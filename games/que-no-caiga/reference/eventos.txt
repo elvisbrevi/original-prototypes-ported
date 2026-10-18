@@ -1,0 +1,205 @@
+
+== Hoja de eventos 'Game events'
+variable número fin = 0
+variable número ContadorBomba = 1
+variable número VelocidadAzar = 0
+variable número GravedadPelota = 400
+variable número VelocidadSubida = 350
+variable número TiempoTranscurrido = 0
+grupo 'Start' activo
+evento
+  si System.IsGroupActive("Start")
+  evento
+    si System.OnLayoutStart() [disparador]
+    -> BotonOk.SetVisible(opción0)
+    -> TextoFinal.SetVisible(opción0)
+    -> CuadroFinal.SetVisible(opción0)
+    -> GameOver.SetVisible(opción0)
+    -> TextoSegundos.SetVisible(opción0)
+    -> Texto2(sin instancias).SetText(0)
+    -> System.SetVar(TiempoTranscurrido, 0)
+    -> System.SetVar(VelocidadAzar, 0)
+    -> Pelota.Platform.SetGravity(0)
+    -> System.SetVar(fin, 0)
+  evento
+    si Touch.OnTouchStart() [disparador]
+    si TextoEmpezar.IsVisible()
+    -> Pelota.Platform.SetGravity(GravedadPelota)
+    -> Pelota.Platform.SetVectorY(-(VelocidadSubida))
+    -> TextoEmpezar.SetVisible(opción0)
+    -> System.SetTimescale(1)
+grupo 'Puntaje' activo
+evento
+  si System.IsGroupActive("Puntaje")
+  evento
+    si System.Every(1)
+    si no TextoEmpezar.IsVisible()
+    -> System.AddVar(TiempoTranscurrido, 1)
+    -> TextoTiempo.SetText(TiempoTranscurrido)
+    -> Browser.GoToURL((("javascript:tiempo(" & TiempoTranscurrido) & ");"), opción0)
+    evento
+      si System.CompareVar(TiempoTranscurrido, =, 9)
+      -> System.CreateObject(Pelota, 0, Pelota.X(), 100)
+      -> Audio.Play(sonido 'aparicion', opción0, 1, "aparicion")
+    evento
+      si System.CompareVar(TiempoTranscurrido, =, 20)
+      -> System.SetVar(VelocidadAzar, 1)
+    evento
+      si System.CompareVar(TiempoTranscurrido, =, 30)
+      -> Pelota.Platform.SetGravity(450)
+      -> System.SetVar(VelocidadAzar, 2)
+    evento
+      si System.CompareVar(TiempoTranscurrido, =, 40)
+      -> System.CreateObject(Pelota, 0, Pelota.X(), 100)
+      -> Audio.Play(sonido 'aparicion', opción0, 1, "aparicion")
+    evento
+      si System.CompareVar(TiempoTranscurrido, =, 50)
+      -> System.CreateObject(Bomba, 0, Pelota.X(), 80)
+      -> Audio.Play(sonido 'aparicion', opción0, 1, "aparicion")
+    evento
+      si System.CompareVar(ContadorBomba, =, 0)
+      -> System.CreateObject(Bomba, 0, Pelota.X(), 80)
+      -> Audio.Play(sonido 'aparicion', opción0, 1, "aparicion")
+    evento
+      si System.CompareVar(TiempoTranscurrido, ≥, 55)
+      -> System.SubtractVar(ContadorBomba, 1)
+      evento
+        si System.CompareVar(ContadorBomba, <, 0)
+        -> System.SetVar(ContadorBomba, 5)
+grupo 'Pelota' activo
+evento
+  si System.IsGroupActive("Pelota")
+  evento
+    si Pelota.IsOverlapping(Limite)
+    -> Pelota.Platform.SetGravity(0)
+    evento
+      si no Audio.IsTagPlaying("caida")
+      si no BotonOk.IsVisible()
+      -> Audio.Play(sonido 'caida', opción0, 1, "caida")
+  evento
+    si Jugador.IsAnimPlaying("patear")
+    si Pelota.IsOverlapping(LimiteCorrecto)
+    si no Pelota.IsOverlapping(Limite)
+    evento
+      si no Audio.IsTagPlaying("pegada")
+      -> Audio.Play(sonido 'pegada', opción0, 1, "pegada")
+    evento
+      si System.CompareVar(VelocidadAzar, =, 0)
+      -> Pelota.Platform.SetVectorY(-(VelocidadSubida))
+    evento
+      si System.CompareVar(VelocidadAzar, =, 1)
+      -> Pelota.Platform.SetVectorY(-(random(250, 400)))
+    evento
+      si System.CompareVar(VelocidadAzar, =, 2)
+      -> Pelota.Platform.SetVectorY(-(random(350, 450)))
+grupo 'Bomba' activo
+evento
+  si System.IsGroupActive("Bomba")
+  evento
+    si Jugador.IsAnimPlaying("patear")
+    si Bomba.IsOverlapping(LimiteCorrecto)
+    si no Bomba.IsOverlapping(Limite)
+    -> Bomba.Platform.SetVectorY(-(VelocidadSubida))
+    -> Bomba.SetAnim("brillar", opción1)
+    evento
+      si no Audio.IsTagPlaying("pegada")
+      -> Audio.Play(sonido 'pegada', opción0, 1, "pegada")
+  evento
+    si Bomba.Platform.IsFalling()
+    si Bomba.IsAnimPlaying("brillar")
+    -> Bomba.SetAnim("explotar", opción1)
+    -> Audio.Play(sonido 'explosion', opción0, 1, "explosion")
+  evento
+    si Bomba.OnAnimFinished("explotar") [disparador]
+    -> Bomba.Destroy()
+  evento
+    si Bomba.IsAnimPlaying("explotar")
+    -> Bomba.Platform.SetEnabled(opción0)
+  evento
+    si Bomba.IsOverlapping(Limite)
+    si no Jugador.IsAnimPlaying("quemando")
+    -> Bomba.SetScale(2)
+    -> Bomba.SetAnim("explotar", opción1)
+    -> Jugador.SetAnim("quemando", opción1)
+    -> Audio.Play(sonido 'explosion', opción0, 1, "explosion")
+grupo 'Collisions' activo
+evento
+  si System.IsGroupActive("Collisions")
+  evento
+    si Pelota.IsOverlapping(Limite)
+    si no Bomba.IsAnimPlaying("explotar")
+    -> CuadroFinal.SetVisible(opción1)
+    -> GameOver.SetVisible(opción1)
+    -> BotonOk.SetVisible(opción1)
+    -> TextoFinal.SetVisible(opción1)
+    -> TextoFinal.SetText(TextoTiempo.Text())
+    -> TextoSegundos.SetVisible(opción1)
+    -> System.SetTimescale(0)
+    evento
+      si System.CompareVar(fin, =, 0)
+      -> Browser.GoToURL((("javascript:fin(" & TiempoTranscurrido) & ");"), opción0)
+      -> System.SetVar(fin, 1)
+  evento
+    si Bomba.OnAnimFinished("explotar") [disparador]
+    si Bomba.IsOverlapping(Limite)
+    -> CuadroFinal.SetVisible(opción1)
+    -> GameOver.SetVisible(opción1)
+    -> BotonOk.SetVisible(opción1)
+    -> TextoFinal.SetVisible(opción1)
+    -> TextoFinal.SetText(TextoTiempo.Text())
+    -> TextoSegundos.SetVisible(opción1)
+    -> System.SetTimescale(0)
+    -> Bomba.Destroy()
+    evento
+      si System.CompareVar(fin, =, 0)
+      -> Browser.GoToURL((("javascript:fin(" & TiempoTranscurrido) & ");"), opción0)
+      -> System.SetVar(fin, 1)
+grupo 'Game Over' activo
+evento
+  si System.IsGroupActive("Game Over")
+  evento
+    si Touch.IsTouchingObject(BotonOk)
+    si BotonOk.IsVisible()
+    -> Audio.Play(sonido 'click', opción0, 1, "click")
+    -> Browser.GoToURL("javascript:reiniciar();", opción0)
+    -> System.GoToLayout(layout "Start")
+  evento
+    -> Audio.Play(sonido 'click', opción0, 1, "click")
+    -> Browser.GoToURL((("javascript:compartir(" & TiempoTranscurrido) & ");"), opción0)
+grupo 'Personaje' activo
+evento
+  si System.IsGroupActive("Personaje")
+  evento
+    si Pelota.Platform.IsJumping()
+    si no Jugador.IsAnimPlaying("mirar")
+    si no Jugador.IsAnimPlaying("patear")
+    si no Jugador.IsAnimPlaying("quemando")
+    -> Jugador.SetAnim("mirar", opción1)
+  evento
+    si Pelota.Platform.IsFalling()
+    si no Jugador.IsAnimPlaying("bajar")
+    si no Jugador.IsAnimPlaying("patear")
+    si no Jugador.IsAnimPlaying("quemando")
+    -> Jugador.SetAnim("bajar", opción1)
+  evento
+    si Touch.OnTouchStart() [disparador]
+    si no Jugador.IsAnimPlaying("quemando")
+    -> Jugador.SetAnim("patear", opción1)
+  evento
+    si Jugador.OnAnimFinished("patear") [disparador]
+    -> Jugador.SetAnim("normal", opción1)
+
+== Hoja de eventos 'Start events'
+evento
+  si Touch.IsTouchingObject(BotonJugar)
+  -> System.GoToLayout(layout "Dominar")
+  -> System.SetTimescale(0)
+  -> Audio.Play(sonido 'click', opción0, 1, "click")
+  -> Browser.GoToURL("javascript:inicio();", opción0)
+evento
+  si System.OnLayoutStart() [disparador]
+  -> Audio.Preload(sonido 'aparicion')
+  -> Audio.Preload(sonido 'caida')
+  -> Audio.Preload(sonido 'click')
+  -> Audio.Preload(sonido 'explosion')
+  -> Audio.Preload(sonido 'pegada')

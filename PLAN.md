@@ -5,9 +5,10 @@ Plan de trabajo para recrear en Rust + macroquad todos los juegos publicados en
 Está pensado para avanzar en varias sesiones: marca cada casilla al completarla e incluye el cambio
 del plan en el mismo commit.
 
-**Siguiente paso:** 2.3 Que No Caiga (Construct 2): anotar con `tools/c2_eventos.py` los nombres
-de su tabla de referencias y portar sus eventos. El 0.7 (GitHub Pages) queda pendiente de decidir
-si se publica.
+**Siguiente paso:** 2.4 Retro Penal (Construct 2): reutilizar la estructura de
+`games/que-no-caiga` (lector de `data.js`, runtime parcial de Construct 2) y anotar los nombres de
+su tabla de referencias; usa Turret, CustomMovement, Bullet, Solid y Wrap. El 0.7 (GitHub Pages)
+queda pendiente de decidir si se publica.
 
 ## Reglas
 
@@ -118,7 +119,7 @@ cada juego en la fase 2).
 | The Meaning of Christmas | APK (7,8 MB) | Java + libGDX | REA Android + JADX; assets en `assets/data` | música en MP3 (macroquad no lo lee: convertir a OGG); el juego está en `com.badlogic.gdx.helloworld` (plantilla de libGDX) |
 | Fast Car Racer | — | Android (`cl.gioco.fcr`) | — | **sin binario**: itch.io solo enlaza a Google Play |
 | Super Happy Jump | `web.unity3d` (385 KB) | Unity 4.6.0f3, Web Player | UnityPy para abrir el bundle `UnityWeb` → `Assembly-CSharp.dll` + assets | formato UnityWeb comprimido con LZMA |
-| Que No Caiga | HTML5 (39 archivos) | Construct 2 | leer las hojas de eventos de `data.js` + REA JavaScript | comportamientos del runtime (física) |
+| Que No Caiga | HTML5 (39 archivos) | Construct 2 | ✅ hecho | ver pendientes en 2.3 |
 | Retro Penal | HTML5 + NW.js (win/osx/linux) | Construct 2 | igual que Que No Caiga | ídem |
 | One Button Prototype | Mac, Linux, APK y WebGL | Unity 5.1.2f1, Mono | ILSpy (Standard Assets 2D + clases propias); escenas con UnityPy/AssetRipper | física 2D (Box2D) |
 | Neuro Battle | `Neuro Battle.zip` (WebGL) | Unity 5.1.1f1, IL2CPP → asm.js | **sin DLL de C#**: metadatos IL2CPP + escenas + observar el juego (REA browser) | el más difícil; el WebGL de 2015 puede no correr en navegadores actuales. El `.data` ya se desempaqueta (`unity_assets.py emscripten`): escenas, sprites y nombres de scripts legibles |
@@ -160,16 +161,21 @@ Orden sugerido: primero lo que reutiliza herramientas ya hechas y luego lo más 
   táctiles se probaron solo en emulación de Chromium. Los niveles se probaron hasta la cadena
   1 → 4 → título con ayudas temporales, pero ninguno se jugó de principio a fin en el port.
 
-### 2.3 Que No Caiga (Construct 2)
-- [ ] Triaje: versión del runtime de Construct 2, plugins y comportamientos usados (REA
+### 2.3 Que No Caiga (Construct 2) ✅
+- [x] Triaje: Construct 2 de 2015 (r20x, sin número en la exportación), plugins Sprite, Text,
+  Touch, Audio, Browser (y Button, TextBox y Mouse sin uso) y el comportamiento Platform (REA
   `analyze-javascript-application` sobre `originales/que-no-caiga/html5`).
-- [ ] Herramienta `tools/c2_eventos.py`: volcar layouts, objetos y hojas de eventos de `data.js` a
-  pseudocódigo legible (sirve para los tres juegos de Construct).
-- [ ] Assets: `images/*.png` y `media/*.ogg` se usan tal cual.
-- [ ] Port nativo jugable (reimplementar los comportamientos usados: física, plataforma, etc.).
-- [ ] Web + táctil.
-- [ ] README del juego + ficha del museo.
-- [ ] Pendientes anotados.
+- [x] Herramienta `tools/c2_eventos.py` (checkpoint 0.8) y `games/que-no-caiga/reference/nombres.json`
+  con los nombres de las condiciones y acciones minificadas.
+- [x] Assets: `images/*.png` y `media/*.ogg` tal cual, y `data.js` se lee al arrancar.
+- [x] Port nativo jugable: las dos hojas de eventos y lo que usan del runtime (Platform sin
+  sólidos, animaciones de Sprite, polígonos de colisión, Text, Audio con etiquetas, Touch con el
+  ratón).
+- [x] Web + táctil (se juega tocando la pantalla, sin botones).
+- [x] README del juego + ficha del museo.
+- [x] Pendientes anotados: las fuentes son Liberation Sans en lugar de Arial y Arial Black; el
+  sonido no se probó en hardware real; no se jugó hasta el segundo 50 sin ayuda (la bomba se probó
+  con un cambio temporal).
 
 ### 2.4 Retro Penal (Construct 2)
 - [ ] Triaje (comparar `package.nw` con la versión HTML5).

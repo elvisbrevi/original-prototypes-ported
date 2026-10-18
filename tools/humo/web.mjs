@@ -14,7 +14,8 @@
 // humo.json:
 //   {
 //     "pantalla": [640, 480],              // tamaño de la pantalla virtual del juego
-//     "tactil": { "botones": 2 },          // cuántos botones tiene su ConfigTactil
+//     "tactil": { "botones": 2 },          // cuántos botones tiene su ConfigTactil (sin "tactil":
+//                                          // el juego no tiene controles y queda centrado)
 //     "pasos": [
 //       { "esperar": 3000 },
 //       { "captura": "menu" },
@@ -157,7 +158,8 @@ for (const e of escenarios) {
     await page.waitForFunction(() => window.museo?.tactilVisible !== null && window.museo?.tactilVisible !== undefined, null, { timeout: 30000 }).catch(() => {});
     const cdp = e.movil ? await contexto.newCDPSession(page) : null;
     const { width: w, height: h } = e.viewport;
-    const arriba = e.movil && h > w;
+    // Como Tactil::juego_arriba: en vertical, arriba solo si hay controles en pantalla.
+    const arriba = e.movil && h > w && Boolean(config.tactil);
     const capturas = [];
     let negro = 1;
 

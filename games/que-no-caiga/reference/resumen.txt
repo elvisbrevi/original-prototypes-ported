@@ -1,0 +1,170 @@
+Proyecto 'Que No Caiga': 400x500, primer layout 'Start', modo de pantalla 4, medios en 'media/', versión 1.0.0.0
+
+Plugins:
+  [ 0] lc     Audio                    G
+  [ 1] nc     Button                   WPS
+  [ 2] mc     Browser                  G
+  [ 3] oc     Mouse                    G
+  [ 4] kc     Sprite                   WPSAZE
+  [ 5] pc     Text                     WPSAZE
+  [ 6] qc     TextBox                  WPS
+  [ 7] Z      Touch                    G
+  (G global, W en el mundo, P posición, S tamaño, A apariencia, Z orden, E efectos)
+
+Tipos de objeto:
+   0 Pelota                       Sprite       comportamientos=Platform
+       animación 'Default' velocidad=5 bucle=False cuadros=1: pelota-sheet0.png
+         pelota-sheet0.png recorte=(0,0,44,46) duración=1 origen=(0.523,1.109) puntos=[] colisión=[-0.364, -0.957, -0.023, -1.109, 0.318, -0.957, 0.477, -0.609, 0.318, -0.261, -0.023, -0.109, -0.364, -0.261, -0.523, -0.609]
+   1 t1<Button>                   Button      
+   2 Texto2(sin instancias)       Text        
+   3 t3<Button>                   Button      
+   4 Browser                      Browser     
+   5 Touch                        Touch       
+   6 BotonJugar                   Sprite      
+       animación 'Default' velocidad=5 bucle=False cuadros=1: botonjugar-sheet0.png
+         botonjugar-sheet0.png recorte=(0,0,122,47) duración=1 origen=(0.500,0.511) puntos=[] colisión=[]
+   7 TextoTiempo                  Text        
+   8 t8<sprite3>                  Sprite      
+       animación 'Default' velocidad=5 bucle=False cuadros=1: sprite3-sheet0.png
+         sprite3-sheet0.png recorte=(0,0,250,250) duración=1 origen=(0.500,0.500) puntos=[] colisión=[]
+   9 t9<TextBox>                  TextBox     
+  10 TextoEmpezar                 Text        
+  11 BotonOk                      Sprite      
+       animación 'Default' velocidad=5 bucle=False cuadros=1: reiniciar-sheet0.png
+         reiniciar-sheet0.png recorte=(0,0,66,47) duración=1 origen=(0.500,0.511) puntos=[] colisión=[]
+  12 TextoFinal                   Text        
+  13 Titulo                       Sprite      
+       animación 'Default' velocidad=5 bucle=False cuadros=1: sprite4-sheet0.png
+         sprite4-sheet0.png recorte=(0,0,500,300) duración=1 origen=(0.502,0.503) puntos=[] colisión=[-0.264, -0.107, -0.002, -0.457, 0.272, -0.127, 0.236, -0.003, 0.36, 0.267, -0.002, 0.327, -0.39, 0.31, -0.284, -0.003]
+  14 t14<sprite5>                 Sprite      
+       animación 'Default' velocidad=5 bucle=False cuadros=1: sprite5-sheet0.png
+         sprite5-sheet0.png recorte=(0,0,250,250) duración=1 origen=(0.500,0.500) puntos=[] colisión=[]
+  15 CuadroFinal                  Sprite      
+       animación 'Default' velocidad=5 bucle=False cuadros=1: cuadrogameover-sheet0.png
+         cuadrogameover-sheet0.png recorte=(0,0,162,161) duración=1 origen=(0.500,0.503) puntos=[] colisión=[]
+  16 GameOver                     Sprite      
+       animación 'Default' velocidad=5 bucle=False cuadros=1: gameover-sheet0.png
+         gameover-sheet0.png recorte=(0,0,298,57) duración=1 origen=(0.500,0.509) puntos=[] colisión=[-0.497, -0.491, 0.483, -0.421, 0.497, 0.474, -0.473, 0.351, -0.5, -0.018]
+  17 TextoSegundos                Text        
+  18 Audio                        Audio       
+  19 t19<Mouse>                   Mouse       
+  20 Limite                       Sprite      
+       animación 'Default' velocidad=5 bucle=False cuadros=1: limite-sheet0.png
+         limite-sheet0.png recorte=(0,0,250,250) duración=1 origen=(0.500,0.500) puntos=[] colisión=[]
+  21 LimiteCorrecto               Sprite      
+       animación 'Default' velocidad=5 bucle=False cuadros=1: limitecorrecto-sheet0.png
+         limitecorrecto-sheet0.png recorte=(0,0,250,250) duración=1 origen=(0.500,0.500) puntos=[] colisión=[]
+  22 Jugador                      Sprite      
+       animación 'normal' velocidad=5 bucle=False cuadros=1: jugador1-sheet1.png
+         jugador1-sheet1.png recorte=(53,1,27,47) duración=1 origen=(0.519,0.511) puntos=[] colisión=[-0.333, -0.404, -0.037, -0.426, 0.333, -0.426, 0.148, -0.021, 0.111, 0.277, -0.037, 0.489, -0.259, 0.34, -0.259, -0.021]
+       animación 'patear' velocidad=5 bucle=False cuadros=1: jugador1-sheet1.png
+         jugador1-sheet1.png recorte=(82,1,27,47) duración=1 origen=(0.519,0.511) puntos=[] colisión=[-0.296, -0.383, -0.037, -0.404, 0.222, -0.362, 0.148, -0.021, 0.333, 0.404, -0.037, 0.277, -0.259, 0.34, -0.259, -0.021]
+       animación 'mirar' velocidad=5 bucle=False cuadros=3: jugador1-sheet1.png
+         jugador1-sheet1.png recorte=(53,1,27,47) duración=1 origen=(0.519,0.511) puntos=[] colisión=[-0.333, -0.404, -0.037, -0.426, 0.333, -0.426, 0.148, -0.021, 0.111, 0.277, -0.037, 0.489, -0.259, 0.34, -0.259, -0.021]
+         jugador1-sheet1.png recorte=(1,50,27,47) duración=1 origen=(0.519,0.511) puntos=[] colisión=[-0.333, -0.404, -0.037, -0.468, 0.222, -0.362, 0.148, -0.021, 0.111, 0.277, -0.037, 0.489, -0.259, 0.34, -0.259, -0.021]
+         jugador1-sheet1.png recorte=(30,50,27,47) duración=1 origen=(0.519,0.511) puntos=[] colisión=[-0.37, -0.426, -0.037, -0.489, 0.259, -0.383, 0.148, -0.021, 0.111, 0.277, -0.037, 0.489, -0.259, 0.34, -0.259, -0.021]
+       animación 'bajar' velocidad=5 bucle=False cuadros=3: jugador1-sheet1.png
+         jugador1-sheet1.png recorte=(30,50,27,47) duración=1 origen=(0.519,0.511) puntos=[] colisión=[-0.37, -0.426, -0.037, -0.489, 0.259, -0.383, 0.148, -0.021, 0.111, 0.277, -0.037, 0.489, -0.259, 0.34, -0.259, -0.021]
+         jugador1-sheet1.png recorte=(1,50,27,47) duración=1 origen=(0.519,0.511) puntos=[] colisión=[-0.333, -0.404, -0.037, -0.468, 0.222, -0.362, 0.148, -0.021, 0.111, 0.277, -0.037, 0.489, -0.259, 0.34, -0.259, -0.021]
+         jugador1-sheet1.png recorte=(53,1,27,47) duración=1 origen=(0.519,0.511) puntos=[] colisión=[-0.333, -0.404, -0.037, -0.426, 0.333, -0.426, 0.148, -0.021, 0.111, 0.277, -0.037, 0.489, -0.259, 0.34, -0.259, -0.021]
+       animación 'quemando' velocidad=15 bucle=False cuadros=5: jugador1-sheet0.png, jugador1-sheet1.png
+         jugador1-sheet0.png recorte=(1,1,50,47) duración=1 origen=(0.500,0.511) puntos=[] colisión=[-0.24, -0.234, 0, -0.426, 0.18, -0.17, 0.08, -0.021, 0.1, 0.064, 0, 0.489, -0.24, 0.213, -0.14, -0.021]
+         jugador1-sheet0.png recorte=(53,1,50,47) duración=1 origen=(0.500,0.511) puntos=[] colisión=[-0.3, -0.298, 0, -0.489, 0.18, -0.17, 0.08, -0.021, 0.1, 0.064, 0, 0.489, -0.36, 0.34, -0.14, -0.021]
+         jugador1-sheet0.png recorte=(1,50,50,47) duración=1 origen=(0.500,0.511) puntos=[] colisión=[-0.36, -0.362, 0, -0.489, 0.18, -0.17, 0.08, -0.021, 0.1, 0.064, 0, 0.489, -0.44, 0.426, -0.22, -0.021]
+         jugador1-sheet0.png recorte=(53,50,50,47) duración=1 origen=(0.500,0.511) puntos=[] colisión=[-0.44, -0.447, 0, -0.489, 0.18, -0.17, 0.08, -0.021, 0.1, 0.064, 0, 0.489, -0.44, 0.426, -0.22, -0.021]
+         jugador1-sheet1.png recorte=(1,1,50,47) duración=1 origen=(0.500,0.511) puntos=[] colisión=[-0.3, -0.298, 0, -0.489, 0.18, -0.17, 0.08, -0.021, 0.1, 0.064, 0, 0.489, -0.24, 0.213, -0.14, -0.021]
+  23 TextoEtiquetaTiempo          Text        
+  24 Bomba                        Sprite       comportamientos=Platform
+       animación 'Default' velocidad=5 bucle=False cuadros=1: bomba-sheet1.png
+         bomba-sheet1.png recorte=(113,1,50,50) duración=1 origen=(0.500,0.500) puntos=[] colisión=[-0.28, -0.28, 0, -0.38, 0.5, -0.5, 0.38, 0, 0.28, 0.28, 0, 0.5, -0.38, 0.38, -0.5, 0]
+       animación 'brillar' velocidad=5 bucle=True cuadros=2: bomba-sheet1.png
+         bomba-sheet1.png recorte=(113,1,50,50) duración=1 origen=(0.500,0.500) puntos=[] colisión=[-0.28, -0.28, 0, -0.38, 0.5, -0.5, 0.38, 0, 0.28, 0.28, 0, 0.5, -0.38, 0.38, -0.5, 0]
+         bomba-sheet1.png recorte=(165,1,50,50) duración=1 origen=(0.500,0.500) puntos=[] colisión=[-0.28, -0.28, 0, -0.38, 0.5, -0.5, 0.38, 0, 0.28, 0.28, 0, 0.5, -0.38, 0.38, -0.5, 0]
+       animación 'explotar' velocidad=5 bucle=False cuadros=5: bomba-sheet0.png, bomba-sheet1.png
+         bomba-sheet0.png recorte=(1,1,110,110) duración=1 origen=(0.500,0.500) puntos=[] colisión=[-0.136, -0.136, 0, -0.2, 0.127, -0.127, 0.145, 0, 0.109, 0.109, 0, 0.164, -0.118, 0.118, -0.173, 0]
+         bomba-sheet0.png recorte=(113,1,110,110) duración=1 origen=(0.500,0.500) puntos=[] colisión=[-0.227, -0.227, 0, -0.382, 0.227, -0.227, 0.327, 0, 0.227, 0.227, 0, 0.391, -0.245, 0.245, -0.309, 0]
+         bomba-sheet0.png recorte=(1,113,110,110) duración=1 origen=(0.500,0.500) puntos=[] colisión=[-0.255, -0.255, 0, -0.391, 0.273, -0.273, 0.409, 0, 0.282, 0.282, 0, 0.427, -0.245, 0.245, -0.355, 0]
+         bomba-sheet0.png recorte=(113,113,110,110) duración=1 origen=(0.500,0.500) puntos=[] colisión=[-0.291, -0.291, 0, -0.255, 0.282, -0.282, 0.191, 0, 0.191, 0.191, 0, 0.164, -0.245, 0.245, -0.245, 0]
+         bomba-sheet1.png recorte=(1,1,110,110) duración=1 origen=(0.500,0.500) puntos=[] colisión=[-0.045, -0.045, 0, -0.245, 0.018, -0.018, 0.064, 0, 0.109, 0.109, -0.255, 0.255, -0.136, 0]
+  25 t25<sprite6>                 Sprite      
+       animación 'Default' velocidad=5 bucle=False cuadros=1: sprite6-sheet0.png
+         sprite6-sheet0.png recorte=(0,0,250,250) duración=1 origen=(0.500,0.500) puntos=[] colisión=[]
+  26 Fondo                        Sprite      
+       animación 'Default' velocidad=5 bucle=False cuadros=1: fondo-sheet0.png
+         fondo-sheet0.png recorte=(0,0,400,500) duración=1 origen=(0.500,0.500) puntos=[] colisión=[]
+  27 FondoJuego                   Sprite      
+       animación 'Default' velocidad=5 bucle=False cuadros=1: fondo-sheet0.png
+         fondo-sheet0.png recorte=(0,0,400,500) duración=1 origen=(0.500,0.500) puntos=[] colisión=[]
+
+Layouts:
+  'Start' 400x500 hoja='Start events'
+    capa 'Layer 0' visible=True fondo=[255, 255, 255] transparente=False parallax=(1,1) opacidad=1
+      Fondo                        uid=14 x=200 y=250 w=400 h=500 ángulo=0 opacidad=1 vars=[] comp=[] props=[0, 'Default', 0, 1]
+      BotonJugar                   uid=2 x=208 y=344 w=122 h=47 ángulo=0 opacidad=1 vars=[] comp=[] props=[0, 'Default', 0, 1]
+      Titulo                       uid=18 x=200.972 y=118.98 w=398 h=235 ángulo=0 opacidad=1 vars=[] comp=[] props=[0, 'Default', 0, 1]
+  'Dominar' 400x500 hoja='Game events'
+    capa 'Juego' visible=True fondo=[255, 255, 255] transparente=False parallax=(1,1) opacidad=1
+      Limite                       uid=5 x=232.144 y=399.537 w=112.276 h=30 ángulo=0 opacidad=1 vars=[] comp=[] props=[0, 'Default', 0, 1]
+      LimiteCorrecto               uid=6 x=232 y=372.5 w=111 h=23 ángulo=0 opacidad=1 vars=[] comp=[] props=[0, 'Default', 0, 1]
+      FondoJuego                   uid=19 x=200 y=250 w=400 h=500 ángulo=0 opacidad=1 vars=[] comp=[] props=[0, 'Default', 0, 1]
+      Jugador                      uid=4 x=162 y=335 w=60 h=100 ángulo=0 opacidad=1 vars=[] comp=[] props=[0, 'normal', 0, 1]
+      Pelota                       uid=0 x=197 y=386 w=30 h=30 ángulo=0 opacidad=1 vars=[] comp=[[0, 300, 1500, 0, 400, 1000, 0, 0, 1, 1]] props=[0, 'Default', 0, 1]
+      Bomba                        uid=7 x=-93 y=163 w=30 h=30 ángulo=0 opacidad=1 vars=[] comp=[[0, 300, 1500, 0, 400, 1000, 0, 0, 1, 1]] props=[0, 'Default', 0, 1]
+    capa 'GUI' visible=True fondo=[255, 255, 255] transparente=True parallax=(1,1) opacidad=1
+      TextoEmpezar                 uid=1 x=201 y=138 w=244 h=30 ángulo=0 opacidad=1 vars=[] comp=[] props=['CLICK PARA EMPEZAR', 0, 'bold 12pt Arial', 'rgb(0,0,0)', 1, 1, 4, 0, 0]
+      TextoTiempo                  uid=9 x=318 y=6 w=83 h=46 ángulo=0 opacidad=1 vars=[] comp=[] props=['0', 0, 'bold 20pt Arial Black', 'rgb(255,255,255)', 0, 1, 0, 0, 0]
+      TextoEtiquetaTiempo          uid=23 x=189 y=13 w=132 h=42 ángulo=0 opacidad=1 vars=[] comp=[] props=['TIEMPO:', 0, 'bold 20pt Arial Black', 'rgb(255,255,255)', 0, 0, 0, 0, 0]
+    capa 'GameOver' visible=True fondo=[255, 255, 255] transparente=True parallax=(1,1) opacidad=1
+      CuadroFinal                  uid=20 x=200 y=215 w=162 h=131 ángulo=0 opacidad=1 vars=[] comp=[] props=[0, 'Default', 0, 1]
+      BotonOk                      uid=15 x=202 y=450 w=66 h=47 ángulo=0 opacidad=1 vars=[] comp=[] props=[0, 'Default', 0, 1]
+      TextoFinal                   uid=17 x=200 y=193 w=155 h=56 ángulo=0 opacidad=1 vars=[] comp=[] props=['.', 0, 'bold 18pt Arial', 'rgb(0,0,0)', 1, 1, 4, 0, 0]
+      GameOver                     uid=21 x=201 y=88 w=298 h=57 ángulo=0 opacidad=1 vars=[] comp=[] props=[0, 'Default', 0, 1]
+      TextoSegundos                uid=22 x=200 y=248 w=156 h=45 ángulo=0 opacidad=1 vars=[] comp=[] props=['SEGUNDOS', 0, '16pt Arial', 'rgb(0,0,0)', 1, 1, 4, 0, 0]
+
+Medios: aparicion.m4a (3596 B), aparicion.ogg (7136 B), caida.m4a (3935 B), caida.ogg (6966 B), click.m4a (13996 B), click.ogg (15237 B), explosion.m4a (19534 B), explosion.ogg (18615 B), pegada.m4a (1192 B), pegada.ogg (4900 B)
+
+Tabla de referencias:
+    0 lc                         Audio
+    1 nc                         Button
+    2 mc                         Browser
+    3 oc                         Mouse
+    4 kc                         Sprite
+    5 pc                         Text
+    6 qc                         TextBox
+    7 Z                          Touch
+    8 rc                         Platform (comportamiento)
+    9 Y.prototype.j.$q           System               cnd  IsGroupActive
+   10 Y.prototype.j.nn           System               cnd  OnLayoutStart
+   11 kc.prototype.ca.si         Sprite               act  SetVisible
+   12 pc.prototype.ca.si         Text                 act  SetVisible
+   13 pc.prototype.ca.vk         Text                 act  SetText
+   14 Y.prototype.ca.Qr          System               act  SetVar
+   15 rc.prototype.ca.Nr         Platform (comportamiento) act  SetGravity
+   16 Z.prototype.j.tk           Touch                cnd  OnTouchStart
+   17 pc.prototype.j.kn          Text                 cnd  IsVisible
+   18 rc.prototype.ca.Rr         Platform (comportamiento) act  SetVectorY
+   19 Y.prototype.ca.Pr          System               act  SetTimescale
+   20 Y.prototype.j.Tq           System               cnd  Every
+   21 Y.prototype.ca.Kq          System               act  AddVar
+   22 mc.prototype.ca.Vq         Browser              act  GoToURL
+   23 Y.prototype.j.Pq           System               cnd  CompareVar
+   24 Y.prototype.ca.Qq          System               act  CreateObject
+   25 kc.prototype.fb.wk         Sprite               exp  X
+   26 lc.prototype.ca.Play       Audio                act  Play
+   27 Y.prototype.ca.Tr          System               act  SubtractVar
+   28 kc.prototype.j.cr          Sprite               cnd  IsOverlapping
+   29 lc.prototype.j.dr          Audio                cnd  IsTagPlaying
+   30 kc.prototype.j.kn          Sprite               cnd  IsVisible
+   31 kc.prototype.j.Wq          Sprite               cnd  IsAnimPlaying
+   32 Y.prototype.fb.random      System               exp  random
+   33 kc.prototype.ca.Mr         Sprite               act  SetAnim
+   34 rc.prototype.j.Zq          Platform (comportamiento) cnd  IsFalling
+   35 kc.prototype.j.ln          Sprite               cnd  OnAnimFinished
+   36 kc.prototype.ca.Rq         Sprite               act  Destroy
+   37 rc.prototype.ca.uk         Platform (comportamiento) act  SetEnabled
+   38 kc.prototype.ca.Or         Sprite               act  SetScale
+   39 pc.prototype.fb.Text       Text                 exp  Text
+   40 Z.prototype.j.er           Touch                cnd  IsTouchingObject
+   41 Y.prototype.ca.Uq          System               act  GoToLayout
+   42 rc.prototype.j.br          Platform (comportamiento) cnd  IsJumping
+   43 lc.prototype.ca.Lr         Audio                act  Preload

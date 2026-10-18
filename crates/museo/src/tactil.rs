@@ -146,9 +146,15 @@ impl Tactil {
         }
     }
 
-    /// En vertical con controles táctiles el juego se coloca arriba y los controles debajo.
+    /// En vertical con controles táctiles el juego se coloca arriba y los controles debajo (si el
+    /// juego no tiene controles en pantalla, porque se juega tocándolo, queda centrado).
     pub fn juego_arriba(&self) -> bool {
-        self.activo && screen_height() > screen_width()
+        self.activo && screen_height() > screen_width() && self.hay_controles()
+    }
+
+    fn hay_controles(&self) -> bool {
+        let c = &self.config;
+        c.cruceta != Cruceta::Ninguna || !c.botones.is_empty() || c.start.is_some()
     }
 
     /// Lee los toques del frame. Admite varios dedos a la vez (andar y saltar).

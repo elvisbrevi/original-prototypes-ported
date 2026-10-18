@@ -20,7 +20,7 @@ El avance está en [PLAN.md](PLAN.md). Cada push compila todo en nativo y en was
 | 2011 | [The Meaning of Christmas](#the-meaning-of-christmas) | Java + libGDX (Android) | pendiente |
 | 2013 | [Fast Car Racer](#fast-car-racer) | Android (Google Play) | bloqueado: falta el binario |
 | 2014 | [Super Happy Jump](#super-happy-jump) | Unity 4.6 (Web Player, iOS, Android) | pendiente |
-| 2014–15 | [Que No Caiga](#que-no-caiga) | Construct 2 (HTML5) | pendiente |
+| 2014–15 | [Que No Caiga](#que-no-caiga) | Construct 2 (HTML5) | ✅ [games/que-no-caiga](games/que-no-caiga) |
 | 2014–15 | [Retro Penal](#retro-penal) | Construct 2 (HTML5 + NW.js) | pendiente |
 | 2015 | [One Button Prototype](#one-button-prototype) | Unity 5.1 (Mac, Linux, Android, WebGL) | pendiente |
 | 2015 | [Neuro Battle](#neuro-battle) | Unity 5.1 (WebGL) | pendiente |
@@ -117,10 +117,16 @@ confirmar» y se cierran en el triaje de cada juego.
 
 ### Que No Caiga
 
-- **Fecha:** exportado el 23-jul-2015; temática del Mundial de Brasil 2014 (creación por confirmar).
-- **Stack:** Construct 2, HTML5.
-- **De qué trata:** dominar el balón para que no caiga al suelo.
-- **Port:** pendiente.
+![Que No Caiga](games/que-no-caiga/docs/patada.png)
+
+- **Fecha:** exportado el 23-jul-2015, según su `offline.appcache`. Tiene la temática del Mundial
+  de Brasil 2014; la fecha de creación sigue por confirmar.
+- **Stack:** Construct 2 (una versión de 2015, r20x), HTML5.
+- **De qué trata:** dominar el balón para que no caiga al suelo: cada toque hace patear al jugador.
+  Cuenta los segundos, y con el tiempo llegan más pelotas y bombas que explotan en los pies.
+- **Port:** ✅ [games/que-no-caiga](games/que-no-caiga): las hojas de eventos traducidas de su
+  `data.js`, y lo que usa del runtime minificado (Platform, animaciones, colisiones) traducido
+  también; imágenes, sonidos y proyecto originales. Se juega con el ratón o tocando la pantalla.
 - **Original:** [elvisbrevi.itch.io/que-no-caiga](https://elvisbrevi.itch.io/que-no-caiga)
 
 ### Retro Penal
@@ -179,7 +185,7 @@ PLAN.md              plan por fases con checkpoints
 ## Jugar
 
 ```sh
-cargo run --release -p iman            # PC (o -p proyecto-nutria, -p the-electric-eel-attack)
+cargo run --release -p iman            # PC (o proyecto-nutria, the-electric-eel-attack, que-no-caiga)
 tools/build_web.sh iman                # web: sirve dist/iman con cualquier servidor estático
 ```
 

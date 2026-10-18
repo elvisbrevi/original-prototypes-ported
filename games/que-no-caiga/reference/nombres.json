@@ -1,0 +1,29 @@
+{
+  "plugins": {
+    "lc": "Audio", "nc": "Button", "mc": "Browser", "oc": "Mouse", "kc": "Sprite", "pc": "Text",
+    "qc": "TextBox", "Z": "Touch", "rc": "Platform (comportamiento)", "Y": "System"
+  },
+  "tipos": {
+    "t0": "Pelota", "t2": "Texto2(sin instancias)", "t4": "Browser", "t5": "Touch", "t6": "BotonJugar",
+    "t7": "TextoTiempo", "t10": "TextoEmpezar", "t11": "BotonOk", "t12": "TextoFinal", "t13": "Titulo",
+    "t15": "CuadroFinal", "t16": "GameOver", "t17": "TextoSegundos", "t18": "Audio", "t20": "Limite",
+    "t21": "LimiteCorrecto", "t22": "Jugador", "t23": "TextoEtiquetaTiempo", "t24": "Bomba",
+    "t26": "Fondo", "t27": "FondoJuego"
+  },
+  "aces": {
+    "Y.prototype.j.$q": "IsGroupActive", "Y.prototype.j.nn": "OnLayoutStart", "Y.prototype.j.Tq": "Every",
+    "Y.prototype.j.Pq": "CompareVar", "Y.prototype.ca.Qr": "SetVar", "Y.prototype.ca.Kq": "AddVar",
+    "Y.prototype.ca.Tr": "SubtractVar", "Y.prototype.ca.Pr": "SetTimescale", "Y.prototype.ca.Qq": "CreateObject",
+    "Y.prototype.ca.Uq": "GoToLayout", "Y.prototype.fb.random": "random",
+    "kc.prototype.ca.si": "SetVisible", "kc.prototype.j.kn": "IsVisible", "kc.prototype.j.cr": "IsOverlapping",
+    "kc.prototype.j.Wq": "IsAnimPlaying", "kc.prototype.ca.Mr": "SetAnim", "kc.prototype.j.ln": "OnAnimFinished",
+    "kc.prototype.ca.Rq": "Destroy", "kc.prototype.ca.Or": "SetScale", "kc.prototype.fb.wk": "X",
+    "pc.prototype.ca.si": "SetVisible", "pc.prototype.ca.vk": "SetText", "pc.prototype.j.kn": "IsVisible",
+    "pc.prototype.fb.Text": "Text",
+    "rc.prototype.ca.Nr": "SetGravity", "rc.prototype.ca.Rr": "SetVectorY", "rc.prototype.ca.uk": "SetEnabled",
+    "rc.prototype.j.Zq": "IsFalling", "rc.prototype.j.br": "IsJumping",
+    "Z.prototype.j.tk": "OnTouchStart", "Z.prototype.j.er": "IsTouchingObject",
+    "mc.prototype.ca.Vq": "GoToURL",
+    "lc.prototype.ca.Play": "Play", "lc.prototype.j.dr": "IsTagPlaying", "lc.prototype.ca.Lr": "Preload"
+  }
+}

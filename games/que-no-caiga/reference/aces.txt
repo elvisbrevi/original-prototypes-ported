@@ -1,0 +1,107 @@
+# Código minificado (c2runtime.js) de cada condición, acción y expresión que usan los eventos,
+# con el nombre de Construct 2 identificado a partir de él (ver nombres.json).
+
+## IsGroupActive (Y.prototype.j.$q)
+$q=function(a){return(a=this.b.bh[a.toLowerCase()])&&a.Pf}
+
+## OnLayoutStart (Y.prototype.j.nn)
+nn=function(){return!0}
+
+## Every (Y.prototype.j.Tq)
+Tq=function(a){var b=this.b.cl(),c=b.S.Every_lastTime||0,m=this.b.Cc.ma;"undefined"===typeof b.S.Every_seconds&&(b.S.Every_seconds=a);var e=b.S.Every_seconds;if(m>=c+e)return b.S.Every_lastTime=c+e,m>=b.S.Every_lastTime+.04&&(b.S.Every_lastTime=m),b.S.Every_seconds=a,!0;m<c-.1&&(b.S.Every_lastTime=m);return!1}
+
+## CompareVar (Y.prototype.j.Pq)
+Pq=function(a,b,c){return $b(a.Ue(),
+
+## SetVar (Y.prototype.ca.Qr)
+Qr=function(a,b){0===a.pi?M(b)?a.Rd(b):a.Rd(parseFloat(b)):1===a.pi&&a.Rd(b.toString())}
+
+## AddVar (Y.prototype.ca.Kq)
+Kq=function(a,b){0===a.pi?M(b)?a.Rd(a.Ue()+b):a.Rd(a.Ue()+parseFloat(b)):1===a.pi&&a.Rd(a.Ue()+b.toString())}
+
+## SubtractVar (Y.prototype.ca.Tr)
+Tr=function(a,b){0===a.pi&&(M(b)?a.Rd(a.Ue()-b):a.Rd(a.Ue()-parseFloat(b)))}
+
+## SetTimescale (Y.prototype.ca.Pr)
+Pr=function(a){0>a&&(a=0);this.b.uf=a}
+
+## CreateObject (Y.prototype.ca.Qq)
+Qq=function(a,b,c,m){if(b&&a&&(b=this.b.Qn(a,b,c,m))){this.b.Tc++;var e;this.b.trigger(Object.getPrototypeOf(a.ra).j.qk,b);if(b.Vb)for(c=0,m=b.siblings.length;c<m;c++)e=b.siblings[c],this.b.trigger(Object.getPrototypeOf(e.type.ra).j.qk,e);this.b.Tc--;a=a.da();a.qa=!1;U(a.e);a.e[0]=b;if(b.Vb)for(c=0,m=b.siblings.length;c<m;c++)e=b.siblings[c],a=e.type.da(),a.qa=!1,U(a.e),a.e[0]=
+
+## GoToLayout (Y.prototype.ca.Uq)
+Uq=function(a){this.b.oh||this.b.Ng||(this.b.Ng=a)}
+
+## random (Y.prototype.fb.random)
+random=function(a,b,c){void 0===c?a.u(Math.random()*b):a.u(Math.random()*(c-b)+b)}
+
+## SetVisible (kc.prototype.ca.si)
+si=function(a){!a!==!this.visible&&(this.visible=a,this.b.la=!0)}
+
+## IsVisible (kc.prototype.j.kn)
+kn=function(){return this.visible}
+
+## IsOverlapping (kc.prototype.j.cr)
+cr=function(a){if(a){var c=!1,f,l,q,p=this.b.cl(),w=p.type,p=p.mj;f=a.da();l=this.b.Eb().wc.Wc;var t;f.qa?(this.na(),h.Pg(this.ya),h.offset(0,0),this.b.eo(this.i,a,h,e),t=e):t=l?f.V:f.e;b=a;
+
+## IsAnimPlaying (kc.prototype.j.Wq)
+Wq=function(a){return this.Ff.length?jb(this.Ff,a):jb(this.ua.name,a)}
+
+## SetAnim (kc.prototype.ca.Mr)
+Mr=function(a,b){this.Ff=a;this.On=b;this.Cl||(this.b.xg(this),this.Cl=!0);this.sl||this.Un()}
+
+## OnAnimFinished (kc.prototype.j.ln)
+ln=function(a){return jb(this.Fn,a)}
+
+## Destroy (kc.prototype.ca.Rq)
+Rq=function(){this.b.He(this)}
+
+## SetScale (kc.prototype.ca.Or)
+Or=function(a){var b=this.jc,c=b.width*
+
+## X (kc.prototype.fb.wk)
+wk=function(a){a.u(this.x)}
+
+## SetVisible (pc.prototype.ca.si)
+si=function(a){!a!==!this.visible&&(this.visible=a,this.b.la=!0)}
+
+## SetText (pc.prototype.ca.vk)
+vk=function(a){M(a)&&1E9>a&&(a=Math.round(1E10*a)/1E10);a=a.toString();this.text!==a&&(this.text=a,this.tf=!0,this.b.la=!0)}
+
+## IsVisible (pc.prototype.j.kn)
+kn=function(){return this.visible}
+
+## Text (pc.prototype.fb.Text)
+Text=function(a){a.pb(this.text)}
+
+## SetGravity (rc.prototype.ca.Nr)
+Nr=
+
+## SetVectorY (rc.prototype.ca.Rr)
+Rr=function(f){this.Y=f}
+
+## SetEnabled (rc.prototype.ca.uk)
+uk=function(f){this.enabled!==(1===f)&&(this.enabled=1===f,this.enabled||(this.tb=null))}
+
+## IsFalling (rc.prototype.j.Zq)
+Zq=function(){return 0<this.Y}
+
+## IsJumping (rc.prototype.j.br)
+br=function(){return 0>this.Y}
+
+## OnTouchStart (Z.prototype.j.tk)
+tk=function(){return!0}
+
+## IsTouchingObject (Z.prototype.j.er)
+er=function(a){if(!a)return!1;var b=a.da(),c=b.Ac(),e,g,h,f,k,l;h=0;for(f=c.length;h<f;h++){var m=c[h];m.na();k=0;for(l=this.touches.length;k<l;k++)if(g=this.touches[k],e=m.i.Pa(g.x,g.y,!0),g=m.i.Pa(g.x,g.y,!1),m.mb(e,g)){F.push(m);break}}return F.length?(b.qa=!1,Aa(b.e,F),a.wd(),U(F),!0):!1}
+
+## GoToURL (mc.prototype.ca.Vq)
+Vq=function(f,l){this.b.nc?CocoonJS.App.openURL(f):this.b.Bc?ejecta.openURL(f):
+
+## Play (lc.prototype.ca.Play)
+Play=function(a,b,c,d){!E&&(c=Math.pow(10,c/20),0>c&&(c=0),1<c&&(c=1),L=this.al(this.b.Yi+a[0]+(D?".ogg":".m4a"),d,a[1],0!==b,c))&&(L.Lm(!1),L.play(0!==b,c))}
+
+## IsTagPlaying (lc.prototype.j.dr)
+dr=function(a){r(a);var b;a=0;for(b=Ca.length;a<b;a++)if(Ca[a].Ze())return!0;return!1}
+
+## Preload (lc.prototype.ca.Lr)
+Lr=function(a){if(!E){var b=a[1];a=this.b.Yi+a[0]+(D?".ogg":".m4a");3===G?this.b.Ya?AppMobi.context.loadSound(a):AppMobi.player.loadSound(a):2!==G&&this.al(a,"<preload>",b,!1)}}

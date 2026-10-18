@@ -1,0 +1,12 @@
+[package]
+name = "que-no-caiga"
+version = "0.1.0"
+edition = "2024"
+
+[package.metadata.museo]
+titulo = "Que No Caiga"
+
+[dependencies]
+macroquad = { version = "0.4", features = ["audio"] }
+museo = { path = "../../crates/museo" }
+serde_json = "1"

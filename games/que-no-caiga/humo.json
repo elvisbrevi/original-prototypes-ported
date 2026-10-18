@@ -1,0 +1,15 @@
+{
+  "pantalla": [400, 500],
+  "pasos": [
+    { "esperar": 2500 },
+    { "captura": "menu" },
+    { "zona": [208, 344], "ms": 120, "despues": 1200 },
+    { "captura": "inicio" },
+    { "zona": [200, 250], "ms": 80, "despues": 250 },
+    { "captura": "patada" },
+    { "esperar": 1200 },
+    { "captura": "cae" },
+    { "esperar": 2500 },
+    { "captura": "final" }
+  ]
+}

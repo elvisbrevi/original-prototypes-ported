@@ -1,0 +1,371 @@
+[
+  {
+    "slug": "prototipo-2000",
+    "titulo": "One Button Prototype",
+    "id": 31311,
+    "url": "https://elvisbrevi.itch.io/prototipo-2000",
+    "info": {
+      "Status": "Prototype",
+      "Platforms": "HTML5 , macOS , Linux , Android",
+      "Author": "Elvis Brevi",
+      "Genre": "Platformer",
+      "Tags": "chile , elvisbrevi , Puzzle-Platformer , unity3d"
+    },
+    "descripcion": "",
+    "archivos": [
+      {
+        "upload_id": 80501,
+        "nombre": "_Mac.zip",
+        "tamano_itch": "25 MB",
+        "plataformas": [
+          "macOS"
+        ],
+        "sha256": "6a369b48e2fc102ca36e56a74abe158ee992a70c1ad0391f8a05dd2e6b641b7b",
+        "bytes": 26484430
+      },
+      {
+        "upload_id": 80502,
+        "nombre": "_Linux.zip",
+        "tamano_itch": "25 MB",
+        "plataformas": [
+          "Linux"
+        ],
+        "sha256": "6b68dc92f3c2b7b6ee0115a141e901f15d8a0b2adde0316b8445065d3e145545",
+        "bytes": 27007990
+      },
+      {
+        "upload_id": 80505,
+        "nombre": "demo.apk",
+        "tamano_itch": "27 MB",
+        "plataformas": [
+          "Android"
+        ],
+        "sha256": "da78dd1c6d39d95179d485087e158409c00a35640ac8d81afc5bbf7180de3a21",
+        "bytes": 28730658
+      },
+      {
+        "upload_id": 88932,
+        "nombre": "Archivo comprimido.zip",
+        "tamano_itch": "38 MB",
+        "plataformas": [],
+        "sha256": "7355ef421f394a5b82abce892ce061a3b894c060a5786d1cdf4dd3a1e3afdd69",
+        "bytes": 39898702
+      }
+    ],
+    "html5": null,
+    "unity_web_player": false,
+    "externos": []
+  },
+  {
+    "slug": "da-car",
+    "titulo": "Da Car",
+    "id": 44681,
+    "url": "https://elvisbrevi.itch.io/da-car",
+    "info": {
+      "Status": "Prototype",
+      "Platforms": "HTML5",
+      "Author": "Elvis Brevi",
+      "Genre": "Sports , Racing",
+      "Made with": "Construct",
+      "Tags": "dakar , moto"
+    },
+    "descripcion": "",
+    "archivos": [],
+    "html5": "https://html-classic.itch.zone/html/1796748/index.html",
+    "unity_web_player": false,
+    "externos": [],
+    "html5_archivos": 32,
+    "html5_bytes": 1477753
+  },
+  {
+    "slug": "neuro-battle",
+    "titulo": "Neuro Battle",
+    "id": 35313,
+    "url": "https://elvisbrevi.itch.io/neuro-battle",
+    "info": {
+      "Status": "Prototype",
+      "Platforms": "Unity Web Player (Legacy)",
+      "Author": "Elvis Brevi",
+      "Genre": "Shooter",
+      "Made with": "Unity"
+    },
+    "descripcion": "Prototipo desarrollado en GameJam, Santo Tomas Concepción 2015.",
+    "archivos": [
+      {
+        "upload_id": 96500,
+        "nombre": "Neuro Battle.zip",
+        "tamano_itch": "13 MB",
+        "plataformas": [],
+        "sha256": "f1503c9b448c1813bddcd29db9417160c8876783a50b30a5bff9bd17f138ef57",
+        "bytes": 13990192
+      }
+    ],
+    "html5": null,
+    "unity_web_player": false,
+    "externos": []
+  },
+  {
+    "slug": "super-happy-jump",
+    "titulo": "Super Happy Jump",
+    "id": 15603,
+    "url": "https://elvisbrevi.itch.io/super-happy-jump",
+    "info": {
+      "Status": "Released",
+      "Platforms": "Unity Web Player (Legacy)",
+      "Author": "Elvis Brevi",
+      "Genre": "Platformer",
+      "Tags": "Casual , chile , coin , double-jump , elvis-brevi , happy , hard , infinite , jumping , mobile"
+    },
+    "descripcion": "Super Happy Jump is double jump, cactus and coins. [How to play] > Tap to jump. > Double tap to double jump. > Don't touch the cactus. > Be happy. iOS ► https:// appsto.re/cl/CvkK3 . Android ► http:// goo.gl/HsbYRU",
+    "archivos": [],
+    "html5": null,
+    "unity_web_player": true,
+    "externos": [],
+    "unity_web_sha256": "12f40d96950953afa4a6446ce0d7231fe0331a1cc78dcd23c9a031d227b60125",
+    "unity_web_bytes": 385194
+  },
+  {
+    "slug": "retro-penal",
+    "titulo": "Retro Penal",
+    "id": 31329,
+    "url": "https://elvisbrevi.itch.io/retro-penal",
+    "info": {
+      "Status": "Released",
+      "Platforms": "HTML5 , Windows , macOS , Linux",
+      "Author": "Elvis Brevi",
+      "Genre": "Sports",
+      "Made with": "Construct",
+      "Tags": "brazil , casueli , cazely , chile , elvis-brevi , futbol , mundial , penal , retro-penal , seleccion-chilena"
+    },
+    "descripcion": "",
+    "archivos": [
+      {
+        "upload_id": 80575,
+        "nombre": "win32.zip",
+        "tamano_itch": "29 MB",
+        "plataformas": [
+          "Windows"
+        ],
+        "sha256": "73ec15701cedd2f1bf128a28351d85419f9454aac8af19d2af5428d6c4aa1ce5",
+        "bytes": 30888232
+      },
+      {
+        "upload_id": 80576,
+        "nombre": "osx32.zip",
+        "tamano_itch": "32 MB",
+        "plataformas": [
+          "macOS"
+        ],
+        "sha256": "3d33903af46dad0eac09af1c3b73d368fabb7c908b9be3b99e1e922a068fb857",
+        "bytes": 34280083
+      },
+      {
+        "upload_id": 80577,
+        "nombre": "linux32.zip",
+        "tamano_itch": "37 MB",
+        "plataformas": [
+          "Linux"
+        ],
+        "sha256": "87f2ecef56f7f0b6dbbcca6d1d366a1a54fe0b53be640be43f5fc570482f6283",
+        "bytes": 39778275
+      }
+    ],
+    "html5": "https://html-classic.itch.zone/html/80893/index.html",
+    "unity_web_player": false,
+    "externos": [],
+    "html5_archivos": 56,
+    "html5_bytes": 1618005
+  },
+  {
+    "slug": "que-no-caiga",
+    "titulo": "Que No Caiga",
+    "id": 31408,
+    "url": "https://elvisbrevi.itch.io/que-no-caiga",
+    "info": {
+      "Status": "Released",
+      "Platforms": "HTML5",
+      "Author": "Elvis Brevi",
+      "Genre": "Sports",
+      "Made with": "Construct",
+      "Tags": "ball , balon , brasil , chile , dominar , Football , futbol , mundial , pelota , Soccer"
+    },
+    "descripcion": "",
+    "archivos": [],
+    "html5": "https://html-classic.itch.zone/html/80888/index.html",
+    "unity_web_player": false,
+    "externos": [],
+    "html5_archivos": 39,
+    "html5_bytes": 859496
+  },
+  {
+    "slug": "fast-car-racer",
+    "titulo": "Fast Car Racer",
+    "id": 33802,
+    "url": "https://elvisbrevi.itch.io/fast-car-racer",
+    "info": {
+      "Status": "Released",
+      "Author": "Elvis Brevi",
+      "Genre": "Sports"
+    },
+    "descripcion": "Video del gameplay: https://player.vimeo.com/video/57856159 Fast Car Racer from Elvis Brevi on Vimeo .",
+    "archivos": [],
+    "html5": null,
+    "unity_web_player": false,
+    "externos": [
+      "https://play.google.com/store/apps/details?id=cl.gioco.fcr"
+    ]
+  },
+  {
+    "slug": "the-meaning-of-christmas",
+    "titulo": "The Meaning of Christmas",
+    "id": 33590,
+    "url": "https://elvisbrevi.itch.io/the-meaning-of-christmas",
+    "info": {
+      "Status": "Released",
+      "Platforms": "Android",
+      "Author": "Elvis Brevi",
+      "Genre": "Puzzle"
+    },
+    "descripcion": "Video del gameplay: https://player.vimeo.com/video/34446793 The Meaning of Christmas from Elvis Brevi on Vimeo .",
+    "archivos": [
+      {
+        "upload_id": 88928,
+        "nombre": "The Meaning Of Christmas.apk",
+        "tamano_itch": "7.7 MB",
+        "plataformas": [
+          "Android"
+        ],
+        "sha256": "1b0d85a222e8bdc0234387f4a0fdadfa7c153bac6958285c6d04d961ce761cc6",
+        "bytes": 8158243
+      }
+    ],
+    "html5": null,
+    "unity_web_player": false,
+    "externos": []
+  },
+  {
+    "slug": "go-ball",
+    "titulo": "Go Ball",
+    "id": 31962,
+    "url": "https://elvisbrevi.itch.io/go-ball",
+    "info": {
+      "Status": "Prototype",
+      "Author": "Elvis Brevi",
+      "Genre": "Puzzle"
+    },
+    "descripcion": "Video del gameplay: https://player.vimeo.com/video/29466492 Go Ball - Teaser Trailer from Elvis Brevi on Vimeo .",
+    "archivos": [
+      {
+        "upload_id": 82958,
+        "nombre": "Go Ball (Demo) Windows x32",
+        "tamano_itch": "23 MB",
+        "plataformas": [],
+        "sha256": "95c142b8142d3dffad53d0aaf1ef1167487ef1dae0d35a57c0fb9c638acfa7b9",
+        "bytes": 24277710
+      },
+      {
+        "upload_id": 82960,
+        "nombre": "Go Ball (Demo) Windows x64",
+        "tamano_itch": "22 MB",
+        "plataformas": [],
+        "sha256": "6ed131a632366c644edc8ccf40c2e10821d9415da3932c89770d3c39b33874b6",
+        "bytes": 23387381
+      },
+      {
+        "upload_id": 82961,
+        "nombre": "Go Ball (Demo) osx",
+        "tamano_itch": "20 MB",
+        "plataformas": [],
+        "sha256": "1a490378b9081b9357fba069ee8d6e2692bed81c9915a26f2f46b8015cb65d9f",
+        "bytes": 21058484
+      }
+    ],
+    "html5": null,
+    "unity_web_player": false,
+    "externos": []
+  },
+  {
+    "slug": "the-electric-eel-attack",
+    "titulo": "The Electric Eel Attack",
+    "id": 33589,
+    "url": "https://elvisbrevi.itch.io/the-electric-eel-attack",
+    "info": {
+      "Status": "Prototype",
+      "Platforms": "Windows",
+      "Author": "Elvis Brevi",
+      "Genre": "Platformer"
+    },
+    "descripcion": "Video del gameplay https://player.vimeo.com/video/20317603 The Electric Eel Attack from Elvis Brevi on Vimeo .",
+    "archivos": [
+      {
+        "upload_id": 88926,
+        "nombre": "The_Electric_Eel_Attack.zip",
+        "tamano_itch": "6.9 MB",
+        "plataformas": [
+          "Windows"
+        ],
+        "sha256": "8c464a2d28514271813a5bec42dfae7343ddb5b39974eab151a9d4be7137d95f",
+        "bytes": 7312844
+      }
+    ],
+    "html5": null,
+    "unity_web_player": false,
+    "externos": []
+  },
+  {
+    "slug": "iman",
+    "titulo": "IMAN",
+    "id": 33587,
+    "url": "https://elvisbrevi.itch.io/iman",
+    "info": {
+      "Status": "Prototype",
+      "Platforms": "Windows",
+      "Author": "Elvis Brevi",
+      "Genre": "Platformer"
+    },
+    "descripcion": "Video del gameplay: https://player.vimeo.com/video/8196488 IMAN (Prototipo) from Elvis Brevi on Vimeo .",
+    "archivos": [
+      {
+        "upload_id": 88923,
+        "nombre": "IMAN_(Prototipo).rar",
+        "tamano_itch": "5.2 MB",
+        "plataformas": [
+          "Windows"
+        ],
+        "sha256": "d554bfa909ed11af019a44742c7a1e7148e5c2063090b89f3cb918e30898b85f",
+        "bytes": 5517802
+      }
+    ],
+    "html5": null,
+    "unity_web_player": false,
+    "externos": []
+  },
+  {
+    "slug": "proyecto-nutria",
+    "titulo": "Proyecto Nutria",
+    "id": 33585,
+    "url": "https://elvisbrevi.itch.io/proyecto-nutria",
+    "info": {
+      "Status": "Prototype",
+      "Platforms": "Windows",
+      "Author": "Elvis Brevi",
+      "Genre": "Platformer"
+    },
+    "descripcion": "Video del gameplay: https://player.vimeo.com/video/6882393 Proyecto Nutria (version prototipo) from Elvis Brevi on Vimeo .",
+    "archivos": [
+      {
+        "upload_id": 88917,
+        "nombre": "Proyecto_Nutria.rar",
+        "tamano_itch": "1.5 MB",
+        "plataformas": [
+          "Windows"
+        ],
+        "sha256": "0e2c313e1bebbcae3589e6f1192c297c93e3ffcfdd72fa408bd4d5d623198658",
+        "bytes": 1588318
+      }
+    ],
+    "html5": null,
+    "unity_web_player": false,
+    "externos": []
+  }
+]

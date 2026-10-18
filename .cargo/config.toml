@@ -1,0 +1,4 @@
+# Las funciones JS de mq_js_bundle.js (y las de web/index.html) se resuelven al cargar el wasm;
+# rust-lld ya no las permite sin definir por defecto.
+[target.wasm32-unknown-unknown]
+rustflags = ["-C", "link-arg=--allow-undefined"]

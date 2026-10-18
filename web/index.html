@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>IMÁN 2026</title>
+    <style>
+        html, body, canvas {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: black;
+            touch-action: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        canvas {
+            position: absolute;
+            z-index: 0;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="glcanvas" tabindex="1"></canvas>
+    <!-- mq_js_bundle.js de macroquad 0.4.16; tiene que coincidir con la versión del crate. -->
+    <script src="mq_js_bundle.js"></script>
+    <script>
+        // src/tactil.rs pregunta si el puntero principal es táctil (móvil o tablet).
+        miniquad_add_plugin({
+            name: "iman_tactil",
+            version: 1,
+            register_plugin: function (importObject) {
+                importObject.env.iman_es_tactil = function () {
+                    return window.matchMedia("(pointer: coarse)").matches ? 1 : 0;
+                };
+            },
+        });
+        load("iman.wasm");
+        document.getElementById("glcanvas").focus();
+    </script>
+</body>
+</html>

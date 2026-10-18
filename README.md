@@ -16,6 +16,24 @@ cargo run --release
 En Linux hacen falta las cabeceras de ALSA y OpenGL/X11 (`sudo apt install libasound2-dev`).
 Los assets van embebidos en el binario, así que se puede ejecutar desde cualquier carpeta.
 
+### Versión web
+
+```sh
+rustup target add wasm32-unknown-unknown
+./tools/build_web.sh        # genera dist/web (index.html + mq_js_bundle.js + iman.wasm)
+butler push dist/web elvisbrevi/imn-2026:html5
+```
+
+`web/mq_js_bundle.js` es el de macroquad 0.4.16 y tiene que coincidir con la versión del crate.
+En la web, Esc y la opción "Quit" no hacen nada (no hay ventana que cerrar).
+
+### Controles táctiles
+
+En móviles y tablets aparecen una cruceta, los botones A (imán) y B (salto) y START. Se activan
+si el navegador indica un puntero táctil (`(pointer: coarse)`, ver `web/index.html`) o en cuanto
+llega el primer toque. Admiten varios dedos a la vez (andar y saltar). En vertical el juego se
+coloca arriba y los controles debajo.
+
 ## Controles
 
 | Tecla | Acción |

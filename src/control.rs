@@ -2,6 +2,8 @@
 
 use macroquad::prelude::*;
 
+use crate::tactil::Pulsados;
+
 #[derive(Default)]
 pub struct Control {
     pub a_: bool,
@@ -20,15 +22,16 @@ pub struct Control {
 
 impl Control {
     /// Se llama una vez por paso fijo, igual que PCInput.actualizar en Game1.Update.
-    pub fn actualizar(&mut self) {
+    /// Los botones táctiles cuentan igual que sus teclas.
+    pub fn actualizar(&mut self, tactil: &Pulsados) {
         let actual = [
-            is_key_down(KeyCode::Z),
-            is_key_down(KeyCode::X),
-            is_key_down(KeyCode::Enter) || is_key_down(KeyCode::KpEnter),
-            is_key_down(KeyCode::Up),
-            is_key_down(KeyCode::Down),
-            is_key_down(KeyCode::Left),
-            is_key_down(KeyCode::Right),
+            is_key_down(KeyCode::Z) || tactil.a,
+            is_key_down(KeyCode::X) || tactil.b,
+            is_key_down(KeyCode::Enter) || is_key_down(KeyCode::KpEnter) || tactil.start,
+            is_key_down(KeyCode::Up) || tactil.arriba,
+            is_key_down(KeyCode::Down) || tactil.abajo,
+            is_key_down(KeyCode::Left) || tactil.izquierda,
+            is_key_down(KeyCode::Right) || tactil.derecha,
         ];
         let pulsada = |i: usize| actual[i] && !self.anterior[i];
 

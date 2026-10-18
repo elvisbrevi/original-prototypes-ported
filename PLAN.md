@@ -5,8 +5,8 @@ Plan de trabajo para recrear en Rust + macroquad todos los juegos publicados en
 Está pensado para avanzar en varias sesiones: marca cada casilla al completarla e incluye el cambio
 del plan en el mismo commit.
 
-**Siguiente paso:** checkpoint 0.4 (crate compartido `crates/museo`, añadirlo a `members` del
-`Cargo.toml` raíz) y después 2.1 Proyecto Nutria, que reutiliza todo lo hecho para IMAN.
+**Siguiente paso:** checkpoint 0.5 (plantilla web común) y el resto de la fase 0; después 2.1
+Proyecto Nutria, que reutiliza todo lo hecho para IMAN.
 
 ## Reglas
 
@@ -52,7 +52,7 @@ para escenas y assets de Unity, apktool/JADX para APK de Android (REA las usa si
 - [x] **0.2** Inventario y descarga de originales: `tools/originales.py` →
   `originales/catalogo.json` (metadatos, archivos, sha256). Los binarios quedan fuera de git.
 - [x] **0.3** Repo público en GitHub.
-- [ ] **0.4** Crate compartido `crates/museo` sacado de IMAN: pantalla virtual escalada con bandas,
+- [x] **0.4** Crate compartido `crates/museo` sacado de IMAN: pantalla virtual escalada con bandas,
   paso fijo, detección táctil (`(pointer: coarse)` + primer toque) y controles táctiles
   **configurables por juego** (cruceta, 1–4 botones, zonas de toque). Migrar IMAN a usarlo.
 - [ ] **0.5** Plantilla web común: que `tools/build_web.sh` genere `index.html` (título, nombre del
@@ -103,7 +103,7 @@ Orden sugerido: primero lo que reutiliza herramientas ya hechas y luego lo más 
 
 ### 2.0 IMAN ✅
 - [x] Triaje REA, assets, lógica, port nativo, web + táctil, README.
-- [ ] Migrar a `crates/museo` cuando exista (checkpoint 0.4).
+- [x] Migrar a `crates/museo` (checkpoint 0.4).
 - Pendientes: mando DirectInput no portado; sonido sin probar en hardware real (el servidor no tiene
   tarjeta de sonido); controles táctiles probados solo en emulación de Chromium.
 

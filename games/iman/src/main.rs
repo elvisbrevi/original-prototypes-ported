@@ -8,17 +8,16 @@ mod graficos;
 mod menu;
 mod objetos;
 mod shader;
-mod tactil;
 mod xna;
 
 use macroquad::prelude::*;
+use museo::{Boton, ConfigTactil, Cruceta, Pantalla, PasoFijo, Tactil, WEB};
 
 use crate::assets::Assets;
 use crate::control::Control;
 use crate::escenarios::Camara;
 use crate::menu::Menu;
-use crate::tactil::Tactil;
-use crate::xna::{ALTO, ANCHO, SEGUNDOS_POR_PASO};
+use crate::xna::{ALTO, ANCHO};
 
 fn window_conf() -> Conf {
     Conf {
@@ -29,34 +28,38 @@ fn window_conf() -> Conf {
     }
 }
 
-/// Cámara que dibuja en la pantalla virtual de 640x480 con `origen` en la esquina superior izquierda.
-fn vista(pantalla: &RenderTarget, origen: Vec2) {
-    set_camera(&Camera2D {
-        target: origen + vec2(ANCHO, ALTO) / 2.0,
-        zoom: vec2(2.0 / ANCHO, 2.0 / ALTO),
-        render_target: Some(pantalla.clone()),
-        ..Default::default()
-    });
-}
+/// Cruceta, botones A (imán) y B (salto) y START, como el mando del original.
+const TACTIL: ConfigTactil = ConfigTactil {
+    cruceta: Cruceta::Completa,
+    botones: &[
+        Boton {
+            letra: "A",
+            etiqueta: "IMAN",
+        },
+        Boton {
+            letra: "B",
+            etiqueta: "SALTO",
+        },
+    ],
+    start: Some("START"),
+    zonas: &[],
+};
 
 #[macroquad::main(window_conf)]
 async fn main() {
     rand::srand(miniquad::date::now() as u64);
     let assets = Assets::cargar().await;
-    let pantalla = render_target(ANCHO as u32, ALTO as u32);
-    pantalla.texture.set_filter(FilterMode::Linear);
-
+    let pantalla = Pantalla::nueva(ANCHO, ALTO);
+    let mut paso = PasoFijo::xna();
     let mut camara = Camara::default();
     let mut control = Control::default();
-    let mut tactil = Tactil::nuevo();
+    let mut tactil = Tactil::nuevo(TACTIL);
     let mut menu = Menu::nuevo(&assets, &mut camara);
-    let mut acumulado = 0.0_f64;
     let mut pantalla_completa = false;
 
     loop {
         // En la web no hay ventana que cerrar: Esc y "Quit" no hacen nada.
-        let web = cfg!(target_arch = "wasm32");
-        if is_key_down(KeyCode::Escape) && !web {
+        if is_key_down(KeyCode::Escape) && !WEB {
             break;
         }
         if is_key_pressed(KeyCode::F4) {
@@ -64,50 +67,24 @@ async fn main() {
             set_fullscreen(pantalla_completa);
         }
 
-        let pulsados = tactil.actualizar();
-
-        // Paso fijo como Game de XNA (IsFixedTimeStep, máximo 500 ms acumulados por frame).
-        acumulado += (get_frame_time() as f64).min(0.5);
-        while acumulado >= SEGUNDOS_POR_PASO as f64 {
-            acumulado -= SEGUNDOS_POR_PASO as f64;
+        let pulsados = tactil.actualizar(&pantalla);
+        for _ in 0..paso.pasos() {
             control.actualizar(&pulsados);
             menu.actualizar(&control, &mut camara, &assets);
             if menu.exit {
-                if !web {
+                if !WEB {
                     return;
                 }
                 menu.exit = false;
             }
         }
 
-        vista(&pantalla, Vec2::ZERO);
+        pantalla.vista(Vec2::ZERO);
         clear_background(BLACK);
         menu.dibujar(&camara, &assets, |origen| {
-            vista(&pantalla, origen.unwrap_or_default())
+            pantalla.vista(origen.unwrap_or_default())
         });
-
-        // Escala la pantalla virtual a la ventana manteniendo 4:3. En vertical con controles
-        // táctiles el juego sube arriba para dejarles el espacio de abajo.
-        set_default_camera();
-        clear_background(BLACK);
-        let escala = (screen_width() / ANCHO).min(screen_height() / ALTO);
-        let tamano = vec2(ANCHO, ALTO) * escala;
-        let vertical = screen_height() > screen_width();
-        draw_texture_ex(
-            &pantalla.texture,
-            (screen_width() - tamano.x) / 2.0,
-            if tactil.activo && vertical {
-                0.0
-            } else {
-                (screen_height() - tamano.y) / 2.0
-            },
-            WHITE,
-            DrawTextureParams {
-                dest_size: Some(tamano),
-                ..Default::default()
-            },
-        );
-        tactil.dibujar(&pulsados);
+        museo::presentar(&pantalla, &tactil, &pulsados);
         next_frame().await
     }
 }

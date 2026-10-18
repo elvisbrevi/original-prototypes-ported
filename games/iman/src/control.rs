@@ -2,7 +2,7 @@
 
 use macroquad::prelude::*;
 
-use crate::tactil::Pulsados;
+use museo::Pulsados;
 
 #[derive(Default)]
 pub struct Control {
@@ -25,8 +25,8 @@ impl Control {
     /// Los botones táctiles cuentan igual que sus teclas.
     pub fn actualizar(&mut self, tactil: &Pulsados) {
         let actual = [
-            is_key_down(KeyCode::Z) || tactil.a,
-            is_key_down(KeyCode::X) || tactil.b,
+            is_key_down(KeyCode::Z) || tactil.botones[0],
+            is_key_down(KeyCode::X) || tactil.botones[1],
             is_key_down(KeyCode::Enter) || is_key_down(KeyCode::KpEnter) || tactil.start,
             is_key_down(KeyCode::Up) || tactil.arriba,
             is_key_down(KeyCode::Down) || tactil.abajo,

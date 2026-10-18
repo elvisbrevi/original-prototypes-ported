@@ -3,7 +3,7 @@
 use macroquad::prelude::*;
 
 /// TargetElapsedTime por defecto de XNA: 166667 ticks de 100 ns.
-pub const TICKS_POR_PASO: i64 = 166_667;
+pub const TICKS_POR_PASO: i64 = museo::PasoFijo::TICKS_XNA;
 /// gameTime.ElapsedGameTime.TotalSeconds con paso fijo.
 pub const SEGUNDOS_POR_PASO: f32 = TICKS_POR_PASO as f32 / 10_000_000.0;
 

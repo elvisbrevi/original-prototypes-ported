@@ -1,0 +1,8 @@
+[package]
+name = "museo"
+version = "0.1.0"
+edition = "2024"
+description = "Piezas comunes de los ports del museo: pantalla virtual, paso fijo y controles táctiles"
+
+[dependencies]
+macroquad = "0.4"

@@ -29,10 +29,10 @@ En la web, Esc y la opción "Quit" no hacen nada (no hay ventana que cerrar).
 
 ### Controles táctiles
 
-En móviles y tablets aparecen una cruceta, los botones A (imán) y B (salto) y START. Se activan
-si el navegador indica un puntero táctil (`(pointer: coarse)`, ver `web/index.html`) o en cuanto
-llega el primer toque. Admiten varios dedos a la vez (andar y saltar). En vertical el juego se
-coloca arriba y los controles debajo.
+En móviles y tablets aparecen una cruceta, los botones A (imán) y B (salto) y START. Los dibuja el
+crate compartido [`crates/museo`](../../crates/museo), configurado en `src/main.rs`: se activan si el
+navegador indica un puntero táctil (`(pointer: coarse)`) o en cuanto llega el primer toque. Admiten
+varios dedos a la vez (andar y saltar). En vertical el juego se coloca arriba y los controles debajo.
 
 ## Controles
 
@@ -82,7 +82,7 @@ cajas/barriles hacia el niño y, apuntando hacia arriba, lo eleva hacia una plat
 
 | C# (XNA) | Rust |
 |---|---|
-| `Game1`, `Program`, `Camaras.Camera2D` | `main.rs`, `escenarios::Camara` |
+| `Game1`, `Program`, `Camaras.Camera2D` | `main.rs` (con `museo::PasoFijo` y `museo::Pantalla`), `escenarios::Camara` |
 | `Controles.PCInput` / `Control` | `control.rs` |
 | `Objetos.Objeto`, `Plataforma`, `Niño` | `objetos.rs` |
 | `Fisicas.Fisica` | `fisica.rs` |

@@ -1,0 +1,14 @@
+{
+  "pantalla": [640, 480],
+  "tactil": { "botones": 2 },
+  "pasos": [
+    { "esperar": 3000 },
+    { "captura": "menu" },
+    { "tecla": "z", "control": "boton0", "ms": 200, "despues": 3000 },
+    { "tecla": "ArrowRight", "control": "derecha", "ms": 1500 },
+    { "tecla": ["ArrowRight", "x"], "control": ["derecha", "boton1"], "ms": 500, "despues": 200 },
+    { "captura": "juego" },
+    { "tecla": "Enter", "control": "start", "ms": 150, "despues": 500 },
+    { "captura": "pausa" }
+  ]
+}

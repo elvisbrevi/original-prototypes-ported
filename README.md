@@ -5,7 +5,9 @@ recreados en **Rust + [macroquad](https://macroquad.rs)** para jugarse hoy en PC
 (con controles táctiles en móvil). Cada port se reconstruye por ingeniería inversa del binario
 original con [REA](https://rea.tools/) y usa los gráficos y sonidos originales extraídos de él.
 
-El avance está en [PLAN.md](PLAN.md).
+El avance está en [PLAN.md](PLAN.md). Cada push compila todo en nativo y en wasm
+([GitHub Actions](.github/workflows/build.yml)):
+![build](https://github.com/elvisbrevi/original-prototypes-ported/actions/workflows/build.yml/badge.svg)
 
 ## Sala de exposición
 

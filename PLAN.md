@@ -5,7 +5,7 @@ Plan de trabajo para recrear en Rust + macroquad todos los juegos publicados en
 Está pensado para avanzar en varias sesiones: marca cada casilla al completarla e incluye el cambio
 del plan en el mismo commit.
 
-**Siguiente paso:** checkpoint 0.6 (GitHub Actions) y el resto de la fase 0; después 2.1
+**Siguiente paso:** checkpoint 0.7 (opcional, GitHub Pages) y el resto de la fase 0; después 2.1
 Proyecto Nutria, que reutiliza todo lo hecho para IMAN.
 
 ## Reglas
@@ -57,7 +57,7 @@ para escenas y assets de Unity, apktool/JADX para APK de Android (REA las usa si
   **configurables por juego** (cruceta, 1–4 botones, zonas de toque). Migrar IMAN a usarlo.
 - [x] **0.5** Plantilla web común: que `tools/build_web.sh` genere `index.html` (título, nombre del
   wasm, plugin táctil) en vez de copiar `games/<slug>/web/`.
-- [ ] **0.6** GitHub Actions: build nativo + wasm de todo el workspace en cada push.
+- [x] **0.6** GitHub Actions: build nativo + wasm de todo el workspace en cada push.
 - [ ] **0.7** (Opcional) GitHub Pages con todas las versiones web, enlazadas desde el README del museo.
 - [ ] **0.8** Herramientas de extracción por stack: UnityPy/AssetRipper (Unity 4/5 y Unity Web
   Player), lector de `data.js` de Construct 2, apktool/JADX (Android).

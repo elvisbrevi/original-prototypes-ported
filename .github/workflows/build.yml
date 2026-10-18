@@ -1,0 +1,42 @@
+# Compila todo el workspace en nativo (Linux) y en wasm, y deja las versiones web como artefacto.
+name: build
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Rust estable con wasm32, clippy y rustfmt
+        run: |
+          rustup toolchain install stable --profile minimal --component clippy,rustfmt --target wasm32-unknown-unknown
+          rustup default stable
+
+      - name: Dependencias de macroquad (ALSA, X11, OpenGL)
+        run: sudo apt-get update && sudo apt-get install -y libasound2-dev libx11-dev libxi-dev libgl1-mesa-dev
+
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Formato
+        run: cargo fmt --all --check
+
+      - name: Clippy nativo
+        run: cargo clippy --workspace --all-targets -- -D warnings
+
+      - name: Clippy wasm
+        run: cargo clippy --workspace --target wasm32-unknown-unknown -- -D warnings
+
+      - name: Build nativo
+        run: cargo build --workspace --release
+
+      - name: Versiones web
+        run: for juego in games/*/; do tools/build_web.sh "$(basename "$juego")"; done
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: web
+          path: dist/

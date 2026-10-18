@@ -5,6 +5,7 @@ Uso: python3 -I tools/xnb_extract.py <carpeta Content> <salida> [lista.txt]
 - Texture2D (Color, DXT1, DXT3, DXT5) -> <ruta>.png
 - SpriteFont -> <ruta>.png (textura) + <ruta>.txt (glifos, recortes, kerning; formato de
   crates/xna: line_spacing spacing default_char y una línea por glifo)
+- SoundEffect -> <ruta>.wav con el mismo formato PCM del original (quad-snd y WebAudio remuestrean)
 Si se da una lista, solo se convierten las rutas de contenido que tenga (una por línea, sin
 extensión, como en Content.Load: "Graficos/Personajes/coipo"); las líneas con # son comentarios.
 Los archivos de ClickOnce (.xnb.deploy) se aceptan igual que los .xnb.
@@ -189,7 +190,23 @@ def fuente(r, destino):
     return f"fuente {w}x{h}, {len(caracteres)} glifos"
 
 
-CONVERSORES = {"Texture2DReader": textura, "SpriteFontReader": fuente}
+def sonido(r, destino):
+    formato = r.bytes(r.u32())
+    datos = r.bytes(r.u32())
+    inicio_bucle, largo_bucle, duracion_ms = r.i32(), r.i32(), r.i32()
+    assert r.p == len(r.d), (r.p, len(r.d))
+    etiqueta, canales, frecuencia, bytes_por_segundo, alineacion, bits = struct.unpack_from("<HHIIHH", formato)
+    if etiqueta != 1:
+        raise ValueError(f"formato de audio {etiqueta} no soportado (solo PCM)")
+    fmt = struct.pack("<HHIIHH", etiqueta, canales, frecuencia, bytes_por_segundo, alineacion, bits)
+    with open(destino + ".wav", "wb") as f:
+        f.write(b"RIFF" + struct.pack("<I", 4 + 8 + len(fmt) + 8 + len(datos)) + b"WAVE")
+        f.write(b"fmt " + struct.pack("<I", len(fmt)) + fmt)
+        f.write(b"data" + struct.pack("<I", len(datos)) + datos)
+    return f"sonido PCM {canales} canal(es), {frecuencia} Hz, {bits} bits, {duracion_ms} ms"
+
+
+CONVERSORES = {"Texture2DReader": textura, "SpriteFontReader": fuente, "SoundEffectReader": sonido}
 
 
 def main(contenido, salida, lista=None):

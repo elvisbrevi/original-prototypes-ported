@@ -1,0 +1,336 @@
+<Escenario Nombre="nivel3" ColorR="100" ColorG="149" ColorB="237" ColorA="255" MostrarGrilla="False" MostrarDatos="False" MostrarCuerpos="False" Shaders="Ninguno" X="0" Y="120" Tamaño="1" Rotacion="0" Ancho="640" Alto="480">
+  <cielo Tipo="Grafico" Nombre="cielo" Nombre_Textura="cielo" PosicionX="0" PosicionY="0" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Ninguna" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="False" FueraDeCamara="True" Movimento="False" BlendMode="AlphaBlend" Animado="False" ScrollHorizontal="0" ScrollVertical="0" Tamaño="1" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="238" ColorG="130" ColorB="238" ColorA="255" SpriteEffects="None" Lugar="Fondo" CuerpoX="0" CuerpoY="0" CuerpoAncho="640" CuerpoAlto="480">
+    <Shader Tipo_Shader="Ninguno" />
+  </cielo>
+  <nube Tipo="Grafico" Nombre="nube" Nombre_Textura="nube" PosicionX="-82" PosicionY="10" Velocidad="1" VelocidadParticulas="0" Direccion="Arriba" Colision="Ninguna" Inclinacion="0" CantidadParticulas="0" RepetirScroll="True" Activo="True" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="True" BlendMode="AlphaBlend" Animado="False" ScrollHorizontal="0" ScrollVertical="0" Tamaño="1" InicioX="0" InicioY="0" DestinoX="1020" DestinoY="0" ColorR="255" ColorG="99" ColorB="71" ColorA="255" SpriteEffects="None" Lugar="Medio" CuerpoX="-82" CuerpoY="10" CuerpoAncho="120" CuerpoAlto="50">
+    <Shader Tipo_Shader="Ninguno" />
+  </nube>
+  <nube2 Tipo="Grafico" Nombre="nube2" Nombre_Textura="nube" PosicionX="87" PosicionY="120" Velocidad="1" VelocidadParticulas="0" Direccion="Arriba" Colision="Ninguna" Inclinacion="0" CantidadParticulas="0" RepetirScroll="True" Activo="True" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="True" BlendMode="AlphaBlend" Animado="False" ScrollHorizontal="0" ScrollVertical="0" Tamaño="1" InicioX="0" InicioY="0" DestinoX="1020" DestinoY="0" ColorR="255" ColorG="99" ColorB="71" ColorA="255" SpriteEffects="None" Lugar="Medio" CuerpoX="87" CuerpoY="120" CuerpoAncho="120" CuerpoAlto="50">
+    <Shader Tipo_Shader="Ninguno" />
+  </nube2>
+  <nube3 Tipo="Grafico" Nombre="nube3" Nombre_Textura="nube" PosicionX="374" PosicionY="42" Velocidad="1" VelocidadParticulas="0" Direccion="Arriba" Colision="Ninguna" Inclinacion="0" CantidadParticulas="0" RepetirScroll="True" Activo="True" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="True" BlendMode="AlphaBlend" Animado="False" ScrollHorizontal="0" ScrollVertical="0" Tamaño="1" InicioX="0" InicioY="0" DestinoX="1020" DestinoY="0" ColorR="255" ColorG="99" ColorB="71" ColorA="255" SpriteEffects="None" Lugar="Medio" CuerpoX="374" CuerpoY="42" CuerpoAncho="120" CuerpoAlto="50">
+    <Shader Tipo_Shader="Ninguno" />
+  </nube3>
+  <set Tipo="Grafico" Nombre="set" Nombre_Textura="set3" PosicionX="0" PosicionY="0" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Ninguna" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="False" BlendMode="AlphaBlend" Animado="False" ScrollHorizontal="0" ScrollVertical="0" Tamaño="1" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="255" ColorG="255" ColorB="255" ColorA="255" SpriteEffects="None" Lugar="Medio" CuerpoX="0" CuerpoY="0" CuerpoAncho="1020" CuerpoAlto="600">
+    <Shader Tipo_Shader="Ninguno" />
+  </set>
+  <vortice Tipo="Particulas" Nombre="vortice" NoShaderCamara="True" Nombre_Textura="star" PosicionX="940" PosicionY="530" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Ninguna" Inclinacion="0" CantidadParticulas="2" RepetirScroll="False" Activo="False" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="False" BlendMode="AlphaBlend" Animado="False" ScrollHorizontal="0" ScrollVertical="0" Tamaño="1" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="255" ColorG="255" ColorB="255" ColorA="255" SpriteEffects="None" Lugar="Frente" CuerpoX="940" CuerpoY="530" CuerpoAncho="10" CuerpoAlto="10" ColorRandom="True" TamañoRandom="True" DireccionRandom="True">
+    <Shader Tipo_Shader="Ninguno" />
+    <Sonidos>
+      <vortice Nombre="vortice" Volumen="1" />
+    </Sonidos>
+  </vortice>
+  <suelo1 Tipo="Plataforma" Nombre="suelo1" Nombre_Textura="pixel" PosicionX="0" PosicionY="580" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Superior" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="False" BlendMode="AlphaBlend" Animado="False" ScrollHorizontal="1" ScrollVertical="1" Tamaño="1" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="0" ColorG="0" ColorB="0" ColorA="0" SpriteEffects="None" Lugar="Frente" CuerpoX="0" CuerpoY="580" CuerpoAncho="1020" CuerpoAlto="20">
+    <Shader Tipo_Shader="Ninguno" />
+  </suelo1>
+  <suelo2 Tipo="Plataforma" Nombre="suelo2" Nombre_Textura="pixel" PosicionX="140" PosicionY="502" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Superior" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="False" BlendMode="AlphaBlend" Animado="False" ScrollHorizontal="1" ScrollVertical="1" Tamaño="1" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="0" ColorG="0" ColorB="0" ColorA="0" SpriteEffects="None" Lugar="Frente" CuerpoX="140" CuerpoY="502" CuerpoAncho="200" CuerpoAlto="20">
+    <Shader Tipo_Shader="Ninguno" />
+  </suelo2>
+  <arbusto1 Tipo="Plataforma" Nombre="arbusto1" Nombre_Textura="pixel" PosicionX="100" PosicionY="560" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Total" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="False" BlendMode="AlphaBlend" Animado="False" ScrollHorizontal="1" ScrollVertical="1" Tamaño="1" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="0" ColorG="0" ColorB="0" ColorA="0" SpriteEffects="None" Lugar="Frente" CuerpoX="100" CuerpoY="560" CuerpoAncho="40" CuerpoAlto="20">
+    <Shader Tipo_Shader="Ninguno" />
+  </arbusto1>
+  <arbusto2 Tipo="Plataforma" Nombre="arbusto2" Nombre_Textura="pixel" PosicionX="340" PosicionY="560" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Total" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="False" BlendMode="AlphaBlend" Animado="False" ScrollHorizontal="1" ScrollVertical="1" Tamaño="1" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="0" ColorG="0" ColorB="0" ColorA="0" SpriteEffects="None" Lugar="Frente" CuerpoX="340" CuerpoY="560" CuerpoAncho="40" CuerpoAlto="20">
+    <Shader Tipo_Shader="Ninguno" />
+  </arbusto2>
+  <pared1 Tipo="Plataforma" Nombre="pared1" Nombre_Textura="pixel" PosicionX="500" PosicionY="0" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Lateral" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="False" BlendMode="AlphaBlend" Animado="False" ScrollHorizontal="1" ScrollVertical="1" Tamaño="1" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="0" ColorG="0" ColorB="0" ColorA="0" SpriteEffects="None" Lugar="Frente" CuerpoX="500" CuerpoY="0" CuerpoAncho="40" CuerpoAlto="470">
+    <Shader Tipo_Shader="Ninguno" />
+  </pared1>
+  <pared2 Tipo="Plataforma" Nombre="pared2" Nombre_Textura="pixel" PosicionX="740" PosicionY="46" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Total" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="False" BlendMode="AlphaBlend" Animado="False" ScrollHorizontal="1" ScrollVertical="1" Tamaño="1" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="0" ColorG="0" ColorB="0" ColorA="0" SpriteEffects="None" Lugar="Frente" CuerpoX="740" CuerpoY="46" CuerpoAncho="40" CuerpoAlto="560">
+    <Shader Tipo_Shader="Ninguno" />
+  </pared2>
+  <pared3 Tipo="Plataforma" Nombre="pared3" Nombre_Textura="pixel" PosicionX="980" PosicionY="0" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Lateral" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="False" BlendMode="AlphaBlend" Animado="False" ScrollHorizontal="1" ScrollVertical="1" Tamaño="1" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="0" ColorG="0" ColorB="0" ColorA="0" SpriteEffects="None" Lugar="Frente" CuerpoX="980" CuerpoY="0" CuerpoAncho="40" CuerpoAlto="600">
+    <Shader Tipo_Shader="Ninguno" />
+  </pared3>
+  <suelo3 Tipo="Plataforma" Nombre="suelo3" Nombre_Textura="pixel" PosicionX="540" PosicionY="100" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Superior" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="False" BlendMode="AlphaBlend" Animado="False" ScrollHorizontal="1" ScrollVertical="1" Tamaño="1" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="0" ColorG="0" ColorB="0" ColorA="0" SpriteEffects="None" Lugar="Frente" CuerpoX="540" CuerpoY="100" CuerpoAncho="100" CuerpoAlto="20">
+    <Shader Tipo_Shader="Ninguno" />
+  </suelo3>
+  <suelo4 Tipo="Plataforma" Nombre="suelo4" Nombre_Textura="pixel" PosicionX="540" PosicionY="220" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Superior" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="False" BlendMode="AlphaBlend" Animado="False" ScrollHorizontal="1" ScrollVertical="1" Tamaño="1" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="0" ColorG="0" ColorB="0" ColorA="0" SpriteEffects="None" Lugar="Frente" CuerpoX="540" CuerpoY="220" CuerpoAncho="100" CuerpoAlto="20">
+    <Shader Tipo_Shader="Ninguno" />
+  </suelo4>
+  <suelo5 Tipo="Plataforma" Nombre="suelo5" Nombre_Textura="pixel" PosicionX="540" PosicionY="340" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Superior" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="False" BlendMode="AlphaBlend" Animado="False" ScrollHorizontal="1" ScrollVertical="1" Tamaño="1" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="0" ColorG="0" ColorB="0" ColorA="0" SpriteEffects="None" Lugar="Frente" CuerpoX="540" CuerpoY="340" CuerpoAncho="100" CuerpoAlto="20">
+    <Shader Tipo_Shader="Ninguno" />
+  </suelo5>
+  <suelo6 Tipo="Plataforma" Nombre="suelo6" Nombre_Textura="pixel" PosicionX="540" PosicionY="460" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Superior" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="False" BlendMode="AlphaBlend" Animado="False" ScrollHorizontal="1" ScrollVertical="1" Tamaño="1" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="0" ColorG="0" ColorB="0" ColorA="0" SpriteEffects="None" Lugar="Frente" CuerpoX="540" CuerpoY="460" CuerpoAncho="100" CuerpoAlto="20">
+    <Shader Tipo_Shader="Ninguno" />
+  </suelo6>
+  <suelo7 Tipo="Plataforma" Nombre="suelo7" Nombre_Textura="pixel" PosicionX="660" PosicionY="40" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Superior" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="False" BlendMode="AlphaBlend" Animado="False" ScrollHorizontal="1" ScrollVertical="1" Tamaño="1" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="0" ColorG="0" ColorB="0" ColorA="0" SpriteEffects="None" Lugar="Frente" CuerpoX="660" CuerpoY="40" CuerpoAncho="200" CuerpoAlto="20">
+    <Shader Tipo_Shader="Ninguno" />
+  </suelo7>
+  <suelo8 Tipo="Plataforma" Nombre="suelo8" Nombre_Textura="pixel" PosicionX="880" PosicionY="100" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Superior" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="False" BlendMode="AlphaBlend" Animado="False" ScrollHorizontal="1" ScrollVertical="1" Tamaño="1" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="0" ColorG="0" ColorB="0" ColorA="0" SpriteEffects="None" Lugar="Frente" CuerpoX="880" CuerpoY="100" CuerpoAncho="100" CuerpoAlto="20">
+    <Shader Tipo_Shader="Ninguno" />
+  </suelo8>
+  <suelo9 Tipo="Plataforma" Nombre="suelo9" Nombre_Textura="pixel" PosicionX="880" PosicionY="220" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Superior" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="False" BlendMode="AlphaBlend" Animado="False" ScrollHorizontal="1" ScrollVertical="1" Tamaño="1" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="0" ColorG="0" ColorB="0" ColorA="0" SpriteEffects="None" Lugar="Frente" CuerpoX="880" CuerpoY="220" CuerpoAncho="100" CuerpoAlto="20">
+    <Shader Tipo_Shader="Ninguno" />
+  </suelo9>
+  <suelo10 Tipo="Plataforma" Nombre="suelo10" Nombre_Textura="pixel" PosicionX="880" PosicionY="340" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Superior" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="False" BlendMode="AlphaBlend" Animado="False" ScrollHorizontal="1" ScrollVertical="1" Tamaño="1" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="0" ColorG="0" ColorB="0" ColorA="0" SpriteEffects="None" Lugar="Frente" CuerpoX="880" CuerpoY="340" CuerpoAncho="100" CuerpoAlto="20">
+    <Shader Tipo_Shader="Ninguno" />
+  </suelo10>
+  <suelo11 Tipo="Plataforma" Nombre="suelo11" Nombre_Textura="pixel" PosicionX="880" PosicionY="460" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Superior" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="False" BlendMode="AlphaBlend" Animado="False" ScrollHorizontal="1" ScrollVertical="1" Tamaño="1" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="0" ColorG="0" ColorB="0" ColorA="0" SpriteEffects="None" Lugar="Frente" CuerpoX="880" CuerpoY="460" CuerpoAncho="100" CuerpoAlto="20">
+    <Shader Tipo_Shader="Ninguno" />
+  </suelo11>
+  <hero Tipo="Personaje" Nombre="hero" Nombre_Textura="yerko" PosicionX="20" PosicionY="540" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Ninguna" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="True" FueraDeCamara="False" Movimento="False" BlendMode="AlphaBlend" Animado="True" ScrollHorizontal="0" ScrollVertical="0" Tamaño="1" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="255" ColorG="255" ColorB="255" ColorA="255" SpriteEffects="None" Lugar="Frente" CuerpoX="20" CuerpoY="540" CuerpoAncho="40" CuerpoAlto="40">
+    <Estados EstadoSeleccionado="0">
+      <quieto Nombre="quieto" CuadroX="0" CuadroY="40" CuadroAncho="40" CuadroAlto="40" FPS="0" Numero="1" NoRepetir="False" MinVariacion="0" MaxVariacion="0" VelocidadVariacion="0" Variacion="Ninguna" />
+      <corriendo Nombre="corriendo" CuadroX="80" CuadroY="0" CuadroAncho="40" CuadroAlto="40" FPS="60" Numero="6" NoRepetir="False" MinVariacion="0" MaxVariacion="0" VelocidadVariacion="0" Variacion="Ninguna" />
+      <saltando Nombre="saltando" CuadroX="0" CuadroY="0" CuadroAncho="40" CuadroAlto="40" FPS="0" Numero="1" NoRepetir="False" MinVariacion="0" MaxVariacion="0" VelocidadVariacion="0" Variacion="Ninguna" />
+    </Estados>
+    <Shader Tipo_Shader="Ninguno" />
+    <Sonidos>
+      <walk Nombre="walk" Volumen="0,27" />
+      <jump Nombre="jump" Volumen="0,7" />
+      <shot Nombre="shot" Volumen="1" />
+      <dead Nombre="dead" Volumen="0,8" />
+    </Sonidos>
+  </hero>
+  <hunter1 Tipo="Personaje" Nombre="hunter1" Nombre_Textura="hunter" PosicionX="263" PosicionY="472" Velocidad="2" VelocidadParticulas="0" Direccion="Arriba" Colision="Ninguna" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="True" FueraDeCamara="False" Movimento="True" BlendMode="AlphaBlend" Animado="True" ScrollHorizontal="0" ScrollVertical="0" Tamaño="1" InicioX="140" InicioY="0" DestinoX="300" DestinoY="0" ColorR="255" ColorG="255" ColorB="255" ColorA="255" SpriteEffects="None" Lugar="Medio" CuerpoX="263" CuerpoY="472" CuerpoAncho="40" CuerpoAlto="30">
+    <Estados EstadoSeleccionado="0">
+      <moviendose Nombre="moviendose" CuadroX="40" CuadroY="0" CuadroAncho="40" CuadroAlto="30" FPS="20" Numero="2" NoRepetir="False" MinVariacion="0" MaxVariacion="0" VelocidadVariacion="0" Variacion="Ninguna" />
+      <electricidad Nombre="electricidad" CuadroX="40" CuadroY="30" CuadroAncho="40" CuadroAlto="30" FPS="20" Numero="2" NoRepetir="False" MinVariacion="0" MaxVariacion="0" VelocidadVariacion="0" Variacion="Ninguna" />
+      <morir Nombre="morir" CuadroX="0" CuadroY="0" CuadroAncho="40" CuadroAlto="30" FPS="20" Numero="2" NoRepetir="False" MinVariacion="0" MaxVariacion="1" VelocidadVariacion="0,5" Variacion="Rotacion" />
+    </Estados>
+    <Shader Tipo_Shader="Ninguno" />
+    <Sonidos>
+      <move Nombre="hunter move" Volumen="1" />
+      <shock Nombre="electricity" Volumen="1" />
+      <dead Nombre="hunter dead" Volumen="1" />
+    </Sonidos>
+  </hunter1>
+  <hunter2 Tipo="Personaje" Nombre="hunter2" Nombre_Textura="hunter" PosicionX="802" PosicionY="130" Velocidad="1" VelocidadParticulas="0" Direccion="Arriba" Colision="Ninguna" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="True" FueraDeCamara="False" Movimento="True" BlendMode="AlphaBlend" Animado="True" ScrollHorizontal="0" ScrollVertical="0" Tamaño="1" InicioX="780" InicioY="0" DestinoX="840" DestinoY="0" ColorR="255" ColorG="255" ColorB="255" ColorA="255" SpriteEffects="None" Lugar="Medio" CuerpoX="802" CuerpoY="130" CuerpoAncho="40" CuerpoAlto="30">
+    <Estados EstadoSeleccionado="0">
+      <moviendose Nombre="moviendose" CuadroX="40" CuadroY="0" CuadroAncho="40" CuadroAlto="30" FPS="20" Numero="2" NoRepetir="False" MinVariacion="0" MaxVariacion="0" VelocidadVariacion="0" Variacion="Ninguna" />
+      <electricidad Nombre="electricidad" CuadroX="40" CuadroY="30" CuadroAncho="40" CuadroAlto="30" FPS="20" Numero="2" NoRepetir="False" MinVariacion="0" MaxVariacion="0" VelocidadVariacion="0" Variacion="Ninguna" />
+      <morir Nombre="morir" CuadroX="0" CuadroY="0" CuadroAncho="40" CuadroAlto="30" FPS="20" Numero="2" NoRepetir="False" MinVariacion="0" MaxVariacion="1" VelocidadVariacion="0,5" Variacion="Rotacion" />
+    </Estados>
+    <Shader Tipo_Shader="Ninguno" />
+    <Sonidos>
+      <move Nombre="hunter move" Volumen="1" />
+      <shock Nombre="electricity" Volumen="1" />
+      <dead Nombre="hunter dead" Volumen="1" />
+    </Sonidos>
+  </hunter2>
+  <hunter3 Tipo="Personaje" Nombre="hunter3" Nombre_Textura="hunter" PosicionX="781" PosicionY="250" Velocidad="1" VelocidadParticulas="0" Direccion="Arriba" Colision="Ninguna" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="True" FueraDeCamara="False" Movimento="True" BlendMode="AlphaBlend" Animado="True" ScrollHorizontal="0" ScrollVertical="0" Tamaño="1" InicioX="780" InicioY="0" DestinoX="840" DestinoY="0" ColorR="255" ColorG="255" ColorB="255" ColorA="255" SpriteEffects="None" Lugar="Medio" CuerpoX="781" CuerpoY="250" CuerpoAncho="40" CuerpoAlto="30">
+    <Estados EstadoSeleccionado="0">
+      <moviendose Nombre="moviendose" CuadroX="0" CuadroY="0" CuadroAncho="40" CuadroAlto="30" FPS="20" Numero="2" NoRepetir="False" MinVariacion="0" MaxVariacion="0" VelocidadVariacion="0" Variacion="Ninguna" />
+      <electricidad Nombre="electricidad" CuadroX="40" CuadroY="30" CuadroAncho="40" CuadroAlto="30" FPS="20" Numero="2" NoRepetir="False" MinVariacion="0" MaxVariacion="0" VelocidadVariacion="0" Variacion="Ninguna" />
+      <morir Nombre="morir" CuadroX="0" CuadroY="0" CuadroAncho="40" CuadroAlto="30" FPS="20" Numero="2" NoRepetir="False" MinVariacion="0" MaxVariacion="1" VelocidadVariacion="0,5" Variacion="Rotacion" />
+    </Estados>
+    <Shader Tipo_Shader="Ninguno" />
+    <Sonidos>
+      <move Nombre="hunter move" Volumen="1" />
+      <shock Nombre="electricity" Volumen="1" />
+      <dead Nombre="hunter dead" Volumen="1" />
+    </Sonidos>
+  </hunter3>
+  <hunter4 Tipo="Personaje" Nombre="hunter4" Nombre_Textura="hunter" PosicionX="813" PosicionY="370" Velocidad="1" VelocidadParticulas="0" Direccion="Arriba" Colision="Ninguna" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="True" FueraDeCamara="False" Movimento="True" BlendMode="AlphaBlend" Animado="True" ScrollHorizontal="0" ScrollVertical="0" Tamaño="1" InicioX="780" InicioY="0" DestinoX="840" DestinoY="0" ColorR="255" ColorG="255" ColorB="255" ColorA="255" SpriteEffects="None" Lugar="Medio" CuerpoX="813" CuerpoY="370" CuerpoAncho="40" CuerpoAlto="30">
+    <Estados EstadoSeleccionado="0">
+      <moviendose Nombre="moviendose" CuadroX="0" CuadroY="0" CuadroAncho="40" CuadroAlto="30" FPS="20" Numero="2" NoRepetir="False" MinVariacion="0" MaxVariacion="0" VelocidadVariacion="0" Variacion="Ninguna" />
+      <electricidad Nombre="electricidad" CuadroX="40" CuadroY="30" CuadroAncho="40" CuadroAlto="30" FPS="20" Numero="2" NoRepetir="False" MinVariacion="0" MaxVariacion="0" VelocidadVariacion="0" Variacion="Ninguna" />
+      <morir Nombre="morir" CuadroX="0" CuadroY="0" CuadroAncho="40" CuadroAlto="30" FPS="20" Numero="2" NoRepetir="False" MinVariacion="0" MaxVariacion="1" VelocidadVariacion="0,5" Variacion="Rotacion" />
+    </Estados>
+    <Shader Tipo_Shader="Ninguno" />
+    <Sonidos>
+      <move Nombre="hunter move" Volumen="1" />
+      <shock Nombre="electricity" Volumen="1" />
+      <dead Nombre="hunter dead" Volumen="1" />
+    </Sonidos>
+  </hunter4>
+  <hunter5 Tipo="Personaje" Nombre="hunter5" Nombre_Textura="hunter" PosicionX="791" PosicionY="490" Velocidad="1" VelocidadParticulas="0" Direccion="Arriba" Colision="Ninguna" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="True" FueraDeCamara="False" Movimento="True" BlendMode="AlphaBlend" Animado="True" ScrollHorizontal="0" ScrollVertical="0" Tamaño="1" InicioX="780" InicioY="0" DestinoX="840" DestinoY="0" ColorR="255" ColorG="255" ColorB="255" ColorA="255" SpriteEffects="None" Lugar="Medio" CuerpoX="791" CuerpoY="490" CuerpoAncho="40" CuerpoAlto="30">
+    <Estados EstadoSeleccionado="0">
+      <moviendose Nombre="moviendose" CuadroX="40" CuadroY="0" CuadroAncho="40" CuadroAlto="30" FPS="20" Numero="2" NoRepetir="False" MinVariacion="0" MaxVariacion="0" VelocidadVariacion="0" Variacion="Ninguna" />
+      <electricidad Nombre="electricidad" CuadroX="40" CuadroY="30" CuadroAncho="40" CuadroAlto="30" FPS="20" Numero="2" NoRepetir="False" MinVariacion="0" MaxVariacion="0" VelocidadVariacion="0" Variacion="Ninguna" />
+      <morir Nombre="morir" CuadroX="0" CuadroY="0" CuadroAncho="40" CuadroAlto="30" FPS="20" Numero="2" NoRepetir="False" MinVariacion="0" MaxVariacion="1" VelocidadVariacion="0,5" Variacion="Rotacion" />
+    </Estados>
+    <Shader Tipo_Shader="Ninguno" />
+    <Sonidos>
+      <move Nombre="hunter move" Volumen="1" />
+      <shock Nombre="electricity" Volumen="1" />
+      <dead Nombre="hunter dead" Volumen="1" />
+    </Sonidos>
+  </hunter5>
+  <hunter6 Tipo="Personaje" Nombre="hunter6" Nombre_Textura="hunter" PosicionX="625" PosicionY="71" Velocidad="2" VelocidadParticulas="0" Direccion="Arriba" Colision="Ninguna" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="True" FueraDeCamara="False" Movimento="True" BlendMode="AlphaBlend" Animado="True" ScrollHorizontal="0" ScrollVertical="0" Tamaño="1" InicioX="540" InicioY="0" DestinoX="700" DestinoY="0" ColorR="255" ColorG="255" ColorB="255" ColorA="255" SpriteEffects="None" Lugar="Medio" CuerpoX="625" CuerpoY="71" CuerpoAncho="40" CuerpoAlto="30">
+    <Estados EstadoSeleccionado="0">
+      <moviendose Nombre="moviendose" CuadroX="0" CuadroY="0" CuadroAncho="40" CuadroAlto="30" FPS="20" Numero="2" NoRepetir="False" MinVariacion="0" MaxVariacion="0" VelocidadVariacion="0" Variacion="Ninguna" />
+      <electricidad Nombre="electricidad" CuadroX="40" CuadroY="30" CuadroAncho="40" CuadroAlto="30" FPS="20" Numero="2" NoRepetir="False" MinVariacion="0" MaxVariacion="0" VelocidadVariacion="0" Variacion="Ninguna" />
+      <morir Nombre="morir" CuadroX="0" CuadroY="0" CuadroAncho="40" CuadroAlto="30" FPS="20" Numero="2" NoRepetir="False" MinVariacion="0" MaxVariacion="1" VelocidadVariacion="0,5" Variacion="Rotacion" />
+    </Estados>
+    <Shader Tipo_Shader="Ninguno" />
+    <Sonidos>
+      <move Nombre="hunter move" Volumen="1" />
+      <shock Nombre="electricity" Volumen="1" />
+      <dead Nombre="hunter dead" Volumen="1" />
+    </Sonidos>
+  </hunter6>
+  <hunter7 Tipo="Personaje" Nombre="hunter7" Nombre_Textura="hunter" PosicionX="824" PosicionY="8" Velocidad="2" VelocidadParticulas="0" Direccion="Arriba" Colision="Ninguna" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="True" FueraDeCamara="False" Movimento="True" BlendMode="AlphaBlend" Animado="True" ScrollHorizontal="0" ScrollVertical="0" Tamaño="1" InicioX="780" InicioY="0" DestinoX="940" DestinoY="0" ColorR="255" ColorG="255" ColorB="255" ColorA="255" SpriteEffects="None" Lugar="Medio" CuerpoX="824" CuerpoY="8" CuerpoAncho="40" CuerpoAlto="30">
+    <Estados EstadoSeleccionado="0">
+      <moviendose Nombre="moviendose" CuadroX="0" CuadroY="0" CuadroAncho="40" CuadroAlto="30" FPS="20" Numero="2" NoRepetir="False" MinVariacion="0" MaxVariacion="0" VelocidadVariacion="0" Variacion="Ninguna" />
+      <electricidad Nombre="electricidad" CuadroX="40" CuadroY="30" CuadroAncho="40" CuadroAlto="30" FPS="20" Numero="2" NoRepetir="False" MinVariacion="0" MaxVariacion="0" VelocidadVariacion="0" Variacion="Ninguna" />
+      <morir Nombre="morir" CuadroX="0" CuadroY="0" CuadroAncho="40" CuadroAlto="30" FPS="20" Numero="2" NoRepetir="False" MinVariacion="0" MaxVariacion="1" VelocidadVariacion="0,5" Variacion="Rotacion" />
+    </Estados>
+    <Shader Tipo_Shader="Ninguno" />
+    <Sonidos>
+      <move Nombre="hunter move" Volumen="1" />
+      <shock Nombre="electricity" Volumen="1" />
+      <dead Nombre="hunter dead" Volumen="1" />
+    </Sonidos>
+  </hunter7>
+  <hunter8 Tipo="Personaje" Nombre="hunter8" Nombre_Textura="hunter" PosicionX="895" PosicionY="311" Velocidad="2" VelocidadParticulas="0" Direccion="Arriba" Colision="Ninguna" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="True" FueraDeCamara="False" Movimento="True" BlendMode="AlphaBlend" Animado="True" ScrollHorizontal="0" ScrollVertical="0" Tamaño="1" InicioX="780" InicioY="0" DestinoX="940" DestinoY="0" ColorR="255" ColorG="255" ColorB="255" ColorA="255" SpriteEffects="None" Lugar="Medio" CuerpoX="895" CuerpoY="311" CuerpoAncho="40" CuerpoAlto="30">
+    <Estados EstadoSeleccionado="0">
+      <moviendose Nombre="moviendose" CuadroX="0" CuadroY="0" CuadroAncho="40" CuadroAlto="30" FPS="20" Numero="2" NoRepetir="False" MinVariacion="0" MaxVariacion="0" VelocidadVariacion="0" Variacion="Ninguna" />
+      <electricidad Nombre="electricidad" CuadroX="40" CuadroY="30" CuadroAncho="40" CuadroAlto="30" FPS="20" Numero="2" NoRepetir="False" MinVariacion="0" MaxVariacion="0" VelocidadVariacion="0" Variacion="Ninguna" />
+      <morir Nombre="morir" CuadroX="0" CuadroY="0" CuadroAncho="40" CuadroAlto="30" FPS="20" Numero="2" NoRepetir="False" MinVariacion="0" MaxVariacion="1" VelocidadVariacion="0,5" Variacion="Rotacion" />
+    </Estados>
+    <Shader Tipo_Shader="Ninguno" />
+    <Sonidos>
+      <move Nombre="hunter move" Volumen="1" />
+      <shock Nombre="electricity" Volumen="1" />
+      <dead Nombre="hunter dead" Volumen="1" />
+    </Sonidos>
+  </hunter8>
+  <hunter9 Tipo="Personaje" Nombre="hunter9" Nombre_Textura="hunter" PosicionX="625" PosicionY="311" Velocidad="2" VelocidadParticulas="0" Direccion="Arriba" Colision="Ninguna" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="True" FueraDeCamara="False" Movimento="True" BlendMode="AlphaBlend" Animado="True" ScrollHorizontal="0" ScrollVertical="0" Tamaño="1" InicioX="540" InicioY="0" DestinoX="700" DestinoY="0" ColorR="255" ColorG="255" ColorB="255" ColorA="255" SpriteEffects="None" Lugar="Medio" CuerpoX="625" CuerpoY="311" CuerpoAncho="40" CuerpoAlto="30">
+    <Estados EstadoSeleccionado="0">
+      <moviendose Nombre="moviendose" CuadroX="0" CuadroY="0" CuadroAncho="40" CuadroAlto="30" FPS="20" Numero="2" NoRepetir="False" MinVariacion="0" MaxVariacion="0" VelocidadVariacion="0" Variacion="Ninguna" />
+      <electricidad Nombre="electricidad" CuadroX="40" CuadroY="30" CuadroAncho="40" CuadroAlto="30" FPS="20" Numero="2" NoRepetir="False" MinVariacion="0" MaxVariacion="0" VelocidadVariacion="0" Variacion="Ninguna" />
+      <morir Nombre="morir" CuadroX="0" CuadroY="0" CuadroAncho="40" CuadroAlto="30" FPS="20" Numero="2" NoRepetir="False" MinVariacion="0" MaxVariacion="1" VelocidadVariacion="0,5" Variacion="Rotacion" />
+    </Estados>
+    <Shader Tipo_Shader="Ninguno" />
+    <Sonidos>
+      <move Nombre="hunter move" Volumen="1" />
+      <shock Nombre="electricity" Volumen="1" />
+      <dead Nombre="hunter dead" Volumen="1" />
+    </Sonidos>
+  </hunter9>
+  <mapa1 Tipo="Grafico" Nombre="mapa1" Nombre_Textura="mapa" PosicionX="221" PosicionY="548" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Ninguna" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="False" BlendMode="AlphaBlend" Animado="False" ScrollHorizontal="0" ScrollVertical="0" Tamaño="1" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="255" ColorG="255" ColorB="255" ColorA="255" SpriteEffects="None" Lugar="Medio" CuerpoX="221" CuerpoY="548" CuerpoAncho="30" CuerpoAlto="30">
+    <Shader Tipo_Shader="Ninguno" />
+    <Sonidos>
+      <paper Nombre="paper" Volumen="1" />
+    </Sonidos>
+  </mapa1>
+  <mapa2 Tipo="Grafico" Nombre="mapa2" Nombre_Textura="mapa" PosicionX="750" PosicionY="6" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Ninguna" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="False" BlendMode="AlphaBlend" Animado="False" ScrollHorizontal="0" ScrollVertical="0" Tamaño="1" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="255" ColorG="255" ColorB="255" ColorA="255" SpriteEffects="None" Lugar="Medio" CuerpoX="750" CuerpoY="6" CuerpoAncho="30" CuerpoAlto="30">
+    <Shader Tipo_Shader="Ninguno" />
+    <Sonidos>
+      <paper Nombre="paper" Volumen="1" />
+    </Sonidos>
+  </mapa2>
+  <mapa3 Tipo="Grafico" Nombre="mapa3" Nombre_Textura="mapa" PosicionX="787" PosicionY="366" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Ninguna" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="False" BlendMode="AlphaBlend" Animado="False" ScrollHorizontal="0" ScrollVertical="0" Tamaño="1" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="255" ColorG="255" ColorB="255" ColorA="255" SpriteEffects="None" Lugar="Medio" CuerpoX="787" CuerpoY="366" CuerpoAncho="30" CuerpoAlto="30">
+    <Shader Tipo_Shader="Ninguno" />
+    <Sonidos>
+      <paper Nombre="paper" Volumen="1" />
+    </Sonidos>
+  </mapa3>
+  <pila1 Tipo="Grafico" Nombre="pila1" Nombre_Textura="pila" PosicionX="231" PosicionY="400" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Ninguna" Inclinacion="-0,35" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="False" BlendMode="AlphaBlend" Animado="False" ScrollHorizontal="0" ScrollVertical="0" Tamaño="0,4" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="255" ColorG="255" ColorB="255" ColorA="255" SpriteEffects="None" Lugar="Medio" CuerpoX="231" CuerpoY="400" CuerpoAncho="16" CuerpoAlto="20">
+    <Shader Tipo_Shader="Ninguno" />
+    <Sonidos>
+      <carga Nombre="charge" Volumen="1" />
+    </Sonidos>
+  </pila1>
+  <bala1 Tipo="Grafico" Nombre="bala1" Nombre_Textura="bala" PosicionX="-100" PosicionY="-100" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Ninguna" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="False" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="False" BlendMode="AlphaBlend" Animado="True" ScrollHorizontal="0" ScrollVertical="0" Tamaño="1,5" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="255" ColorG="255" ColorB="0" ColorA="255" SpriteEffects="None" Lugar="Frente" CuerpoX="-100" CuerpoY="-100" CuerpoAncho="15" CuerpoAlto="4">
+      <Shader Tipo_Shader="Ninguno" />
+  </bala1>
+  <bala2 Tipo="Grafico" Nombre="bala2" Nombre_Textura="bala" PosicionX="-100" PosicionY="-100" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Ninguna" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="False" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="False" BlendMode="AlphaBlend" Animado="True" ScrollHorizontal="0" ScrollVertical="0" Tamaño="1,5" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="255" ColorG="255" ColorB="0" ColorA="255" SpriteEffects="None" Lugar="Frente" CuerpoX="-100" CuerpoY="-100" CuerpoAncho="15" CuerpoAlto="4">
+    <Shader Tipo_Shader="Ninguno" />
+  </bala2>
+  <bala3 Tipo="Grafico" Nombre="bala3" Nombre_Textura="bala" PosicionX="-100" PosicionY="-100" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Ninguna" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="False" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="False" BlendMode="AlphaBlend" Animado="True" ScrollHorizontal="0" ScrollVertical="0" Tamaño="1,5" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="255" ColorG="255" ColorB="0" ColorA="255" SpriteEffects="None" Lugar="Frente" CuerpoX="-100" CuerpoY="-100" CuerpoAncho="15" CuerpoAlto="4">
+    <Shader Tipo_Shader="Ninguno" />
+  </bala3>
+  <bala4 Tipo="Grafico" Nombre="bala4" Nombre_Textura="bala" PosicionX="-100" PosicionY="-100" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Ninguna" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="False" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="False" BlendMode="AlphaBlend" Animado="True" ScrollHorizontal="0" ScrollVertical="0" Tamaño="1,5" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="255" ColorG="255" ColorB="0" ColorA="255" SpriteEffects="None" Lugar="Frente" CuerpoX="-100" CuerpoY="-100" CuerpoAncho="15" CuerpoAlto="4">
+    <Shader Tipo_Shader="Ninguno" />
+  </bala4>
+  <bala5 Tipo="Grafico" Nombre="bala5" Nombre_Textura="bala" PosicionX="-100" PosicionY="-100" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Ninguna" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="False" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="False" BlendMode="AlphaBlend" Animado="True" ScrollHorizontal="0" ScrollVertical="0" Tamaño="1,5" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="255" ColorG="255" ColorB="0" ColorA="255" SpriteEffects="None" Lugar="Frente" CuerpoX="-100" CuerpoY="-100" CuerpoAncho="15" CuerpoAlto="4">
+    <Shader Tipo_Shader="Ninguno" />
+  </bala5>
+  <bala6 Tipo="Grafico" Nombre="bala6" Nombre_Textura="bala" PosicionX="-100" PosicionY="-100" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Ninguna" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="False" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="False" BlendMode="AlphaBlend" Animado="True" ScrollHorizontal="0" ScrollVertical="0" Tamaño="1,5" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="255" ColorG="255" ColorB="0" ColorA="255" SpriteEffects="None" Lugar="Frente" CuerpoX="-100" CuerpoY="-100" CuerpoAncho="15" CuerpoAlto="4">
+    <Shader Tipo_Shader="Ninguno" />
+  </bala6>
+  <bala7 Tipo="Grafico" Nombre="bala7" Nombre_Textura="bala" PosicionX="-100" PosicionY="-100" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Ninguna" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="False" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="False" BlendMode="AlphaBlend" Animado="True" ScrollHorizontal="0" ScrollVertical="0" Tamaño="1,5" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="255" ColorG="255" ColorB="0" ColorA="255" SpriteEffects="None" Lugar="Frente" CuerpoX="-100" CuerpoY="-100" CuerpoAncho="15" CuerpoAlto="4">
+    <Shader Tipo_Shader="Ninguno" />
+  </bala7>
+  <bala8 Tipo="Grafico" Nombre="bala8" Nombre_Textura="bala" PosicionX="-100" PosicionY="-100" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Ninguna" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="False" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="False" BlendMode="AlphaBlend" Animado="True" ScrollHorizontal="0" ScrollVertical="0" Tamaño="1,5" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="255" ColorG="255" ColorB="0" ColorA="255" SpriteEffects="None" Lugar="Frente" CuerpoX="-100" CuerpoY="-100" CuerpoAncho="15" CuerpoAlto="4">
+    <Shader Tipo_Shader="Ninguno" />
+  </bala8>
+  <bala9 Tipo="Grafico" Nombre="bala9" Nombre_Textura="bala" PosicionX="-100" PosicionY="-100" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Ninguna" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="False" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="False" BlendMode="AlphaBlend" Animado="True" ScrollHorizontal="0" ScrollVertical="0" Tamaño="1,5" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="255" ColorG="255" ColorB="0" ColorA="255" SpriteEffects="None" Lugar="Frente" CuerpoX="-100" CuerpoY="-100" CuerpoAncho="15" CuerpoAlto="4">
+    <Shader Tipo_Shader="Ninguno" />
+  </bala9>
+  <bala10 Tipo="Grafico" Nombre="bala10" Nombre_Textura="bala" PosicionX="-100" PosicionY="-100" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Ninguna" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="False" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="False" BlendMode="AlphaBlend" Animado="True" ScrollHorizontal="0" ScrollVertical="0" Tamaño="1,5" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="255" ColorG="255" ColorB="0" ColorA="255" SpriteEffects="None" Lugar="Frente" CuerpoX="-100" CuerpoY="-100" CuerpoAncho="15" CuerpoAlto="4">
+    <Shader Tipo_Shader="Ninguno" />
+  </bala10>
+  <pared4 Tipo="Plataforma" Nombre="pared4" Nombre_Textura="pixel" PosicionX="-16" PosicionY="418" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Lateral" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="False" BlendMode="AlphaBlend" Animado="False" ScrollHorizontal="1" ScrollVertical="1" Tamaño="1" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="0" ColorG="0" ColorB="0" ColorA="0" SpriteEffects="None" Lugar="Frente" CuerpoX="-16" CuerpoY="418" CuerpoAncho="20" CuerpoAlto="200">
+    <Shader Tipo_Shader="Ninguno" />
+  </pared4>
+  <edificio1 Tipo="Grafico" Nombre="edificio1" Nombre_Textura="edificio1" PosicionX="440" PosicionY="401" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Ninguna" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="False" BlendMode="AlphaBlend" Animado="False" ScrollHorizontal="0,05" ScrollVertical="0,05" Tamaño="0,62" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="65" ColorG="105" ColorB="225" ColorA="255" SpriteEffects="None" Lugar="Fondo" CuerpoX="440" CuerpoY="401" CuerpoAncho="93" CuerpoAlto="186">
+    <Shader Tipo_Shader="Ninguno" />
+  </edificio1>
+  <edificio2 Tipo="Grafico" Nombre="edificio2" Nombre_Textura="edificio1" PosicionX="234" PosicionY="448" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Ninguna" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="False" BlendMode="AlphaBlend" Animado="False" ScrollHorizontal="0,02" ScrollVertical="0,02" Tamaño="0,51" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="255" ColorG="99" ColorB="71" ColorA="255" SpriteEffects="None" Lugar="Fondo" CuerpoX="234" CuerpoY="448" CuerpoAncho="76" CuerpoAlto="152">
+    <Shader Tipo_Shader="Ninguno" />
+  </edificio2>
+  <edificio3 Tipo="Grafico" Nombre="edificio3" Nombre_Textura="edificio1" PosicionX="-1" PosicionY="430" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Ninguna" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="False" BlendMode="AlphaBlend" Animado="False" ScrollHorizontal="0,02" ScrollVertical="0,02" Tamaño="0,6" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="255" ColorG="250" ColorB="250" ColorA="255" SpriteEffects="None" Lugar="Fondo" CuerpoX="-1" CuerpoY="430" CuerpoAncho="90" CuerpoAlto="180">
+    <Shader Tipo_Shader="Ninguno" />
+  </edificio3>
+  <edificio4 Tipo="Grafico" Nombre="edificio4" Nombre_Textura="edificio1" PosicionX="333" PosicionY="350" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Ninguna" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="False" BlendMode="AlphaBlend" Animado="False" ScrollHorizontal="0,05" ScrollVertical="0,05" Tamaño="1" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="255" ColorG="255" ColorB="255" ColorA="255" SpriteEffects="None" Lugar="Fondo" CuerpoX="333" CuerpoY="350" CuerpoAncho="150" CuerpoAlto="300">
+    <Shader Tipo_Shader="Ninguno" />
+  </edificio4>
+  <edificio5 Tipo="Grafico" Nombre="edificio5" Nombre_Textura="edificio1" PosicionX="118" PosicionY="410" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Ninguna" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="False" BlendMode="AlphaBlend" Animado="False" ScrollHorizontal="0,04" ScrollVertical="0,04" Tamaño="0,74" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="144" ColorG="238" ColorB="144" ColorA="255" SpriteEffects="FlipHorizontally" Lugar="Fondo" CuerpoX="118" CuerpoY="410" CuerpoAncho="111" CuerpoAlto="222">
+    <Shader Tipo_Shader="Ninguno" />
+  </edificio5>
+  <pila2 Tipo="Grafico" Nombre="pila2" Nombre_Textura="pila" PosicionX="549" PosicionY="68" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Ninguna" Inclinacion="-0,35" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="False" BlendMode="AlphaBlend" Animado="False" ScrollHorizontal="0" ScrollVertical="0" Tamaño="0,4" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="255" ColorG="255" ColorB="255" ColorA="255" SpriteEffects="None" Lugar="Medio" CuerpoX="549" CuerpoY="68" CuerpoAncho="16" CuerpoAlto="20">
+    <Shader Tipo_Shader="Ninguno" />
+    <Sonidos>
+      <carga Nombre="charge" Volumen="1" />
+    </Sonidos>
+  </pila2>
+  <pajaro1 Tipo="Grafico" Nombre="pajaro1" Nombre_Textura="pajaro" PosicionX="564" PosicionY="91" Velocidad="5" VelocidadParticulas="0" Direccion="Arriba" Colision="Ninguna" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="False" BlendMode="AlphaBlend" Animado="True" ScrollHorizontal="0" ScrollVertical="0" Tamaño="1" InicioX="-50" InicioY="140" DestinoX="1050" DestinoY="141" ColorR="255" ColorG="255" ColorB="255" ColorA="255" SpriteEffects="None" Lugar="Medio" CuerpoX="564" CuerpoY="91" CuerpoAncho="20" CuerpoAlto="9">
+    <Estados EstadoSeleccionado="0">
+      <quieto Nombre="quieto" CuadroX="20" CuadroY="0" CuadroAncho="20" CuadroAlto="9" FPS="0" Numero="0" NoRepetir="False" MinVariacion="0" MaxVariacion="0" VelocidadVariacion="0" Variacion="Ninguna" />
+      <volando Nombre="volando" CuadroX="0" CuadroY="0" CuadroAncho="20" CuadroAlto="9" FPS="10" Numero="2" NoRepetir="False" MinVariacion="0" MaxVariacion="0" VelocidadVariacion="0" Variacion="Ninguna" />
+    </Estados>
+    <Shader Tipo_Shader="Ninguno" />
+  </pajaro1>
+  <pajaro2 Tipo="Grafico" Nombre="pajaro2" Nombre_Textura="pajaro" PosicionX="558" PosicionY="91" Velocidad="4" VelocidadParticulas="0" Direccion="Arriba" Colision="Ninguna" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="False" BlendMode="AlphaBlend" Animado="True" ScrollHorizontal="0" ScrollVertical="0" Tamaño="1" InicioX="-50" InicioY="120" DestinoX="1050" DestinoY="121" ColorR="255" ColorG="255" ColorB="255" ColorA="255" SpriteEffects="None" Lugar="Medio" CuerpoX="558" CuerpoY="91" CuerpoAncho="20" CuerpoAlto="9">
+    <Estados EstadoSeleccionado="0">
+      <quieto Nombre="quieto" CuadroX="20" CuadroY="0" CuadroAncho="20" CuadroAlto="9" FPS="0" Numero="0" NoRepetir="False" MinVariacion="0" MaxVariacion="0" VelocidadVariacion="0" Variacion="Ninguna" />
+      <volando Nombre="volando" CuadroX="0" CuadroY="0" CuadroAncho="20" CuadroAlto="9" FPS="10" Numero="2" NoRepetir="False" MinVariacion="0" MaxVariacion="0" VelocidadVariacion="0" Variacion="Ninguna" />
+    </Estados>
+    <Shader Tipo_Shader="Ninguno" />
+  </pajaro2>
+  <plataforma1 Tipo="Grafico" Nombre="plataforma1" Nombre_Textura="plataforma2" PosicionX="680" PosicionY="160" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Superior" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="False" BlendMode="AlphaBlend" Animado="False" ScrollHorizontal="0" ScrollVertical="0" Tamaño="1" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="255" ColorG="255" ColorB="255" ColorA="255" SpriteEffects="None" Lugar="Medio" CuerpoX="680" CuerpoY="160" CuerpoAncho="200" CuerpoAlto="20">
+    <Shader Tipo_Shader="Ninguno" />
+  </plataforma1>
+  <plataforma2 Tipo="Grafico" Nombre="plataforma2" Nombre_Textura="plataforma2" PosicionX="680" PosicionY="280" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Superior" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="False" BlendMode="AlphaBlend" Animado="False" ScrollHorizontal="0" ScrollVertical="0" Tamaño="1" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="255" ColorG="255" ColorB="255" ColorA="255" SpriteEffects="None" Lugar="Medio" CuerpoX="680" CuerpoY="280" CuerpoAncho="200" CuerpoAlto="20">
+    <Shader Tipo_Shader="Ninguno" />
+  </plataforma2>
+  <plataforma3 Tipo="Grafico" Nombre="plataforma3" Nombre_Textura="plataforma2" PosicionX="680" PosicionY="400" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Superior" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="False" BlendMode="AlphaBlend" Animado="False" ScrollHorizontal="0" ScrollVertical="0" Tamaño="1" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="255" ColorG="255" ColorB="255" ColorA="255" SpriteEffects="None" Lugar="Medio" CuerpoX="680" CuerpoY="400" CuerpoAncho="200" CuerpoAlto="20">
+    <Shader Tipo_Shader="Ninguno" />
+  </plataforma3>
+  <plataforma4 Tipo="Grafico" Nombre="plataforma4" Nombre_Textura="plataforma2" PosicionX="680" PosicionY="520" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Superior" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="False" BlendMode="AlphaBlend" Animado="False" ScrollHorizontal="0" ScrollVertical="0" Tamaño="1" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="255" ColorG="255" ColorB="255" ColorA="255" SpriteEffects="None" Lugar="Medio" CuerpoX="680" CuerpoY="520" CuerpoAncho="200" CuerpoAlto="20">
+    <Shader Tipo_Shader="Ninguno" />
+  </plataforma4>
+  <fachada1 Tipo="Grafico" Nombre="fachada1" Nombre_Textura="fachada1" PosicionX="500" PosicionY="69" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Ninguna" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="False" BlendMode="AlphaBlend" Animado="False" ScrollHorizontal="0" ScrollVertical="0" Tamaño="1" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="255" ColorG="255" ColorB="255" ColorA="255" SpriteEffects="None" Lugar="Medio" CuerpoX="500" CuerpoY="69" CuerpoAncho="260" CuerpoAlto="511">
+    <Shader Tipo_Shader="Ninguno" />
+  </fachada1>
+  <fachada2 Tipo="Grafico" Nombre="fachada2" Nombre_Textura="fachada2" PosicionX="760" PosicionY="40" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Ninguna" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="False" FueraDeCamara="False" Movimento="False" BlendMode="AlphaBlend" Animado="False" ScrollHorizontal="0" ScrollVertical="0" Tamaño="1" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="255" ColorG="255" ColorB="255" ColorA="255" SpriteEffects="None" Lugar="Medio" CuerpoX="760" CuerpoY="40" CuerpoAncho="260" CuerpoAlto="540">
+    <Shader Tipo_Shader="Ninguno" />
+  </fachada2>
+  <marco Tipo="Grafico" Nombre="marco" NoShaderCamara="True" Nombre_Textura="marco" PosicionX="0" PosicionY="0" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Ninguna" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="False" FueraDeCamara="True" Movimento="False" BlendMode="AlphaBlend" Animado="False" ScrollHorizontal="0" ScrollVertical="0" Tamaño="1" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="0" ColorG="0" ColorB="0" ColorA="255" SpriteEffects="None" Lugar="Medio" CuerpoX="0" CuerpoY="0" CuerpoAncho="640" CuerpoAlto="50">
+    <Shader Tipo_Shader="Ninguno" />
+  </marco>
+  <maps Tipo="Texto" Nombre="maps" NoShaderCamara="True" Nombre_Textura="normal" PosicionX="20" PosicionY="10" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Ninguna" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="Maps:" Gravedad="False" FueraDeCamara="True" Movimento="False" BlendMode="AlphaBlend" Animado="False" ScrollHorizontal="0" ScrollVertical="0" Tamaño="1" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="255" ColorG="99" ColorB="71" ColorA="255" SpriteEffects="None" Lugar="Frente">
+    <Shader Tipo_Shader="Ninguno" />
+  </maps>
+  <energia Tipo="Texto" Nombre="energia" NoShaderCamara="True" Nombre_Textura="normal" PosicionX="339" PosicionY="10" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Ninguna" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="Energy:" Gravedad="False" FueraDeCamara="True" Movimento="False" BlendMode="AlphaBlend" Animado="False" ScrollHorizontal="0" ScrollVertical="0" Tamaño="1" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="255" ColorG="99" ColorB="71" ColorA="255" SpriteEffects="None" Lugar="Frente">
+    <Shader Tipo_Shader="Ninguno" />
+  </energia>
+  <barra Tipo="Grafico" Nombre="barra" NoShaderCamara="True" Nombre_Textura="pixel" PosicionX="460" PosicionY="10" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Ninguna" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="False" FueraDeCamara="True" Movimento="False" BlendMode="AlphaBlend" Animado="True" ScrollHorizontal="0" ScrollVertical="0" Tamaño="1" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="173" ColorG="255" ColorB="47" ColorA="255" SpriteEffects="None" Lugar="Frente" CuerpoX="460" CuerpoY="20" CuerpoAncho="100" CuerpoAlto="20">
+    <Estados EstadoSeleccionado="0">
+      <barra Nombre="barra" CuadroX="0" CuadroY="0" CuadroAncho="100" CuadroAlto="20" FPS="0" Numero="0" NoRepetir="False" MinVariacion="0" MaxVariacion="0" VelocidadVariacion="0" Variacion="Ninguna" />
+    </Estados>
+    <Shader Tipo_Shader="Ninguno" />
+  </barra>
+  <bateria Tipo="Grafico" Nombre="bateria" NoShaderCamara="True" Nombre_Textura="energia" PosicionX="460" PosicionY="10" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Ninguna" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="True" Texto="" Gravedad="False" FueraDeCamara="True" Movimento="False" BlendMode="AlphaBlend" Animado="False" ScrollHorizontal="0" ScrollVertical="0" Tamaño="1" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="255" ColorG="255" ColorB="255" ColorA="255" SpriteEffects="None" Lugar="Frente" CuerpoX="460" CuerpoY="20" CuerpoAncho="100" CuerpoAlto="20">
+    <Shader Tipo_Shader="Ninguno" />
+  </bateria>
+  <pixel Tipo="Grafico" Nombre="pixel" NoShaderCamara="True" Nombre_Textura="pixel" PosicionX="0" PosicionY="0" Velocidad="0" VelocidadParticulas="0" Direccion="Arriba" Colision="Ninguna" Inclinacion="0" CantidadParticulas="0" RepetirScroll="False" Activo="False" Texto="" Gravedad="False" FueraDeCamara="True" Movimento="False" BlendMode="AlphaBlend" Animado="True" ScrollHorizontal="0" ScrollVertical="0" Tamaño="1" InicioX="0" InicioY="0" DestinoX="0" DestinoY="0" ColorR="0" ColorG="0" ColorB="0" ColorA="255" SpriteEffects="None" Lugar="Frente" CuerpoX="0" CuerpoY="0" CuerpoAncho="640" CuerpoAlto="480">
+    <Estados EstadoSeleccionado="0">
+      <estado Nombre="estado" CuadroX="0" CuadroY="0" CuadroAncho="640" CuadroAlto="480" FPS="0" Numero="0" NoRepetir="False" MinVariacion="0" MaxVariacion="0" VelocidadVariacion="0" Variacion="Ninguna" />
+    </Estados>
+    <Shader Tipo_Shader="Ninguno" />
+  </pixel>
+</Escenario>

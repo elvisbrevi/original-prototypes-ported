@@ -94,6 +94,36 @@ pub fn int(value: f32) -> i32 {
     value as i32
 }
 
+/// SpriteEffects de XNA: voltear en horizontal y/o en vertical.
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+pub struct Efectos {
+    pub horizontal: bool,
+    pub vertical: bool,
+}
+
+impl Efectos {
+    pub const NINGUNO: Self = Self {
+        horizontal: false,
+        vertical: false,
+    };
+    pub const HORIZONTAL: Self = Self {
+        horizontal: true,
+        vertical: false,
+    };
+    pub const VERTICAL: Self = Self {
+        horizontal: false,
+        vertical: true,
+    };
+
+    /// FlipHorizontally si `voltear`, None si no.
+    pub const fn horizontal_si(voltear: bool) -> Self {
+        Self {
+            horizontal: voltear,
+            vertical: false,
+        }
+    }
+}
+
 /// SpriteBatch.Draw(textura, posición, fuente, color, rotación, origen, escala, efectos, capa) de
 /// XNA 3.1: el `origen` (en píxeles de la fuente) cae en `posicion`, la escala y la rotación se
 /// aplican alrededor de él, y voltear solo invierte las coordenadas de textura.
@@ -106,7 +136,7 @@ pub fn dibujar(
     rotacion: f32,
     origen: Vec2,
     escala: f32,
-    voltear_x: bool,
+    efectos: Efectos,
 ) {
     let fuente = fuente.map(|f| f.as_rect()).unwrap_or(Rect::new(
         0.0,
@@ -125,8 +155,8 @@ pub fn dibujar(
             dest_size: Some(fuente.size() * escala),
             rotation: rotacion,
             pivot: Some(posicion),
-            flip_x: voltear_x,
-            ..Default::default()
+            flip_x: efectos.horizontal,
+            flip_y: efectos.vertical,
         },
     );
 }

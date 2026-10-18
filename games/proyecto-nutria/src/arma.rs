@@ -2,7 +2,7 @@
 // Lanzallamas existe en el código pero ninguna caja lo crea, así que no se portó.
 
 use macroquad::prelude::*;
-use xna::{Rectangle, int};
+use xna::{Efectos, Rectangle, int};
 
 use crate::assets::Assets;
 
@@ -60,7 +60,7 @@ impl Arma {
             0.0,
             Vec2::ZERO,
             0.4,
-            self.voltear,
+            Efectos::horizontal_si(self.voltear),
         );
         for bala in self.balas.iter().filter(|b| b.activa) {
             xna::dibujar(
@@ -71,7 +71,7 @@ impl Arma {
                 bala.rotacion,
                 bala.origen,
                 1.0,
-                false,
+                Efectos::NINGUNO,
             );
         }
     }

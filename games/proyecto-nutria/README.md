@@ -80,7 +80,7 @@ los disparos.
    generalizado) convierte a PNG las texturas `Color` y la `SpriteFont`, solo las que el juego usa
    (lista en `tools/contenido.txt`).
 5. **Efecto de pausa**: `Shaders/blur_grayscale.xnb` no trae el código fuente, así que su píxel
-   shader ps_2_0 se desensambló con `tools/ps20_desensamblar.py` y se reescribió en GLSL
+   shader ps_2_0 se desensambló con [`tools/ps20_desensamblar.py`](../../tools/ps20_desensamblar.py) y se reescribió en GLSL
    (`src/shader.rs`): suma 12 muestras de un disco de Poisson de radio 0,005 (en coordenadas de
    cada textura, sin la muestra central), pasa a gris con `(r + g + b) / 3` y divide por 12. Deja
    como alfa la suma de los 12 alfas, y no usa el tinte del sprite.

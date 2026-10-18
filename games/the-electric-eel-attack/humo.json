@@ -1,0 +1,15 @@
+{
+  "pantalla": [640, 480],
+  "tactil": { "botones": 3 },
+  "pasos": [
+    { "esperar": 3000 },
+    { "captura": "titulo" },
+    { "tecla": "Enter", "control": "start", "ms": 150, "despues": 2500 },
+    { "captura": "nivel1" },
+    { "tecla": "ArrowRight", "control": "derecha", "ms": 1200 },
+    { "tecla": ["ArrowRight", "x"], "control": ["derecha", "boton1"], "ms": 300, "despues": 150 },
+    { "captura": "salto" },
+    { "tecla": "ArrowRight", "control": "derecha", "ms": 1500, "despues": 500 },
+    { "captura": "avance" }
+  ]
+}

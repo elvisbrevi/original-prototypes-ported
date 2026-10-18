@@ -11,6 +11,30 @@ pub struct Pantalla {
     opaco: Material,
 }
 
+/// Cámara con una matriz arbitraria que dibuja en la pantalla virtual.
+struct CamaraMatriz {
+    matriz: Mat4,
+    pase: macroquad::texture::RenderPass,
+}
+
+impl Camera for CamaraMatriz {
+    fn matrix(&self) -> Mat4 {
+        self.matriz
+    }
+
+    fn depth_enabled(&self) -> bool {
+        false
+    }
+
+    fn render_pass(&self) -> Option<macroquad::texture::RenderPass> {
+        Some(self.pase.clone())
+    }
+
+    fn viewport(&self) -> Option<(i32, i32, i32, i32)> {
+        None
+    }
+}
+
 const VERTICE: &str = r#"#version 100
 attribute vec3 position;
 attribute vec2 texcoord;
@@ -69,6 +93,17 @@ impl Pantalla {
             zoom: vec2(2.0 / self.ancho, 2.0 / self.alto),
             render_target: Some(self.destino.clone()),
             ..Default::default()
+        });
+    }
+
+    /// Dibuja en la pantalla virtual con una transformación de mundo a píxeles virtuales (por
+    /// ejemplo la matriz de cámara de un SpriteBatch de XNA: traslación, escala y rotación).
+    pub fn vista_transformada(&self, transformacion: Mat4) {
+        let proyeccion = Mat4::from_scale(vec3(2.0 / self.ancho, 2.0 / self.alto, 1.0))
+            * Mat4::from_translation(vec3(-self.ancho / 2.0, -self.alto / 2.0, 0.0));
+        set_camera(&CamaraMatriz {
+            matriz: proyeccion * transformacion,
+            pase: self.destino.render_pass.clone(),
         });
     }
 

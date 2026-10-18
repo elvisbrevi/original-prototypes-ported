@@ -1,7 +1,7 @@
 // Port de Proyecto_Nutria.Nivel y Nivel_1: el único nivel del prototipo.
 
 use macroquad::prelude::*;
-use xna::Rectangle;
+use xna::{Efectos, Rectangle};
 
 use crate::assets::Assets;
 use crate::caja::Caja;
@@ -199,7 +199,7 @@ impl Nivel {
                 0.0,
                 Vec2::ZERO,
                 escala,
-                false,
+                Efectos::NINGUNO,
             );
         };
         capa(
@@ -224,7 +224,7 @@ impl Nivel {
             0.0,
             Vec2::ZERO,
             2.25,
-            false,
+            Efectos::NINGUNO,
         );
         // menu.PersonajesActivos siempre es true.
         for personaje in &self.personajes {

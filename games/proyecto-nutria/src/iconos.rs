@@ -3,8 +3,8 @@
 // actualiza en el original pero nunca se dibuja, así que no se portó.)
 
 use macroquad::prelude::*;
-use xna::Rectangle;
 use xna::colores::{CORNFLOWER_BLUE, ORO, ROJO};
+use xna::{Efectos, Rectangle};
 
 use crate::assets::Assets;
 use crate::personaje::Personaje;
@@ -51,7 +51,16 @@ impl IconoPersonajes {
         }
         .map(|(x, y)| vec2(x, y));
         let normal = |textura, en: Vec2, fuente, color| {
-            xna::dibujar(textura, en, fuente, color, 0.0, Vec2::ZERO, 1.0, false)
+            xna::dibujar(
+                textura,
+                en,
+                fuente,
+                color,
+                0.0,
+                Vec2::ZERO,
+                1.0,
+                Efectos::NINGUNO,
+            )
         };
         normal(p.textura(assets), retrato, Some(p.cuadro), WHITE);
         normal(&assets.esfera, esfera, None, WHITE);
@@ -73,7 +82,7 @@ impl IconoPersonajes {
             0.0,
             Vec2::ZERO,
             0.3,
-            false,
+            Efectos::NINGUNO,
         );
         assets.fuente.dibujar(&p.monedas.to_string(), numero, ORO);
     }

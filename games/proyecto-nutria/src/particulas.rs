@@ -2,7 +2,7 @@
 // correr sobre una plataforma.
 
 use macroquad::prelude::*;
-use xna::{Random, Rectangle, int};
+use xna::{Efectos, Random, Rectangle, int};
 
 use crate::tiempo::GameTime;
 
@@ -96,7 +96,7 @@ impl Explosion {
                 p.rotacion,
                 p.origen,
                 p.zoom,
-                false,
+                Efectos::NINGUNO,
             );
         }
     }

@@ -1,0 +1,13 @@
+[package]
+name = "the-electric-eel-attack"
+version = "0.1.0"
+edition = "2024"
+
+[package.metadata.museo]
+titulo = "The Electric Eel Attack"
+
+[dependencies]
+macroquad = { version = "0.4", features = ["audio"] }
+museo = { path = "../../crates/museo" }
+xna = { path = "../../crates/xna" }
+roxmltree = "0.21"

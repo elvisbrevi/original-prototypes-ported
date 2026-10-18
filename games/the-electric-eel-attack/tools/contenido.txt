@@ -1,0 +1,55 @@
+# Contenido que cargan los mapas (Mapas/*.xml) y Game1. Sin uso: Graficos/huevo, Graficos/smoke y
+# los efectos (los tres que se ven se reescribieron en GLSL: ver src/shader.rs).
+Graficos/arbusto
+Graficos/bala
+Graficos/barril
+Graficos/bloque4
+Graficos/bola
+Graficos/cañon
+Graficos/cielo
+Graficos/edificio1
+Graficos/energia
+Graficos/fachada1
+Graficos/fachada2
+Graficos/fire
+Graficos/hunter
+Graficos/kamikaze
+Graficos/mapa
+Graficos/maquina
+Graficos/marco
+Graficos/mira
+Graficos/montaña
+Graficos/nube
+Graficos/pajaro
+Graficos/pila
+Graficos/pixel
+Graficos/plataforma1
+Graficos/plataforma2
+Graficos/set
+Graficos/set2
+Graficos/set3
+Graficos/set4
+Graficos/star
+Graficos/subterraneo
+Graficos/tubo
+Graficos/yerko
+Fuentes/normal
+Fuentes/pixel1
+Fuentes/pixel2
+Audios/cancion1
+Audios/cancion2
+Audios/charge
+Audios/crow
+Audios/dead
+Audios/electricity
+Audios/explosion1
+Audios/explosion2
+Audios/hunter dead
+Audios/hunter move
+Audios/jump
+Audios/kamikaze dead
+Audios/kamikaze move
+Audios/paper
+Audios/shot
+Audios/vortice
+Audios/walk

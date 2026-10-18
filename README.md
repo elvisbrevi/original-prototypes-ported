@@ -15,7 +15,7 @@ El avance está en [PLAN.md](PLAN.md). Cada push compila todo en nativo y en was
 |---|---|---|---|
 | 2009 | [Proyecto Nutria](#proyecto-nutria) | C# + XNA 3.1 (Windows) | ✅ [games/proyecto-nutria](games/proyecto-nutria) |
 | 2009 | [IMAN](#iman) | C# + XNA 3.1 (Windows) | ✅ [games/iman](games/iman) |
-| 2011 | [The Electric Eel Attack](#the-electric-eel-attack) | C# + XNA 3.1 (Windows) | pendiente |
+| 2011 | [The Electric Eel Attack](#the-electric-eel-attack) | C# + XNA 3.1 + motor propio (Windows) | ✅ [games/the-electric-eel-attack](games/the-electric-eel-attack) |
 | 2011 | [Go Ball](#go-ball) | Unity 3.4 (C# + UnityScript) | pendiente |
 | 2011 | [The Meaning of Christmas](#the-meaning-of-christmas) | Java + libGDX (Android) | pendiente |
 | 2013 | [Fast Car Racer](#fast-car-racer) | Android (Google Play) | bloqueado: falta el binario |
@@ -64,11 +64,19 @@ confirmar» y se cierran en el triaje de cada juego.
 
 ### The Electric Eel Attack
 
-- **Fecha:** compilado el 9-mar-2011, versión 1.0.0.13 (video: 24-feb-2011).
-- **Stack:** C# + XNA 3.1 con un motor propio (`Engine.dll`), ClickOnce para Windows.
-- **De qué trata:** plataformas de acción con una anguila eléctrica; los sonidos incluyen disparos,
-  electricidad, explosiones y enemigos «kamikaze» y «hunter». Por confirmar en el triaje.
-- **Port:** pendiente.
+![The Electric Eel Attack](games/the-electric-eel-attack/docs/nivel1.png)
+
+- **Fecha:** compilado el 9-mar-2011, versión 1.0.0.13 (el motor, el 8-mar-2011), según las
+  cabeceras de los ejecutables (video: 24-feb-2011).
+- **Stack:** C# + XNA 3.1 con un motor propio (`Engine.dll`): niveles en XML hechos con su editor,
+  física, partículas y efectos. ClickOnce para Windows.
+- **De qué trata:** plataformas de acción. Yerko reúne los tres mapas de cada nivel para abrir el
+  vórtice de salida, mientras lo atacan anguilas eléctricas: unas patrullan y se electrifican, las
+  *kamikazes* saltan. Se las pisa o se las dispara con la energía de las pilas. Tiene cuatro
+  niveles: campo, caverna, ciudad y una fábrica con un cañón que apunta.
+- **Port:** ✅ [games/the-electric-eel-attack](games/the-electric-eel-attack): motor y juego
+  traducidos del C# decompilado, mapas, gráficos, fuentes, sonidos y música originales, y los
+  efectos reescritos en GLSL; versión web con controles táctiles.
 - **Original:** [elvisbrevi.itch.io/the-electric-eel-attack](https://elvisbrevi.itch.io/the-electric-eel-attack)
   (`The_Electric_Eel_Attack.zip`) · [video](https://vimeo.com/20317603)
 
@@ -163,6 +171,7 @@ tools/build_web.sh   versión web de un juego en dist/<slug> a partir de la plan
 tools/xnb_extract.py, tools/unity_assets.py, tools/c2_eventos.py
                      extracción de contenido XNA, Unity y Construct 2 (ver PLAN.md)
 tools/rea_reconstruction.py   C# de ILSpy -> import-managed-reconstruction de REA
+tools/ps20_desensamblar.py    píxel shaders ps_2_0 de los efectos XNA, para reescribirlos en GLSL
 tools/humo/          tests de humo: nativo (Xvfb + xdotool) y web (Playwright: escritorio y móvil)
 PLAN.md              plan por fases con checkpoints
 ```
@@ -170,7 +179,7 @@ PLAN.md              plan por fases con checkpoints
 ## Jugar
 
 ```sh
-cargo run --release -p iman            # PC (o -p proyecto-nutria)
+cargo run --release -p iman            # PC (o -p proyecto-nutria, -p the-electric-eel-attack)
 tools/build_web.sh iman                # web: sirve dist/iman con cualquier servidor estático
 ```
 

@@ -5,9 +5,9 @@ Plan de trabajo para recrear en Rust + macroquad todos los juegos publicados en
 Está pensado para avanzar en varias sesiones: marca cada casilla al completarla e incluye el cambio
 del plan en el mismo commit.
 
-**Siguiente paso:** 2.2 The Electric Eel Attack (XNA 3.1 + `Engine.dll`), con `crates/xna` y
-`tools/xnb_extract.py` (falta añadirle `SoundEffect`). El 0.7 (GitHub Pages) queda pendiente de
-decidir si se publica.
+**Siguiente paso:** 2.3 Que No Caiga (Construct 2): anotar con `tools/c2_eventos.py` los nombres
+de su tabla de referencias y portar sus eventos. El 0.7 (GitHub Pages) queda pendiente de decidir
+si se publica.
 
 ## Reglas
 
@@ -113,7 +113,7 @@ cada juego en la fase 2).
 |---|---|---|---|---|
 | Proyecto Nutria | `Proyecto_Nutria.rar` (1,5 MB) | XNA 3.1, XNB v4 | ✅ hecho | sin audio en el original; ver pendientes en 2.1 |
 | IMAN | `IMAN_(Prototipo).rar` | XNA 3.1 | ✅ hecho | ver pendientes de IMAN |
-| The Electric Eel Attack | `The_Electric_Eel_Attack.zip` (7 MB) | XNA 3.1 + `Engine.dll` propio | REA managed sobre los dos ensamblados + ILSpy; XNB `SoundEffect` | música larga (`cancion1/2`); shaders propios |
+| The Electric Eel Attack | `The_Electric_Eel_Attack.zip` (7 MB) | XNA 3.1 + `Engine.dll` propio | ✅ hecho | ver pendientes en 2.2 |
 | Go Ball | 3 zips (Win32, Win64, macOS) | Unity 3.4.0f5, Mono, con `.mdb` | ILSpy de `Assembly-CSharp` y `Assembly-UnityScript`; escenas `level0..4` con `unity_assets.py` | 3D + física PhysX; UnityPy lee texturas, mallas, audio y campos de MonoBehaviour (los PPtr salen con los bytes invertidos) |
 | The Meaning of Christmas | APK (7,8 MB) | Java + libGDX | REA Android + JADX; assets en `assets/data` | música en MP3 (macroquad no lo lee: convertir a OGG); el juego está en `com.badlogic.gdx.helloworld` (plantilla de libGDX) |
 | Fast Car Racer | — | Android (`cl.gioco.fcr`) | — | **sin binario**: itch.io solo enlaza a Google Play |
@@ -147,14 +147,18 @@ Orden sugerido: primero lo que reutiliza herramientas ya hechas y luego lo más 
 - [x] Pendientes anotados: mando DirectInput no portado (el pollo solo era jugable con mando);
   controles táctiles probados solo en emulación de Chromium.
 
-### 2.2 The Electric Eel Attack (XNA 3.1 + Engine.dll)
-- [ ] Triaje REA de `The Electric Eel Attack.exe` y `Engine.dll`.
-- [ ] Assets: XNB (texturas, `SoundEffect` → WAV/OGG, shaders; el `SketchTexture` es el mismo de IMAN).
-- [ ] Lógica: decompilar los dos ensamblados.
-- [ ] Port nativo jugable.
-- [ ] Web + táctil.
-- [ ] README del juego + ficha del museo.
-- [ ] Pendientes anotados.
+### 2.2 The Electric Eel Attack (XNA 3.1 + Engine.dll) ✅
+- [x] Triaje REA de `The Electric Eel Attack.exe` y `Engine.dll` (9 y 8-mar-2011, cabeceras PE).
+- [x] Assets: XNB (texturas, fuentes, 17 `SoundEffect` PCM → WAV) y los mapas XML del editor del
+  motor. Los efectos se desensamblaron y los tres que se ven se reescribieron en GLSL.
+- [x] Lógica: decompilar los dos ensamblados (33 + 129 métodos importados en REA).
+- [x] Port nativo jugable.
+- [x] Web + táctil.
+- [x] README del juego + ficha del museo.
+- [x] Pendientes anotados: la música se carga al llegar a su nivel (pausa breve en web); el
+  sonido no se probó en hardware real (el servidor no tiene tarjeta de sonido); los controles
+  táctiles se probaron solo en emulación de Chromium. Los niveles se probaron hasta la cadena
+  1 → 4 → título con ayudas temporales, pero ninguno se jugó de principio a fin en el port.
 
 ### 2.3 Que No Caiga (Construct 2)
 - [ ] Triaje: versión del runtime de Construct 2, plugins y comportamientos usados (REA

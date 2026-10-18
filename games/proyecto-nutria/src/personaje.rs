@@ -2,7 +2,7 @@
 // y en este prototipo la textura del pollo es la misma del coipo).
 
 use macroquad::prelude::*;
-use xna::{Rectangle, SEGUNDOS_POR_PASO_F64, clamp, int};
+use xna::{Efectos, Rectangle, SEGUNDOS_POR_PASO_F64, clamp, int};
 
 use crate::arma::Arma;
 use crate::assets::Assets;
@@ -276,7 +276,7 @@ impl Personaje {
             self.rotacion,
             self.origen,
             self.zoom,
-            self.voltear,
+            Efectos::horizontal_si(self.voltear),
         );
         if self.armado
             && let Some(arma) = &self.arma

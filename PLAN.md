@@ -5,7 +5,7 @@ Plan de trabajo para recrear en Rust + macroquad todos los juegos publicados en
 Está pensado para avanzar en varias sesiones: marca cada casilla al completarla e incluye el cambio
 del plan en el mismo commit.
 
-**Siguiente paso:** checkpoint 0.7 (opcional, GitHub Pages) y el resto de la fase 0; después 2.1
+**Siguiente paso:** checkpoint 0.9 (test de humo web) y el resto de la fase 0; después 2.1
 Proyecto Nutria, que reutiliza todo lo hecho para IMAN.
 
 ## Reglas
@@ -40,10 +40,29 @@ dotnet tool install -g ilspycmd --version 9.1.0.7988  # la última versión exig
 
 # Originales (no están en git): bajarlos y comprobar sha256 contra originales/catalogo.json
 python3 -I tools/originales.py descargar
+
+# Unity (3.4 a 5.1, Web Player y WebGL): UnityPy y type trees de MonoBehaviour desde los ensamblados
+sudo apt install python3.12-venv
+python3 -m venv ~/.venvs/museo && ~/.venvs/museo/bin/pip install -r tools/requirements-unity.txt
+
+# Android: JADX 1.5.6 y apktool 3.0.3 (Java 21) en ~/.local/opt
+sudo apt install openjdk-21-jre-headless
+curl -LO https://github.com/skylot/jadx/releases/download/v1.5.6/jadx-1.5.6.zip   # unzip -d ~/.local/opt/jadx
+curl -L -o ~/.local/opt/apktool/apktool_3.0.3.jar \
+  https://github.com/iBotPeaches/Apktool/releases/download/v3.0.3/apktool_3.0.3.jar
 ```
 
-Herramientas por stack que todavía no están instaladas (ver checkpoint 0.8): UnityPy o AssetRipper
-para escenas y assets de Unity, apktool/JADX para APK de Android (REA las usa si se configuran).
+Herramientas de extracción por stack (checkpoint 0.8; las salidas van a `originales/<slug>/`):
+
+- XNA 3.1: `games/iman/tools/xnb_extract.py` (XNB v4 sin comprimir, `SpriteFont`, bancos XACT).
+- Unity: `~/.venvs/museo/bin/python -I tools/unity_assets.py inventario|exportar|emscripten ...`.
+  Lee Unity 3.4, 4.6 (`web.unity3d`) y 5.1; con `--managed <carpeta Managed>` vuelca también los
+  campos de los MonoBehaviour. AssetRipper no hizo falta.
+- Construct 2: `python3 -I tools/c2_eventos.py resumen|eventos|fuente <carpeta html5>` (proyecto,
+  tipos, layouts, tabla de referencias del runtime minificado y hojas de eventos en pseudocódigo).
+- Android: `~/.local/opt/jadx/bin/jadx -d <salida> <apk>` y
+  `java -jar ~/.local/opt/apktool/apktool_3.0.3.jar d -o <salida> <apk>`. Para las herramientas
+  Android de REA falta un JAR de JADX MCP en `REA_JADX_MCP_JAR` (checkpoint 2.8).
 
 ## Fase 0 — Infraestructura
 
@@ -59,7 +78,7 @@ para escenas y assets de Unity, apktool/JADX para APK de Android (REA las usa si
   wasm, plugin táctil) en vez de copiar `games/<slug>/web/`.
 - [x] **0.6** GitHub Actions: build nativo + wasm de todo el workspace en cada push.
 - [ ] **0.7** (Opcional) GitHub Pages con todas las versiones web, enlazadas desde el README del museo.
-- [ ] **0.8** Herramientas de extracción por stack: UnityPy/AssetRipper (Unity 4/5 y Unity Web
+- [x] **0.8** Herramientas de extracción por stack: UnityPy/AssetRipper (Unity 4/5 y Unity Web
   Player), lector de `data.js` de Construct 2, apktool/JADX (Android).
 - [ ] **0.9** Test de humo web reutilizable (Playwright: móvil horizontal/vertical y escritorio) en
   `tools/`, como el que se usó a mano con IMAN.
@@ -87,14 +106,14 @@ cada juego en la fase 2).
 | Proyecto Nutria | `Proyecto_Nutria.rar` (1,5 MB) | XNA 3.1, XNB v4 | igual que IMAN: REA managed + ILSpy + `xnb_extract.py` | fuente del cronómetro de 8 MB; audio sin revisar |
 | IMAN | `IMAN_(Prototipo).rar` | XNA 3.1 | ✅ hecho | ver pendientes de IMAN |
 | The Electric Eel Attack | `The_Electric_Eel_Attack.zip` (7 MB) | XNA 3.1 + `Engine.dll` propio | REA managed sobre los dos ensamblados + ILSpy; XNB `SoundEffect` | música larga (`cancion1/2`); shaders propios |
-| Go Ball | 3 zips (Win32, Win64, macOS) | Unity 3.4.0f5, Mono, con `.mdb` | ILSpy de `Assembly-CSharp` y `Assembly-UnityScript`; escenas `level0..4` | formato de Unity 3.4 (comprobar UnityPy/AssetRipper); posible 3D + física PhysX |
-| The Meaning of Christmas | APK (7,8 MB) | Java + libGDX | REA Android + JADX; assets en `assets/data` | música en MP3 (macroquad no lo lee: convertir a OGG) |
+| Go Ball | 3 zips (Win32, Win64, macOS) | Unity 3.4.0f5, Mono, con `.mdb` | ILSpy de `Assembly-CSharp` y `Assembly-UnityScript`; escenas `level0..4` con `unity_assets.py` | 3D + física PhysX; UnityPy lee texturas, mallas, audio y campos de MonoBehaviour (los PPtr salen con los bytes invertidos) |
+| The Meaning of Christmas | APK (7,8 MB) | Java + libGDX | REA Android + JADX; assets en `assets/data` | música en MP3 (macroquad no lo lee: convertir a OGG); el juego está en `com.badlogic.gdx.helloworld` (plantilla de libGDX) |
 | Fast Car Racer | — | Android (`cl.gioco.fcr`) | — | **sin binario**: itch.io solo enlaza a Google Play |
 | Super Happy Jump | `web.unity3d` (385 KB) | Unity 4.6.0f3, Web Player | UnityPy para abrir el bundle `UnityWeb` → `Assembly-CSharp.dll` + assets | formato UnityWeb comprimido con LZMA |
 | Que No Caiga | HTML5 (39 archivos) | Construct 2 | leer las hojas de eventos de `data.js` + REA JavaScript | comportamientos del runtime (física) |
 | Retro Penal | HTML5 + NW.js (win/osx/linux) | Construct 2 | igual que Que No Caiga | ídem |
 | One Button Prototype | Mac, Linux, APK y WebGL | Unity 5.1.2f1, Mono | ILSpy (Standard Assets 2D + clases propias); escenas con UnityPy/AssetRipper | física 2D (Box2D) |
-| Neuro Battle | `Neuro Battle.zip` (WebGL) | Unity 5.1.1f1, IL2CPP → asm.js | **sin DLL de C#**: metadatos IL2CPP + escenas + observar el juego (REA browser) | el más difícil; el WebGL de 2015 puede no correr en navegadores actuales |
+| Neuro Battle | `Neuro Battle.zip` (WebGL) | Unity 5.1.1f1, IL2CPP → asm.js | **sin DLL de C#**: metadatos IL2CPP + escenas + observar el juego (REA browser) | el más difícil; el WebGL de 2015 puede no correr en navegadores actuales. El `.data` ya se desempaqueta (`unity_assets.py emscripten`): escenas, sprites y nombres de scripts legibles |
 | Da Car | HTML5 (32 archivos) | Construct 2 | igual que Que No Caiga | ídem |
 
 ## Fase 2 — Ports

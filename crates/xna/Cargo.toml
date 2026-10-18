@@ -1,0 +1,8 @@
+[package]
+name = "xna"
+version = "0.1.0"
+edition = "2024"
+description = "Equivalentes de XNA 3.1 para los ports de juegos XNA del museo"
+
+[dependencies]
+macroquad = "0.4"

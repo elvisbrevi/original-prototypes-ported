@@ -7,7 +7,7 @@ use crate::control::Control;
 use crate::fisica;
 use crate::graficos::{Grafico, Ramas, Tipo};
 use crate::objetos::{Colision, Diseno, Movimiento, Objeto};
-use crate::xna::{Rectangle, clamp};
+use xna::{Rectangle, clamp};
 
 /// Iman.Camaras.Camera2D. En el juego original la cámara manual queda desactivada
 /// (Initialize pone manualcamera = false) y la escala siempre es 1.

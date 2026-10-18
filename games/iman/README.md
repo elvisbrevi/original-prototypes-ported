@@ -90,7 +90,7 @@ cajas/barriles hacia el niño y, apuntando hacia arriba, lo eleva hacia una plat
 | `Graficos.*` (Cielo, Background, Suelo, Front, Ramas) | `graficos.rs` |
 | `Menus.Menu` | `menu.rs` |
 | `Shaders.NonPhotoRealistic` | `shader.rs` |
-| `MathHelper`, `Rectangle`, colores | `xna.rs` |
+| `MathHelper`, `Rectangle`, `SpriteFont`, colores | [`crates/xna`](../../crates/xna) |
 
 Se conservan también las rarezas del original, porque forman parte de cómo se juega: el niño y las
 cajas quedan unos píxeles hundidos en el suelo (la gravedad nunca se reinicia al aterrizar), el

@@ -2,7 +2,7 @@
 // y el Clamp de XNA se mantienen porque definen cómo se siente el juego original.
 
 use crate::objetos::{Colision, Movimiento, Objeto, TipoObjeto};
-use crate::xna::{clamp, int};
+use xna::{clamp, int};
 
 pub fn actualizar(objetos: &mut [Objeto]) {
     aplicar_colision(objetos);

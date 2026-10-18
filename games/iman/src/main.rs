@@ -8,7 +8,6 @@ mod graficos;
 mod menu;
 mod objetos;
 mod shader;
-mod xna;
 
 use macroquad::prelude::*;
 use museo::{Boton, ConfigTactil, Cruceta, Pantalla, PasoFijo, Tactil, WEB};
@@ -17,7 +16,10 @@ use crate::assets::Assets;
 use crate::control::Control;
 use crate::escenarios::Camara;
 use crate::menu::Menu;
-use crate::xna::{ALTO, ANCHO};
+
+/// Resolución del juego original (640x480).
+pub const ANCHO: f32 = 640.0;
+pub const ALTO: f32 = 480.0;
 
 fn window_conf() -> Conf {
     Conf {

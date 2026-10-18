@@ -1,0 +1,19 @@
+{
+  "pantalla": [1280, 720],
+  "tactil": { "botones": 2 },
+  "pasos": [
+    { "esperar": 2500 },
+    { "captura": "inicio" },
+    { "tecla": "ArrowRight", "control": "derecha", "ms": 2600 },
+    { "tecla": "z", "control": "boton0", "ms": 120, "despues": 150 },
+    { "tecla": "z", "control": "boton0", "ms": 120, "despues": 300 },
+    { "captura": "pistola" },
+    { "tecla": ["ArrowRight", "x"], "control": ["derecha", "boton1"], "ms": 700, "despues": 100 },
+    { "captura": "salto" },
+    { "esperar": 1500 },
+    { "tecla": "Enter", "control": "start", "ms": 150, "despues": 500 },
+    { "captura": "pausa" },
+    { "tecla": "z", "control": "boton0", "ms": 150, "despues": 800 },
+    { "captura": "continuar" }
+  ]
+}

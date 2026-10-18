@@ -5,7 +5,7 @@ use macroquad::prelude::*;
 
 use crate::assets::Assets;
 use crate::control::Control;
-use crate::xna::{Rectangle, SEGUNDOS_POR_PASO, int};
+use xna::{Rectangle, SEGUNDOS_POR_PASO, int};
 
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
 pub enum Diseno {

@@ -6,7 +6,8 @@ use crate::assets::Assets;
 use crate::control::Control;
 use crate::escenarios::{Camara, Escenario};
 use crate::shader::NonPhotoRealistic;
-use crate::xna::{ALTO, AMARILLO, ANCHO, VERDE};
+use crate::{ALTO, ANCHO};
+use xna::colores::{AMARILLO, VERDE};
 
 pub struct Menu {
     shader: NonPhotoRealistic,

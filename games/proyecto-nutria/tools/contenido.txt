@@ -1,0 +1,22 @@
+# Contenido que el juego carga y dibuja (rutas de Content.Load; Windows no distingue mayúsculas).
+# No se incluyen: Fuentes/fuenteCronometro (el cronómetro nunca se dibuja), Graficos/Armas/lanzallamas
+# y Graficos/Particulas/fuego (el lanzallamas nunca aparece), Graficos/Menus/MenuPersonajes/* (se
+# cargan pero no se dibujan), Graficos/Plataformas/pasto y las demás partículas (sin uso).
+Fuentes/fuentePredeterminada
+Graficos/Armas/laser
+Graficos/Armas/pistola
+Graficos/Iconos/esfera
+Graficos/Iconos/marco
+Graficos/Items/caja
+Graficos/Items/moneda
+Graficos/Menus/fondo
+Graficos/Niveles/Nivel 1/Marco Coipo
+Graficos/Niveles/Nivel 1/Plataformas
+Graficos/Niveles/Nivel 1/scroll1
+Graficos/Niveles/Nivel 1/scroll2
+Graficos/Niveles/Nivel 1/sky
+Graficos/Particulas/hoja
+Graficos/Personajes/coipo
+Graficos/Personajes/pollo
+Graficos/Plataformas/null
+Graficos/Plataformas/roca

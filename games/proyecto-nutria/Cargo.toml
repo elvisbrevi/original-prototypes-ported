@@ -1,0 +1,12 @@
+[package]
+name = "proyecto-nutria"
+version = "0.1.0"
+edition = "2024"
+
+[package.metadata.museo]
+titulo = "Proyecto Nutria (Version Prototipo)"
+
+[dependencies]
+macroquad = "0.4"
+museo = { path = "../../crates/museo" }
+xna = { path = "../../crates/xna" }

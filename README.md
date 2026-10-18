@@ -13,7 +13,7 @@ El avance está en [PLAN.md](PLAN.md). Cada push compila todo en nativo y en was
 
 | Año | Juego | Stack original | Port |
 |---|---|---|---|
-| 2009 | [Proyecto Nutria](#proyecto-nutria) | C# + XNA 3.1 (Windows) | pendiente |
+| 2009 | [Proyecto Nutria](#proyecto-nutria) | C# + XNA 3.1 (Windows) | ✅ [games/proyecto-nutria](games/proyecto-nutria) |
 | 2009 | [IMAN](#iman) | C# + XNA 3.1 (Windows) | ✅ [games/iman](games/iman) |
 | 2011 | [The Electric Eel Attack](#the-electric-eel-attack) | C# + XNA 3.1 (Windows) | pendiente |
 | 2011 | [Go Ball](#go-ball) | Unity 3.4 (C# + UnityScript) | pendiente |
@@ -34,16 +34,24 @@ confirmar» y se cierran en el triaje de cada juego.
 
 ### Proyecto Nutria
 
-- **Fecha:** compilado el 11-nov-2009 (video del prototipo: 3-oct-2009).
+![Proyecto Nutria](games/proyecto-nutria/docs/nivel1.png)
+
+- **Fecha:** compilado el 11-nov-2009, según la cabecera del ejecutable (video del prototipo:
+  3-oct-2009).
 - **Stack:** C# + XNA 3.1, instalador ClickOnce para Windows.
-- **De qué trata:** plataformas. Por sus assets tiene selección de personaje, un cronómetro y un
-  primer nivel con fondos en scroll; el protagonista sería un coipo (la «nutria» chilena), por
-  confirmar.
-- **Port:** pendiente.
+- **De qué trata:** plataformas de acción para dos. Un coipo (la «nutria» chilena) y un pollo
+  recorren un nivel de plataformas de roca y recogen cajas con pistolas láser para dispararse. El
+  pollo solo era jugable con un mando conectado. Tiene un nivel y un menú de pausa con el fondo
+  desenfocado en gris.
+- **Port:** ✅ [games/proyecto-nutria](games/proyecto-nutria): lógica traducida del C# decompilado,
+  gráficos, fuente y efecto de pausa originales; versión web con controles táctiles. El original
+  no tiene sonido.
 - **Original:** [elvisbrevi.itch.io/proyecto-nutria](https://elvisbrevi.itch.io/proyecto-nutria)
   (`Proyecto_Nutria.rar`) · [video](https://vimeo.com/6882393)
 
 ### IMAN
+
+![IMAN](games/iman/docs/nivel1.png)
 
 - **Fecha:** compilado el 13-nov-2009 (video: 15-dic-2009).
 - **Stack:** C# + XNA 3.1, instalador ClickOnce para Windows.
@@ -148,10 +156,13 @@ confirmar» y se cierran en el triaje de cada juego.
 games/<slug>/        un crate de Cargo por juego (port + assets extraídos + referencia del original)
 crates/museo/        piezas comunes: pantalla virtual con bandas, paso fijo y controles táctiles;
                      plantilla web (index.html + mq_js_bundle.js de macroquad) en crates/museo/web
+crates/xna/          equivalentes de XNA 3.1 (Rectangle, Clamp, SpriteBatch.Draw, SpriteFont, Random)
 originales/          binarios originales (fuera de git) y catalogo.json con sus sha256
 tools/originales.py  inventario y descarga de los originales desde itch.io
 tools/build_web.sh   versión web de un juego en dist/<slug> a partir de la plantilla
-tools/unity_assets.py, tools/c2_eventos.py   extracción de juegos Unity y Construct 2 (ver PLAN.md)
+tools/xnb_extract.py, tools/unity_assets.py, tools/c2_eventos.py
+                     extracción de contenido XNA, Unity y Construct 2 (ver PLAN.md)
+tools/rea_reconstruction.py   C# de ILSpy -> import-managed-reconstruction de REA
 tools/humo/          tests de humo: nativo (Xvfb + xdotool) y web (Playwright: escritorio y móvil)
 PLAN.md              plan por fases con checkpoints
 ```
@@ -159,7 +170,7 @@ PLAN.md              plan por fases con checkpoints
 ## Jugar
 
 ```sh
-cargo run --release -p iman            # PC
+cargo run --release -p iman            # PC (o -p proyecto-nutria)
 tools/build_web.sh iman                # web: sirve dist/iman con cualquier servidor estático
 ```
 

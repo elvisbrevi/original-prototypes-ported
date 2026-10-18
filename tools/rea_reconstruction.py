@@ -1,6 +1,6 @@
 """Build an REA import-managed-reconstruction payload from ILSpy output.
 
-Usage: python3 -I rea_reconstruction.py <members.json> <ilspy project dir> <out.json>
+Usage: python3 -I tools/rea_reconstruction.py <members.json> <ilspy project dir> <out.json>
 Methods are located by declaring type file + name; overloaded names are matched by parameter count.
 """
 import json

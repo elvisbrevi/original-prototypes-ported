@@ -6,17 +6,50 @@ pub struct Pantalla {
     pub ancho: f32,
     pub alto: f32,
     destino: RenderTarget,
+    /// Copia sin mezcla: el canal alfa de un render target baja donde se dibujan sprites
+    /// semitransparentes, y al presentarlo con mezcla oscurecería esas zonas.
+    opaco: Material,
 }
+
+const VERTICE: &str = r#"#version 100
+attribute vec3 position;
+attribute vec2 texcoord;
+varying lowp vec2 uv;
+uniform mat4 Model;
+uniform mat4 Projection;
+void main() {
+    gl_Position = Projection * Model * vec4(position, 1.0);
+    uv = texcoord;
+}
+"#;
+
+const FRAGMENTO: &str = r#"#version 100
+precision lowp float;
+varying lowp vec2 uv;
+uniform sampler2D Texture;
+void main() {
+    gl_FragColor = vec4(texture2D(Texture, uv).rgb, 1.0);
+}
+"#;
 
 impl Pantalla {
     /// Pantalla virtual de `ancho` x `alto`, escalada con filtro lineal.
     pub fn nueva(ancho: f32, alto: f32) -> Self {
         let destino = render_target(ancho as u32, alto as u32);
         destino.texture.set_filter(FilterMode::Linear);
+        let opaco = load_material(
+            ShaderSource::Glsl {
+                vertex: VERTICE,
+                fragment: FRAGMENTO,
+            },
+            MaterialParams::default(),
+        )
+        .expect("material opaco");
         Self {
             ancho,
             alto,
             destino,
+            opaco,
         }
     }
 
@@ -59,20 +92,27 @@ impl Pantalla {
         (punto - d.point()) * self.ancho / d.w
     }
 
+    /// Copia `textura` (por ejemplo otro render target) en `destino` sin mezclar, como un
+    /// viewport opaco.
+    pub fn copiar_opaco(&self, textura: &Texture2D, destino: Rect) {
+        gl_use_material(&self.opaco);
+        draw_texture_ex(
+            textura,
+            destino.x,
+            destino.y,
+            WHITE,
+            DrawTextureParams {
+                dest_size: Some(destino.size()),
+                ..Default::default()
+            },
+        );
+        gl_use_default_material();
+    }
+
     /// Dibuja la pantalla virtual en la ventana con bandas negras.
     pub fn presentar(&self, arriba: bool) {
         set_default_camera();
         clear_background(BLACK);
-        let d = self.destino(arriba);
-        draw_texture_ex(
-            &self.destino.texture,
-            d.x,
-            d.y,
-            WHITE,
-            DrawTextureParams {
-                dest_size: Some(d.size()),
-                ..Default::default()
-            },
-        );
+        self.copiar_opaco(&self.destino.texture, self.destino(arriba));
     }
 }

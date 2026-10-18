@@ -3,7 +3,7 @@
 
 use macroquad::prelude::*;
 
-use crate::xna::TICKS_POR_PASO;
+use xna::TICKS_POR_PASO;
 
 const VERTEX: &str = r#"#version 100
 attribute vec3 position;

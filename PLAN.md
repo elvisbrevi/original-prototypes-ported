@@ -5,8 +5,9 @@ Plan de trabajo para recrear en Rust + macroquad todos los juegos publicados en
 Está pensado para avanzar en varias sesiones: marca cada casilla al completarla e incluye el cambio
 del plan en el mismo commit.
 
-**Siguiente paso:** 2.1 Proyecto Nutria, que reutiliza todo lo hecho para IMAN (0.7, GitHub Pages,
-queda pendiente de decidir si se publica).
+**Siguiente paso:** 2.2 The Electric Eel Attack (XNA 3.1 + `Engine.dll`), con `crates/xna` y
+`tools/xnb_extract.py` (falta añadirle `SoundEffect`). El 0.7 (GitHub Pages) queda pendiente de
+decidir si se publica.
 
 ## Reglas
 
@@ -110,7 +111,7 @@ cada juego en la fase 2).
 
 | Juego | Original descargado | Stack detectado | Ruta de RE | Riesgos conocidos |
 |---|---|---|---|---|
-| Proyecto Nutria | `Proyecto_Nutria.rar` (1,5 MB) | XNA 3.1, XNB v4 | igual que IMAN: REA managed + ILSpy + `xnb_extract.py` | fuente del cronómetro de 8 MB; audio sin revisar |
+| Proyecto Nutria | `Proyecto_Nutria.rar` (1,5 MB) | XNA 3.1, XNB v4 | ✅ hecho | sin audio en el original; ver pendientes en 2.1 |
 | IMAN | `IMAN_(Prototipo).rar` | XNA 3.1 | ✅ hecho | ver pendientes de IMAN |
 | The Electric Eel Attack | `The_Electric_Eel_Attack.zip` (7 MB) | XNA 3.1 + `Engine.dll` propio | REA managed sobre los dos ensamblados + ILSpy; XNB `SoundEffect` | música larga (`cancion1/2`); shaders propios |
 | Go Ball | 3 zips (Win32, Win64, macOS) | Unity 3.4.0f5, Mono, con `.mdb` | ILSpy de `Assembly-CSharp` y `Assembly-UnityScript`; escenas `level0..4` con `unity_assets.py` | 3D + física PhysX; UnityPy lee texturas, mallas, audio y campos de MonoBehaviour (los PPtr salen con los bytes invertidos) |
@@ -133,14 +134,18 @@ Orden sugerido: primero lo que reutiliza herramientas ya hechas y luego lo más 
 - Pendientes: mando DirectInput no portado; sonido sin probar en hardware real (el servidor no tiene
   tarjeta de sonido); controles táctiles probados solo en emulación de Chromium.
 
-### 2.1 Proyecto Nutria (XNA 3.1)
-- [ ] Triaje REA (`inspect-managed-artifact`, `inspect-managed-members`) + fecha de compilación.
-- [ ] Assets: adaptar `games/iman/tools/xnb_extract.py` (más fuentes y formatos; revisar audio).
-- [ ] Lógica: `ilspycmd -r <XNA 3.1 ref>` + `import-managed-reconstruction` en REA.
-- [ ] Port nativo jugable.
-- [ ] Web + táctil.
-- [ ] README del juego + ficha del museo.
-- [ ] Pendientes anotados.
+### 2.1 Proyecto Nutria (XNA 3.1) ✅
+- [x] Triaje REA (`inspect-managed-artifact`, `inspect-managed-members`) + fecha de compilación
+  (11-nov-2009 12:52 UTC, cabecera PE).
+- [x] Assets: `tools/xnb_extract.py` (generalización del de IMAN) con la lista de contenido usado.
+  No hay audio en el original.
+- [x] Lógica: `ilspycmd -r <XNA 3.1 ref>` + `import-managed-reconstruction` en REA (104 métodos).
+  El efecto de pausa se desensambló (ps_2_0) y se reescribió en GLSL.
+- [x] Port nativo jugable.
+- [x] Web + táctil.
+- [x] README del juego + ficha del museo.
+- [x] Pendientes anotados: mando DirectInput no portado (el pollo solo era jugable con mando);
+  controles táctiles probados solo en emulación de Chromium.
 
 ### 2.2 The Electric Eel Attack (XNA 3.1 + Engine.dll)
 - [ ] Triaje REA de `The Electric Eel Attack.exe` y `Engine.dll`.

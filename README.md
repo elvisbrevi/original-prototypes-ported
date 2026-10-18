@@ -144,10 +144,11 @@ confirmar» y se cierran en el triaje de cada juego.
 
 ```
 games/<slug>/        un crate de Cargo por juego (port + assets extraídos + referencia del original)
-crates/museo/        piezas comunes: pantalla virtual con bandas, paso fijo y controles táctiles
+crates/museo/        piezas comunes: pantalla virtual con bandas, paso fijo y controles táctiles;
+                     plantilla web (index.html + mq_js_bundle.js de macroquad) en crates/museo/web
 originales/          binarios originales (fuera de git) y catalogo.json con sus sha256
 tools/originales.py  inventario y descarga de los originales desde itch.io
-tools/build_web.sh   versión web de un juego en dist/<slug>
+tools/build_web.sh   versión web de un juego en dist/<slug> a partir de la plantilla
 PLAN.md              plan por fases con checkpoints
 ```
 

@@ -24,8 +24,8 @@ rustup target add wasm32-unknown-unknown
 butler push ../../dist/iman elvisbrevi/imn-2026:html5   # prueba de publicación del port
 ```
 
-`web/mq_js_bundle.js` es el de macroquad 0.4.16 y tiene que coincidir con la versión del crate.
-En la web, Esc y la opción "Quit" no hacen nada (no hay ventana que cerrar).
+El `index.html` sale de la plantilla común de [`crates/museo/web`](../../crates/museo/web), con el
+título de `[package.metadata.museo]` en `Cargo.toml`. En la web, Esc y la opción "Quit" no hacen nada (no hay ventana que cerrar).
 
 ### Controles táctiles
 

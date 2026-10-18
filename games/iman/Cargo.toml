@@ -3,6 +3,9 @@ name = "iman"
 version = "0.1.0"
 edition = "2024"
 
+[package.metadata.museo]
+titulo = "IMAN (Prototipo)"
+
 [dependencies]
 macroquad = { version = "0.4", features = ["audio"] }
 museo = { path = "../../crates/museo" }

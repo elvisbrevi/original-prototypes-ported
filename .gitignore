@@ -2,3 +2,4 @@
 /dist
 /originales/*
 !/originales/catalogo.json
+node_modules/

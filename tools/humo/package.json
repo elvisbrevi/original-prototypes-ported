@@ -1,0 +1,9 @@
+{
+  "name": "museo-humo",
+  "private": true,
+  "type": "module",
+  "description": "Tests de humo de los ports del museo: web (Playwright + Chromium) y nativo (Xvfb + xdotool)",
+  "dependencies": {
+    "playwright-core": "1.64.1"
+  }
+}

@@ -152,6 +152,7 @@ originales/          binarios originales (fuera de git) y catalogo.json con sus 
 tools/originales.py  inventario y descarga de los originales desde itch.io
 tools/build_web.sh   versión web de un juego en dist/<slug> a partir de la plantilla
 tools/unity_assets.py, tools/c2_eventos.py   extracción de juegos Unity y Construct 2 (ver PLAN.md)
+tools/humo/          tests de humo: nativo (Xvfb + xdotool) y web (Playwright: escritorio y móvil)
 PLAN.md              plan por fases con checkpoints
 ```
 

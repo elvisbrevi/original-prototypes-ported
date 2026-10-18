@@ -5,8 +5,8 @@ Plan de trabajo para recrear en Rust + macroquad todos los juegos publicados en
 Está pensado para avanzar en varias sesiones: marca cada casilla al completarla e incluye el cambio
 del plan en el mismo commit.
 
-**Siguiente paso:** checkpoint 0.9 (test de humo web) y el resto de la fase 0; después 2.1
-Proyecto Nutria, que reutiliza todo lo hecho para IMAN.
+**Siguiente paso:** 2.1 Proyecto Nutria, que reutiliza todo lo hecho para IMAN (0.7, GitHub Pages,
+queda pendiente de decidir si se publica).
 
 ## Reglas
 
@@ -50,6 +50,12 @@ sudo apt install openjdk-21-jre-headless
 curl -LO https://github.com/skylot/jadx/releases/download/v1.5.6/jadx-1.5.6.zip   # unzip -d ~/.local/opt/jadx
 curl -L -o ~/.local/opt/apktool/apktool_3.0.3.jar \
   https://github.com/iBotPeaches/Apktool/releases/download/v3.0.3/apktool_3.0.3.jar
+
+# Tests de humo (checkpoint 0.9): Playwright con el Chromium de la caché de Playwright o $CHROMIUM
+sudo apt install xvfb xdotool imagemagick
+npm install --prefix tools/humo
+node tools/humo/nativo.mjs <juego>   # tras cargo build --release -p <juego>
+node tools/humo/web.mjs <juego>      # tras tools/build_web.sh <juego>
 ```
 
 Herramientas de extracción por stack (checkpoint 0.8; las salidas van a `originales/<slug>/`):
@@ -80,7 +86,7 @@ Herramientas de extracción por stack (checkpoint 0.8; las salidas van a `origin
 - [ ] **0.7** (Opcional) GitHub Pages con todas las versiones web, enlazadas desde el README del museo.
 - [x] **0.8** Herramientas de extracción por stack: UnityPy/AssetRipper (Unity 4/5 y Unity Web
   Player), lector de `data.js` de Construct 2, apktool/JADX (Android).
-- [ ] **0.9** Test de humo web reutilizable (Playwright: móvil horizontal/vertical y escritorio) en
+- [x] **0.9** Test de humo web reutilizable (Playwright: móvil horizontal/vertical y escritorio) en
   `tools/`, como el que se usó a mano con IMAN.
 
 ## Plantilla de checkpoints por juego
@@ -92,7 +98,8 @@ Cada juego de la fase 2 sigue estos pasos:
 3. Reconstrucción de la lógica: C# decompilado, eventos de Construct o pseudocódigo, guardado en
    `games/<slug>/reference/`.
 4. Port nativo jugable de principio a fin.
-5. Versión web + controles táctiles, probada en móvil (horizontal y vertical) y escritorio.
+5. Versión web + controles táctiles, probada en móvil (horizontal y vertical) y escritorio con
+   `tools/humo` (pasos del juego en `games/<slug>/humo.json`, también para el test nativo).
 6. README del juego y su ficha en el README del museo.
 7. Pendientes anotados.
 

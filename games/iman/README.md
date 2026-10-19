@@ -1,9 +1,12 @@
-# IMAN (Prototipo) — port a Rust + macroquad
+# IMAN (Prototipo)
 
-Port del plataformero **IMAN** (Elvis Brevi, 2009, [itch.io](https://elvisbrevi.itch.io/iman)),
-escrito originalmente en C# con XNA 3.1. La lógica se reconstruyó por ingeniería inversa del
-ejecutable publicado y se tradujo casi línea por línea. Los gráficos, la fuente, el shader y el
-sonido son los originales, extraídos de los `.xnb` / `.xwb`.
+**IMAN** (Elvis Brevi, [itch.io](https://elvisbrevi.itch.io/iman)) es un juego de plataformas en el
+que un niño usa el imán de su mochila para atraer cajas y para elevarse hacia plataformas móviles.
+Tiene dos niveles y un final. Se hizo en 2009 con C# y XNA 3.1 para Windows (compilado el
+13-nov-2009) y ahora está portado a Rust + macroquad: se juega en PC y en el navegador, también en
+móviles. La lógica se reconstruyó por ingeniería inversa del ejecutable publicado y se tradujo
+casi línea por línea. Los gráficos, la fuente, el shader y el sonido son los originales, extraídos
+de los `.xnb` / `.xwb`.
 
 ![menú](docs/menu.png) ![nivel 1](docs/nivel1.png)
 
@@ -75,6 +78,21 @@ cajas/barriles hacia el niño y, apuntando hacia arriba, lo eleva hacia una plat
 5. **Shader**: `PostprocessEffect.xnb` es el efecto del sample *Non-Photorealistic* de XNA; los
    valores por defecto se leyeron del binario (`SketchThreshold = 0.1`, `SketchBrightness = 0.333`)
    y la técnica `ColorSketch` se reescribió en GLSL.
+6. **Port**:
+   - Cada clase de C# es un módulo de Rust (ver la tabla de abajo), con los mismos campos y el
+     mismo orden de operaciones. Las conversiones `(int)` truncan hacia cero como en C#
+     (`xna::int`), y `xna::clamp` aplica primero el máximo, como `MathHelper.Clamp`.
+   - El bucle de `Game` con paso fijo es `museo::PasoFijo::xna()`. En cada fotograma se ejecutan
+     los `Update` de 166 667 ticks que tocan (con 500 ms de atraso como mucho, como `Game.Tick`)
+     y un solo `Draw`.
+   - Todo se dibuja en una pantalla virtual de 640×480 (`museo::Pantalla`, un render target) que
+     se escala a la ventana con bandas. `xna::dibujar` reproduce `SpriteBatch.Draw`: el origen en
+     píxeles de la fuente, la escala y la rotación en torno a él, y el volteo solo de las UV.
+     `xna::SpriteFont` reproduce el `InternalDraw` de XNA.
+   - El shader es un material de macroquad con la textura de trazos. `SketchJitter` toma un valor
+     al azar cada 0,05 s (500 000 ticks), como en `Shaders.NonPhotoRealistic`.
+   - `control.rs` copia `PCInput`: «pulsado en este paso» y «mantenido». Los botones táctiles de
+     `museo::Tactil` se leen igual que las teclas.
 
 `reference/csharp/` contiene el C# decompilado como referencia para comparar con el port.
 

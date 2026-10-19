@@ -6,8 +6,10 @@ Está pensado para avanzar en varias sesiones: marca cada casilla al completarla
 del plan en el mismo commit.
 
 **Siguiente paso:** 2.6 Super Happy Jump (Unity 4.6 Web Player): abrir `web.unity3d` con
-`tools/unity_assets.py`, decompilar `Assembly-CSharp.dll` con ILSpy y seguir la plantilla. El 0.7
-(GitHub Pages) queda pendiente de decidir si se publica.
+`tools/unity_assets.py`, decompilar `Assembly-CSharp.dll` con ILSpy y seguir la plantilla (con el
+paso 6 ampliado: «Cómo se hizo» con los detalles técnicos del port). La fase 4 (publicar las
+versiones web en itch.io) espera la confirmación del dueño de la cuenta: 4.1 y 4.2 se pueden
+preparar en cuanto la dé. El 0.7 (GitHub Pages) queda pendiente de decidir si se publica.
 
 ## Reglas
 
@@ -17,7 +19,9 @@ del plan en el mismo commit.
    provisional y se anota como pendiente.
 3. **Cada port tiene versión nativa (PC) y web (wasm)**, con controles táctiles que aparecen solos en
    móviles y tablets.
-4. **No se publica en itch.io.** Los ports viven en este repo.
+4. **itch.io, solo con confirmación.** Los ports viven en este repo y su versión web se publica en
+   la página de itch.io de cada juego (fase 4), pero cada subida se confirma antes con el dueño de
+   la cuenta.
 5. **Los impedimentos no bloquean.** Audio que no se puede convertir, formatos propietarios o binarios
    que faltan se anotan como pendientes (en el README del juego y en la tabla de la fase 1) y se sigue
    con lo demás.
@@ -101,8 +105,13 @@ Cada juego de la fase 2 sigue estos pasos:
 4. Port nativo jugable de principio a fin.
 5. Versión web + controles táctiles, probada en móvil (horizontal y vertical) y escritorio con
    `tools/humo` (pasos del juego en `games/<slug>/humo.json`, también para el test nativo).
-6. README del juego y su ficha en el README del museo.
+6. README del juego y su ficha en el README del museo. Cuentan qué juego es, con qué y cuándo se
+   hizo y que ahora está portado, sin separar «versión original» y «port». En «Cómo se hizo» el
+   README documenta el proceso técnico del port, al terminarlo: triaje y Evidence de REA,
+   extracción, qué se tradujo y cómo se resolvió cada pieza del motor (lo que no se ve leyendo el
+   código), y cómo se comprobó.
 7. Pendientes anotados.
+8. Publicar la versión web en la página de itch.io del juego (fase 4), con confirmación.
 
 ## Fase 1 — Triaje
 
@@ -122,7 +131,7 @@ cada juego en la fase 2).
 | Retro Penal | HTML5 + NW.js (win/osx/linux) | Construct 2 | ✅ hecho | ver pendientes en 2.4 |
 | One Button Prototype | Mac, Linux, APK y WebGL | Unity 5.1.2f1, Mono | ILSpy (Standard Assets 2D + clases propias); escenas con UnityPy/AssetRipper | física 2D (Box2D) |
 | Neuro Battle | `Neuro Battle.zip` (WebGL) | Unity 5.1.1f1, IL2CPP → asm.js | **sin DLL de C#**: metadatos IL2CPP + escenas + observar el juego (REA browser) | el más difícil; el WebGL de 2015 puede no correr en navegadores actuales. El `.data` ya se desempaqueta (`unity_assets.py emscripten`): escenas, sprites y nombres de scripts legibles |
-| Da Car | HTML5 (32 archivos) | Construct 2 | igual que Que No Caiga | ídem |
+| Da Car | HTML5 (32 archivos) | Construct 2 + Box2D (asm.js) | ✅ hecho | ver pendientes en 2.5 |
 
 ## Fase 2 — Ports
 
@@ -272,4 +281,36 @@ Orden sugerido: primero lo que reutiliza herramientas ya hechas y luego lo más 
 
 - [ ] Capturas de cada port en `games/<slug>/docs/` y en el README del museo.
 - [ ] Versiones web jugables enlazadas desde el README (si se hace el checkpoint 0.7).
-- [ ] Revisar que cada ficha tenga fecha confirmada, stack, descripción, port y original.
+- [ ] Revisar que cada ficha tenga fecha confirmada, stack, descripción, estado del port y enlace a
+  itch.io.
+- [x] README de los juegos y fichas del museo con un mismo enfoque: qué juego es, con qué y cuándo
+  se hizo y que ahora está portado, sin separar «original» y «port». «Cómo se hizo» ampliado con
+  los detalles técnicos de cada port: IMAN, Proyecto Nutria, The Electric Eel Attack, Que No Caiga,
+  Retro Penal y Da Car (paso 6 de la plantilla para los siguientes).
+
+## Fase 4 — Publicación en itch.io
+
+Cada página de itch.io pasa a ofrecer el port para jugar en el navegador. Los juegos que ya tenían
+versión web (Que No Caiga, Retro Penal y Da Car en HTML5; One Button Prototype y Neuro Battle en
+WebGL) la reemplazan por la del port, y los demás la estrenan. Nada se sube sin la confirmación
+del dueño de la cuenta (regla 4).
+
+- [ ] **4.1** Preparar la publicación: butler (la herramienta de itch.io) con una API key que no
+  entra al repo, y `tools/publicar_itch.sh <slug>`, que compila la web con `tools/build_web.sh` y
+  la sube con `butler push dist/<slug> elvisbrevi/<proyecto>:html5`. Hace falta la tabla de slugs
+  del repo y proyectos de itch.io: casi todos coinciden, pero One Button Prototype es
+  `prototipo-2000`. La prueba de IMÁN 2026 (`elvisbrevi/imn-2026:html5`) ya probó el flujo con
+  IMAN.
+- [ ] **4.2** Decidir con el dueño qué pasa con lo que ya hay en cada página. Las descargas
+  originales (rar, zip, apk), el HTML5 de Construct 2 y los WebGL de Unity: ¿se reemplazan, quedan
+  como descarga o se ocultan? Y el texto de la página: decir que lo que se juega es el port y
+  enlazar a este repo.
+- [ ] **4.3** Configurar cada página para jugar en el navegador, desde el panel de itch.io (butler
+  no lo hace): tipo HTML, marco del tamaño del juego (640×480 IMAN y The Electric Eel Attack,
+  1280×720 Proyecto Nutria, 400×500 Que No Caiga y Retro Penal, 800×450 Da Car), «Mobile friendly»
+  con su orientación y botón de pantalla completa.
+- [ ] **4.4** Publicar uno a uno, con confirmación, los ports ya hechos: Proyecto Nutria, IMAN, The
+  Electric Eel Attack, Que No Caiga, Retro Penal y Da Car. Probar cada página publicada en
+  escritorio y en móvil (`tools/humo/web.mjs` adaptado a una URL, o a mano).
+- [ ] **4.5** Desde entonces, cada port nuevo se publica al cerrar su checkpoint (paso 8 de la
+  plantilla), también con confirmación.

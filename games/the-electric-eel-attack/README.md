@@ -1,15 +1,17 @@
-# The Electric Eel Attack — port a Rust + macroquad
+# The Electric Eel Attack
 
-Port de **The Electric Eel Attack** (Elvis Brevi, 2011,
-[itch.io](https://elvisbrevi.itch.io/the-electric-eel-attack)), escrito originalmente en C# con
-XNA 3.1 y un motor propio, `Engine.dll`. Es un plataformero de acción. Yerko tiene que reunir los
-tres mapas de cada nivel para que se abra el vórtice de salida, mientras lo atacan anguilas
-eléctricas: los *hunters* patrullan y se electrifican cada cierto tiempo, y los *kamikazes* saltan
-desde abajo. Se las puede pisar o disparar con la energía de las pilas (10 disparos por pila).
-Tiene cuatro niveles: el campo, una caverna en la que se sale por un lado y se entra por el otro,
-la ciudad y una fábrica con un cañón que apunta con su mira. La lógica se reconstruyó por
-ingeniería inversa de los dos ensamblados y se tradujo casi línea por línea. Los gráficos, las
-fuentes, los mapas, los efectos y los sonidos son los originales.
+**The Electric Eel Attack** (Elvis Brevi,
+[itch.io](https://elvisbrevi.itch.io/the-electric-eel-attack)) es un juego de plataformas de
+acción. Yerko tiene que reunir los tres mapas de cada nivel para que se abra el vórtice de salida,
+mientras lo atacan anguilas eléctricas: los *hunters* patrullan y se electrifican cada cierto
+tiempo, y los *kamikazes* saltan desde abajo. Se las puede pisar o disparar con la energía de las
+pilas (10 disparos por pila). Tiene cuatro niveles: el campo, una caverna en la que se sale por un
+lado y se entra por el otro, la ciudad y una fábrica con un cañón que apunta con su mira.
+
+Se hizo en 2011 con C# y XNA 3.1 sobre un motor propio, `Engine.dll` (compilado el 9-mar-2011), y
+ahora está portado a Rust + macroquad: se juega en PC y en el navegador, también en móviles. La
+lógica se reconstruyó por ingeniería inversa de los dos ensamblados y se tradujo casi línea por
+línea. Los gráficos, las fuentes, los mapas, los efectos y los sonidos son los originales.
 
 ![título](docs/titulo.png) ![nivel 1](docs/nivel1.png)
 
@@ -93,6 +95,22 @@ juego se coloca arriba y los controles debajo.
    - `TopFade`: `color × v`.
 
    Ninguno usa el tinte del sprite.
+6. **Port**:
+   - `src/motor/` traduce `Engine.dll` y `src/niveles.rs` el juego. Las subclases de `Objeto`
+     (`Grafico`, `Plataforma`, `Personaje`, `SistemaParticulas` y `Texto`) solo cambian cargar,
+     actualizar y dibujar, así que son un único tipo con un campo `tipo`.
+   - Los mapas XML se leen con `roxmltree` al cargar cada nivel, como `Escenario.cargar`. Los
+     objetos piden sus texturas, fuentes y sonidos por nombre, como `Content.Load`, a los assets
+     embebidos.
+   - La cámara del motor (`Pantalla`) guarda su matriz, `Translation(−posición) · Scale ·
+     RotationZ`. Cada objeto dibuja con ella mediante `museo::Pantalla::vista_transformada`, en una
+     pantalla virtual de 640×480. Como cada objeto abría su propio `SpriteBatch`, el port elige
+     por objeto la mezcla (aditiva o normal), si va con cámara y si usa el efecto de la escena o
+     el suyo.
+   - `SoundEffectInstance` se emula por objeto con un `Sound` de macroquad por instancia, que
+     recuerda hasta cuándo suena (ver «Diferencias con el original»).
+   - El paso fijo, `Rectangle`, `Clamp`, `SpriteFont` (con rotación, escala y volteo) y
+     `System.Random` vienen de `crates/museo` y `crates/xna`, como en los otros ports de XNA.
 
 `reference/csharp/` contiene el C# decompilado del juego (`juego/`) y del motor (`Engine/`).
 

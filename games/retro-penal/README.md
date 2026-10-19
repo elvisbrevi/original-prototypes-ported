@@ -1,17 +1,18 @@
-# Retro Penal — port a Rust + macroquad
+# Retro Penal
 
-Port de **Retro Penal** (Elvis Brevi, [itch.io](https://elvisbrevi.itch.io/retro-penal)), un juego
-de penales hecho con Construct 2 para el navegador y para escritorio (NW.js en Windows, macOS y
-Linux). Sus etiquetas en itch.io (*chile*, *seleccion-chilena*, *mundial*, *cazely*) apuntan a la
+**Retro Penal** (Elvis Brevi, [itch.io](https://elvisbrevi.itch.io/retro-penal)) es un juego de
+penales. Sus etiquetas en itch.io (*chile*, *seleccion-chilena*, *mundial*, *cazely*) apuntan a la
 selección chilena. Hay tres intentos: una flecha va y viene sobre el punto penal, y al tocar el
 jugador patea en esa dirección. El arquero se lanza hacia un lado o se agacha, y los palos y el
 arquero desvían la pelota. Cada gol hace más rápidos la flecha y el arquero.
 
-La lógica se tradujo de las hojas de eventos del proyecto (`data.js`) y del runtime minificado de
-Construct 2 (`c2runtime.js`). Las imágenes, los sonidos y el proyecto (tipos, animaciones,
-polígonos de colisión, comportamientos y layouts) son los originales: el port lee `data.js` al
-arrancar. Las piezas del runtime están en [`crates/construct2`](../../crates/construct2), que
-también usa [Que No Caiga](../que-no-caiga).
+Se hizo en julio de 2015 con Construct 2, para el navegador y para escritorio (NW.js en Windows,
+macOS y Linux), y ahora está portado a Rust + macroquad: se juega en PC y en el navegador, también
+en móviles. La lógica se tradujo de las hojas de eventos del proyecto (`data.js`) y del runtime
+minificado de Construct 2 (`c2runtime.js`). Las imágenes, los sonidos y el proyecto (tipos,
+animaciones, polígonos de colisión, comportamientos y layouts) son los originales: el port lee
+`data.js` al arrancar. Las piezas del runtime están en
+[`crates/construct2`](../../crates/construct2), que también usa [Que No Caiga](../que-no-caiga).
 
 ![menú](docs/menu.png) ![flecha](docs/flecha.png) ![gol](docs/gol.png)
 
@@ -94,6 +95,26 @@ Sobre los botones el cursor pasa a ser una mano, como en el original (Mouse.SetC
    Los fragmentos están en `reference/runtime.txt`.
 5. **Assets**: [`tools/extraer.sh`](tools/extraer.sh) copia las imágenes, los OGG que suenan y
    `data.js`.
+6. **Port de las hojas** (`src/juego.rs`), con las mismas reglas que en
+   [Que No Caiga](../que-no-caiga) (instancias elegidas, disparadores entre ticks, orden del tick):
+   - Cada hoja es una función (`hoja_menu`, `hoja_juego` y `hoja_game_over`) y el tick llama a la
+     del layout actual.
+   - System.Wait guarda en `construct2::Esperas` el resto de las acciones como un valor de
+     `Seguir` (`Choque(fallo)` o `FinDePartida`), junto con los uid de las instancias elegidas. Las
+     esperas se cumplen al principio del tick, antes de los comportamientos, y sobreviven al
+     cambio de layout.
+   - Cada condición «On collision» tiene su `MemoriaColision` (cuatro en este juego). Recuerda en
+     qué tick vio solapada a cada pareja y cuenta también las colisiones que registra Bullet al
+     rebotar.
+   - «Every X seconds» (`Cada`) guarda su último disparo y se recoloca si se atrasa más de 40 ms,
+     como el runtime.
+   - El rebote de Bullet en los sólidos sigue a `calculateSolidBounceAngle`. Gira de 5 en 5
+     grados alrededor de la posición anterior buscando la primera dirección libre a cada lado. La
+     normal queda entre las dos y el nuevo ángulo es el reflejo del de llegada. Luego la pelota
+     avanza en la nueva dirección de píxel en píxel hasta salir del sólido y se vuelve a acercar a
+     él en fracciones (`pushOutSolid`). Si así no sale, va al hueco libre más cercano
+     (`pushOutSolidNearest`).
+   - Audio: `Stop` lanza «On ended», como Web Audio, y el fin de un sonido se avisa entre ticks.
 
 ## Correspondencia con el original
 

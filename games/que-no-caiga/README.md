@@ -1,15 +1,17 @@
-# Que No Caiga — port a Rust + macroquad
+# Que No Caiga
 
-Port de **Que No Caiga** (Elvis Brevi, [itch.io](https://elvisbrevi.itch.io/que-no-caiga)), un
-juego de Construct 2 para el navegador con la temática del Mundial (las etiquetas dicen *brasil*,
-*chile*, *mundial*). Hay que dominar el balón: cada toque hace patear al jugador, y si la pelota
-pasa por la zona de sus pies se acaba la partida. Cuenta los segundos que aguantas. En el segundo 9
-y en el 40 aparece otra pelota. Desde el 50 caen bombas: pateadas brillan y explotan en el aire,
-pero si llegan a los pies explotan ahí y queman al jugador.
+**Que No Caiga** (Elvis Brevi, [itch.io](https://elvisbrevi.itch.io/que-no-caiga)) es un juego con
+la temática del Mundial (las etiquetas dicen *brasil*, *chile*, *mundial*). Hay que dominar el
+balón: cada toque hace patear al jugador, y si la pelota pasa por la zona de sus pies se acaba la
+partida. Cuenta los segundos que aguantas. En el segundo 9 y en el 40 aparece otra pelota. Desde
+el 50 caen bombas: pateadas brillan y explotan en el aire, pero si llegan a los pies explotan ahí y
+queman al jugador.
 
-La lógica se tradujo de las hojas de eventos del proyecto (`data.js`) y del runtime minificado de
-Construct 2 (`c2runtime.js`). Las imágenes, los sonidos y el proyecto (tipos, animaciones,
-polígonos de colisión y layouts) son los originales: el port lee `data.js` al arrancar.
+Se hizo con Construct 2 para el navegador (exportado el 23-jul-2015) y ahora está portado a
+Rust + macroquad: se juega en PC y en el navegador, también en móviles. La lógica se tradujo de las
+hojas de eventos del proyecto (`data.js`) y del runtime minificado de Construct 2
+(`c2runtime.js`). Las imágenes, los sonidos y el proyecto (tipos, animaciones, polígonos de
+colisión y layouts) son los originales: el port lee `data.js` al arrancar.
 
 ![menú](docs/menu.png) ![patada](docs/patada.png) ![bomba](docs/bomba.png) ![final](docs/final.png)
 
@@ -81,6 +83,22 @@ nada, y no se portaron.
    piezas viven en [`crates/construct2`](../../crates/construct2), compartidas por los juegos de
    Construct 2.
 5. **Assets**: [`tools/extraer.sh`](tools/extraer.sh) copia las imágenes, los OGG y `data.js`.
+6. **Port de las hojas de eventos** (`src/juego.rs`):
+   - Las hojas no se interpretan: cada evento es código Rust, en el orden de la hoja. Las
+     condiciones eligen instancias como en Construct 2. Cada una filtra la lista de instancias que
+     le llega, los subeventos heredan esa lista y las acciones se aplican a cada instancia
+     elegida. `random()` se evalúa una vez por instancia.
+   - Los disparadores corren cuando el runtime los lanza: «On any touch start» entre ticks (como
+     los eventos del DOM), «On animation finished» durante el tick de los sprites y «On start of
+     layout» al cambiar de layout. Un `SetAnim` dentro de un disparador se aplica después, como en
+     el runtime.
+   - El tick sigue al de `c2runtime.js`. El dt del navegador se limita a 0,1 s y se multiplica por
+     la escala de tiempo. Después van los comportamientos, las animaciones, el cambio de layout y
+     los eventos. Lo destruido desaparece al terminar cada evento de primer nivel.
+   - Text se dibuja con Liberation Sans y el alto de línea del runtime (`ceil(pt × 96 / 72) + 4`
+     px), y deja de dibujar las líneas que no caben en la caja.
+   - El Touch del juego también recibe el ratón: en PC se juega con el clic.
+     `simulate_mouse_with_touch(false)` evita que un toque cuente además como clic.
 
 ## Correspondencia con el original
 

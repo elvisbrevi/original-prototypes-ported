@@ -1,12 +1,13 @@
-# Da Car — port a Rust + macroquad
+# Da Car
 
-Port de **Da Car** (Elvis Brevi, [itch.io](https://elvisbrevi.itch.io/da-car)), un prototipo de
-carreras de moto estilo Dakar (el proyecto se llama «Dakar 2015»; sus etiquetas en itch.io son
-*dakar* y *moto*), hecho con Construct 2 para el navegador. La moto avanza sobre un terreno con
-cerros que aparecen al azar, y hay que llegar a la meta sin que el piloto se golpee la cabeza. Si
-se la golpea, se vuelve a empezar, pero el reloj sigue corriendo. La moto, las ruedas y el piloto
-son cuerpos de Box2D unidos por articulaciones.
+**Da Car** (Elvis Brevi, [itch.io](https://elvisbrevi.itch.io/da-car)) es un prototipo de carreras
+de moto estilo Dakar: el proyecto se llama «Dakar 2015» y sus etiquetas en itch.io son *dakar* y
+*moto*. La moto avanza sobre un terreno con cerros que aparecen al azar, y hay que llegar a la
+meta sin que el piloto se golpee la cabeza. Si se la golpea, se vuelve a empezar, pero el reloj
+sigue corriendo. La moto, las ruedas y el piloto son cuerpos de Box2D unidos por articulaciones.
 
+Se hizo con Construct 2 para el navegador (exportado el 23-nov-2015) y ahora está portado a
+Rust + macroquad: se juega en PC y en el navegador, también en móviles, inclinando el dispositivo.
 La lógica se tradujo de la hoja de eventos del proyecto (`data.js`) y del runtime minificado de
 Construct 2 (`c2runtime.js`), y Box2D, del C++ de Box2D 2.3.1 del que salió el que trae el
 runtime. Las imágenes, los sonidos y el proyecto (tipos, polígonos de colisión, comportamientos y
@@ -104,20 +105,30 @@ centrado.
      `0,01 · min(ancho, alto)` m;
    - un paso fijo de 1/60 s por tick (8 iteraciones de velocidad y 3 de posición), dado en el
      tick del primer objeto con Physics;
-   - si un evento o Wrap mueven el sprite, el cuerpo se teletransporta con esa velocidad lineal;
+   - si un evento o Wrap mueven el sprite, el cuerpo se lleva allí (`SetTransform`) y recibe como
+     velocidad lineal el desplazamiento en píxeles, sin pasarlo a metros, como hace el runtime;
    - los contactos nuevos (`BeginContact`) se registran para la condición «On collision»;
    - las articulaciones se anclan en un punto de imagen del sprite y se borran al destruirse el
      otro objeto.
 6. **El resto del runtime**, también en `crates/construct2`:
-   - ScrollTo, que lleva la vista al promedio de los objetos en el segundo tick (después de los
-     eventos);
+   - ScrollTo, que lleva la vista al promedio de sus objetos en `tick2`, después de los eventos;
    - Wrap en modo «viewport», con la vista de cada capa según su parallax;
    - las capas con parallax, visibilidad y scroll sin límites;
    - el plugin Particles, con los números aleatorios pedidos en el mismo orden;
    - «Trigger once», «Is silent» y el clic de Mouse sobre un objeto.
-7. **Entrada**: `crates/museo` ganó `sensores::beta()`, que en la web lee el último
+7. **La hoja «InGame»** (`src/juego.rs`), con las mismas reglas que en
+   [Que No Caiga](../que-no-caiga) (instancias elegidas, disparadores entre ticks, orden del tick):
+   - Cada grupo de eventos es una función, en el orden de la hoja.
+   - Los dos bloques O de colisiones tienen una `MemoriaColision` por condición (cinco cada uno).
+   - «Trigger once» guarda el último tick en que se evaluó, y se cumple también en el primer tick
+     del layout.
+   - «Restart layout» queda pendiente y se hace en el tick siguiente, antes de los eventos. Las
+     variables globales y el estado de las condiciones (Every, Trigger once) viven en `Juego`,
+     fuera del layout, y por eso sobreviven al reinicio.
+   - Después de los eventos se olvidan las colisiones registradas y ScrollTo mueve la vista.
+8. **Entrada**: `crates/museo` ganó `sensores::beta()`, que en la web lee el último
    `deviceorientation` (en nativo vale 0).
-8. **Assets**: [`tools/extraer.sh`](tools/extraer.sh) copia las imágenes, los OGG y `data.js`.
+9. **Assets**: [`tools/extraer.sh`](tools/extraer.sh) copia las imágenes, los OGG y `data.js`.
 
 ## Correspondencia con el original
 

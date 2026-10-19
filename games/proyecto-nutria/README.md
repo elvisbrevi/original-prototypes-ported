@@ -1,12 +1,13 @@
-# Proyecto Nutria (Version Prototipo) — port a Rust + macroquad
+# Proyecto Nutria (Version Prototipo)
 
-Port del prototipo **Proyecto Nutria** (Elvis Brevi, 2009,
-[itch.io](https://elvisbrevi.itch.io/proyecto-nutria)), escrito originalmente en C# con XNA 3.1.
-Es un plataformero de acción para dos: un coipo (la «nutria» chilena) y un pollo recorren un nivel
-de plataformas de roca, recogen cajas con pistolas láser y se disparan. Si una bala alcanza a un
-personaje, este sale despedido hacia arriba, girando y en rojo. La lógica se reconstruyó por
-ingeniería inversa del ejecutable publicado y se tradujo casi línea por línea. Los gráficos, la
-fuente y el efecto de la pausa son los originales, extraídos de los `.xnb`.
+**Proyecto Nutria** (Elvis Brevi, [itch.io](https://elvisbrevi.itch.io/proyecto-nutria)) es un
+juego de plataformas de acción para dos. Un coipo (la «nutria» chilena) y un pollo recorren un
+nivel de plataformas de roca, recogen cajas con pistolas láser y se disparan. Si una bala alcanza a
+un personaje, este sale despedido hacia arriba, girando y en rojo. Se hizo en 2009 con C# y
+XNA 3.1 para Windows (compilado el 11-nov-2009) y ahora está portado a Rust + macroquad: se juega
+en PC y en el navegador, también en móviles. La lógica se reconstruyó por ingeniería inversa del
+ejecutable publicado y se tradujo casi línea por línea. Los gráficos, la fuente y el efecto de la
+pausa son los originales, extraídos de los `.xnb`.
 
 ![nivel 1](docs/nivel1.png)
 
@@ -84,6 +85,22 @@ los disparos.
    (`src/shader.rs`): suma 12 muestras de un disco de Poisson de radio 0,005 (en coordenadas de
    cada textura, sin la muestra central), pasa a gris con `(r + g + b) / 3` y divide por 12. Deja
    como alfa la suma de los 12 alfas, y no usa el tinte del sprite.
+6. **Port**:
+   - Como en IMAN, cada clase es un módulo y el paso fijo es `museo::PasoFijo::xna()`.
+     `crates/xna` aporta `Rectangle`, `Clamp`, `SpriteBatch.Draw`, `SpriteFont` y
+     `System.Random`. `tiempo.rs` copia el `GameTime` de paso fijo, en el que `TotalGameTime` suma
+     el paso antes de cada `Update`.
+   - `Game1.Draw` dibuja en dos partes. El marco y los iconos van en la pantalla virtual de
+     1280×720. El nivel va en un render target del tamaño del viewport `areaJuego`, borrado en
+     negro y con la transformación de `Camera2D` (escala y después traslación de
+     −posición × escala). Ese render target se copia a la pantalla sin mezcla
+     (`Pantalla::copiar_opaco`), para que los sprites semitransparentes no la oscurezcan.
+   - En la pausa, lo que se dibuja con la cámara (todo menos el cielo) usa el material del efecto
+     en lugar del de los sprites, como el `SpriteBatch.Begin` con efecto del original.
+   - Las partículas usan `xna::Random`, una copia del `System.Random` de .NET 2.0 (el generador
+     sustractivo de Knuth), sembrada con el reloj como `new Random()`.
+   - Sin mando, el original crea un único control, el teclado. El port hace lo mismo, y los
+     botones táctiles se leen como sus teclas.
 
 `reference/csharp/` contiene el C# decompilado como referencia para comparar con el port.
 

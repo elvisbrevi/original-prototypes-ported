@@ -1,0 +1,198 @@
+# Código minificado (c2runtime.js) de cada condición, acción y expresión que usan los eventos,
+# con el nombre de Construct 2 identificado a partir de él (ver nombres.json).
+
+## OnLayoutStart (V.prototype.i.Rm)
+Rm=function(){return!0}
+
+## IsOnMobile (V.prototype.i.Iq)
+Iq=function(){return this.b.dd}
+
+## IsGroupActive (V.prototype.i.Hq)
+Hq=function(b){return(b=this.b.Ug[b.toLowerCase()])&&b.Jf}
+
+## Else (V.prototype.i.Nm)
+Nm=function(){var b=this.b.nb();return b.Ak?!1:!b.$e}
+
+## CompareVar (V.prototype.i.wq)
+wq=function(b,a,d){return bc(b.Ve(),a,d)}
+
+## EveryTick (V.prototype.i.Bq)
+Bq=function(){return!0}
+
+## Compare (V.prototype.i.tq)
+tq=function(b,a,d){return bc(b,a,d)}
+
+## Every (V.prototype.i.Aq)
+Aq=function(b){var a=this.b.Mi(),d=a.L.Every_lastTime||0,g=this.b.Ub.ja;"undefined"===typeof a.L.Every_seconds&&(a.L.Every_seconds=b);var e=a.L.Every_seconds;if(g>=d+e)return a.L.Every_lastTime=d+e,g>=a.L.Every_lastTime+.04&&(a.L.Every_lastTime=g),a.L.Every_seconds=
+b,!0;g<d-.1&&(a.L.Every_lastTime=g);return!1}
+
+## SetVar (V.prototype.D.or)
+or=function(b,a){0===b.Yh?N(a)?b.Sd(a):b.Sd(parseFloat(a)):1===b.Yh&&b.Sd(a.toString())}
+
+## AddVar (V.prototype.D.nq)
+nq=function(b,a){0===b.Yh?N(a)?b.Sd(b.Ve()+a):b.Sd(b.Ve()+parseFloat(a)):1===b.Yh&&b.Sd(b.Ve()+a.toString())}
+
+## SubtractVar (V.prototype.D.ur)
+ur=function(b,a){0===b.Yh&&(N(a)?b.Sd(b.Ve()-a):b.Sd(b.Ve()-parseFloat(a)))}
+
+## CreateObject (V.prototype.D.zq)
+zq=function(b,a,d,g){if(a&&b&&(a=this.b.wn(b,a,d,g))){this.b.Oc++;var e;this.b.trigger(Object.getPrototypeOf(b.Ea).i.Yj,a);if(a.Sb)for(d=0,g=a.siblings.length;d<g;d++)e=a.siblings[d],this.b.trigger(Object.getPrototypeOf(e.type.Ea).i.Yj,e);this.b.Oc--;
+b=b.X();b.ga=!1;T(b.d);b.d[0]=a;if(a.Sb)for(d=0,g=a.siblings.length;d<g;d++)e=a.siblings[d],b=e.type.X(),b.ga=!1,T(b.d),b.d[0]=e}}
+
+## Wait (V.prototype.D.Ar)
+Ar=function(b){if(!(0>b)){var a,
+h,g,e=this.b.nb(),f;u.length?f=u.pop():f={ub:{},na:[]};f.zk=!1;f.time=this.b.Ub.ja+b;f.Ep="";f.qm=!1;f.Ef=e.Ob;f.Mb=e.Mb+1;b=0;for(a=this.b.q.length;b<a;b++)g=this.b.q[b],h=g.X(),h.ga&&-1===e.Ob.na.indexOf(g)||(f.na.push(g),g=void 0,d.length?g=d.pop():g={Hd:[]},g.Dj=!1,g.Dj=h.ga,Ba(g.Hd,h.d),f.ub[b.toString()]=g);this.Lb.push(f);return!0}}
+
+## GoToLayout (V.prototype.D.Cq)
+Cq=function(b){this.b.hh||this.b.Dg||(this.b.Dg=b)}
+
+## ResetGlobals (V.prototype.D.hr)
+hr=function(){var b,a,d;b=0;for(a=this.b.gk.length;b<a;b++)d=this.b.gk[b],d.data=d.Ri}
+
+## CompareFrame (Y.prototype.i.uq)
+uq=function(a,b){return bc(this.A,a,b)}
+
+## CompareX (Y.prototype.i.xq)
+xq=function(a,b){return bc(this.x,a,b)}
+
+## CompareY (Y.prototype.i.yq)
+yq=function(a,b){return bc(this.y,a,b)}
+
+## OnCollision (Y.prototype.i.Tq)
+Tq=function(a){if(!a)return!1;var e=this.b,c=e.Mi(),f=c.type,h=null;c.L.collmemory?h=c.L.collmemory:(h={},c.L.collmemory=h,e.fk(function(a){var b=c.L.collmemory;
+a=a.uid;var d,e;for(d in b)b.hasOwnProperty(d)&&(e=b[d],e[0]===a||e[1]===a)&&(l(b[d]),delete b[d])}));var g=f.X(),k=a.X(),g=g.jc(),q,r,A,x,B,C,L,la=this.b.od,fa=la-1,G=e.nb().Ob;for(r=0;r<g.length;r++){A=g[r];k.ga?(A.qa(),this.b.Jn(A.j,a,A.Ba,y),q=y):q=k.jc();for(x=0;x<q.length;x++)B=q[x],e.rf(A,B)||e.Ur(A,B)?(C=b(h,A,B),C=!C||m<fa,u(h,A,B,la),C&&(e.xj(G.na),C=f.X(),L=a.X(),C.ga=!1,L.ga=!1,f===a?(C.d.length=2,C.d[0]=A,C.d[1]=B,f.Ic()):(C.d.length=1,L.d.length=1,C.d[0]=A,L.d[0]=B,f.Ic(),a.Ic()),G.Qu(),
+e.of(G.na))):d(h,A,B);T(y)}return!1}
+
+## IsAnimPlaying (Y.prototype.i.Eq)
+Eq=function(a){return this.Cf.length?kb(this.Cf,a):kb(this.ua.name,
+a)}
+
+## IsVisible (Y.prototype.i.Lq)
+Lq=function(){return this.visible}
+
+## CompareOpacity (Y.prototype.i.vq)
+vq=function(a,b){return bc(jb(100*
+this.opacity),a,b)}
+
+## SetScale (Y.prototype.D.mr)
+mr=function(a){var b=this.hc,c=b.width*a*(0>this.width?-1:1);a=b.height*a*(0>this.height?-1:1);if(this.width!==
+c||this.height!==a)this.width=c,this.height=a,this.F()}
+
+## SetVisible (Y.prototype.D.$m)
+$m=function(a){!a!==!this.visible&&(this.visible=a,this.b.la=!0)}
+
+## Destroy (Y.prototype.D.Mm)
+Mm=function(){this.b.Ge(this)}
+
+## SetAnim (Y.prototype.D.ir)
+ir=function(a,b){this.Cf=a;this.un=b;this.il||(this.b.Oj(this),this.il=!0);this.al||this.zn()}
+
+## SetPosition (Y.prototype.D.Zm)
+Zm=function(a,b){if(this.x!==a||this.y!==b)this.x=a,this.y=b,this.F()}
+
+## SetX (Y.prototype.D.rr)
+rr=function(a){this.x!==a&&(this.x=a,this.F())}
+
+## SetY (Y.prototype.D.sr)
+sr=function(a){this.y!==a&&(this.y=a,this.F())}
+
+## SetMirrored (Y.prototype.D.kr)
+kr=function(a){a=ma(this.width)*(0===a?-1:1);this.width!==a&&(this.width=a,this.F())}
+
+## SetOpacity (Y.prototype.D.lr)
+lr=function(a){a=a/100;0>a?a=0:1<a&&(a=1);a!==this.opacity&&(this.opacity=a,this.b.la=!0)}
+
+## Angle (Y.prototype.Ga.oq)
+oq=function(a){a.u(Ka(this.k))}
+
+## X (Y.prototype.Ga.dk)
+dk=function(a){a.u(this.x)}
+dk=function(a,b){var d,e,f,l,m;ia(b)?(d=this.b.Gd(0),e=d.scale,f=d.qb,l=d.Db,m=d.k,d.scale=1,d.qb=1,d.Db=1,d.k=0,a.u(d.eb(this.Ld,this.Md,!0)),d.scale=e,d.qb=f,d.Db=l,d.k=m):(d=N(b)?this.b.Gd(b):this.b.Og(b))?a.u(d.eb(this.Ld,this.Md,!0)):a.u(0)}
+dk=function(a,b){var d=this.If;if(0>d||d>=this.touches.length)a.u(0);else{var e,f,h,g,k;ia(b)?(e=this.b.Gd(0),f=e.scale,h=e.qb,g=e.Db,k=e.k,e.scale=1,e.qb=1,e.Db=1,e.k=0,a.u(e.eb(this.touches[d].x,this.touches[d].y,!0)),e.scale=f,e.qb=h,e.Db=g,e.k=k):(e=N(b)?this.b.Gd(b):this.b.Og(b))?a.u(e.eb(this.touches[d].x,this.touches[d].y,!0)):a.u(0)}}
+
+## Y (Y.prototype.Ga.ek)
+ek=function(a){a.u(this.y)}
+ek=
+function(a,b){var d,e,f,l,m;ia(b)?(d=this.b.Gd(0),e=d.scale,f=d.qb,l=d.Eb,m=d.k,d.scale=1,d.qb=1,d.Eb=1,d.k=0,a.u(d.eb(this.Ld,this.Md,!1)),d.scale=e,d.qb=f,d.Eb=l,d.k=m):(d=N(b)?this.b.Gd(b):this.b.Og(b))?a.u(d.eb(this.Ld,this.Md,!1)):a.u(0)}
+ek=function(a,b){var d=this.If;if(0>d||d>=this.touches.length)a.u(0);else{var e,f,h,g,k;ia(b)?(e=this.b.Gd(0),
+f=e.scale,h=e.qb,g=e.Eb,k=e.k,e.scale=1,e.qb=1,e.Eb=1,e.k=0,a.u(e.eb(this.touches[d].x,this.touches[d].y,!1)),e.scale=f,e.qb=h,e.Eb=g,e.k=k):(e=N(b)?this.b.Gd(b):this.b.Og(b))?a.u(e.eb(this.touches[d].x,this.touches[d].y,!1)):a.u(0)}}
+
+## Width (Y.prototype.Ga.Br)
+Br=function(a){a.u(this.width)}
+
+## Height (Y.prototype.Ga.Dq)
+Dq=function(a){a.u(this.height)}
+
+## Opacity (Y.prototype.Ga.Opacity)
+Opacity=function(a){a.u(jb(100*this.opacity))}
+
+## Destroy (pc.prototype.D.Mm)
+Mm=function(){this.b.Ge(this)}
+
+## SetVisible (pc.prototype.D.$m)
+$m=function(a){!a!==!this.visible&&(this.visible=a,this.b.la=!0)}
+
+## SetText (pc.prototype.D.nr)
+nr=function(a){N(a)&&1E9>a&&(a=Math.round(1E10*a)/1E10);a=a.toString();this.text!==a&&(this.text=a,this.tf=!0,this.b.la=!0)}
+
+## SetPosition (pc.prototype.D.Zm)
+Zm=function(a,b){if(this.x!==a||this.y!==b)this.x=a,this.y=b,this.F()}
+
+## IsOverObject (oc.prototype.i.Jq)
+Jq=function(a){var b=this.b.Mi();return Sa(this.b.ng(a,this.Ld,this.Md,b.Zg),b.Zg)}
+
+## SetCursor (oc.prototype.D.jr)
+jr=function(a){a="auto pointer text crosshair move help wait none".split(" ")[a];b!==a&&(b=a,this.b.canvas&&this.b.canvas.style&&(this.b.canvas.style.cursor=a))}
+
+## OnTouchedObject (Z.prototype.i.ak)
+ak=function(a){return a?this.b.ng(a,this.yd,this.zd,!1):!1}
+
+## OnTouchStart (Z.prototype.i.bk)
+bk=function(){return!0}
+
+## Play (nc.prototype.D.Play)
+Play=function(a,b,c,d){!W&&(c=f(c),J=this.Lk(this.b.Fi+a[0]+(O?".ogg":".m4a"),d,a[1],0!==b,c))&&(J.om(!1),J.play(0!==b,c))}
+
+## IsTagPlaying (nc.prototype.i.Kq)
+Kq=function(a){w(a);var b;a=0;for(b=ha.length;a<b;a++)if(ha[a].Jd())return!0;return!1}
+
+## OnEnded (nc.prototype.i.wg)
+wg=function(a){return kb(la,a)}
+
+## Stop (nc.prototype.D.an)
+an=function(a){w(a);var b;a=0;for(b=ha.length;a<b;a++)ha[a].stop()}
+
+## StopAll (nc.prototype.D.tr)
+tr=function(){var a,b;a=0;for(b=F.length;a<b;a++)F[a].stop()}
+
+## Preload (nc.prototype.D.gr)
+gr=function(a){if(!W){var b=a[1];a=this.b.Fi+a[0]+(O?".ogg":".m4a");3===G?this.b.gb?AppMobi.context.loadSound(a):AppMobi.player.loadSound(a):2!==G&&this.Lk(a,"<preload>",b,!1)}}
+
+## SetVolume (nc.prototype.D.pr)
+pr=function(a,b){w(a);var c=f(b),
+d,e;d=0;for(e=ha.length;d<e;d++)ha[d].cv(c)}
+
+## Volume (nc.prototype.Ga.yr)
+yr=function(a,b){w(b,!0);ha.length?a.u(r(ha[0].volume)):a.u(0)}
+
+## SetSpeed (sc.prototype.D.ck)
+ck=function(d,b){var a;switch(d){case 0:a=this.Da();this.P=Math.cos(a)*b;this.K=Math.sin(a)*b;break;case 1:this.P=b;break;case 2:this.K=b}}
+
+## SetEnabled (sc.prototype.D.$h)
+$h=function(d){this.enabled=1===d}
+
+## dx (sc.prototype.Ga.P)
+P=
+function(d){d.u(this.P)}
+
+## CompareSpeed (qc.prototype.i.Lm)
+Lm=function(f,d){return bc(Ra(0,0,this.P,this.K),f,d)}
+
+## SetSpeed (qc.prototype.D.ck)
+ck=function(f){var d=Ma(0,0,this.P,this.K);this.P=Math.cos(d)*f;this.K=Math.sin(d)*f}
+
+## SetAngleOfMotion (qc.prototype.D.Ym)
+Ym=function(f){f=U(f);var d=Ra(0,0,this.P,this.K);this.P=Math.cos(f)*d;this.K=Math.sin(f)*d}
+
+## AddTarget (rc.prototype.D.mq)
+mq=function(b){var a=this.type.Wc;if(-1===a.indexOf(b)){var d,f,e;d=0;for(f=a.length;d<f;d++)if(e=a[d],e.R&&-1!==e.jf.indexOf(b))return;a.push(b)}}

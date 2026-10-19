@@ -1,0 +1,255 @@
+Proyecto 'Retro Penal': 400x500, primer layout 'Menu Principal', modo de pantalla 5, medios en 'media/', versión 1.0.0.0
+
+Plugins:
+  [ 0] nc     Audio                    G
+  [ 1] oc     Mouse                    G
+  [ 2] Y      Sprite                   WPSAZE
+  [ 3] pc     Text                     WPSAZE
+  [ 4] Z      Touch                    G
+  (G global, W en el mundo, P posición, S tamaño, A apariencia, Z orden, E efectos)
+
+Tipos de objeto:
+   0 Flecha                       Sprite       comportamientos=Turret
+       animación 'Default' velocidad=5 bucle=False cuadros=1: flecha-sheet0.png
+         flecha-sheet0.png recorte=(0,0,70,40) duración=1 origen=(0.000,0.500) puntos=[] colisión=[0.829, -0.2, 1, 0, 0.829, 0.2, 0.5, 0.225, 0.171, 0.2, 0, 0, 0.157, -0.225, 0.5, -0.225]
+   1 Pasto                        Sprite      
+       animación 'Default' velocidad=5 bucle=False cuadros=1: pasto-sheet0.png
+         pasto-sheet0.png recorte=(0,0,400,500) duración=1 origen=(0.500,0.500) puntos=[] colisión=[]
+   2 Touch                        Touch       
+   3 Punto                        Sprite       comportamientos=CustomMovement
+       animación 'Default' velocidad=5 bucle=False cuadros=1: punto-sheet0.png
+         punto-sheet0.png recorte=(0,0,250,250) duración=1 origen=(0.500,0.500) puntos=[] colisión=[]
+   4 Pelota                       Sprite       comportamientos=Bullet
+       animación 'normal' velocidad=5 bucle=False cuadros=1: pelota-sheet0.png
+         pelota-sheet0.png recorte=(0,0,44,46) duración=1 origen=(0.500,0.500) puntos=[] colisión=[-0.341, -0.348, 0, -0.5, 0.341, -0.348, 0.5, 0, 0.341, 0.348, 0, 0.5, -0.341, 0.348, -0.5, 0]
+   5 PosteIzquierdo               Sprite       comportamientos=Solid
+       animación 'Default' velocidad=5 bucle=False cuadros=1: arcoizquierdo-sheet0.png
+         arcoizquierdo-sheet0.png recorte=(0,0,250,250) duración=1 origen=(0.500,0.500) puntos=[] colisión=[]
+   6 PosteDerecho                 Sprite       comportamientos=Solid
+       animación 'Default' velocidad=5 bucle=False cuadros=1: arcoizquierdo-sheet0.png
+         arcoizquierdo-sheet0.png recorte=(0,0,250,250) duración=1 origen=(0.500,0.500) puntos=[] colisión=[]
+   7 Travesano                    Sprite      
+       animación 'Default' velocidad=5 bucle=False cuadros=1: arcoizquierdo-sheet0.png
+         arcoizquierdo-sheet0.png recorte=(0,0,250,250) duración=1 origen=(0.500,0.500) puntos=[] colisión=[]
+   8 TextoGoles                   Text        
+   9 CuadroGol                    Sprite      
+       animación 'Default' velocidad=5 bucle=False cuadros=1: cuadrogol-sheet0.png
+         cuadrogol-sheet0.png recorte=(0,0,250,250) duración=1 origen=(0.000,0.000) puntos=[] colisión=[]
+  10 CartelInstrucciones          Sprite      
+       animación 'Default' velocidad=5 bucle=False cuadros=1: tapempezar-sheet0.png
+         tapempezar-sheet0.png recorte=(0,0,250,130) duración=1 origen=(0.500,0.500) puntos=[] colisión=[-0.496, -0.492, 0.496, -0.492, 0.496, 0.492, -0.496, 0.492]
+  11 Arquero                      Sprite       comportamientos=CustomMovement,Solid
+       animación 'Default' velocidad=5 bucle=False cuadros=1: arquero-sheet0.png
+         arquero-sheet0.png recorte=(1,82,67,101) duración=1 origen=(0.507,0.505) puntos=[] colisión=[-0.254, -0.337, -0.015, -0.505, 0.239, -0.337, 0.403, -0.01, -0.164, 0.059, -0.015, -0.099, 0.194, 0.03, -0.358, -0.01]
+       animación 'lanzado' velocidad=5 bucle=False cuadros=1: arquero-sheet0.png
+         arquero-sheet0.png recorte=(1,1,148,79) duración=1 origen=(0.500,0.506) puntos=[] colisión=[-0.25, -0.038, 0, -0.354, 0.101, -0.013, 0.169, -0.127, 0, 0.089, -0.459, 0.418, -0.264, -0.013]
+       animación 'tirado' velocidad=5 bucle=False cuadros=1: arquero-sheet0.png
+         arquero-sheet0.png recorte=(70,109,136,49) duración=1 origen=(0.500,0.510) puntos=[] colisión=[0.265, -0.02, 0.412, 0.245, 0, 0.306, -0.5, 0.49, -0.221, -0.02, -0.456, -0.388, 0, -0.163, 0.294, 0.061]
+       animación 'arriba' velocidad=5 bucle=False cuadros=1: arquero-sheet0.png
+         arquero-sheet0.png recorte=(151,1,82,106) duración=1 origen=(0.500,0.500) puntos=[] colisión=[-0.354, -0.387, 0, 0.057, -0.073, -0.057, -0.037, 0, 0.415, 0.434, 0, 0.226, -0.488, 0.491, -0.317, 0]
+       animación 'abajo' velocidad=5 bucle=False cuadros=3: arquero-sheet0.png
+         arquero-sheet0.png recorte=(1,82,67,101) duración=1 origen=(0.507,0.515) puntos=[] colisión=[-0.254, -0.347, -0.015, -0.515, 0.239, -0.347, 0.403, -0.02, -0.164, 0.05, -0.015, -0.109, 0.194, 0.02, -0.358, -0.02]
+         arquero-sheet0.png recorte=(1,82,67,101) duración=1 origen=(0.507,0.515) puntos=[] colisión=[-0.254, -0.347, -0.015, -0.515, 0.239, -0.347, 0.403, -0.02, -0.164, 0.05, -0.015, -0.109, 0.194, 0.02, -0.358, -0.02]
+         arquero-sheet0.png recorte=(70,160,92,49) duración=1 origen=(0.500,0.510) puntos=[] colisión=[-0.424, -0.367, 0, -0.306, 0.304, -0.143, 0.5, -0.02, 0.435, 0.367, 0, 0.122, -0.25, 0.02, -0.283, -0.02]
+  12 IconoIntento                 Sprite      
+       animación 'Default' velocidad=5 bucle=False cuadros=1: icono_intento-sheet0.png
+         icono_intento-sheet0.png recorte=(0,0,30,30) duración=1 origen=(0.500,0.500) puntos=[] colisión=[-0.367, -0.367, 0, -0.5, 0.367, -0.367, 0.5, 0, 0.367, 0.367, 0, 0.5, -0.367, 0.367, -0.5, 0]
+  13 IconoFallo                   Sprite      
+       animación 'Default' velocidad=5 bucle=False cuadros=1: icono_null-sheet0.png
+         icono_null-sheet0.png recorte=(0,0,12,13) duración=1 origen=(0.500,0.538) puntos=[] colisión=[-0.333, -0.385, 0, -0.538, 0.333, -0.385, 0.5, -0.077, 0.333, 0.308, 0, 0.462, -0.333, 0.308, -0.5, -0.077]
+  14 TextoTitulo                  Text        
+  15 BotonEmpezar                 Sprite      
+       animación 'Default' velocidad=5 bucle=False cuadros=1: boton_empezar-sheet0.png
+         boton_empezar-sheet0.png recorte=(0,0,100,35) duración=1 origen=(0.500,0.514) puntos=[] colisión=[-0.48, -0.457, 0, -0.514, 0.48, -0.457, 0.5, -0.029, 0.48, 0.429, 0, 0.486, -0.48, 0.429, -0.5, -0.029]
+  16 TextoEmpezar                 Text        
+  17 Mouse                        Mouse       
+  18 TextoInstrucciones           Text        
+  19 BotonOk                      Sprite      
+       animación 'Default' velocidad=5 bucle=False cuadros=1: boton_empezar-sheet0.png
+         boton_empezar-sheet0.png recorte=(0,0,100,35) duración=1 origen=(0.500,0.514) puntos=[] colisión=[-0.48, -0.457, 0, -0.514, 0.48, -0.457, 0.5, -0.029, 0.48, 0.429, 0, 0.486, -0.48, 0.429, -0.5, -0.029]
+  20 TextoGameOver                Text        
+  21 BotonReintentar              Sprite      
+       animación 'Default' velocidad=5 bucle=False cuadros=1: boton_empezar-sheet0.png
+         boton_empezar-sheet0.png recorte=(0,0,100,35) duración=1 origen=(0.500,0.514) puntos=[] colisión=[-0.48, -0.457, 0, -0.514, 0.48, -0.457, 0.5, -0.029, 0.48, 0.429, 0, 0.486, -0.48, 0.429, -0.5, -0.029]
+  22 TextoReintentar              Text        
+  23 TextoResultado               Text        
+  24 TextoCompartir               Text        
+  25 Arco                         Sprite      
+       animación 'Default' velocidad=5 bucle=False cuadros=1: arco-sheet0.png
+         arco-sheet0.png recorte=(0,0,334,96) duración=1 origen=(0.500,0.500) puntos=[] colisión=[-0.5, -0.5, 0.5, -0.5, 0.5, 0.5, 0, 0.26, -0.5, 0.5]
+  26 CartelGameOver               Sprite      
+       animación 'Default' velocidad=5 bucle=False cuadros=1: tapempezar-sheet0.png
+         tapempezar-sheet0.png recorte=(0,0,250,130) duración=1 origen=(0.500,0.500) puntos=[] colisión=[-0.496, -0.492, 0.496, -0.492, 0.496, 0.492, -0.496, 0.492]
+  27 Barra                        Sprite      
+       animación 'Default' velocidad=5 bucle=False cuadros=1: barra-sheet0.png
+         barra-sheet0.png recorte=(0,0,96,8) duración=1 origen=(0.500,0.500) puntos=[] colisión=[-0.469, -0.125, 0, -0.5, 0.469, -0.125, 0.5, 0.5, -0.5, 0.5]
+  28 FondoGoles                   Sprite      
+       animación 'Default' velocidad=5 bucle=False cuadros=1: boton_empezar-sheet0.png
+         boton_empezar-sheet0.png recorte=(0,0,100,35) duración=1 origen=(0.500,0.514) puntos=[] colisión=[-0.48, -0.457, 0, -0.514, 0.48, -0.457, 0.5, -0.029, 0.48, 0.429, 0, 0.486, -0.48, 0.429, -0.5, -0.029]
+  29 TextoOk                      Text        
+  30 AnimacionGol                 Sprite      
+       animación 'gol' velocidad=5 bucle=True cuadros=2: animaciongol-sheet0.png
+         animaciongol-sheet0.png recorte=(1,1,170,43) duración=1 origen=(0.500,0.512) puntos=[] colisión=[-0.459, -0.349, 0, -0.488, 0.371, 0.0, 0.371, -0.023, 0.482, 0.419, 0, 0.465, -0.471, 0.372, -0.494, -0.023]
+         animaciongol-sheet0.png recorte=(1,46,170,43) duración=1 origen=(0.500,0.512) puntos=[] colisión=[-0.459, -0.349, 0, -0.488, 0.371, 0.0, 0.371, -0.023, 0.482, 0.419, 0, 0.465, -0.471, 0.372, -0.494, -0.023]
+  31 Jugador                      Sprite      
+       animación 'parado' velocidad=5 bucle=False cuadros=1: jugador-sheet0.png
+         jugador-sheet0.png recorte=(1,1,144,224) duración=1 origen=(0.500,0.500) puntos=[] colisión=[-0.16, -0.281, 0, -0.116, -0.069, -0.134, 0.146, 0, 0, 0.366, -0.236, 0.33, -0.5, 0]
+       animación 'pateando' velocidad=5 bucle=False cuadros=4: jugador-sheet0.png
+         jugador-sheet0.png recorte=(1,1,144,224) duración=1 origen=(0.500,0.500) puntos=[] colisión=[-0.16, -0.281, 0, -0.116, -0.069, -0.134, 0.146, 0, 0, 0.366, -0.236, 0.33, -0.5, 0]
+         jugador-sheet0.png recorte=(147,1,144,224) duración=1 origen=(0.500,0.500) puntos=[] colisión=[0.049, -0.147, 0, -0.125, 0.424, 0, 0.208, 0.312, 0, 0.112, 0.042, 0.152, -0.201, 0]
+         jugador-sheet0.png recorte=(293,1,144,224) duración=1 origen=(0.500,0.500) puntos=[] colisión=[-0.021, -0.192, 0, -0.192, 0.16, -0.281, 0.306, 0, 0.139, 0.268, 0, 0.161, 0.021, 0.165, -0.062, 0]
+         jugador-sheet0.png recorte=(1,227,144,224) duración=1 origen=(0.500,0.500) puntos=[] colisión=[0.076, -0.129, 0, -0.027, 0.479, 0, 0.187, 0.299, 0, 0.004, 0.118, 0.103, -0.007, 0]
+       animación 'gano' velocidad=5 bucle=False cuadros=2: jugador-sheet0.png
+         jugador-sheet0.png recorte=(147,227,144,224) duración=1 origen=(0.500,0.500) puntos=[] colisión=[0.028, -0.161, 0, -0.094, 0.208, -0.312, 0.354, 0, 0.194, 0.304, 0, -0.036, 0.111, 0.107, 0.09, 0]
+         jugador-sheet0.png recorte=(293,227,144,224) duración=1 origen=(0.500,0.500) puntos=[] colisión=[0.021, -0.165, 0, -0.295, 0.326, -0.388, 0.368, 0, 0.194, 0.304, 0, -0.094, 0.125, 0.098, 0.104, 0]
+       animación 'perdio' velocidad=5 bucle=False cuadros=2: jugador-sheet1.png
+         jugador-sheet1.png recorte=(1,1,144,224) duración=1 origen=(0.500,0.500) puntos=[] colisión=[0.035, -0.156, 0.243, -0.335, 0.382, 0, 0.187, 0.299, 0.118, 0]
+         jugador-sheet1.png recorte=(147,1,144,224) duración=1 origen=(0.500,0.500) puntos=[] colisión=[0.111, -0.107, 0.215, -0.317, 0.396, 0, 0.132, 0.094, 0.09, 0]
+  32 Afuera                       Sprite      
+       animación 'Default' velocidad=5 bucle=False cuadros=1: afuera-sheet0.png
+         afuera-sheet0.png recorte=(0,0,250,250) duración=1 origen=(0.500,0.500) puntos=[] colisión=[]
+  33 PosicionArquero              Sprite       comportamientos=CustomMovement
+       animación 'Default' velocidad=5 bucle=False cuadros=1: posicionarquero-sheet0.png
+         posicionarquero-sheet0.png recorte=(0,0,252,252) duración=1 origen=(0.500,0.500) puntos=[] colisión=[]
+  34 Fondo                        Sprite       comportamientos=Wrap,CustomMovement
+       animación 'Default' velocidad=5 bucle=False cuadros=1: fondo-sheet0.png
+         fondo-sheet0.png recorte=(0,0,400,500) duración=1 origen=(0.500,0.500) puntos=[] colisión=[-0.428, -0.442, 0.14, -0.212, 0.44, 0.452, -0.178, 0.242]
+  35 Degradado                    Sprite      
+       animación 'Default' velocidad=5 bucle=False cuadros=1: degradacion-sheet0.png
+         degradacion-sheet0.png recorte=(0,0,400,500) duración=1 origen=(0.500,0.500) puntos=[] colisión=[]
+  36 Audio                        Audio       
+  37 Cortina                      Sprite      
+       animación 'Default' velocidad=5 bucle=False cuadros=1: cortina-sheet0.png
+         cortina-sheet0.png recorte=(0,0,250,250) duración=1 origen=(0.500,0.500) puntos=[] colisión=[]
+  38 Logo                         Sprite      
+       animación 'Default' velocidad=5 bucle=False cuadros=1: logo_juego-sheet0.png
+         logo_juego-sheet0.png recorte=(0,0,300,184) duración=1 origen=(0.500,0.500) puntos=[] colisión=[-0.267, -0.12, 0, -0.179, 0.39, -0.321, 0.5, 0, 0.41, 0.353, -0.49, 0.484, -0.493, 0]
+  39 ImagenGameOver               Sprite      
+       animación 'Default' velocidad=5 bucle=False cuadros=1: imagen_gameover-sheet0.png
+         imagen_gameover-sheet0.png recorte=(0,0,300,62) duración=1 origen=(0.500,0.500) puntos=[] colisión=[-0.49, -0.452, 0, -0.468, 0.477, -0.387, 0.497, 0, 0.49, 0.452, 0, 0.371, -0.467, 0.339, -0.5, 0]
+
+Layouts:
+  'Juego' 400x500 hoja='Juego'
+    capa 'Juego' visible=True fondo=[255, 255, 255] transparente=False parallax=(1,1) opacidad=1
+      Pasto                        uid=1 x=200 y=250 w=400 h=500 ángulo=0 opacidad=1 vars=[] comp=[] props=[0, 'Default', 0, 1]
+      Arco                         uid=27 x=200 y=87 w=334 h=96 ángulo=0 opacidad=1 vars=[] comp=[] props=[0, 'Default', 0, 1]
+      Flecha                       uid=0 x=200 y=418 w=111.016 h=40 ángulo=-1.5708 opacidad=1 vars=[] comp=[[300, 1, 1, 1000, 0, 0, 500, 1, 0]] props=[1, 'Default', 0, 1]
+      Punto                        uid=2 x=200 y=415 w=7 h=10 ángulo=0 opacidad=1 vars=[] comp=[[1, 1, 1]] props=[1, 'Default', 0, 1]
+      CuadroGol                    uid=10 x=51.0001 y=45 w=298.999 h=50.4997 ángulo=0 opacidad=0 vars=[] comp=[] props=[0, 'Default', 0, 1]
+      Travesano                    uid=7 x=200 y=42 w=333.5 h=4.5 ángulo=0 opacidad=0.01 vars=[] comp=[] props=[0, 'Default', 0, 1]
+      PosteIzquierdo               uid=6 x=31.7502 y=86.9997 w=5.49988 h=96 ángulo=0 opacidad=0.01 vars=[] comp=[[1]] props=[0, 'Default', 0, 1]
+      PosteDerecho                 uid=5 x=368 y=86.7501 w=5 h=96.5 ángulo=0 opacidad=0.01 vars=[] comp=[[1]] props=[0, 'Default', 0, 1]
+      Arquero                      uid=12 x=200 y=127 w=40.0239 h=77.2603 ángulo=0 opacidad=1 vars=[] comp=[[0, 5, 1], [1]] props=[0, 'Default', 0, 1]
+      Pelota                       uid=4 x=200 y=420 w=25 h=25 ángulo=0 opacidad=1 vars=[] comp=[[0, 0, 0, 1, 1, 1]] props=[0, 'normal', 0, 1]
+      Jugador                      uid=8 x=152.304 y=366.114 w=144 h=224 ángulo=0 opacidad=1 vars=[] comp=[] props=[0, 'parado', 0, 1]
+      Afuera                       uid=33 x=-36.7501 y=179.75 w=70.4999 h=349.5 ángulo=0 opacidad=1 vars=[] comp=[] props=[0, 'Default', 0, 1]
+      Afuera                       uid=34 x=436.5 y=177 w=69 h=355 ángulo=0 opacidad=1 vars=[] comp=[] props=[0, 'Default', 0, 1]
+      PosicionArquero              uid=35 x=200 y=130 w=10 h=10 ángulo=0 opacidad=1 vars=[] comp=[[0, 5, 1]] props=[1, 'Default', 0, 1]
+      Afuera                       uid=40 x=199.5 y=-25 w=399 h=41 ángulo=0 opacidad=1 vars=[] comp=[] props=[0, 'Default', 0, 1]
+    capa 'GUI' visible=True fondo=[255, 255, 255] transparente=True parallax=(1,1) opacidad=1
+      FondoGoles                   uid=30 x=323.046 y=27.9073 w=137.11 h=35 ángulo=0 opacidad=1 vars=[] comp=[] props=[1, 'Default', 0, 1]
+      TextoGoles                   uid=9 x=259.305 y=13.9073 w=127.913 h=27.141 ángulo=0 opacidad=1 vars=[] comp=[] props=['GOLES: 0', 1, 'bold 14pt Arial', 'rgb(255,255,255)', 1, 1, 0, 0, 0]
+      CartelInstrucciones          uid=11 x=201 y=240 w=250 h=130 ángulo=0 opacidad=1 vars=[] comp=[] props=[0, 'Default', 0, 1]
+      IconoIntento                 uid=13 x=278 y=-191 w=20 h=20 ángulo=0 opacidad=1 vars=[] comp=[] props=[0, 'Default', 0, 1]
+      IconoFallo                   uid=14 x=318 y=-192 w=20 h=22 ángulo=0 opacidad=1 vars=[] comp=[] props=[0, 'Default', 0, 1]
+      TextoInstrucciones           uid=19 x=98 y=192 w=200 h=47 ángulo=0 opacidad=1 vars=[] comp=[] props=['Haz click para disparar', 0, '12pt Arial', 'rgb(255,255,255)', 1, 1, 0, 0, 0]
+      BotonOk                      uid=20 x=200 y=268 w=100 h=35 ángulo=0 opacidad=1 vars=[] comp=[] props=[0, 'Default', 0, 1]
+      Barra                        uid=29 x=100 y=30 w=140 h=18 ángulo=0 opacidad=1 vars=[] comp=[] props=[1, 'Default', 0, 1]
+      TextoOk                      uid=31 x=152.262 y=252.129 w=93.4398 h=30 ángulo=0 opacidad=1 vars=[] comp=[] props=['OK', 0, '12pt Arial', 'rgb(255,255,255)', 1, 1, 0, 0, 0]
+      AnimacionGol                 uid=32 x=194 y=-114 w=377.032 h=102.57 ángulo=0 opacidad=1 vars=[] comp=[] props=[0, 'gol', 0, 0]
+  'Menu Principal' 400x500 hoja='Menu Principal'
+    capa 'Layer 0' visible=True fondo=[255, 255, 255] transparente=False parallax=(1,1) opacidad=1
+      Degradado                    uid=41 x=200 y=250 w=400 h=500 ángulo=0 opacidad=1 vars=[] comp=[] props=[0, 'Default', 0, 1]
+      Fondo                        uid=36 x=0 y=240 w=400 h=500 ángulo=0 opacidad=0.5 vars=[] comp=[[0], [0, 5, 1]] props=[0, 'Default', 0, 1]
+      Fondo                        uid=37 x=400 y=240 w=400 h=500 ángulo=0 opacidad=0.5 vars=[] comp=[[0], [0, 5, 1]] props=[0, 'Default', 0, 1]
+      TextoTitulo                  uid=15 x=98 y=-48 w=200 h=30 ángulo=0 opacidad=1 vars=[] comp=[] props=['TITULO DEL JUEGO', 0, '12pt Arial', 'rgb(0,0,0)', 1, 1, 0, 0, 0]
+      Logo                         uid=46 x=600 y=130 w=300 h=184 ángulo=0 opacidad=1 vars=[] comp=[] props=[0, 'Default', 0, 1]
+      BotonEmpezar                 uid=16 x=200 y=550 w=100 h=35 ángulo=0 opacidad=1 vars=[] comp=[] props=[0, 'Default', 0, 1]
+      TextoEmpezar                 uid=17 x=200 y=550 w=91.4803 h=24.8804 ángulo=0 opacidad=1 vars=[] comp=[] props=['Empezar', 0, '12pt Arial', 'rgb(255,255,255)', 1, 1, 4, 0, 0]
+      Cortina                      uid=44 x=200 y=250 w=405 h=508 ángulo=0 opacidad=1 vars=[] comp=[] props=[0, 'Default', 0, 1]
+  'Game Over' 400x500 hoja='Game Over'
+    capa 'Layer 0' visible=True fondo=[255, 255, 255] transparente=False parallax=(1,1) opacidad=1
+      Degradado                    uid=42 x=200 y=250 w=400 h=500 ángulo=0 opacidad=1 vars=[] comp=[] props=[0, 'Default', 0, 1]
+      Fondo                        uid=39 x=400 y=240 w=400 h=500 ángulo=0 opacidad=0.5 vars=[] comp=[[0], [0, 5, 1]] props=[0, 'Default', 0, 1]
+      Fondo                        uid=38 x=0 y=240 w=400 h=500 ángulo=0 opacidad=0.5 vars=[] comp=[[0], [0, 5, 1]] props=[0, 'Default', 0, 1]
+      CartelGameOver               uid=28 x=202 y=247 w=250 h=392 ángulo=0 opacidad=1 vars=[] comp=[] props=[0, 'Default', 0, 1]
+      TextoGameOver                uid=21 x=111 y=-108 w=200 h=30 ángulo=0 opacidad=1 vars=[] comp=[] props=['GAME OVER', 0, '12pt Arial', 'rgb(0,0,0)', 1, 1, 0, 0, 0]
+      BotonReintentar              uid=22 x=202 y=378 w=100 h=35 ángulo=0 opacidad=1 vars=[] comp=[] props=[0, 'Default', 0, 1]
+      TextoReintentar              uid=23 x=155.644 y=363 w=92.746 h=30 ángulo=0 opacidad=1 vars=[] comp=[] props=['Reintentar', 0, '12pt Arial', 'rgb(255,255,255)', 1, 1, 0, 0, 0]
+      TextoResultado               uid=24 x=103 y=216 w=200 h=30 ángulo=0 opacidad=1 vars=[] comp=[] props=['...', 0, 'bold 14pt Arial', 'rgb(255,255,255)', 1, 1, 0, 0, 0]
+      TextoCompartir               uid=26 x=156.542 y=298 w=92.2435 h=30 ángulo=0 opacidad=1 vars=[] comp=[] props=['Compartir', 0, '12pt Arial', 'rgb(255,255,255)', 1, 1, 0, 0, 0]
+      ImagenGameOver               uid=47 x=200 y=127.44 w=214 h=57.8801 ángulo=0 opacidad=1 vars=[] comp=[] props=[0, 'Default', 0, 1]
+
+Medios: chute.ogg (4586 B), chute.m4a (1186 B), click3.m4a (3101 B), click3.ogg (6229 B), comenzar3.m4a (5944 B), comenzar3.ogg (8599 B), gol3.m4a (23825 B), gol3.ogg (23882 B), musica3.m4a (48070 B), musica3.ogg (47571 B), perdio3.m4a (51134 B), perdio3.ogg (42636 B), pitazo3.m4a (13171 B), pitazo3.ogg (13695 B), publico3.m4a (24529 B), publico3.ogg (21474 B), seloperdio3.m4a (71303 B), seloperdio3.ogg (36188 B), tiro3.m4a (24878 B), tiro3.ogg (22244 B)
+
+Tabla de referencias:
+    0 nc                         Audio
+    1 oc                         Mouse
+    2 Y                          Sprite
+    3 pc                         Text
+    4 Z                          Touch
+    5 rc                         Turret (comportamiento)
+    6 sc                         CustomMovement (comportamiento)
+    7 qc                         Bullet (comportamiento)
+    8 mc                         Solid (comportamiento)
+    9 xc                         Wrap (comportamiento)
+   10 V.prototype.i.Rm           System               cnd  OnLayoutStart
+   11 V.prototype.D.or           System               act  SetVar
+   12 Y.prototype.D.mr           Sprite               act  SetScale
+   13 nc.prototype.D.Play        Audio                act  Play
+   14 V.prototype.i.Iq           System               cnd  IsOnMobile
+   15 Y.prototype.D.$m           Sprite               act  SetVisible
+   16 V.prototype.i.Hq           System               cnd  IsGroupActive
+   17 oc.prototype.i.Jq          Mouse                cnd  IsOverObject
+   18 oc.prototype.D.jr          Mouse                act  SetCursor
+   19 V.prototype.i.Nm           System               cnd  Else
+   20 Z.prototype.i.ak           Touch                cnd  OnTouchedObject
+   21 V.prototype.i.wq           System               cnd  CompareVar
+   22 nc.prototype.i.Kq          Audio                cnd  IsTagPlaying
+   23 sc.prototype.D.ck          CustomMovement (comportamiento) act  SetSpeed
+   24 Y.prototype.D.Mm           Sprite               act  Destroy
+   25 pc.prototype.D.Mm          Text                 act  Destroy
+   26 V.prototype.D.zq           System               act  CreateObject
+   27 pc.prototype.D.$m          Text                 act  SetVisible
+   28 Y.prototype.i.uq           Sprite               cnd  CompareFrame
+   29 qc.prototype.i.Lm          Bullet (comportamiento) cnd  CompareSpeed
+   30 qc.prototype.D.ck          Bullet (comportamiento) act  SetSpeed
+   31 qc.prototype.D.Ym          Bullet (comportamiento) act  SetAngleOfMotion
+   32 V.prototype.D.ur           System               act  SubtractVar
+   33 Z.prototype.i.bk           Touch                cnd  OnTouchStart
+   34 Y.prototype.i.yq           Sprite               cnd  CompareY
+   35 Y.prototype.D.ir           Sprite               act  SetAnim
+   36 Y.prototype.Ga.oq          Sprite               exp  Angle
+   37 V.prototype.i.Bq           System               cnd  EveryTick
+   38 rc.prototype.D.mq          Turret (comportamiento) act  AddTarget
+   39 Y.prototype.i.xq           Sprite               cnd  CompareX
+   40 Y.prototype.i.Tq           Sprite               cnd  OnCollision
+   41 V.prototype.D.Ar           System               act  Wait
+   42 Y.prototype.D.Zm           Sprite               act  SetPosition
+   43 V.prototype.i.tq           System               cnd  Compare
+   44 Y.prototype.Ga.dk          Sprite               exp  X
+   45 Y.prototype.Ga.Br          Sprite               exp  Width
+   46 Y.prototype.Ga.ek          Sprite               exp  Y
+   47 Y.prototype.Ga.Dq          Sprite               exp  Height
+   48 V.prototype.D.nq           System               act  AddVar
+   49 pc.prototype.D.nr          Text                 act  SetText
+   50 nc.prototype.i.wg          Audio                cnd  OnEnded
+   51 nc.prototype.D.an          Audio                act  Stop
+   52 sc.prototype.D.$h          CustomMovement (comportamiento) act  SetEnabled
+   53 Y.prototype.D.sr           Sprite               act  SetY
+   54 nc.prototype.D.tr          Audio                act  StopAll
+   55 V.prototype.D.Cq           System               act  GoToLayout
+   56 Y.prototype.D.rr           Sprite               act  SetX
+   57 Y.prototype.D.kr           Sprite               act  SetMirrored
+   58 Y.prototype.i.Eq           Sprite               cnd  IsAnimPlaying
+   59 sc.prototype.Ga.P          CustomMovement (comportamiento) exp  dx
+   60 Y.prototype.i.Lq           Sprite               cnd  IsVisible
+   61 nc.prototype.D.gr          Audio                act  Preload
+   62 Y.prototype.i.vq           Sprite               cnd  CompareOpacity
+   63 pc.prototype.D.Zm          Text                 act  SetPosition
+   64 V.prototype.i.Aq           System               cnd  Every
+   65 Y.prototype.D.lr           Sprite               act  SetOpacity
+   66 Y.prototype.Ga.Opacity     Sprite               exp  Opacity
+   67 nc.prototype.D.pr          Audio                act  SetVolume
+   68 nc.prototype.Ga.yr         Audio                exp  Volume
+   69 V.prototype.D.hr           System               act  ResetGlobals

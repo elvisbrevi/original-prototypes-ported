@@ -77,15 +77,17 @@ nada, y no se portaron.
    - el tick del runtime: dt de 0 a 0,1 s, escala de tiempo, y el orden de behaviors,
      animaciones, cambio de layout y eventos.
 
-   Los fragmentos están en `reference/runtime.txt`.
+   Los fragmentos están en `reference/runtime.txt`. Desde Retro Penal (checkpoint 2.4) estas
+   piezas viven en [`crates/construct2`](../../crates/construct2), compartidas por los juegos de
+   Construct 2.
 5. **Assets**: [`tools/extraer.sh`](tools/extraer.sh) copia las imágenes, los OGG y `data.js`.
 
 ## Correspondencia con el original
 
 | Construct 2 | Rust |
 |---|---|
-| `data.js` (tipos, animaciones, layouts) | `datos.rs` |
-| Sprite, Text, Audio, comportamiento Platform, colisiones | `runtime.rs` |
+| `data.js` (tipos, animaciones, layouts) | `crates/construct2` (`datos.rs`) |
+| Sprite, Text, Audio, comportamiento Platform, colisiones | `crates/construct2` |
 | Tick del runtime, hojas "Start events" y "Game events" | `juego.rs` |
 | `index.html` (canvas de 400×500, *letterbox*) | `main.rs` con `museo::Pantalla` |
 
@@ -118,7 +120,8 @@ nada, y no se portaron.
 
 - **Fuentes**: el original dibujaba los textos con las fuentes del sistema, "Arial" y "Arial
   Black". El port usa Liberation Sans 2.1.5 (normal y negrita, SIL OFL 1.1, con las métricas de
-  Arial). Arial Black no tiene equivalente libre y se usa la negrita.
+  Arial), en [`crates/construct2/fuentes`](../../crates/construct2/fuentes). Arial Black no tiene
+  equivalente libre y se usa la negrita.
 - **Sonido**: se usan los OGG. El navegador elegía entre OGG y M4A; los dos son el mismo sonido.
 - **Aleatoriedad**: `random()` usa el generador de macroquad en lugar de `Math.random()`.
 - **Ventana**: el canvas de 400×500 se escala con bandas negras, como el modo *letterbox* del

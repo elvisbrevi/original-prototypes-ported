@@ -5,10 +5,11 @@ Plan de trabajo para recrear en Rust + macroquad todos los juegos publicados en
 Está pensado para avanzar en varias sesiones: marca cada casilla al completarla e incluye el cambio
 del plan en el mismo commit.
 
-**Siguiente paso:** 2.4 Retro Penal (Construct 2): reutilizar la estructura de
-`games/que-no-caiga` (lector de `data.js`, runtime parcial de Construct 2) y anotar los nombres de
-su tabla de referencias; usa Turret, CustomMovement, Bullet, Solid y Wrap. El 0.7 (GitHub Pages)
-queda pendiente de decidir si se publica.
+**Siguiente paso:** 2.5 Da Car (Construct 2): reutilizar `crates/construct2` y anotar los
+nombres de su tabla de referencias. Lo nuevo es el comportamiento Physics (Box2D: suelo, moto,
+ruedas con articulaciones), además de ScrollTo y un plugin de partículas sin identificar
+(`particulaspolvo`). Hay que ver qué Box2D trae su `c2runtime.js` y cómo portarlo con fidelidad. El
+0.7 (GitHub Pages) queda pendiente de decidir si se publica.
 
 ## Reglas
 
@@ -120,7 +121,7 @@ cada juego en la fase 2).
 | Fast Car Racer | — | Android (`cl.gioco.fcr`) | — | **sin binario**: itch.io solo enlaza a Google Play |
 | Super Happy Jump | `web.unity3d` (385 KB) | Unity 4.6.0f3, Web Player | UnityPy para abrir el bundle `UnityWeb` → `Assembly-CSharp.dll` + assets | formato UnityWeb comprimido con LZMA |
 | Que No Caiga | HTML5 (39 archivos) | Construct 2 | ✅ hecho | ver pendientes en 2.3 |
-| Retro Penal | HTML5 + NW.js (win/osx/linux) | Construct 2 | igual que Que No Caiga | ídem |
+| Retro Penal | HTML5 + NW.js (win/osx/linux) | Construct 2 | ✅ hecho | ver pendientes en 2.4 |
 | One Button Prototype | Mac, Linux, APK y WebGL | Unity 5.1.2f1, Mono | ILSpy (Standard Assets 2D + clases propias); escenas con UnityPy/AssetRipper | física 2D (Box2D) |
 | Neuro Battle | `Neuro Battle.zip` (WebGL) | Unity 5.1.1f1, IL2CPP → asm.js | **sin DLL de C#**: metadatos IL2CPP + escenas + observar el juego (REA browser) | el más difícil; el WebGL de 2015 puede no correr en navegadores actuales. El `.data` ya se desempaqueta (`unity_assets.py emscripten`): escenas, sprites y nombres de scripts legibles |
 | Da Car | HTML5 (32 archivos) | Construct 2 | igual que Que No Caiga | ídem |
@@ -177,13 +178,23 @@ Orden sugerido: primero lo que reutiliza herramientas ya hechas y luego lo más 
   sonido no se probó en hardware real; no se jugó hasta el segundo 50 sin ayuda (la bomba se probó
   con un cambio temporal).
 
-### 2.4 Retro Penal (Construct 2)
-- [ ] Triaje (comparar `package.nw` con la versión HTML5).
-- [ ] Eventos con `tools/c2_eventos.py`.
-- [ ] Port nativo jugable.
-- [ ] Web + táctil.
-- [ ] README del juego + ficha del museo.
-- [ ] Pendientes anotados.
+### 2.4 Retro Penal (Construct 2) ✅
+- [x] Triaje (comparar `package.nw` con la versión HTML5): REA `analyze-javascript-application`
+  sobre las dos. Los paquetes NW.js (22-jul-2015) son una exportación del día anterior a la HTML5
+  (23-jul-2015): mismas imágenes y OGG, pero todavía con el plugin Browser y el botón «Compartir»,
+  cuyo evento sin condiciones es el clic en cada tick del final de la HTML5.
+- [x] Eventos con `tools/c2_eventos.py` y `games/retro-penal/reference/nombres.json`.
+- [x] Runtime compartido `crates/construct2`, sacado de Que No Caiga (que pasa a usarlo, con las
+  mismas capturas de humo): Bullet con rebote en sólidos, Turret, Custom Movement, Solid y Wrap,
+  colisión con giro y espejo, On collision, Wait, bloques O y Sino, Audio con bucle, Stop, volumen
+  y On ended, Mouse.SetCursor.
+- [x] Port nativo jugable: las tres hojas de eventos.
+- [x] Web + táctil (se juega tocando la pantalla, sin botones).
+- [x] README del juego + ficha del museo.
+- [x] Pendientes anotados: las fuentes son Liberation Sans en lugar de Arial; el sonido no se
+  probó en hardware real; Stop y SetVolume actúan sobre todo el archivo (aquí no cambia nada); la
+  ventana no escala por múltiplos enteros como el original; de Turret no se portaron la puntería
+  predictiva ni los disparadores de disparo (no se usan).
 
 ### 2.5 Da Car (Construct 2)
 - [ ] Triaje.

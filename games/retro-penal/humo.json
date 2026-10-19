@@ -1,0 +1,15 @@
+{
+  "pantalla": [400, 500],
+  "pasos": [
+    { "esperar": 6000 },
+    { "captura": "menu" },
+    { "zona": [200, 345], "ms": 120, "despues": 6500 },
+    { "captura": "instrucciones" },
+    { "zona": [200, 268], "ms": 120, "despues": 700 },
+    { "captura": "flecha" },
+    { "zona": [200, 450], "ms": 80, "despues": 650 },
+    { "captura": "tiro" },
+    { "esperar": 900 },
+    { "captura": "resultado" }
+  ]
+}

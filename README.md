@@ -21,7 +21,7 @@ El avance está en [PLAN.md](PLAN.md). Cada push compila todo en nativo y en was
 | 2013 | [Fast Car Racer](#fast-car-racer) | Android (Google Play) | bloqueado: falta el binario |
 | 2014 | [Super Happy Jump](#super-happy-jump) | Unity 4.6 (Web Player, iOS, Android) | pendiente |
 | 2014–15 | [Que No Caiga](#que-no-caiga) | Construct 2 (HTML5) | ✅ [games/que-no-caiga](games/que-no-caiga) |
-| 2014–15 | [Retro Penal](#retro-penal) | Construct 2 (HTML5 + NW.js) | pendiente |
+| 2015 | [Retro Penal](#retro-penal) | Construct 2 (HTML5 + NW.js) | ✅ [games/retro-penal](games/retro-penal) |
 | 2015 | [One Button Prototype](#one-button-prototype) | Unity 5.1 (Mac, Linux, Android, WebGL) | pendiente |
 | 2015 | [Neuro Battle](#neuro-battle) | Unity 5.1 (WebGL) | pendiente |
 | 2015 | [Da Car](#da-car) | Construct 2 (HTML5) | pendiente |
@@ -131,10 +131,19 @@ confirmar» y se cierran en el triaje de cada juego.
 
 ### Retro Penal
 
-- **Fecha:** exportado el 22/23-jul-2015; temática del Mundial (creación por confirmar).
-- **Stack:** Construct 2, HTML5 y escritorio con NW.js (Windows, macOS, Linux).
-- **De qué trata:** penales de fútbol con estética retro y la selección chilena.
-- **Port:** pendiente.
+![Retro Penal](games/retro-penal/docs/gol.png)
+
+- **Fecha:** julio de 2015: los paquetes de escritorio son del 22-jul-2015 y la versión HTML5 se
+  exportó el 23-jul-2015, según su `offline.appcache`.
+- **Stack:** Construct 2 (una versión de 2015, r20x), HTML5 y escritorio con NW.js (Windows, macOS
+  y Linux).
+- **De qué trata:** penales con la selección chilena. Hay tres intentos: una flecha va y viene
+  sobre el punto penal y el toque patea en esa dirección. El arquero se lanza o se agacha, y cada
+  gol los hace más rápidos.
+- **Port:** ✅ [games/retro-penal](games/retro-penal): las hojas de eventos traducidas de su
+  `data.js`, y lo que usa del runtime minificado (Bullet con rebote en los sólidos, Turret, Custom
+  Movement, Wrap, colisiones con giro, Wait) traducido en `crates/construct2`; imágenes, sonidos y
+  proyecto originales. Se juega con el ratón o tocando la pantalla.
 - **Original:** [elvisbrevi.itch.io/retro-penal](https://elvisbrevi.itch.io/retro-penal)
   (`win32.zip`, `osx32.zip`, `linux32.zip` y versión HTML5)
 
@@ -171,6 +180,7 @@ games/<slug>/        un crate de Cargo por juego (port + assets extraídos + ref
 crates/museo/        piezas comunes: pantalla virtual con bandas, paso fijo y controles táctiles;
                      plantilla web (index.html + mq_js_bundle.js de macroquad) en crates/museo/web
 crates/xna/          equivalentes de XNA 3.1 (Rectangle, Clamp, SpriteBatch.Draw, SpriteFont, Random)
+crates/construct2/   runtime de Construct 2: data.js, Sprite, Text, Audio, comportamientos, colisiones
 originales/          binarios originales (fuera de git) y catalogo.json con sus sha256
 tools/originales.py  inventario y descarga de los originales desde itch.io
 tools/build_web.sh   versión web de un juego en dist/<slug> a partir de la plantilla
@@ -185,7 +195,7 @@ PLAN.md              plan por fases con checkpoints
 ## Jugar
 
 ```sh
-cargo run --release -p iman            # PC (o proyecto-nutria, the-electric-eel-attack, que-no-caiga)
+cargo run --release -p iman            # PC (o proyecto-nutria, the-electric-eel-attack, que-no-caiga, retro-penal)
 tools/build_web.sh iman                # web: sirve dist/iman con cualquier servidor estático
 ```
 

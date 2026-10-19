@@ -1,0 +1,354 @@
+
+== Hoja de eventos 'Juego'
+variable número pelotaActiva = 1
+variable número anguloTiro = 0
+variable número salioAfuera = 0
+variable número atajoArco = 0
+variable número atajoArquero = 0
+variable texto direccionArquero = "ninguna"
+variable número velocidadArquero = 3
+variable número perdio = 0
+variable número anoto = 0
+variable número scale = 0.6
+variable número intentos = 3
+variable número cantidadGoles = 0
+variable número velocidadFlecha = 5
+variable número comenzo = 0
+evento
+  si System.OnLayoutStart() [disparador]
+  -> System.SetVar(scale, 0.6)
+  -> Pelota.SetScale(0.6)
+  -> Audio.Play(sonido 'publico3', opción1, 1, "publico")
+  evento
+    si System.IsOnMobile()
+    -> Barra.SetVisible(opción0)
+grupo 'Comenzar' activo
+evento
+  si System.IsGroupActive("Comenzar")
+  evento
+    si Mouse.IsOverObject(BotonOk)
+    -> Mouse.SetCursor(opción1)
+  evento
+    si System.Else()
+    -> Mouse.SetCursor(opción0)
+  evento
+    si Touch.OnTouchedObject(BotonOk) [disparador]
+    si System.CompareVar(comenzo, =, 0)
+    evento
+      si no Audio.IsTagPlaying("comenzar")
+      -> Audio.Play(sonido 'click3', opción0, 1, "click")
+      -> System.SetVar(comenzo, 1)
+      -> Punto.CustomMovement.SetSpeed(opción1, -(velocidadFlecha))
+      -> PosicionArquero.CustomMovement.SetSpeed(opción1, -(velocidadArquero))
+      -> CartelInstrucciones.Destroy()
+      -> BotonOk.Destroy()
+      -> TextoInstrucciones.Destroy()
+      -> System.SetVar(cantidadGoles, 0)
+      -> System.CreateObject(IconoIntento, 1, 70, 20)
+      -> System.CreateObject(IconoIntento, 1, 100, 20)
+      -> System.CreateObject(IconoIntento, 1, 130, 20)
+      -> Barra.SetVisible(opción1)
+      -> TextoGoles.SetVisible(opción1)
+      -> FondoGoles.SetVisible(opción1)
+      -> TextoOk.Destroy()
+      -> Flecha.SetVisible(opción1)
+grupo 'Lanza Pelota' activo
+evento
+  si System.IsGroupActive("Lanza Pelota")
+  evento
+    si Jugador.CompareFrame(=, 2)
+    evento
+      si Pelota.Bullet.CompareSpeed(=, 0)
+      -> Pelota.Bullet.SetSpeed(600)
+      -> Pelota.Bullet.SetAngleOfMotion(anguloTiro)
+  evento
+    si Pelota.Bullet.CompareSpeed(>, 0)
+    si System.CompareVar(scale, >, 0.5)
+    -> System.SubtractVar(scale, 0.18)
+    -> Pelota.SetScale(scale)
+  evento
+    si Touch.OnTouchStart() [disparador]
+    si System.CompareVar(comenzo, =, 1)
+    si Pelota.Bullet.CompareSpeed(=, 0)
+    si Pelota.CompareY(=, 420)
+    -> Flecha.SetVisible(opción0)
+    -> Jugador.SetAnim("pateando", opción1)
+    -> System.SetVar(anguloTiro, Flecha.Angle())
+    -> Audio.Play(sonido 'tiro3', opción0, 1, "tiro")
+  evento
+    si System.EveryTick()
+    -> Flecha.Turret.AddTarget(Punto)
+    evento
+      si Punto.CompareX(<, 197)
+      -> Punto.CustomMovement.SetSpeed(opción1, velocidadFlecha)
+    evento
+      si Punto.CompareX(>, 203)
+      -> Punto.CustomMovement.SetSpeed(opción1, -(velocidadFlecha))
+grupo 'Choque Pelota' activo
+evento
+  si System.IsGroupActive("Choque Pelota")
+  evento
+    si Pelota.OnCollision(Afuera)
+    si System.CompareVar(pelotaActiva, =, 1)
+    evento
+      si System.CompareVar(salioAfuera, =, 0)
+      -> Audio.Play(sonido 'perdio3', opción0, 1, "perdio")
+      -> Audio.Play(sonido 'seloperdio3', opción0, 1, "seloperdio")
+      -> System.SubtractVar(intentos, 1)
+      -> System.SetVar(perdio, 1)
+      -> Jugador.SetAnim("perdio", opción1)
+      -> System.Wait(3)
+      -> Pelota.SetPosition(200, 420)
+      -> System.SetVar(salioAfuera, 1)
+  evento (O)
+    si Pelota.OnCollision(PosteDerecho)
+    si Pelota.OnCollision(PosteIzquierdo)
+    evento
+      si System.CompareVar(pelotaActiva, =, 1)
+      si System.CompareVar(atajoArquero, =, 0)
+      si System.CompareVar(atajoArco, =, 0)
+      -> Audio.Play(sonido 'perdio3', opción0, 1, "perdio")
+      -> Audio.Play(sonido 'seloperdio3', opción0, 1, "seloperdio")
+      -> System.SetVar(pelotaActiva, 0)
+      -> System.SubtractVar(intentos, 1)
+      -> System.SetVar(perdio, 1)
+      -> Jugador.SetAnim("perdio", opción1)
+      -> System.Wait(3)
+      -> Pelota.SetPosition(200, 420)
+      -> System.SetVar(atajoArco, 1)
+  evento
+    si Pelota.OnCollision(Arquero)
+    si System.CompareVar(pelotaActiva, =, 1)
+    evento
+      si System.CompareVar(atajoArco, =, 0)
+      si System.CompareVar(atajoArquero, =, 0)
+      -> Audio.Play(sonido 'perdio3', opción0, 1, "perdio")
+      -> Audio.Play(sonido 'seloperdio3', opción0, 1, "seloperdio")
+      -> System.SetVar(pelotaActiva, 0)
+      -> System.SubtractVar(intentos, 1)
+      -> System.SetVar(perdio, 1)
+      -> Jugador.SetAnim("perdio", opción1)
+      -> System.Wait(3)
+      -> Pelota.SetPosition(200, 420)
+      -> System.SetVar(atajoArquero, 1)
+  evento
+    si System.Compare(CuadroGol.X(), ≤, (Pelota.X() - (Pelota.Width() / 2)))
+    si System.Compare(CuadroGol.Y(), ≤, (Pelota.Y() - (Pelota.Height() / 2)))
+    si System.Compare((CuadroGol.X() + CuadroGol.Width()), ≥, (Pelota.X() + (Pelota.Width() / 2)))
+    si System.Compare((CuadroGol.Y() + CuadroGol.Height()), ≥, (Pelota.Y() + (Pelota.Height() / 2)))
+    si System.CompareVar(anoto, =, 0)
+    si System.CompareVar(atajoArco, =, 0)
+    si System.CompareVar(atajoArquero, =, 0)
+    si System.CompareVar(pelotaActiva, =, 1)
+    -> Audio.Play(sonido 'gol3', opción0, 1, "gol")
+    -> System.AddVar(cantidadGoles, 1)
+    -> TextoGoles.SetText(("GOLES: " & cantidadGoles))
+    -> Pelota.Bullet.SetSpeed(0)
+    -> System.SetVar(anoto, 1)
+    -> AnimacionGol.SetPosition(200, 250)
+    -> AnimacionGol.SetAnim("gol", opción1)
+    -> Jugador.SetAnim("gano", opción1)
+    evento
+      si System.CompareVar(velocidadArquero, <, 25)
+      -> System.AddVar(velocidadArquero, 5)
+    evento
+      si System.CompareVar(velocidadFlecha, <, 15)
+      -> System.AddVar(velocidadFlecha, 0.5)
+  evento (O)
+    si System.CompareVar(salioAfuera, =, 1)
+    si System.CompareVar(atajoArco, =, 1)
+    si System.CompareVar(atajoArquero, =, 1)
+    si Audio.OnEnded("gol") [disparador]
+    -> Pelota.Bullet.SetSpeed(0)
+    -> Audio.Stop("perdio")
+    -> Audio.Stop("seloperdio")
+    -> Pelota.SetPosition(200, 420)
+    -> Arquero.SetPosition(200, 127)
+    -> PosicionArquero.CustomMovement.SetEnabled(opción1)
+    -> AnimacionGol.SetY(-114)
+    -> Arquero.SetAnim("Default", opción1)
+    -> System.SetVar(direccionArquero, "ninguna")
+    -> System.SetVar(pelotaActiva, 1)
+    -> Flecha.SetVisible(opción1)
+    -> System.SetVar(scale, 0.6)
+    -> Pelota.SetScale(0.6)
+    -> System.SetVar(anoto, 0)
+    -> System.SetVar(atajoArquero, 0)
+    -> System.SetVar(atajoArco, 0)
+    -> System.SetVar(salioAfuera, 0)
+    -> Jugador.SetAnim("parado", opción1)
+grupo 'Game Over' activo
+evento
+  si System.IsGroupActive("Game Over")
+  evento
+    si System.EveryTick()
+    si System.CompareVar(perdio, =, 1)
+    evento
+      si System.CompareVar(intentos, =, 2)
+      -> System.CreateObject(IconoFallo, 1, 130, 20)
+      -> System.SetVar(perdio, 0)
+    evento
+      si System.CompareVar(intentos, =, 1)
+      -> System.CreateObject(IconoFallo, 1, 100, 20)
+      -> System.SetVar(perdio, 0)
+    evento
+      si System.CompareVar(intentos, =, 0)
+      -> System.CreateObject(IconoFallo, 1, 70, 20)
+      -> System.SetVar(perdio, 0)
+      -> System.SetVar(anoto, 0)
+      -> System.SetVar(intentos, 3)
+      -> System.SetVar(velocidadFlecha, 5)
+      -> System.SetVar(comenzo, 0)
+      -> Flecha.Destroy()
+      -> System.Wait(2)
+      -> Pelota.Destroy()
+      -> Audio.StopAll()
+      -> System.GoToLayout(layout "Game Over")
+grupo 'Movimiento Arquero' activo
+evento
+  si System.IsGroupActive("Movimiento Arquero")
+  evento
+    si System.CompareVar(direccionArquero, =, "izquierda")
+    si Arquero.CompareX(>, 75)
+    -> Arquero.SetX((Arquero.X() - 3))
+    -> PosicionArquero.CustomMovement.SetEnabled(opción0)
+    -> Arquero.SetAnim("lanzado", opción1)
+    -> Arquero.SetMirrored(opción0)
+    evento
+      si Arquero.CompareY(>, 118)
+      -> Arquero.SetY((Arquero.Y() - 0.2))
+  evento
+    si System.Else()
+    si System.CompareVar(direccionArquero, =, "izquierda")
+    -> Arquero.SetAnim("tirado", opción1)
+    -> Arquero.SetY(135)
+  evento
+    si System.CompareVar(direccionArquero, =, "derecha")
+    si Arquero.CompareX(<, 320)
+    -> Arquero.SetX((Arquero.X() + 3))
+    -> PosicionArquero.CustomMovement.SetEnabled(opción0)
+    -> Arquero.SetAnim("lanzado", opción1)
+    -> Arquero.SetMirrored(opción1)
+    evento
+      si Arquero.CompareY(>, 118)
+      -> Arquero.SetY((Arquero.Y() - 0.2))
+  evento
+    si System.Else()
+    si System.CompareVar(direccionArquero, =, "derecha")
+    -> Arquero.SetAnim("tirado", opción1)
+    -> Arquero.SetY(135)
+  evento
+    si System.CompareVar(direccionArquero, =, "abajo")
+    si no Arquero.IsAnimPlaying("abajo")
+    -> Arquero.SetAnim("abajo", opción1)
+  evento
+    si Pelota.Bullet.CompareSpeed(>, 0)
+    evento
+      si PosicionArquero.CompareX(≥, 197)
+      si PosicionArquero.CompareX(≤, 203)
+      si System.CompareVar(direccionArquero, =, "ninguna")
+      -> System.SetVar(direccionArquero, "abajo")
+    evento
+      si System.Compare(PosicionArquero.CustomMovement.dx(), <, 0)
+      si System.CompareVar(direccionArquero, =, "ninguna")
+      -> System.SetVar(direccionArquero, "izquierda")
+    evento
+      si System.Compare(PosicionArquero.CustomMovement.dx(), >, 0)
+      si System.CompareVar(direccionArquero, =, "ninguna")
+      -> System.SetVar(direccionArquero, "derecha")
+  evento
+    si System.EveryTick()
+    evento
+      si PosicionArquero.CompareX(<, 190)
+      -> PosicionArquero.CustomMovement.SetSpeed(opción1, velocidadArquero)
+    evento
+      si PosicionArquero.CompareX(>, 210)
+      -> PosicionArquero.CustomMovement.SetSpeed(opción1, -(velocidadArquero))
+
+== Hoja de eventos 'Menu Principal'
+variable número cerrarCortina = 0
+evento
+  si Mouse.IsOverObject(BotonEmpezar)
+  si BotonEmpezar.IsVisible()
+  -> Mouse.SetCursor(opción1)
+evento
+  si System.Else()
+  -> Mouse.SetCursor(opción0)
+evento
+  si Touch.OnTouchedObject(BotonEmpezar) [disparador]
+  si BotonEmpezar.IsVisible()
+  evento
+    si no Audio.IsTagPlaying("comenzar")
+    si System.CompareVar(cerrarCortina, =, 0)
+    -> Audio.Play(sonido 'click3', opción0, 1, "comenzar")
+    -> System.SetVar(cerrarCortina, 1)
+evento
+  si System.OnLayoutStart() [disparador]
+  -> Audio.Preload(sonido 'chute')
+  -> Audio.Preload(sonido 'click3')
+  -> Audio.Preload(sonido 'comenzar3')
+  -> Audio.Preload(sonido 'gol3')
+  -> Audio.Preload(sonido 'musica3')
+  -> Audio.Preload(sonido 'perdio3')
+  -> Audio.Preload(sonido 'pitazo3')
+  -> Audio.Preload(sonido 'tiro3')
+  -> Audio.Preload(sonido 'seloperdio3')
+  -> Audio.Preload(sonido 'publico3')
+  -> Fondo.CustomMovement.SetEnabled(opción1)
+  -> Fondo.CustomMovement.SetSpeed(opción1, -500)
+evento
+  si Cortina.CompareOpacity(≤, 0)
+  -> TextoEmpezar.SetPosition(200, 345)
+  -> BotonEmpezar.SetPosition(200, 345)
+evento
+  si System.CompareVar(cerrarCortina, =, 1)
+  evento
+    si System.Every(0.01)
+    -> Cortina.SetOpacity((Cortina.Opacity() + 1))
+    -> Audio.SetVolume("musica", (Audio.Volume("musica") - 0.3))
+  evento
+    si Cortina.CompareOpacity(=, 100)
+    -> Audio.Stop("musica")
+    -> System.SetVar(cerrarCortina, 0)
+    -> System.GoToLayout(layout "Juego")
+evento
+  si System.Else()
+  evento
+    si System.Every(0.01)
+    -> Cortina.SetOpacity((Cortina.Opacity() - 1))
+evento
+  si System.OnLayoutStart() [disparador]
+  si no Audio.IsTagPlaying("musica")
+  -> Audio.Play(sonido 'musica3', opción1, 1, "musica")
+evento
+  si System.Compare(Logo.X(), >, 200)
+  -> Logo.SetX((Logo.X() - 4))
+
+== Hoja de eventos 'Game Over'
+evento
+  si Mouse.IsOverObject(BotonReintentar)
+  -> Mouse.SetCursor(opción1)
+evento
+  si System.Else()
+  -> Mouse.SetCursor(opción0)
+evento
+  si Touch.OnTouchedObject(BotonReintentar) [disparador]
+  evento
+    si no Audio.IsTagPlaying("comenzar")
+    -> Audio.Play(sonido 'click3', opción0, 1, "click")
+    -> System.ResetGlobals()
+    -> System.GoToLayout(layout "Menu Principal")
+evento
+  evento
+    si no Audio.IsTagPlaying("comenzar")
+    -> Audio.Play(sonido 'click3', opción0, 1, "click")
+evento
+  si System.OnLayoutStart() [disparador]
+  -> TextoResultado.SetText((cantidadGoles & " GOLES"))
+evento
+  si System.OnLayoutStart() [disparador]
+  -> Fondo.CustomMovement.SetEnabled(opción1)
+  -> Fondo.CustomMovement.SetSpeed(opción1, -500)
+  evento
+    si no Audio.IsTagPlaying("musica")
+    -> Audio.Play(sonido 'musica3', opción1, 1, "musica")

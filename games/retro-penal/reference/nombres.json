@@ -1,0 +1,48 @@
+{
+  "plugins": {
+    "nc": "Audio", "oc": "Mouse", "Y": "Sprite", "pc": "Text", "Z": "Touch",
+    "rc": "Turret (comportamiento)", "sc": "CustomMovement (comportamiento)",
+    "qc": "Bullet (comportamiento)", "mc": "Solid (comportamiento)", "xc": "Wrap (comportamiento)",
+    "V": "System"
+  },
+  "tipos": {
+    "t0": "Flecha", "t1": "Pasto", "t2": "Touch", "t3": "Punto", "t4": "Pelota",
+    "t5": "PosteIzquierdo", "t6": "PosteDerecho", "t7": "Travesano", "t8": "TextoGoles",
+    "t9": "CuadroGol", "t10": "CartelInstrucciones", "t11": "Arquero", "t12": "IconoIntento",
+    "t13": "IconoFallo", "t14": "TextoTitulo", "t15": "BotonEmpezar", "t16": "TextoEmpezar",
+    "t17": "Mouse", "t18": "TextoInstrucciones", "t19": "BotonOk", "t20": "TextoGameOver",
+    "t21": "BotonReintentar", "t22": "TextoReintentar", "t23": "TextoResultado",
+    "t24": "TextoCompartir", "t25": "Arco", "t26": "CartelGameOver", "t27": "Barra",
+    "t28": "FondoGoles", "t29": "TextoOk", "t30": "AnimacionGol", "t31": "Jugador",
+    "t32": "Afuera", "t33": "PosicionArquero", "t34": "Fondo", "t35": "Degradado",
+    "t36": "Audio", "t37": "Cortina", "t38": "Logo", "t39": "ImagenGameOver"
+  },
+  "aces": {
+    "V.prototype.i.Rm": "OnLayoutStart", "V.prototype.i.Iq": "IsOnMobile",
+    "V.prototype.i.Hq": "IsGroupActive", "V.prototype.i.Nm": "Else",
+    "V.prototype.i.wq": "CompareVar", "V.prototype.i.Bq": "EveryTick",
+    "V.prototype.i.tq": "Compare", "V.prototype.i.Aq": "Every",
+    "V.prototype.D.or": "SetVar", "V.prototype.D.nq": "AddVar", "V.prototype.D.ur": "SubtractVar",
+    "V.prototype.D.zq": "CreateObject", "V.prototype.D.Ar": "Wait",
+    "V.prototype.D.Cq": "GoToLayout", "V.prototype.D.hr": "ResetGlobals",
+    "Y.prototype.i.uq": "CompareFrame", "Y.prototype.i.xq": "CompareX", "Y.prototype.i.yq": "CompareY",
+    "Y.prototype.i.Tq": "OnCollision", "Y.prototype.i.Eq": "IsAnimPlaying",
+    "Y.prototype.i.Lq": "IsVisible", "Y.prototype.i.vq": "CompareOpacity",
+    "Y.prototype.D.mr": "SetScale", "Y.prototype.D.$m": "SetVisible", "Y.prototype.D.Mm": "Destroy",
+    "Y.prototype.D.ir": "SetAnim", "Y.prototype.D.Zm": "SetPosition", "Y.prototype.D.rr": "SetX",
+    "Y.prototype.D.sr": "SetY", "Y.prototype.D.kr": "SetMirrored", "Y.prototype.D.lr": "SetOpacity",
+    "Y.prototype.Ga.oq": "Angle", "Y.prototype.Ga.dk": "X", "Y.prototype.Ga.ek": "Y",
+    "Y.prototype.Ga.Br": "Width", "Y.prototype.Ga.Dq": "Height", "Y.prototype.Ga.Opacity": "Opacity",
+    "pc.prototype.D.Mm": "Destroy", "pc.prototype.D.$m": "SetVisible", "pc.prototype.D.nr": "SetText",
+    "pc.prototype.D.Zm": "SetPosition",
+    "oc.prototype.i.Jq": "IsOverObject", "oc.prototype.D.jr": "SetCursor",
+    "Z.prototype.i.ak": "OnTouchedObject", "Z.prototype.i.bk": "OnTouchStart",
+    "nc.prototype.D.Play": "Play", "nc.prototype.i.Kq": "IsTagPlaying", "nc.prototype.i.wg": "OnEnded",
+    "nc.prototype.D.an": "Stop", "nc.prototype.D.tr": "StopAll", "nc.prototype.D.gr": "Preload",
+    "nc.prototype.D.pr": "SetVolume", "nc.prototype.Ga.yr": "Volume",
+    "sc.prototype.D.ck": "SetSpeed", "sc.prototype.D.$h": "SetEnabled", "sc.prototype.Ga.P": "dx",
+    "qc.prototype.i.Lm": "CompareSpeed", "qc.prototype.D.ck": "SetSpeed",
+    "qc.prototype.D.Ym": "SetAngleOfMotion",
+    "rc.prototype.D.mq": "AddTarget"
+  }
+}

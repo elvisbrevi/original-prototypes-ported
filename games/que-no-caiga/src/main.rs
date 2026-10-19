@@ -1,17 +1,14 @@
 // Que No Caiga — port a macroquad del juego de Construct 2 de Elvis Brevi (2014-2015).
 
-mod datos;
 mod juego;
-mod runtime;
 
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 
+use construct2::{Audio, Clase, Fuentes, Mundo, Proyecto, Toques, dt_del_runtime};
 use macroquad::prelude::*;
 use museo::{ConfigTactil, Cruceta, Pantalla, Tactil};
 
-use crate::datos::Proyecto;
 use crate::juego::Juego;
-use crate::runtime::{Audio, Fuentes};
 
 fn window_conf() -> Conf {
     Conf {
@@ -41,7 +38,8 @@ macro_rules! imagenes {
 async fn main() {
     // El Touch del juego usa también el ratón: los toques no deben generar clics además.
     simulate_mouse_with_touch(false);
-    let proyecto = Proyecto::leer(include_str!("../assets/data.js"));
+    // El comportamiento Platform es el constructor 8 de la tabla de referencias del runtime.
+    let proyecto = Proyecto::leer(include_str!("../assets/data.js"), &[(8, Clase::Plataforma)]);
     let texturas: HashMap<String, Texture2D> = imagenes!(
         "images/bomba-sheet0.png",
         "images/bomba-sheet1.png",
@@ -63,16 +61,7 @@ async fn main() {
     .into_iter()
     .map(|(n, b)| (n.to_owned(), Texture2D::from_file_with_format(b, None)))
     .collect();
-    let fuentes = Fuentes {
-        normal: load_ttf_font_from_bytes(include_bytes!(
-            "../assets/fuentes/LiberationSans-Regular.ttf"
-        ))
-        .expect("fuente"),
-        negrita: load_ttf_font_from_bytes(include_bytes!(
-            "../assets/fuentes/LiberationSans-Bold.ttf"
-        ))
-        .expect("fuente"),
-    };
+    let fuentes = Fuentes::liberation();
     clear_background(BLACK);
     next_frame().await;
     let audio = Audio::cargar(&[
@@ -83,44 +72,19 @@ async fn main() {
         ("pegada", include_bytes!("../assets/media/pegada.ogg")),
     ])
     .await;
-    let pantalla = Pantalla::nueva(proyecto.ancho, proyecto.alto);
+    let pantalla = Pantalla::nueva(proyecto.ancho as f32, proyecto.alto as f32);
     let mut tactil = Tactil::nuevo(TACTIL);
-    let mut juego = Juego::nuevo(proyecto, texturas, fuentes, audio);
-    let mut vistos: HashSet<u64> = HashSet::new();
+    let mut juego = Juego::nuevo(Mundo::nuevo(proyecto, texturas, fuentes), audio);
+    let mut toques = Toques::default();
     let mut primero = true;
 
     loop {
         let pulsados = tactil.actualizar(&pantalla);
         let arriba = tactil.juego_arriba();
         // Toques y ratón, entre ticks (como los eventos del DOM).
-        let mut activos = Vec::new();
-        let mut nuevos = 0;
-        for t in touches() {
-            let terminado = matches!(t.phase, TouchPhase::Ended | TouchPhase::Cancelled);
-            if vistos.insert(t.id) {
-                nuevos += 1;
-            }
-            if terminado {
-                vistos.remove(&t.id);
-            } else {
-                activos.push(pantalla.a_virtual(t.position, arriba));
-            }
-        }
-        if is_mouse_button_pressed(MouseButton::Left) {
-            nuevos += 1;
-        }
-        if is_mouse_button_down(MouseButton::Left) {
-            activos.push(pantalla.a_virtual(mouse_position().into(), arriba));
-        }
-        juego.entrada(activos, nuevos);
+        juego.entrada(&toques.leer(|p| pantalla.a_virtual(p, arriba), true));
 
-        // dt del runtime: 0 en el primer tick o si pasó más de medio segundo; como mucho 0,1 s.
-        let mut dt = get_frame_time() as f64;
-        if primero || dt > 0.5 {
-            dt = 0.0;
-        } else if dt > 0.1 {
-            dt = 0.1;
-        }
+        let dt = dt_del_runtime(get_frame_time() as f64, primero);
         primero = false;
         juego.tick(dt);
 

@@ -1,0 +1,33 @@
+{
+  "plugins": {
+    "Qg": "Audio", "Sg": "Mouse", "Rg": "Keyboard", "Tg": "Particles", "Ug": "Text",
+    "Vg": "Touch", "Pg": "Sprite", "dm": "Physics (comportamiento)",
+    "rm": "Wrap (comportamiento)", "em": "ScrollTo (comportamiento)", "Og": "System"
+  },
+  "tipos": {
+    "t0": "Suelo", "t1": "RuedaDelantera", "t2": "Mouse", "t3": "Keyboard", "t4": "Moto",
+    "t5": "RuedaTrasera", "t6": "Touch", "t7": "Cabeza", "t8": "Spawn", "t9": "Cerro1",
+    "t10": "Cerro2", "t11": "Cerro3", "t12": "Cerro4", "t13": "TextoTiempo", "t14": "Meta",
+    "t15": "MapaMeta", "t16": "MotoMapa", "t17": "TextoComenzar", "t18": "BotonCompartir",
+    "t19": "BotonReintentar", "t20": "TextoResultado", "t21": "Texto21(sin instancias)",
+    "t22": "Texto22(sin instancias)", "t23": "Audio", "t24": "Polvo"
+  },
+  "aces": {
+    "Og.prototype.C.qP": "IsGroupActive", "Og.prototype.C.Np": "OnLayoutStart",
+    "Og.prototype.C.aP": "CompareVar", "Og.prototype.C.jP": "EveryTick", "Og.prototype.C.iP": "Every",
+    "Og.prototype.C.tP": "IsOnMobile", "Og.prototype.C.pQ": "TriggerOnce", "Og.prototype.C.$O": "Compare",
+    "Og.prototype.pa.eQ": "SetLayerVisible", "Og.prototype.pa.iQ": "SetVar", "Og.prototype.pa.SO": "AddVar",
+    "Og.prototype.pa.cQ": "RestartLayout", "Og.prototype.pa.dP": "CreateObject",
+    "Og.prototype.ob.round": "round", "Og.prototype.ob.random": "random",
+    "Qg.prototype.pa.aQ": "Preload", "Qg.prototype.pa.mQ": "Stop", "Qg.prototype.pa.Play": "Play",
+    "Qg.prototype.C.bQ": "IsSilent", "Qg.prototype.C.uP": "IsTagPlaying",
+    "Ug.prototype.pa.hQ": "SetText", "Ug.prototype.pa.Fp": "Destroy",
+    "dm.prototype.pa.kQ": "SetWorldGravity", "dm.prototype.pa.eP": "CreateRevoluteJoint",
+    "dm.prototype.pa.cP": "CreateLimitedRevoluteJoint", "dm.prototype.pa.gg": "SetAngularVelocity",
+    "Pg.prototype.pa.lQ": "SetX", "Pg.prototype.pa.Fp": "Destroy", "Pg.prototype.ob.mh": "X",
+    "Pg.prototype.ob.nh": "Y", "Pg.prototype.C.LP": "OnCollision", "Pg.prototype.C.bP": "CompareX",
+    "Tg.prototype.pa.gQ": "SetSpraying", "Tg.prototype.pa.fQ": "SetPosToObject",
+    "Sg.prototype.C.Ol": "OnObjectClicked", "Rg.prototype.C.sP": "IsKeyDown",
+    "Vg.prototype.C.vP": "IsTouchingObject", "Vg.prototype.C.rP": "IsInTouch", "Vg.prototype.ob.WO": "Beta"
+  }
+}

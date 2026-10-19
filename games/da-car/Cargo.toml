@@ -1,0 +1,12 @@
+[package]
+name = "da-car"
+version = "0.1.0"
+edition = "2024"
+
+[package.metadata.museo]
+titulo = "Da Car"
+
+[dependencies]
+construct2 = { path = "../../crates/construct2" }
+macroquad = { version = "0.4", features = ["audio"] }
+museo = { path = "../../crates/museo" }

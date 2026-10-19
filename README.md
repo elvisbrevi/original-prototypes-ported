@@ -24,7 +24,7 @@ El avance está en [PLAN.md](PLAN.md). Cada push compila todo en nativo y en was
 | 2015 | [Retro Penal](#retro-penal) | Construct 2 (HTML5 + NW.js) | ✅ [games/retro-penal](games/retro-penal) |
 | 2015 | [One Button Prototype](#one-button-prototype) | Unity 5.1 (Mac, Linux, Android, WebGL) | pendiente |
 | 2015 | [Neuro Battle](#neuro-battle) | Unity 5.1 (WebGL) | pendiente |
-| 2015 | [Da Car](#da-car) | Construct 2 (HTML5) | pendiente |
+| 2015 | [Da Car](#da-car) | Construct 2 (HTML5) | ✅ [games/da-car](games/da-car) |
 
 Las fechas salen de los propios binarios (fecha de compilación, de los archivos o de la exportación)
 y de los videos de gameplay; los datos que todavía son deducciones están marcados como «por
@@ -165,10 +165,19 @@ confirmar» y se cierran en el triaje de cada juego.
 
 ### Da Car
 
-- **Fecha:** exportado el 23-nov-2015.
-- **Stack:** Construct 2, HTML5.
-- **De qué trata:** carreras de moto estilo Dakar.
-- **Port:** pendiente.
+![Da Car](games/da-car/docs/salto.png)
+
+- **Fecha:** exportado el 23-nov-2015, según su `offline.appcache` (el proyecto se llama «Dakar
+  2015»).
+- **Stack:** Construct 2 (una versión de 2015), HTML5, con el comportamiento Physics (Box2D).
+- **De qué trata:** carreras de moto estilo Dakar. Se acelera, se inclina la moto para pasar los
+  cerros que aparecen al azar y hay que llegar a la meta sin que el piloto se golpee la cabeza; al
+  chocar se vuelve a empezar, pero el reloj sigue corriendo.
+- **Port:** ✅ [games/da-car](games/da-car): la hoja de eventos traducida de su `data.js`; Box2D
+  2.3.1 traducido a Rust en `crates/box2d` (idéntico bit a bit al C++ de Box2D en las escenas de
+  prueba) y el comportamiento Physics, ScrollTo y Particles en `crates/construct2`; imágenes,
+  sonidos y proyecto originales. Se juega con el teclado, con el ratón o tocando la pantalla e
+  inclinando el móvil.
 - **Original:** [elvisbrevi.itch.io/da-car](https://elvisbrevi.itch.io/da-car)
 
 ---
@@ -181,6 +190,8 @@ crates/museo/        piezas comunes: pantalla virtual con bandas, paso fijo y co
                      plantilla web (index.html + mq_js_bundle.js de macroquad) en crates/museo/web
 crates/xna/          equivalentes de XNA 3.1 (Rectangle, Clamp, SpriteBatch.Draw, SpriteFont, Random)
 crates/construct2/   runtime de Construct 2: data.js, Sprite, Text, Audio, comportamientos, colisiones
+crates/box2d/        Box2D 2.3.1 en Rust (el del comportamiento Physics de Construct 2), comparado
+                     bit a bit con el C++ original (crates/box2d/comparar)
 originales/          binarios originales (fuera de git) y catalogo.json con sus sha256
 tools/originales.py  inventario y descarga de los originales desde itch.io
 tools/build_web.sh   versión web de un juego en dist/<slug> a partir de la plantilla
@@ -195,7 +206,7 @@ PLAN.md              plan por fases con checkpoints
 ## Jugar
 
 ```sh
-cargo run --release -p iman            # PC (o proyecto-nutria, the-electric-eel-attack, que-no-caiga, retro-penal)
+cargo run --release -p iman            # PC (o proyecto-nutria, the-electric-eel-attack, que-no-caiga, retro-penal, da-car)
 tools/build_web.sh iman                # web: sirve dist/iman con cualquier servidor estático
 ```
 

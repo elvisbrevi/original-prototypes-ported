@@ -20,6 +20,8 @@ pub struct Entrada {
     pub activos: Vec<DVec2>,
     /// Última posición del ratón.
     pub raton: DVec2,
+    /// Clic izquierdo en este fotograma (Mouse "On object clicked").
+    pub clic: Option<DVec2>,
 }
 
 impl Toques {
@@ -38,6 +40,9 @@ impl Toques {
             }
         }
         e.raton = a_layout(mouse_position().into()).as_dvec2();
+        if is_mouse_button_pressed(MouseButton::Left) {
+            e.clic = Some(e.raton);
+        }
         if usar_raton {
             if is_mouse_button_pressed(MouseButton::Left) {
                 e.inicios.push(e.raton);

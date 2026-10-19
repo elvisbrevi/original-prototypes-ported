@@ -1,0 +1,11 @@
+{
+  "pantalla": [800, 450],
+  "pasos": [
+    { "esperar": 2500 },
+    { "captura": "inicio" },
+    { "tecla": "ArrowUp", "zona": [400, 380], "ms": 2500 },
+    { "captura": "carrera" },
+    { "tecla": "ArrowUp", "zona": [400, 380], "ms": 4000 },
+    { "captura": "cerros" }
+  ]
+}

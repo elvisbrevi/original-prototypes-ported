@@ -3,6 +3,7 @@
 
 use std::collections::HashMap;
 
+use macroquad::math::DVec2;
 use macroquad::models::{Mesh, Vertex, draw_mesh};
 use macroquad::prelude::*;
 
@@ -120,6 +121,11 @@ impl Sprite {
 
     pub fn animacion<'a>(&self, tipo: &'a Tipo) -> &'a Animacion {
         &tipo.animaciones[self.anim]
+    }
+
+    /// La animación actual (índice en el tipo).
+    pub fn anim_indice(&self) -> usize {
+        self.anim
     }
 
     pub fn cuadro_actual<'a>(&self, tipo: &'a Tipo) -> &'a Cuadro {
@@ -374,6 +380,30 @@ impl Sprite {
         (caja, cuad)
     }
 
+    /// El centro del cuadrilátero (la posición que usa el comportamiento Physics).
+    pub fn centro(&self, tipo: &Tipo) -> (f64, f64) {
+        let (_, q) = self.cajas(tipo);
+        (
+            (q.x[0] + q.x[1] + q.x[2] + q.x[3]) / 4.0,
+            (q.y[0] + q.y[1] + q.y[2] + q.y[3]) / 4.0,
+        )
+    }
+
+    /// getImagePoint: el punto de imagen n (desde 1) girado con la instancia; el 0 o uno que no
+    /// existe es la posición.
+    pub fn punto_imagen(&self, tipo: &Tipo, n: i32) -> (f64, f64) {
+        let c = self.cuadro_actual(tipo);
+        let i = n - 1;
+        if i < 0 || i as usize >= c.puntos.len() {
+            return (self.x, self.y);
+        }
+        let p = c.puntos[i as usize];
+        let f = (p.x - c.origen.x) * self.ancho;
+        let d = (p.y - c.origen.y) * self.alto;
+        let (sin, cos) = (self.angulo.sin(), self.angulo.cos());
+        (f * cos - d * sin + self.x, d * cos + f * sin + self.y)
+    }
+
     /// El polígono de colisión del cuadro actual con el tamaño y el ángulo de la instancia
     /// (None si el cuadro no tiene: se usa el cuadrilátero).
     pub fn poligono(&self, tipo: &Tipo) -> Option<Poligono> {
@@ -417,13 +447,19 @@ impl Sprite {
     // --- dibujo ------------------------------------------------------------------------------
 
     /// Sprite.drawGL: el cuadro estirado al cuadrilátero, con la opacidad.
-    pub fn dibujar(&self, tipo: &Tipo, texturas: &HashMap<String, Texture2D>) {
+    pub fn dibujar(
+        &self,
+        tipo: &Tipo,
+        texturas: &HashMap<String, Texture2D>,
+        desplazamiento: DVec2,
+    ) {
         if !self.visible || self.ancho == 0.0 || self.alto == 0.0 {
             return;
         }
         let c = self.cuadro_actual(tipo);
         let textura = &texturas[&c.imagen];
-        let (_, q) = self.cajas(tipo);
+        let (_, mut q) = self.cajas(tipo);
+        q.offset(desplazamiento.x, desplazamiento.y);
         let (tw, th) = (textura.width(), textura.height());
         let r = c.recorte;
         let (u0, v0, u1, v1) = (r.x / tw, r.y / th, (r.x + r.w) / tw, (r.y + r.h) / th);

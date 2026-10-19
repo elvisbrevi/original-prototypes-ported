@@ -1,0 +1,170 @@
+
+== Hoja de eventos 'InGame'
+variable número acelerando = 0
+variable número velocidadMoto = 0
+variable número termino = 0
+variable número tiempo = 0
+variable número empezo = 0
+variable número constante DISTANCIASPAWN = 600
+variable número maxVelocidadMoto = 2800
+grupo 'Inicio' activo
+evento
+  si System.IsGroupActive("Inicio")
+  evento
+    si System.OnLayoutStart() [disparador]
+    -> Audio.Preload(sonido 'acelerar')
+    -> Audio.Preload(sonido 'motor2')
+    -> TextoTiempo.SetText((("Tiempo: " & tiempo) & " segundos"))
+    -> RuedaDelantera.Physics.SetWorldGravity(10)
+    -> RuedaTrasera.Physics.SetWorldGravity(10)
+    -> Moto.Physics.CreateRevoluteJoint(1, RuedaDelantera)
+    -> Moto.Physics.CreateRevoluteJoint(2, RuedaTrasera)
+    -> Moto.Physics.CreateLimitedRevoluteJoint(3, Cabeza, 0, 0)
+    -> RuedaDelantera.Physics.SetAngularVelocity(0)
+    -> RuedaTrasera.Physics.SetAngularVelocity(0)
+    -> Meta.SetX(11000)
+    -> System.SetLayerVisible(3, opción0)
+    -> System.SetLayerVisible(2, opción1)
+    -> System.SetVar(termino, 0)
+    -> System.SetVar(velocidadMoto, 0)
+    -> Polvo.SetSpraying(opción0)
+    evento
+      si System.CompareVar(empezo, =, 1)
+      -> TextoComenzar.Destroy()
+grupo 'GUI' activo
+evento
+  si System.IsGroupActive("GUI")
+  grupo 'GUI Final' activo
+  evento
+    si System.IsGroupActive("GUI Final")
+    evento (O)
+      si Mouse.OnObjectClicked(opción0, opción0, BotonReintentar) [disparador]
+      si Touch.IsTouchingObject(BotonCompartir)
+      -> System.RestartLayout()
+  grupo 'Mapa' activo
+  evento
+    si System.IsGroupActive("Mapa")
+    evento
+      si System.EveryTick()
+      -> MotoMapa.SetX((MapaMeta.X() + (Moto.X() / 100)))
+  grupo 'GUI Inicio' activo
+  evento
+    si System.IsGroupActive("GUI Inicio")
+    evento (O)
+      si Keyboard.IsKeyDown(tecla 38)
+      si Touch.IsInTouch()
+      si Keyboard.IsKeyDown(tecla 87)
+      evento
+        si System.CompareVar(termino, =, 0)
+        -> System.SetVar(empezo, 1)
+        -> TextoComenzar.Destroy()
+    evento
+      si System.CompareVar(empezo, =, 1)
+      evento
+        si System.Every(1)
+        -> System.AddVar(tiempo, 1)
+        -> TextoTiempo.SetText((("Tiempo: " & tiempo) & " segundos"))
+grupo 'Gameplay' activo
+evento
+  si System.IsGroupActive("Gameplay")
+  evento
+    si System.CompareVar(empezo, =, 1)
+    -> Polvo.SetPosToObject(RuedaTrasera, 0)
+    grupo 'Moto' activo
+    evento
+      si System.IsGroupActive("Moto")
+      evento (O)
+        si Keyboard.IsKeyDown(tecla 39)
+        si Keyboard.IsKeyDown(tecla 68)
+        -> Moto.Physics.SetAngularVelocity(200)
+      evento (O)
+        si Keyboard.IsKeyDown(tecla 37)
+        si Keyboard.IsKeyDown(tecla 65)
+        -> Moto.Physics.SetAngularVelocity(-200)
+      evento
+        si System.IsOnMobile()
+        -> Moto.Physics.SetAngularVelocity((Touch.Beta() * 5))
+      evento (O)
+        si Touch.IsInTouch()
+        si Keyboard.IsKeyDown(tecla 38)
+        si Keyboard.IsKeyDown(tecla 87)
+        -> RuedaDelantera.Physics.SetAngularVelocity(velocidadMoto)
+        -> RuedaTrasera.Physics.SetAngularVelocity(velocidadMoto)
+        evento
+          si Audio.IsSilent()
+          si System.CompareVar(acelerando, =, 0)
+          -> Audio.Stop("acelerar")
+          -> Audio.Play(sonido 'acelerar', opción0, 1, "acelerar")
+          -> System.SetVar(acelerando, 1)
+          evento
+            si no Audio.IsTagPlaying("motor")
+            -> Audio.Play(sonido 'motor2', opción1, 1, "motor")
+        evento
+          si System.EveryTick()
+          si System.CompareVar(velocidadMoto, <, maxVelocidadMoto)
+          -> System.SetVar(velocidadMoto, (velocidadMoto + 15))
+      evento
+        si no Touch.IsInTouch()
+        si no Keyboard.IsKeyDown(tecla 38)
+        si no Keyboard.IsKeyDown(tecla 87)
+        -> System.SetVar(acelerando, 0)
+        -> Polvo.SetSpraying(opción0)
+        evento
+          si System.EveryTick()
+          si System.CompareVar(velocidadMoto, >, 10)
+          -> System.SetVar(velocidadMoto, (velocidadMoto - 10))
+      evento
+        si no Keyboard.IsKeyDown(tecla 37)
+        si no Keyboard.IsKeyDown(tecla 39)
+        si System.TriggerOnce()
+        -> RuedaDelantera.Physics.SetAngularVelocity(0)
+        -> RuedaTrasera.Physics.SetAngularVelocity(0)
+      evento (O)
+        si Cabeza.OnCollision(Suelo)
+        si Cabeza.OnCollision(Cerro1)
+        si Cabeza.OnCollision(Cerro2)
+        si Cabeza.OnCollision(Cerro3)
+        si Cabeza.OnCollision(Cerro4)
+        -> System.RestartLayout()
+      evento (O)
+        si RuedaTrasera.OnCollision(Cerro1)
+        si RuedaTrasera.OnCollision(Cerro2)
+        si RuedaTrasera.OnCollision(Cerro3)
+        si RuedaTrasera.OnCollision(Cerro4)
+        si RuedaTrasera.OnCollision(Suelo)
+        -> Polvo.SetSpraying(opción1)
+    grupo 'Spawn' activo
+    evento
+      si System.IsGroupActive("Spawn")
+      evento
+        si Spawn.CompareX(<, (Moto.X() - DISTANCIASPAWN))
+        evento
+          si System.Compare(round(random(0, 4)), =, 0)
+          -> System.CreateObject(Cerro1, 1, (Moto.X() + DISTANCIASPAWN), Cerro1.Y())
+          -> Spawn.SetX((Moto.X() + DISTANCIASPAWN))
+        evento
+          si System.Compare(round(random(0, 4)), =, 1)
+          -> System.CreateObject(Cerro2, 1, (Moto.X() + DISTANCIASPAWN), Cerro2.Y())
+          -> Spawn.SetX((Moto.X() + DISTANCIASPAWN))
+        evento
+          si System.Compare(round(random(0, 4)), =, 2)
+          -> System.CreateObject(Cerro3, 1, (Moto.X() + DISTANCIASPAWN), Cerro3.Y())
+          -> Spawn.SetX((Moto.X() + DISTANCIASPAWN))
+        evento
+          si System.Compare(round(random(0, 4)), =, 3)
+          -> System.CreateObject(Cerro4, 1, (Moto.X() + DISTANCIASPAWN), Cerro4.Y())
+          -> Spawn.SetX((Moto.X() + DISTANCIASPAWN))
+    grupo 'Terminar' activo
+    evento
+      si System.IsGroupActive("Terminar")
+      evento
+        si System.Compare(Moto.X(), ≥, 10000)
+        -> Spawn.Destroy()
+      evento
+        si System.Compare(Moto.X(), ≥, Meta.X())
+        -> System.SetVar(termino, 1)
+        -> System.SetVar(empezo, 0)
+        -> System.SetLayerVisible(3, opción1)
+        -> System.SetLayerVisible(2, opción0)
+        -> TextoResultado.SetText((("Tu tiempo fue: " & tiempo) & " segundos."))
+        -> System.SetVar(tiempo, 0)

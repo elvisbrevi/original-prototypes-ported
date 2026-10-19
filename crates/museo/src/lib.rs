@@ -10,6 +10,7 @@
 
 mod pantalla;
 mod paso;
+pub mod sensores;
 mod tactil;
 
 pub use pantalla::Pantalla;

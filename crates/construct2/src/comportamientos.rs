@@ -19,6 +19,8 @@ pub enum Comportamiento {
     Movimiento(Movimiento),
     Envolver(Envolver),
     Solido(Solido),
+    Fisica(Fisica),
+    Desplazar(Desplazar),
     /// Un comportamiento que el port no usa.
     Otro,
 }
@@ -35,6 +37,10 @@ impl Comportamiento {
                 modo: prop(p, 0) as i32,
             }),
             Some(Clase::Solido) => Self::Solido(Solido {
+                habilitado: prop(p, 0) != 0.0,
+            }),
+            Some(Clase::Fisica) => Self::Fisica(Fisica::nueva(p, x, y, angulo)),
+            Some(Clase::Desplazar) => Self::Desplazar(Desplazar {
                 habilitado: prop(p, 0) != 0.0,
             }),
             None => Self::Otro,
@@ -234,4 +240,89 @@ pub struct Envolver {
 #[derive(Clone, Debug)]
 pub struct Solido {
     pub habilitado: bool,
+}
+
+/// Comportamiento ScrollTo: el scroll del layout sigue a la media de sus instancias (después de
+/// los eventos). El temblor (Shake) no se portó.
+#[derive(Clone, Debug)]
+pub struct Desplazar {
+    pub habilitado: bool,
+}
+
+/// Cómo se creó una articulación de Physics, para rehacerla si se rehace el cuerpo.
+#[derive(Clone, Copy, Debug)]
+pub enum RegistroArticulacion {
+    /// Create revolute joint (punto de imagen, uid del otro objeto).
+    Revolucion { punto: i32, objetivo: u32 },
+    /// Create limited revolute joint (límites en grados).
+    RevolucionLimitada {
+        punto: i32,
+        objetivo: u32,
+        inferior: f64,
+        superior: f64,
+    },
+}
+
+/// Comportamiento Physics: un cuerpo de Box2D (crates/box2d) que manda sobre la posición y el
+/// ángulo de la instancia.
+#[derive(Clone, Debug)]
+pub struct Fisica {
+    pub inmovil: bool,
+    /// Máscara de colisión: 0 el polígono de colisión, 1 la caja, 2 un círculo.
+    pub mascara: i32,
+    pub sin_rotacion: bool,
+    pub densidad: f64,
+    pub friccion: f64,
+    pub elasticidad: f64,
+    pub amortiguacion_lineal: f64,
+    pub amortiguacion_angular: f64,
+    pub bala: bool,
+    pub habilitada: bool,
+    pub cuerpo: Option<box2d::BodyId>,
+    /// Posición, ángulo y tamaño que dejó el último tick (para ver si los eventos la movieron).
+    pub ultima_x: f64,
+    pub ultima_y: f64,
+    pub ultimo_angulo: f64,
+    pub ultimo_ancho: f64,
+    pub ultimo_alto: f64,
+    pub ultima_anim: Option<usize>,
+    pub ultimo_cuadro: i64,
+    /// La instancia se movió por fuera de la física en el tick anterior.
+    pub movida: bool,
+    /// Articulaciones creadas por esta instancia y cómo se crearon.
+    pub articulaciones: Vec<box2d::JointId>,
+    pub registros: Vec<RegistroArticulacion>,
+    /// Instancias que tienen articulaciones hacia esta (uid).
+    pub unidas: Vec<u32>,
+}
+
+impl Fisica {
+    /// onCreate: [inmóvil, máscara de colisión, sin rotación, densidad, fricción, elasticidad,
+    /// amortiguación lineal, amortiguación angular, bala, habilitada].
+    pub fn nueva(p: &Value, x: f64, y: f64, angulo: f64) -> Self {
+        Self {
+            inmovil: prop(p, 0) != 0.0,
+            mascara: prop(p, 1) as i32,
+            sin_rotacion: prop(p, 2) != 0.0,
+            densidad: prop(p, 3),
+            friccion: prop(p, 4),
+            elasticidad: prop(p, 5),
+            amortiguacion_lineal: prop(p, 6),
+            amortiguacion_angular: prop(p, 7),
+            bala: prop(p, 8) != 0.0,
+            habilitada: prop(p, 9) != 0.0,
+            cuerpo: None,
+            ultima_x: x,
+            ultima_y: y,
+            ultimo_angulo: angulo,
+            ultimo_ancho: 0.0,
+            ultimo_alto: 0.0,
+            ultima_anim: None,
+            ultimo_cuadro: -1,
+            movida: false,
+            articulaciones: Vec::new(),
+            registros: Vec::new(),
+            unidas: Vec::new(),
+        }
+    }
 }

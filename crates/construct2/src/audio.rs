@@ -111,6 +111,12 @@ impl Audio {
             .any(|i| igual(&i.etiqueta, etiqueta) && i.sonando(ahora))
     }
 
+    /// Is silent: ninguna instancia suena.
+    pub fn en_silencio(&self) -> bool {
+        let ahora = get_time();
+        !self.instancias.iter().any(|i| i.sonando(ahora))
+    }
+
     /// Detiene las instancias elegidas. Con Web Audio, detener una que sonaba también lanza su
     /// evento "ended" y con él el disparador On ended.
     fn detener_si(&mut self, elegir: impl Fn(&InstanciaAudio) -> bool) {

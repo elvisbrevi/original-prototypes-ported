@@ -108,11 +108,13 @@ impl Texto {
     }
 
     /// Text.draw: líneas ajustadas a la caja, alineadas y con la línea base arriba.
-    pub fn dibujar(&self, fuentes: &Fuentes) {
+    pub fn dibujar(&self, fuentes: &Fuentes, desplazamiento: DVec2) {
         if !self.visible || self.ancho == 0.0 || self.alto == 0.0 {
             return;
         }
-        let caja = self.caja();
+        let mut caja = self.caja();
+        caja.x += desplazamiento.x as f32;
+        caja.y += desplazamiento.y as f32;
         let fuente = if self.negrita {
             &fuentes.negrita
         } else {

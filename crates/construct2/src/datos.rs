@@ -14,6 +14,8 @@ pub struct Cuadro {
     pub origen: DVec2,
     /// Polígono de colisión en fracciones del tamaño, relativo al origen. Vacío: el rectángulo.
     pub poligono: Vec<DVec2>,
+    /// Puntos de imagen (image points), en fracciones del tamaño.
+    pub puntos: Vec<DVec2>,
 }
 
 pub struct Animacion {
@@ -37,6 +39,8 @@ pub enum Clase {
     Movimiento,
     Envolver,
     Solido,
+    Fisica,
+    Desplazar,
 }
 
 /// Comportamiento de un tipo: su nombre en el proyecto y su clase (None si el port no la usa).
@@ -48,6 +52,10 @@ pub struct ComportamientoTipo {
 /// Tipo de objeto (t0, t1...: la exportación minificada perdió los nombres).
 pub struct Tipo {
     pub nombre: String,
+    /// Índice del plugin en la lista de plugins del proyecto.
+    pub plugin: usize,
+    /// La textura de los plugins que tienen una sola (Particles).
+    pub textura: Option<String>,
     pub animaciones: Vec<Animacion>,
     pub comportamientos: Vec<ComportamientoTipo>,
 }
@@ -74,6 +82,8 @@ pub struct Instancia {
 pub struct Capa {
     pub nombre: String,
     pub visible: bool,
+    /// Parallax horizontal y vertical (1: se mueve con el scroll; 0: fija en pantalla).
+    pub parallax: DVec2,
     pub fondo: Color,
     pub transparente: bool,
     pub instancias: Vec<Instancia>,
@@ -83,6 +93,8 @@ pub struct Layout {
     pub nombre: String,
     pub ancho: f64,
     pub alto: f64,
+    /// Unbounded scrolling: el scroll no se limita a los bordes del layout.
+    pub ilimitado: bool,
     pub capas: Vec<Capa>,
 }
 
@@ -115,6 +127,8 @@ impl Proyecto {
             .iter()
             .map(|t| Tipo {
                 nombre: texto(&t[0]),
+                plugin: t[1].as_u64().unwrap_or_default() as usize,
+                textura: t[6].get(0).and_then(Value::as_str).map(str::to_owned),
                 animaciones: t[7]
                     .as_array()
                     .map(|anims| anims.iter().map(leer_animacion).collect())
@@ -143,6 +157,7 @@ impl Proyecto {
                 nombre: texto(&l[0]),
                 ancho: real(&l[1]),
                 alto: real(&l[2]),
+                ilimitado: l[3].as_bool().unwrap_or(false),
                 capas: l[6]
                     .as_array()
                     .expect("capas")
@@ -152,6 +167,7 @@ impl Proyecto {
                         Capa {
                             nombre: texto(&c[0]),
                             visible: c[3].as_bool().unwrap_or(true),
+                            parallax: dvec2(real(&c[6]), real(&c[7])),
                             fondo: Color::from_rgba(
                                 fondo[0].as_u64().unwrap_or(255) as u8,
                                 fondo[1].as_u64().unwrap_or(255) as u8,
@@ -223,6 +239,10 @@ fn leer_animacion(a: &Value) -> Animacion {
                             .map(|xy| dvec2(real(&xy[0]), real(&xy[1])))
                             .collect()
                     })
+                    .unwrap_or_default(),
+                puntos: c[9]
+                    .as_array()
+                    .map(|ps| ps.iter().map(|p| dvec2(real(&p[1]), real(&p[2]))).collect())
                     .unwrap_or_default(),
             })
             .collect(),

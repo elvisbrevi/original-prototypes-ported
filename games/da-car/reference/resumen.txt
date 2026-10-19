@@ -1,0 +1,158 @@
+Proyecto 'Dakar 2015': 800x450, primer layout 'InGame', modo de pantalla 4, medios en 'media/', versión 1
+
+Plugins:
+  [ 0] Qg     Audio                    G
+  [ 1] Sg     Mouse                    G
+  [ 2] Rg     Keyboard                 G
+  [ 3] Tg     Particles                WPAZE
+  [ 4] Ug     Text                     WPSAZE
+  [ 5] Vg     Touch                    G
+  [ 6] Pg     Sprite                   WPSAZE
+  (G global, W en el mundo, P posición, S tamaño, A apariencia, Z orden, E efectos)
+
+Tipos de objeto:
+   0 Suelo                        Sprite       comportamientos=Physics,Wrap
+       animación 'Default' velocidad=5 bucle=False cuadros=1: ground-sheet0.png
+         ground-sheet0.png recorte=(0,0,36,37) duración=1 origen=(0.500,0.514) puntos=[] colisión=[]
+   1 RuedaDelantera               Sprite       comportamientos=Physics
+       animación 'Default' velocidad=5 bucle=False cuadros=1: rueda1-sheet0.png
+         rueda1-sheet0.png recorte=(0,0,43,41) duración=1 origen=(0.512,0.512) puntos=[] colisión=[-0.301, -0.301, -0.012, -0.504, -0.117, 0.093, 0.473, -0.012, 0.316, 0.316, -0.012, 0.476, -0.297, 0.273, -0.402, -0.012]
+   2 Mouse                        Mouse       
+   3 Keyboard                     Keyboard    
+   4 Moto                         Sprite       comportamientos=Physics,ScrollTo
+       animación 'Default' velocidad=5 bucle=False cuadros=1: moto-sheet0.png
+         moto-sheet0.png recorte=(0,0,107,63) duración=1 origen=(0.505,0.508) puntos=[['Imagepoint 1', 0.9158878326416016, 0.8571428656578064], ['Imagepoint 2', 0.1121495291590691, 1], ['Imagepoint 3', 0.4859813153743744, 0.01587301678955555]] colisión=[0.032, -0.182, 0.105, -0.499, 0.234, -0.289, 0.492, -0.25, 0.252, -0.181, -0.202, 0.164, -0.504, -0.139]
+   5 RuedaTrasera                 Sprite       comportamientos=Physics
+       animación 'Default' velocidad=5 bucle=False cuadros=1: rueda1-sheet0.png
+         rueda1-sheet0.png recorte=(0,0,43,41) duración=1 origen=(0.512,0.512) puntos=[] colisión=[0.473, -0.012, -0.297, 0.273, -0.164, -0.332]
+   6 Touch                        Touch       
+   7 Cabeza                       Sprite       comportamientos=Physics
+       animación 'Default' velocidad=5 bucle=False cuadros=1: cabeza-sheet0.png
+         cabeza-sheet0.png recorte=(0,0,31,107) duración=1 origen=(0.516,0.523) puntos=[] colisión=[-0.494, -0.248, -0.094, -0.521, 0.423, -0.464, -0.024, -0.108, -0.492, 0.015]
+   8 Spawn                        Sprite       vars=1
+       animación 'Default' velocidad=5 bucle=False cuadros=1: spawn-sheet0.png
+         spawn-sheet0.png recorte=(0,0,250,250) duración=1 origen=(0.500,0.500) puntos=[] colisión=[]
+   9 Cerro1                       Sprite       comportamientos=Physics
+       animación 'Default' velocidad=5 bucle=False cuadros=1: cerro1-sheet0.png
+         cerro1-sheet0.png recorte=(0,0,199,40) duración=1 origen=(0.503,0.500) puntos=[] colisión=[0.005, -0.231, 0.175, -0.419, 0.292, -0.15, 0.497, 0.5, -0.503, 0.5, -0.353, 0.037, -0.185, -0.475]
+  10 Cerro2                       Sprite       comportamientos=Physics
+       animación 'Default' velocidad=5 bucle=False cuadros=1: cerro2-sheet0.png
+         cerro2-sheet0.png recorte=(0,0,198,21) duración=1 origen=(0.500,0.524) puntos=[] colisión=[-0.237, -0.167, -0.169, 0.06, -0.052, -0.5, 0.102, -0.179, 0.171, -0.315, 0.245, -0.039, 0.298, -0.21, 0.42, -0.051, 0.5, 0.476, -0.5, 0.476]
+  11 Cerro3                       Sprite       comportamientos=Physics
+       animación 'Default' velocidad=5 bucle=False cuadros=1: cerro3-sheet0.png
+         cerro3-sheet0.png recorte=(0,0,249,78) duración=1 origen=(0.502,0.500) puntos=[] colisión=[-0.198, -0.144, -0.095, -0.14, -0.032, -0.222, 0.116, -0.49, 0.306, 0.158, 0.494, 0.49, -0.447, 0.497, -0.244, 0.202]
+  12 Cerro4                       Sprite       comportamientos=Physics
+       animación 'Default' velocidad=5 bucle=False cuadros=1: cerro4-sheet0.png
+         cerro4-sheet0.png recorte=(0,0,500,104) duración=1 origen=(0.500,0.500) puntos=[] colisión=[-0.416, 0.307, -0.394, 0.056, -0.209, 0.022, -0.139, -0.494, -0.052, -0.197, 0.173, -0.186, 0.229, 0.225, 0.441, 0.076, 0.493, 0.5, -0.5, 0.5]
+  13 TextoTiempo                  Text        
+  14 Meta                         Sprite      
+       animación 'Default' velocidad=5 bucle=False cuadros=1: meta-sheet0.png
+         meta-sheet0.png recorte=(0,0,250,272) duración=1 origen=(0.500,0.500) puntos=[] colisión=[-0.5, -0.5, 0.5, -0.5, 0.496, 0.496, 0, -0.316, -0.484, 0.485]
+  15 MapaMeta                     Sprite      
+       animación 'Default' velocidad=5 bucle=False cuadros=1: mapameta-sheet0.png
+         mapameta-sheet0.png recorte=(0,0,250,250) duración=1 origen=(0.000,0.000) puntos=[] colisión=[]
+  16 MotoMapa                     Sprite      
+       animación 'Default' velocidad=5 bucle=False cuadros=1: motomapa-sheet0.png
+         motomapa-sheet0.png recorte=(0,0,250,250) duración=1 origen=(0.500,0.500) puntos=[] colisión=[]
+  17 TextoComenzar                Text        
+  18 BotonCompartir               Sprite      
+       animación 'Default' velocidad=5 bucle=False cuadros=1: botoncompartir-sheet0.png
+         botoncompartir-sheet0.png recorte=(0,0,150,40) duración=1 origen=(0.500,0.500) puntos=[] colisión=[]
+  19 BotonReintentar              Sprite      
+       animación 'Default' velocidad=5 bucle=False cuadros=1: botonreintentar-sheet0.png
+         botonreintentar-sheet0.png recorte=(0,0,150,40) duración=1 origen=(0.500,0.500) puntos=[] colisión=[]
+  20 TextoResultado               Text        
+  21 Texto21(sin instancias)      Text        
+  22 Texto22(sin instancias)      Text        
+  23 Audio                        Audio       
+  24 Polvo                        Particles   
+       textura images/particulaspolvo.png
+
+Layouts:
+  'InGame' 800x450 hoja='InGame'
+    capa 'Invisible' visible=True fondo=[255, 255, 255] transparente=True parallax=(1,1) opacidad=1
+      Spawn                        uid=19 x=508 y=430 w=30 h=30 ángulo=0 opacidad=1 vars=[[0]] comp=[] props=[0, 'Default', 0, 1]
+      Spawn                        uid=18 x=800 y=432 w=30 h=30 ángulo=0 opacidad=1 vars=[[0]] comp=[] props=[0, 'Default', 0, 1]
+      Spawn                        uid=9 x=1106 y=427 w=30 h=30 ángulo=0 opacidad=1 vars=[[0]] comp=[] props=[0, 'Default', 0, 1]
+    capa 'Player' visible=True fondo=[153, 204, 255] transparente=False parallax=(1,0.1000000014901161) opacidad=1
+      Suelo                        uid=0 x=0 y=450 w=200 h=10 ángulo=0 opacidad=1 vars=[] comp=[[1, 1, 0, 1, 0.5, 0.2, 0, 0.01, 0, 1], [1]] props=[0, 'Default', 0, 1]
+      RuedaDelantera               uid=21 x=367.235 y=432.471 w=27.2469 h=26.4941 ángulo=0.0890747 opacidad=1 vars=[] comp=[[0, 2, 0, 1, 500, 0.2, 0, 0.01, 0, 1]] props=[0, 'Default', 0, 1]
+      RuedaTrasera                 uid=2 x=303.868 y=432.553 w=27.2469 h=26.4941 ángulo=0.0890747 opacidad=1 vars=[] comp=[[0, 2, 0, 1, 500, 0.2, 0, 0.01, 0, 1]] props=[0, 'Default', 0, 1]
+      Moto                         uid=1 x=336.628 y=416.033 w=78.273 h=38.7089 ángulo=0.0890747 opacidad=1 vars=[] comp=[[0, 0, 0, 1, 0, 0.2, 0, 0.01, 0, 1], [1]] props=[0, 'Default', 0, 1]
+      Cabeza                       uid=5 x=339.785 y=401.295 w=21.9222 h=78.0834 ángulo=0.0890747 opacidad=1 vars=[] comp=[[0, 0, 0, 1, 0.5, 0.2, 0, 0.01, 0, 1]] props=[0, 'Default', 0, 1]
+      Suelo                        uid=3 x=100 y=450 w=200 h=10 ángulo=0 opacidad=1 vars=[] comp=[[1, 1, 0, 1, 0.5, 0.2, 0, 0.01, 0, 1], [1]] props=[0, 'Default', 0, 1]
+      Suelo                        uid=6 x=200 y=450 w=200 h=10 ángulo=0 opacidad=1 vars=[] comp=[[1, 1, 0, 1, 0.5, 0.2, 0, 0.01, 0, 1], [1]] props=[0, 'Default', 0, 1]
+      Suelo                        uid=7 x=300 y=450 w=200 h=10 ángulo=0 opacidad=1 vars=[] comp=[[1, 1, 0, 1, 0.5, 0.2, 0, 0.01, 0, 1], [1]] props=[0, 'Default', 0, 1]
+      Suelo                        uid=8 x=400 y=450 w=200 h=10 ángulo=0 opacidad=1 vars=[] comp=[[1, 1, 0, 1, 0.5, 0.2, 0, 0.01, 0, 1], [1]] props=[0, 'Default', 0, 1]
+      Suelo                        uid=10 x=600 y=450 w=200 h=10 ángulo=0 opacidad=1 vars=[] comp=[[1, 1, 0, 1, 0.5, 0.2, 0, 0.01, 0, 1], [1]] props=[0, 'Default', 0, 1]
+      Suelo                        uid=11 x=700 y=450 w=200 h=10 ángulo=0 opacidad=1 vars=[] comp=[[1, 1, 0, 1, 0.5, 0.2, 0, 0.01, 0, 1], [1]] props=[0, 'Default', 0, 1]
+      Suelo                        uid=12 x=800 y=450 w=200 h=10 ángulo=0 opacidad=1 vars=[] comp=[[1, 1, 0, 1, 0.5, 0.2, 0, 0.01, 0, 1], [1]] props=[0, 'Default', 0, 1]
+      Suelo                        uid=13 x=500 y=450 w=200 h=10 ángulo=0 opacidad=1 vars=[] comp=[[1, 1, 0, 1, 0.5, 0.2, 0, 0.01, 0, 1], [1]] props=[0, 'Default', 0, 1]
+      Cerro1                       uid=14 x=-200 y=427 w=199 h=40 ángulo=0 opacidad=1 vars=[] comp=[[1, 0, 0, 1, 100, 0.2, 0, 0.01, 0, 1]] props=[0, 'Default', 0, 1]
+      Cerro2                       uid=15 x=-146 y=436 w=198 h=21 ángulo=0 opacidad=1 vars=[] comp=[[1, 0, 0, 1, 0.5, 0.2, 0, 0.01, 0, 1]] props=[0, 'Default', 0, 1]
+      Cerro3                       uid=16 x=-200 y=405 w=249 h=78 ángulo=0 opacidad=1 vars=[] comp=[[1, 0, 0, 1, 0.5, 0.2, 0, 0.01, 0, 1]] props=[0, 'Default', 0, 1]
+      Cerro4                       uid=17 x=-319 y=394 w=500 h=104 ángulo=0 opacidad=1 vars=[] comp=[[1, 0, 0, 1, 0.5, 0.2, 0, 0.01, 0, 1]] props=[0, 'Default', 0, 1]
+      Meta                         uid=26 x=-200 y=316 w=250 h=272 ángulo=0 opacidad=1 vars=[] comp=[] props=[0, 'Default', 0, 1]
+      Polvo                        uid=32 x=291.656 y=435.058 w=42.0998 h=45.5373 ángulo=3.14159 opacidad=1 vars=[] comp=[] props=[10, 30, 0, 200, 32, 50, -10, 0, 0, 0, 0, 0, -150, 3, 0, 0, 0, 0, 0.5]
+    capa 'GUI' visible=True fondo=[255, 255, 255] transparente=True parallax=(0,0) opacidad=1
+      TextoTiempo                  uid=20 x=107 y=23 w=200 h=30 ángulo=0 opacidad=1 vars=[] comp=[] props=['Tiempo: 0 segundos', 0, '12pt Arial', 'rgb(0,0,0)', 1, 1, 4, 0, 0]
+      MapaMeta                     uid=23 x=600 y=30 w=100 h=5 ángulo=0 opacidad=1 vars=[] comp=[] props=[0, 'Default', 0, 1]
+      MotoMapa                     uid=27 x=600 y=33 w=10 h=10 ángulo=0 opacidad=1 vars=[] comp=[] props=[0, 'Default', 0, 1]
+      TextoComenzar                uid=28 x=400 y=225 w=272 h=38 ángulo=0 opacidad=1 vars=[] comp=[] props=['Presiona UP para comenzar', 0, 'bold 20pt Arial', 'rgb(0,0,0)', 1, 1, 4, 0, 0]
+    capa 'GUI Final' visible=True fondo=[255, 255, 255] transparente=True parallax=(0,0) opacidad=1
+      BotonCompartir               uid=22 x=500 y=225 w=150 h=40 ángulo=0 opacidad=1 vars=[] comp=[] props=[0, 'Default', 0, 1]
+      BotonReintentar              uid=29 x=300 y=225 w=150 h=40 ángulo=0 opacidad=1 vars=[] comp=[] props=[0, 'Default', 0, 1]
+      TextoResultado               uid=30 x=400 y=130 w=279 h=40 ángulo=0 opacidad=1 vars=[] comp=[] props=['Tu tiempo fue:', 0, 'bold 20pt Arial', 'rgb(0,0,0)', 1, 1, 4, 0, 0]
+
+Medios: acelerar.m4a (26953 B), acelerar.ogg (28236 B), motor2.m4a (228226 B), motor2.ogg (201674 B)
+
+Tabla de referencias:
+    0 Qg                         Audio
+    1 Sg                         Mouse
+    2 Rg                         Keyboard
+    3 Tg                         Particles
+    4 Ug                         Text
+    5 Vg                         Touch
+    6 Pg                         Sprite
+    7 dm                         Physics (comportamiento)
+    8 rm                         Wrap (comportamiento)
+    9 em                         ScrollTo (comportamiento)
+   10 Og.prototype.C.qP          System               cnd  IsGroupActive
+   11 Og.prototype.C.Np          System               cnd  OnLayoutStart
+   12 Qg.prototype.pa.aQ         Audio                act  Preload
+   13 Ug.prototype.pa.hQ         Text                 act  SetText
+   14 dm.prototype.pa.kQ         Physics (comportamiento) act  SetWorldGravity
+   15 dm.prototype.pa.eP         Physics (comportamiento) act  CreateRevoluteJoint
+   16 dm.prototype.pa.cP         Physics (comportamiento) act  CreateLimitedRevoluteJoint
+   17 dm.prototype.pa.gg         Physics (comportamiento) act  SetAngularVelocity
+   18 Pg.prototype.pa.lQ         Sprite               act  SetX
+   19 Og.prototype.pa.eQ         System               act  SetLayerVisible
+   20 Og.prototype.pa.iQ         System               act  SetVar
+   21 Tg.prototype.pa.gQ         Particles            act  SetSpraying
+   22 Og.prototype.C.aP          System               cnd  CompareVar
+   23 Ug.prototype.pa.Fp         Text                 act  Destroy
+   24 Sg.prototype.C.Ol          Mouse                cnd  OnObjectClicked
+   25 Vg.prototype.C.vP          Touch                cnd  IsTouchingObject
+   26 Og.prototype.pa.cQ         System               act  RestartLayout
+   27 Og.prototype.C.jP          System               cnd  EveryTick
+   28 Pg.prototype.ob.mh         Sprite               exp  X
+   29 Rg.prototype.C.sP          Keyboard             cnd  IsKeyDown
+   30 Vg.prototype.C.rP          Touch                cnd  IsInTouch
+   31 Og.prototype.C.iP          System               cnd  Every
+   32 Og.prototype.pa.SO         System               act  AddVar
+   33 Tg.prototype.pa.fQ         Particles            act  SetPosToObject
+   34 Og.prototype.C.tP          System               cnd  IsOnMobile
+   35 Vg.prototype.ob.WO         Touch                exp  Beta
+   36 Qg.prototype.C.bQ          Audio                cnd  IsSilent
+   37 Qg.prototype.pa.mQ         Audio                act  Stop
+   38 Qg.prototype.pa.Play       Audio                act  Play
+   39 Qg.prototype.C.uP          Audio                cnd  IsTagPlaying
+   40 Og.prototype.C.pQ          System               cnd  TriggerOnce
+   41 Pg.prototype.C.LP          Sprite               cnd  OnCollision
+   42 Pg.prototype.C.bP          Sprite               cnd  CompareX
+   43 Og.prototype.C.$O          System               cnd  Compare
+   44 Og.prototype.ob.round      System               exp  round
+   45 Og.prototype.ob.random     System               exp  random
+   46 Og.prototype.pa.dP         System               act  CreateObject
+   47 Pg.prototype.ob.nh         Sprite               exp  Y
+   48 Pg.prototype.pa.Fp         Sprite               act  Destroy

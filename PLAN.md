@@ -5,11 +5,9 @@ Plan de trabajo para recrear en Rust + macroquad todos los juegos publicados en
 Está pensado para avanzar en varias sesiones: marca cada casilla al completarla e incluye el cambio
 del plan en el mismo commit.
 
-**Siguiente paso:** 2.5 Da Car (Construct 2): reutilizar `crates/construct2` y anotar los
-nombres de su tabla de referencias. Lo nuevo es el comportamiento Physics (Box2D: suelo, moto,
-ruedas con articulaciones), además de ScrollTo y un plugin de partículas sin identificar
-(`particulaspolvo`). Hay que ver qué Box2D trae su `c2runtime.js` y cómo portarlo con fidelidad. El
-0.7 (GitHub Pages) queda pendiente de decidir si se publica.
+**Siguiente paso:** 2.6 Super Happy Jump (Unity 4.6 Web Player): abrir `web.unity3d` con
+`tools/unity_assets.py`, decompilar `Assembly-CSharp.dll` con ILSpy y seguir la plantilla. El 0.7
+(GitHub Pages) queda pendiente de decidir si se publica.
 
 ## Reglas
 
@@ -196,13 +194,25 @@ Orden sugerido: primero lo que reutiliza herramientas ya hechas y luego lo más 
   ventana no escala por múltiplos enteros como el original; de Turret no se portaron la puntería
   predictiva ni los disparadores de disparo (no se usan).
 
-### 2.5 Da Car (Construct 2)
-- [ ] Triaje.
-- [ ] Eventos con `tools/c2_eventos.py`.
-- [ ] Port nativo jugable (física de la moto).
-- [ ] Web + táctil.
-- [ ] README del juego + ficha del museo.
-- [ ] Pendientes anotados.
+### 2.5 Da Car (Construct 2) ✅
+- [x] Triaje: exportado el 23-nov-2015; plugins Sprite, Text, Particles, Audio, Touch, Mouse y
+  Keyboard, y los comportamientos Physics, Wrap y ScrollTo. REA `analyze-javascript-application`
+  pasó del límite de 5 min con la carpeta entera (Box2D en asm.js dentro de `c2runtime.js`): se
+  repitió sin el runtime y el runtime se leyó a mano.
+- [x] Eventos con `tools/c2_eventos.py` y `games/da-car/reference/nombres.json`.
+- [x] Box2D 2.3.1 traducido a Rust en `crates/box2d` (el `box2d.js` de kripken que trae el
+  runtime, con `b2_maxPolygonVertices` = 16), idéntico bit a bit al C++ en cuatro escenas
+  (`crates/box2d/comparar/comparar.sh`).
+- [x] Port nativo jugable: el comportamiento Physics (formas, separador de polígonos cóncavos,
+  articulaciones, colisiones registradas), ScrollTo, Wrap por la vista, capas con parallax,
+  Particles y la hoja «InGame».
+- [x] Web + táctil: se acelera tocando y se gira inclinando el dispositivo (`museo::sensores::beta`,
+  desde `deviceorientation`; en iOS se pide permiso al primer toque).
+- [x] README del juego + ficha del museo.
+- [x] Pendientes anotados: las fuentes son Liberation Sans en lugar de Arial; el sonido no se
+  probó en hardware real; la inclinación no se probó en un móvil de verdad (solo la orientación
+  emulada por CDP en Chromium, que llega a la página, y una inclinación fija forzada en nativo); no
+  se jugó hasta la meta sin ayuda (la meta se probó con un cambio temporal).
 
 ### 2.6 Super Happy Jump (Unity 4.6 Web Player)
 - [ ] Abrir `web.unity3d` con UnityPy: `Assembly-CSharp.dll`, escena, sprites y audio.

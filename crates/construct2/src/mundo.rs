@@ -9,11 +9,13 @@ use macroquad::math::DVec2;
 use macroquad::prelude::*;
 
 use crate::comportamientos::{Bala, Comportamiento, Envolver, Torreta};
-use crate::datos::{Clase, Proyecto, Tipo};
+use crate::datos::{Clase, Instancia, Proyecto, Tipo};
+use crate::fisica::MundoFisico;
 use crate::geometria::{
     a_radianes, angulo_acotado, angulo_hacia, diferencia_angular, distancia, en_sentido_horario,
     piso_c2, rotar_angulo,
 };
+use crate::particulas::Particulas;
 use crate::sprite::Sprite;
 use crate::texto::{Fuentes, Texto};
 use crate::tiempo::Kahan;
@@ -21,6 +23,7 @@ use crate::tiempo::Kahan;
 pub enum Inst {
     Sprite(Sprite),
     Texto(Texto),
+    Particulas(Particulas),
 }
 
 impl Inst {
@@ -28,6 +31,7 @@ impl Inst {
         match self {
             Inst::Sprite(s) => s.tipo,
             Inst::Texto(t) => t.tipo,
+            Inst::Particulas(p) => p.tipo,
         }
     }
 
@@ -35,6 +39,7 @@ impl Inst {
         match self {
             Inst::Sprite(s) => s.uid,
             Inst::Texto(t) => t.uid,
+            Inst::Particulas(p) => p.uid,
         }
     }
 
@@ -42,6 +47,7 @@ impl Inst {
         match self {
             Inst::Sprite(s) => s.visible,
             Inst::Texto(t) => t.visible,
+            Inst::Particulas(p) => p.visible,
         }
     }
 
@@ -49,6 +55,7 @@ impl Inst {
         match self {
             Inst::Sprite(s) => s.destruido,
             Inst::Texto(t) => t.destruido,
+            Inst::Particulas(p) => p.destruido,
         }
     }
 
@@ -56,6 +63,15 @@ impl Inst {
         match self {
             Inst::Sprite(s) => (s.x, s.y),
             Inst::Texto(t) => (t.x, t.y),
+            Inst::Particulas(p) => (p.x, p.y),
+        }
+    }
+
+    pub fn capa(&self) -> usize {
+        match self {
+            Inst::Sprite(s) => s.capa,
+            Inst::Texto(t) => t.capa,
+            Inst::Particulas(p) => p.capa,
         }
     }
 }
@@ -81,6 +97,13 @@ pub struct Mundo {
     /// Objetivos de Turret: la lista es del tipo de la torreta y guarda tipos de objeto.
     objetivos: HashMap<usize, Vec<usize>>,
     iniciado: bool,
+    /// El mundo de Box2D del comportamiento Physics (se crea con el primer cuerpo).
+    pub(crate) fisica: Option<MundoFisico>,
+    /// Scroll del layout: el centro de la vista.
+    pub scroll_x: f64,
+    pub scroll_y: f64,
+    /// Visibilidad de las capas (System.SetLayerVisible).
+    capas_visibles: Vec<bool>,
 }
 
 impl Mundo {
@@ -103,6 +126,10 @@ impl Mundo {
             registradas: Vec::new(),
             objetivos: HashMap::new(),
             iniciado: false,
+            fisica: None,
+            scroll_x: 0.0,
+            scroll_y: 0.0,
+            capas_visibles: Vec::new(),
         }
     }
 
@@ -145,27 +172,43 @@ impl Mundo {
             .expect("layout");
         let mismo = self.iniciado && indice == self.layout;
         self.iniciado = true;
+        // Fin del layout: se destruyen todas las instancias (los cuerpos de Physics también).
+        for i in 0..self.instancias.len() {
+            self.destruir(i);
+        }
+        self.quitar_destruidas();
         self.layout = indice;
-        self.instancias.clear();
         self.registradas.clear();
-        let Self {
-            proyecto,
-            instancias,
-            siguiente_uid,
-            ..
-        } = self;
-        for (c, capa) in proyecto.layouts[indice].capas.iter().enumerate() {
-            for inst in &capa.instancias {
-                *siguiente_uid += 1;
-                let tipo = &proyecto.tipos[inst.tipo];
-                instancias.push(if tipo.animaciones.is_empty() {
-                    Inst::Texto(Texto::nuevo(inst, c, *siguiente_uid, inst.x, inst.y))
-                } else {
-                    Inst::Sprite(Sprite::nuevo(inst, tipo, c, *siguiente_uid, inst.x, inst.y))
-                });
+        // El scroll empieza en el centro de la ventana.
+        self.scroll_x = self.proyecto.ancho / 2.0;
+        self.scroll_y = self.proyecto.alto / 2.0;
+        self.capas_visibles = self.proyecto.layouts[indice]
+            .capas
+            .iter()
+            .map(|c| c.visible)
+            .collect();
+        for c in 0..self.proyecto.layouts[indice].capas.len() {
+            for k in 0..self.proyecto.layouts[indice].capas[c].instancias.len() {
+                let uid = self.nuevo_uid();
+                let inst = &self.proyecto.layouts[indice].capas[c].instancias[k];
+                let nueva = self.nueva_instancia(inst, c, uid, inst.x, inst.y);
+                self.instancias.push(nueva);
+                self.crear_cuerpo(self.instancias.len() - 1);
             }
         }
         mismo
+    }
+
+    /// createInstanceFromInit según el plugin del tipo.
+    fn nueva_instancia(&self, inst: &Instancia, capa: usize, uid: u32, x: f64, y: f64) -> Inst {
+        let tipo = &self.proyecto.tipos[inst.tipo];
+        if !tipo.animaciones.is_empty() {
+            Inst::Sprite(Sprite::nuevo(inst, tipo, capa, uid, x, y))
+        } else if let Some(textura) = &tipo.textura {
+            Inst::Particulas(Particulas::nueva(inst, textura, capa, uid, x, y))
+        } else {
+            Inst::Texto(Texto::nuevo(inst, capa, uid, x, y))
+        }
     }
 
     // --- instancias --------------------------------------------------------------------------
@@ -197,28 +240,35 @@ impl Mundo {
     pub fn sprite(&self, i: usize) -> &Sprite {
         match &self.instancias[i] {
             Inst::Sprite(s) => s,
-            Inst::Texto(_) => unreachable!("no es un Sprite"),
+            _ => unreachable!("no es un Sprite"),
         }
     }
 
     pub fn sprite_mut(&mut self, i: usize) -> &mut Sprite {
         match &mut self.instancias[i] {
             Inst::Sprite(s) => s,
-            Inst::Texto(_) => unreachable!("no es un Sprite"),
+            _ => unreachable!("no es un Sprite"),
         }
     }
 
     pub fn texto(&self, i: usize) -> &Texto {
         match &self.instancias[i] {
             Inst::Texto(t) => t,
-            Inst::Sprite(_) => unreachable!("no es un Text"),
+            _ => unreachable!("no es un Text"),
         }
     }
 
     pub fn texto_mut(&mut self, i: usize) -> &mut Texto {
         match &mut self.instancias[i] {
             Inst::Texto(t) => t,
-            Inst::Sprite(_) => unreachable!("no es un Text"),
+            _ => unreachable!("no es un Text"),
+        }
+    }
+
+    pub fn particulas_mut(&mut self, i: usize) -> &mut Particulas {
+        match &mut self.instancias[i] {
+            Inst::Particulas(p) => p,
+            _ => unreachable!("no es un Particles"),
         }
     }
 
@@ -231,6 +281,7 @@ impl Mundo {
         match &mut self.instancias[i] {
             Inst::Sprite(s) => (s.x, s.y) = (x, y),
             Inst::Texto(t) => (t.x, t.y) = (x, y),
+            Inst::Particulas(p) => (p.x, p.y) = (x, y),
         }
     }
 
@@ -242,6 +293,7 @@ impl Mundo {
         match &mut self.instancias[i] {
             Inst::Sprite(s) => s.visible = visible,
             Inst::Texto(t) => t.visible = visible,
+            Inst::Particulas(p) => p.visible = visible,
         }
     }
 
@@ -258,6 +310,7 @@ impl Mundo {
         match &mut self.instancias[i] {
             Inst::Sprite(s) => s.destruido = true,
             Inst::Texto(t) => t.destruido = true,
+            Inst::Particulas(p) => p.destruido = true,
         }
     }
 
@@ -267,9 +320,45 @@ impl Mundo {
         }
     }
 
-    /// ClearDeathRow.
+    /// ClearDeathRow. Las destruidas se procesan por tipos (en el orden en que aparece cada tipo)
+    /// y, dentro de cada tipo, en orden; los cuerpos de Physics se destruyen entonces.
     pub fn quitar_destruidas(&mut self) {
+        if self.fisica.is_some() {
+            let mut tipos: Vec<usize> = Vec::new();
+            for i in self.por_capas() {
+                let inst = &self.instancias[i];
+                if inst.destruido() && !tipos.contains(&inst.tipo()) {
+                    tipos.push(inst.tipo());
+                }
+            }
+            let capas = self.por_capas();
+            let mut orden: Vec<usize> = Vec::new();
+            for &t in &tipos {
+                for &i in &capas {
+                    let inst = &self.instancias[i];
+                    if inst.destruido() && inst.tipo() == t {
+                        orden.push(i);
+                    }
+                }
+            }
+            for (k, &i) in orden.iter().enumerate() {
+                let vivas: Vec<usize> = (0..self.instancias.len())
+                    .filter(|j| !orden[..k].contains(j))
+                    .collect();
+                self.al_destruir_fisica(i, &vivas);
+            }
+        }
         self.instancias.retain(|i| !i.destruido());
+    }
+
+    /// Las instancias por capas y, dentro de cada capa, en su orden Z.
+    fn por_capas(&self) -> Vec<usize> {
+        let n = self.proyecto.layouts[self.layout].capas.len();
+        (0..n)
+            .flat_map(|c| {
+                (0..self.instancias.len()).filter(move |&i| self.instancias[i].capa() == c)
+            })
+            .collect()
     }
 
     /// System.CreateObject: con las propiedades de la primera instancia del tipo en el proyecto,
@@ -277,14 +366,11 @@ impl Mundo {
     pub fn crear(&mut self, tipo: usize, capa: usize, x: f64, y: f64) -> usize {
         let uid = self.nuevo_uid();
         let modelo = self.proyecto.instancia_por_defecto(tipo);
-        let t = &self.proyecto.tipos[tipo];
-        let inst = if t.animaciones.is_empty() {
-            Inst::Texto(Texto::nuevo(modelo, capa, uid, x, y))
-        } else {
-            Inst::Sprite(Sprite::nuevo(modelo, t, capa, uid, x, y))
-        };
+        let inst = self.nueva_instancia(modelo, capa, uid, x, y);
         self.instancias.push(inst);
-        self.instancias.len() - 1
+        let i = self.instancias.len() - 1;
+        self.crear_cuerpo(i);
+        i
     }
 
     // --- animaciones -------------------------------------------------------------------------
@@ -326,6 +412,12 @@ impl Mundo {
         } = self;
         match &mut instancias[i] {
             Inst::Sprite(s) if !s.destruido => s.tick(&proyecto.tipos[s.tipo], dt),
+            Inst::Particulas(p) if !p.destruido => {
+                if p.tick(dt) {
+                    p.destruido = true;
+                }
+                None
+            }
             _ => None,
         }
     }
@@ -372,10 +464,76 @@ impl Mundo {
     }
 
     /// contains_pt de una instancia (los Text, solo su caja).
+    /// contains_pt con un punto de la pantalla (se pasa a las coordenadas de la capa de la
+    /// instancia, con su scroll y parallax).
     pub fn contiene(&self, i: usize, p: DVec2) -> bool {
+        let (izq, arr) = self.vista_capa(self.instancias[i].capa());
+        let (x, y) = (p.x + izq, p.y + arr);
         match &self.instancias[i] {
-            Inst::Sprite(s) => s.contiene(&self.proyecto.tipos[s.tipo], p.x, p.y),
-            Inst::Texto(t) => t.caja().contains(vec2(p.x as f32, p.y as f32)),
+            Inst::Sprite(s) => s.contiene(&self.proyecto.tipos[s.tipo], x, y),
+            Inst::Texto(t) => t.caja().contains(vec2(x as f32, y as f32)),
+            Inst::Particulas(_) => false,
+        }
+    }
+
+    /// La esquina superior izquierda de la vista de una capa (canvasToLayer del punto 0, 0): el
+    /// scroll multiplicado por el parallax de la capa.
+    pub fn vista_capa(&self, capa: usize) -> (f64, f64) {
+        let parallax = self.proyecto.layouts[self.layout].capas[capa].parallax;
+        let (ox, oy) = (self.proyecto.ancho / 2.0, self.proyecto.alto / 2.0);
+        let par_x = (self.scroll_x - ox) * parallax.x + ox;
+        let par_y = (self.scroll_y - oy) * parallax.y + oy;
+        (par_x - ox, par_y - oy)
+    }
+
+    /// System.SetLayerVisible.
+    pub fn set_capa_visible(&mut self, capa: usize, visible: bool) {
+        if let Some(v) = self.capas_visibles.get_mut(capa) {
+            *v = visible;
+        }
+    }
+
+    /// Layout.scrollToX/Y: sin «Unbounded scrolling», la vista no sale del layout.
+    pub fn desplazar_a(&mut self, x: f64, y: f64) {
+        let layout = &self.proyecto.layouts[self.layout];
+        let (mut x, mut y) = (x, y);
+        if !layout.ilimitado {
+            let (ax, ay) = (self.proyecto.ancho / 2.0, self.proyecto.alto / 2.0);
+            if x > layout.ancho - ax {
+                x = layout.ancho - ax;
+            }
+            if x < ax {
+                x = ax;
+            }
+            if y > layout.alto - ay {
+                y = layout.alto - ay;
+            }
+            if y < ay {
+                y = ay;
+            }
+        }
+        self.scroll_x = x;
+        self.scroll_y = y;
+    }
+
+    /// tick2 de los comportamientos (después de los eventos): ScrollTo lleva la vista a la media
+    /// de sus instancias.
+    pub fn tick2(&mut self) {
+        let (mut sx, mut sy, mut n) = (0.0, 0.0, 0);
+        for inst in &self.instancias {
+            if let Inst::Sprite(s) = inst
+                && !s.destruido
+                && s.comportamientos
+                    .iter()
+                    .any(|c| matches!(c, Comportamiento::Desplazar(d) if d.habilitado))
+            {
+                sx += s.x;
+                sy += s.y;
+                n += 1;
+            }
+        }
+        if n > 0 {
+            self.desplazar_a(sx / n as f64, sy / n as f64);
         }
     }
 
@@ -407,6 +565,10 @@ impl Mundo {
 
     /// registerCollision: un comportamiento empujó a `a` fuera de `b`; "On collision" lo cuenta
     /// aunque ya no se solapen.
+    pub fn registrar_colision_uid(&mut self, a: u32, b: u32) {
+        self.registradas.push((a, b));
+    }
+
     pub fn registrar_colision(&mut self, a: usize, b: usize) {
         self.registradas.push((self.uid(a), self.uid(b)));
     }
@@ -443,6 +605,11 @@ impl Mundo {
         let dt = self.dt;
         for &i in &orden {
             for k in 0..self.sprite(i).comportamientos.len() {
+                // Physics trabaja sobre la instancia (puede rehacer su cuerpo).
+                if matches!(self.sprite(i).comportamientos[k], Comportamiento::Fisica(_)) {
+                    self.tick_fisica(i);
+                    continue;
+                }
                 let mut c = std::mem::replace(
                     &mut self.sprite_mut(i).comportamientos[k],
                     Comportamiento::Otro,
@@ -733,21 +900,28 @@ impl Mundo {
             let s = self.sprite(i);
             s.cajas(&self.proyecto.tipos[s.tipo])
         };
-        let (ancho, alto) = if e.modo == 0 {
+        // Modo 0: los bordes del layout; modo 1: los de la vista de la capa.
+        let (izq, der, arr, aba) = if e.modo == 0 {
             let l = &self.proyecto.layouts[self.layout];
-            (l.ancho, l.alto)
+            (0.0, l.ancho, 0.0, l.alto)
         } else {
-            (self.proyecto.ancho, self.proyecto.alto)
+            let (izq, arr) = self.vista_capa(self.sprite(i).capa);
+            (
+                izq,
+                izq + self.proyecto.ancho,
+                arr,
+                arr + self.proyecto.alto,
+            )
         };
         let s = self.sprite_mut(i);
-        if caja.right < 0.0 {
-            s.x = ancho - 1.0 + (s.x - caja.left);
-        } else if caja.left > ancho {
-            s.x = 1.0 - (caja.right - s.x);
-        } else if caja.bottom < 0.0 {
-            s.y = alto - 1.0 + (s.y - caja.top);
-        } else if caja.top > alto {
-            s.y = 1.0 - (caja.bottom - s.y);
+        if caja.right < izq {
+            s.x = der - 1.0 + (s.x - caja.left);
+        } else if caja.left > der {
+            s.x = izq + 1.0 - (caja.right - s.x);
+        } else if caja.bottom < arr {
+            s.y = aba - 1.0 + (s.y - caja.top);
+        } else if caja.top > aba {
+            s.y = arr + 1.0 - (caja.bottom - s.y);
         }
     }
 
@@ -758,19 +932,24 @@ impl Mundo {
     pub fn dibujar(&self) {
         let layout = &self.proyecto.layouts[self.layout];
         for (c, capa) in layout.capas.iter().enumerate() {
-            if !capa.visible {
+            if !self.capas_visibles.get(c).copied().unwrap_or(capa.visible) {
                 continue;
             }
             if !capa.transparente {
                 clear_background(capa.fondo);
             }
+            let (izq, arr) = self.vista_capa(c);
+            let desplazamiento = DVec2::new(-izq, -arr);
             for inst in &self.instancias {
+                if inst.capa() != c || inst.destruido() {
+                    continue;
+                }
                 match inst {
-                    Inst::Sprite(s) if s.capa == c && !s.destruido => {
-                        s.dibujar(&self.proyecto.tipos[s.tipo], &self.texturas)
+                    Inst::Sprite(s) => {
+                        s.dibujar(&self.proyecto.tipos[s.tipo], &self.texturas, desplazamiento)
                     }
-                    Inst::Texto(t) if t.capa == c && !t.destruido => t.dibujar(&self.fuentes),
-                    _ => {}
+                    Inst::Texto(t) => t.dibujar(&self.fuentes, desplazamiento),
+                    Inst::Particulas(p) => p.dibujar(&self.texturas, desplazamiento),
                 }
             }
         }

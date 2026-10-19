@@ -1,0 +1,136 @@
+# Código minificado (c2runtime.js) de cada condición, acción y expresión que usan los eventos,
+# con el nombre de Construct 2 identificado a partir de él (ver nombres.json).
+
+## IsGroupActive (Og.prototype.C.qP)
+qP=function(d){return(d=this.j.Kh[d.toLowerCase()])&&d.sg}
+
+## OnLayoutStart (Og.prototype.C.Np)
+Np=function(){return!0}
+
+## CompareVar (Og.prototype.C.aP)
+aP=function(d,a,g){return Dg(d.rg(),a,g)}
+
+## EveryTick (Og.prototype.C.jP)
+jP=function(){return!0}
+
+## Every (Og.prototype.C.iP)
+iP=function(d){var a=this.j.Rj(),g=a.G.Every_lastTime||
+0,k=this.j.Gc.xa;"undefined"===typeof a.G.Every_seconds&&(a.G.Every_seconds=d);var e=a.G.Every_seconds;if(k>=g+e)return a.G.Every_lastTime=g+e,k>=a.G.Every_lastTime+.04&&(a.G.Every_lastTime=k),a.G.Every_seconds=d,!0;k<g-.1&&(a.G.Every_lastTime=k);return!1}
+
+## IsOnMobile (Og.prototype.C.tP)
+tP=function(){return this.j.Ed}
+
+## TriggerOnce (Og.prototype.C.pQ)
+pQ=function(){var d=this.j.Rj().G;"undefined"===typeof d.TriggerOnce_lastTick&&(d.TriggerOnce_lastTick=-1);var a=d.TriggerOnce_lastTick,g=this.j.zc;d.TriggerOnce_lastTick=g;return this.j.Yn||a!==g-1}
+
+## Compare (Og.prototype.C.$O)
+$O=function(d,a,g){return Dg(d,a,g)}
+
+## SetLayerVisible (Og.prototype.pa.eQ)
+eQ=function(d,a){d&&d.visible!==a&&(d.visible=a,this.j.na=!0)}
+
+## SetVar (Og.prototype.pa.iQ)
+iQ=function(d,a){0===d.wl?Ld(a)?d.Nd(a):d.Nd(parseFloat(a)):1===d.wl&&d.Nd(a.toString())}
+
+## AddVar (Og.prototype.pa.SO)
+SO=function(d,a){0===d.wl?Ld(a)?d.Nd(d.rg()+a):
+d.Nd(d.rg()+parseFloat(a)):1===d.wl&&d.Nd(d.rg()+a.toString())}
+
+## RestartLayout (Og.prototype.pa.cQ)
+cQ=function(){if(!this.j.Wh&&!this.j.wh&&this.j.ta){this.j.wh=this.j.ta;var d,a,g;d=0;for(a=this.j.Ge.length;d<a;d++)g=this.j.Ge[d],g.TN(g.bk)}}
+
+## CreateObject (Og.prototype.pa.dP)
+dP=function(d,a,g,k){if(a&&d&&(a=this.j.UL(d,a,g,k))){this.j.qd++;var e;this.j.trigger(Object.getPrototypeOf(d.Ha).C.Ml,
+a);if(a.lc)for(g=0,k=a.siblings.length;g<k;g++)e=a.siblings[g],this.j.trigger(Object.getPrototypeOf(e.type.Ha).C.Ml,e);this.j.qd--;d=d.ba();d.ua=!1;se(d.k);d.k[0]=a;if(a.lc)for(g=0,k=a.siblings.length;g<k;g++)e=a.siblings[g],d=e.type.ba(),d.ua=!1,se(d.k),d.k[0]=e}}
+
+## round (Og.prototype.ob.round)
+round=function(d,a){d.Ca(Math.round(a))}
+
+## random (Og.prototype.ob.random)
+random=function(d,a,g){void 0===g?d.H(Math.random()*
+a):d.H(Math.random()*(g-a)+a)}
+
+## Preload (Qg.prototype.pa.aQ)
+aQ=function(a){if(!ab){var d=a[1];a=this.j.Kj+a[0]+(Oa?".ogg":".m4a");3===Pa?this.j.xb?AppMobi.context.loadSound(a):AppMobi.player.loadSound(a):2!==Pa&&this.en(a,"<preload>",d,!1)}}
+
+## Stop (Qg.prototype.pa.mQ)
+mQ=function(a){R(a);var d;a=0;for(d=Nb.length;a<
+d;a++)Nb[a].stop()}
+
+## Play (Qg.prototype.pa.Play)
+Play=function(a,d,e,g){!ab&&(e=Math.pow(10,e/20),0>e&&(e=0),1<e&&(e=1),La=this.en(this.j.Kj+a[0]+(Oa?".ogg":".m4a"),g,a[1],0!==d,e))&&(La.bp(!1),La.play(0!==d,e))}
+
+## IsSilent (Qg.prototype.C.bQ)
+bQ=function(){var a,d;a=0;for(d=cd.length;a<d;a++)if(!cd[a].zM()&&!cd[a].pM())return!1;return!0}
+
+## IsTagPlaying (Qg.prototype.C.uP)
+uP=function(a){R(a);var d;
+a=0;for(d=Nb.length;a<d;a++)if(Nb[a].Gf())return!0;return!1}
+
+## SetText (Ug.prototype.pa.hQ)
+hQ=function(a){Ld(a)&&1E9>a&&(a=Math.round(1E10*a)/1E10);a=a.toString();this.text!==a&&(this.text=a,this.Zf=!0,this.j.na=!0)}
+
+## Destroy (Ug.prototype.pa.Fp)
+Fp=function(){this.j.Be(this)}
+
+## SetWorldGravity (dm.prototype.pa.kQ)
+kQ=function(a){if(a!==this.behavior.QO){this.Ob.Rl(ah(0,a));this.behavior.QO=a;var d,g=this.behavior.ni.cd();
+a=0;for(d=g.length;a<d;a++)g[a].G.Hb&&g[a].G.Hb.hg(!0)}}
+
+## CreateRevoluteJoint (dm.prototype.pa.eP)
+eP=function(a,d){if(d&&this.enabled){var g=d.kn(this.K);g&&g!=this.K&&g.G.Hb&&(this.pc.push({type:1,Ga:[a,g.uid]}),this.$L(a,g.uid))}}
+
+## CreateLimitedRevoluteJoint (dm.prototype.pa.cP)
+cP=function(a,d,g,k){d&&this.enabled&&(d=d.kn(this.K))&&d!=this.K&&d.G.Hb&&(this.pc.push({type:2,Ga:[a,d.uid,g,k]}),this.ZL(a,d.uid,g,k))}
+
+## SetAngularVelocity (dm.prototype.pa.gg)
+gg=function(a){this.enabled&&(this.body.gg(De(a)),this.body.hg(!0))}
+
+## SetX (Pg.prototype.pa.lQ)
+lQ=function(a){this.x!==a&&(this.x=a,this.wa())}
+
+## Destroy (Pg.prototype.pa.Fp)
+Fp=function(){this.j.Be(this)}
+
+## X (Pg.prototype.ob.mh)
+mh=function(a){a.H(this.x)}
+mh=function(g,d){var a,k,n,e,
+w;Fd(d)?(a=this.j.ie(0),k=a.scale,n=a.Gb,e=a.Yb,w=a.u,a.scale=1,a.Gb=1,a.Yb=1,a.u=0,g.H(a.fb(this.Ze,this.$e,!0)),a.scale=k,a.Gb=n,a.Yb=e,a.u=w):(a=Ld(d)?this.j.ie(d):this.j.Gh(d))?g.H(a.fb(this.Ze,this.$e,!0)):g.H(0)}
+mh=function(a,d){var e=this.qg;if(0>e||e>=this.touches.length)a.H(0);else{var g,k,l,n,p;Fd(d)?(g=this.j.ie(0),
+k=g.scale,l=g.Gb,n=g.Yb,p=g.u,g.scale=1,g.Gb=1,g.Yb=1,g.u=0,a.H(g.fb(this.touches[e].x,this.touches[e].y,!0)),g.scale=k,g.Gb=l,g.Yb=n,g.u=p):(g=Ld(d)?this.j.ie(d):this.j.Gh(d))?a.H(g.fb(this.touches[e].x,this.touches[e].y,!0)):a.H(0)}}
+
+## Y (Pg.prototype.ob.nh)
+nh=function(a){a.H(this.y)}
+nh=function(g,d){var a,k,n,e,w;Fd(d)?(a=this.j.ie(0),k=a.scale,n=a.Gb,e=a.Zb,w=a.u,a.scale=1,a.Gb=1,a.Zb=1,a.u=0,g.H(a.fb(this.Ze,this.$e,!1)),a.scale=k,a.Gb=n,a.Zb=e,a.u=w):(a=Ld(d)?this.j.ie(d):this.j.Gh(d))?g.H(a.fb(this.Ze,this.$e,!1)):g.H(0)}
+nh=function(a,d){var e=this.qg;if(0>e||e>=this.touches.length)a.H(0);else{var g,k,l,n,p;Fd(d)?(g=this.j.ie(0),k=g.scale,l=g.Gb,n=g.Zb,p=g.u,g.scale=1,g.Gb=1,g.Zb=1,g.u=0,a.H(g.fb(this.touches[e].x,this.touches[e].y,!1)),g.scale=k,g.Gb=l,g.Zb=n,g.u=p):(g=
+Ld(d)?this.j.ie(d):this.j.Gh(d))?a.H(g.fb(this.touches[e].x,this.touches[e].y,!1)):a.H(0)}}
+
+## OnCollision (Pg.prototype.C.LP)
+LP=function(a){if(!a)return!1;var e=this.j,k=e.Rj(),r=k.type,p=null;k.G.collmemory?p=k.G.collmemory:(p={},k.G.collmemory=p,e.$l(function(a){var d=k.G.collmemory;a=a.uid;var e,g;for(e in d)d.hasOwnProperty(e)&&(g=d[e],g[0]===a||g[1]===
+a)&&(n(d[e]),delete d[e])}));var w=r.ba(),x=a.ba(),w=w.gc(),S,H,da,ua,Fc,Mb,Ab,Pa=this.j.zc,ma=Pa-1,cd=e.Jb().Pc;for(H=0;H<w.length;H++){da=w[H];x.ua?(da.fa(),this.j.bU(da.A,a,da.Ja,K),S=K):S=x.gc();for(ua=0;ua<S.length;ua++)Fc=S[ua],e.WV(da,Fc)||e.pS(da,Fc)?(Mb=d(p,da,Fc),Mb=!Mb||O<ma,J(p,da,Fc,Pa),Mb&&(e.Qk(cd.Ma),Mb=r.ba(),Ab=a.ba(),Mb.ua=!1,Ab.ua=!1,r===a?(Mb.k.length=2,Mb.k[0]=da,Mb.k[1]=Fc,r.Lc()):(Mb.k.length=1,Ab.k.length=1,Mb.k[0]=da,Ab.k[0]=Fc,r.Lc(),a.Lc()),cd.BV(),e.Sf(cd.Ma))):g(p,da,
+Fc);se(K)}return!1}
+
+## CompareX (Pg.prototype.C.bP)
+bP=function(a,d){return Dg(this.x,a,d)}
+
+## SetSpraying (Tg.prototype.pa.gQ)
+gQ=
+function(g){this.el=0!==g}
+
+## SetPosToObject (Tg.prototype.pa.fQ)
+fQ=function(a,d){var e=a.gU(this);if(e){var g;e.Cd?(g=e.Cd(d,!0),e=e.Cd(d,!1)):(g=e.x,e=e.y);if(this.x!==g||this.y!==e)this.x=g,this.y=e,this.wa()}}
+
+## OnObjectClicked (Sg.prototype.C.Ol)
+Ol=function(g,d,a){return g!==this.ah||d!==this.ol?!1:this.j.Ti(a,this.Ze,this.$e)}
+
+## IsKeyDown (Rg.prototype.C.sP)
+sP=function(k){return this.gk[k]}
+
+## IsTouchingObject (Vg.prototype.C.vP)
+vP=function(a){if(!a)return!1;var d=a.ba(),e=d.gc(),g,k,l,n,p,w;l=0;for(n=e.length;l<n;l++){var r=e[l];r.fa();p=0;for(w=this.touches.length;p<w;p++)if(k=this.touches[p],g=r.A.fb(k.x,k.y,!0),k=r.A.fb(k.x,k.y,!1),r.Cb(g,k)){X.push(r);break}}return X.length?(d.ua=!1,te(d.k,X),a.Lc(),se(X),!0):!1}
+
+## IsInTouch (Vg.prototype.C.rP)
+rP=function(){return this.touches.length}
+
+## Beta (Vg.prototype.ob.WO)
+WO=function(a){a.H(this.$T())}

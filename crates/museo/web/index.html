@@ -29,7 +29,19 @@
     <script>
         // crates/museo (tactil.rs) pregunta si el puntero principal es táctil (móvil o tablet)
         // y avisa de si muestra los controles táctiles (lo lee tools/humo-web).
-        window.museo = { tactilVisible: null };
+        window.museo = { tactilVisible: null, beta: 0 };
+        // Inclinación del dispositivo (DeviceOrientationEvent.beta), para los juegos que la usan.
+        // En iOS hay que pedir permiso después de un toque.
+        window.addEventListener("deviceorientation", function (e) {
+            window.museo.beta = e.beta || 0;
+        });
+        document.addEventListener("touchend", function pedir() {
+            document.removeEventListener("touchend", pedir);
+            if (typeof DeviceOrientationEvent !== "undefined" &&
+                typeof DeviceOrientationEvent.requestPermission === "function") {
+                DeviceOrientationEvent.requestPermission().catch(function () {});
+            }
+        });
         miniquad_add_plugin({
             name: "museo_tactil",
             version: 1,
@@ -39,6 +51,9 @@
                 };
                 importObject.env.museo_tactil_visible = function (visible) {
                     window.museo.tactilVisible = visible !== 0;
+                };
+                importObject.env.museo_beta = function () {
+                    return window.museo.beta;
                 };
             },
         });

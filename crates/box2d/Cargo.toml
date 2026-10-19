@@ -1,0 +1,8 @@
+[package]
+name = "box2d"
+version = "0.1.0"
+edition = "2024"
+description = "Traducción a Rust de la parte de Box2D 2.3.1 que usa el comportamiento Physics de Construct 2"
+license = "Zlib"
+
+[dependencies]

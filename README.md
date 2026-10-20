@@ -23,7 +23,7 @@ compila todo en nativo y en wasm ([GitHub Actions](.github/workflows/build.yml))
 | 2014 | [Super Happy Jump](#super-happy-jump) | Unity 4.6 (Web Player, iOS, Android) | ✅ [games/super-happy-jump](games/super-happy-jump) |
 | 2014–15 | [Que No Caiga](#que-no-caiga) | Construct 2 (HTML5) | ✅ [games/que-no-caiga](games/que-no-caiga) |
 | 2015 | [Retro Penal](#retro-penal) | Construct 2 (HTML5 + NW.js) | ✅ [games/retro-penal](games/retro-penal) |
-| 2015 | [One Button Prototype](#one-button-prototype) | Unity 5.1 (Mac, Linux, Android, WebGL) | pendiente |
+| 2015 | [One Button Prototype](#one-button-prototype) | Unity 5.1 (Mac, Linux, Android, WebGL) | ✅ [games/one-button-prototype](games/one-button-prototype) |
 | 2015 | [Neuro Battle](#neuro-battle) | Unity 5.1 (WebGL) | pendiente |
 | 2015 | [Da Car](#da-car) | Construct 2 (HTML5) | ✅ [games/da-car](games/da-car) |
 
@@ -159,10 +159,21 @@ confirmar» y se cierran en el triaje de cada juego.
 
 ### One Button Prototype
 
-- **De qué trata:** plataformas-puzle de un solo botón; el código incluye un dragón como personaje.
-- **Hecho entre julio y agosto de 2015** con Unity 5.1.2f1 (C# con los Standard Assets 2D), para
-  macOS, Linux, Android y WebGL (builds del 11-jul al 17-ago-2015).
-- **Ahora:** pendiente de portar.
+![One Button Prototype](games/one-button-prototype/docs/nivel3.png)
+
+- **De qué trata:** plataformas de un solo botón. Un robot corre solo y da media vuelta al chocar
+  con las paredes; el clic lo hace saltar. Los pinchos reinician el nivel, a los dragones hay que
+  caerles encima y una estrella al final abre la ventana para elegir entre los tres niveles.
+- **Hecho en julio de 2015** con Unity 5.1.2f1 (C#, con el personaje del ejemplo 2D de los
+  Standard Assets modificado) para macOS, Linux y Android: compilado el 22-jul-2015, según la
+  cabecera de su `Assembly-CSharp.dll`. La versión WebGL, con el mismo juego, se exportó el
+  17-ago-2015.
+- **Ahora:** ✅ portado a Rust + macroquad en
+  [games/one-button-prototype](games/one-button-prototype): los scripts traducidos del C#
+  decompilado, y la física 2D (con los colisionadores poligonales y la interpolación), el
+  Animator con blend trees, la GUI con la piel integrada de Unity y el `GUIText` recreados en
+  `crates/unity`, con los gráficos, la fuente y las tres escenas de siempre. Se juega con el
+  ratón o tocando la pantalla. No tiene sonido, como el original.
 - **itch.io:** [elvisbrevi.itch.io/prototipo-2000](https://elvisbrevi.itch.io/prototipo-2000)
 
 ### Neuro Battle
@@ -202,8 +213,9 @@ crates/xna/          equivalentes de XNA 3.1 (Rectangle, Clamp, SpriteBatch.Draw
 crates/construct2/   runtime de Construct 2: data.js, Sprite, Text, Audio, comportamientos, colisiones
 crates/box2d/        Box2D 2.3.1 en Rust (el del comportamiento Physics de Construct 2 y la física
                      2D de Unity), comparado bit a bit con el C++ original (crates/box2d/comparar)
-crates/unity/        piezas de Unity 4.x: escena.json, Time, GameObjects, física 2D, Animator,
-                     partículas (Shuriken), cámara y orden de dibujo, IMGUI y AudioSource
+crates/unity/        piezas de Unity 4.x y 5.x: escena.json, Time, GameObjects, física 2D (con
+                     colisionadores poligonales e interpolación), Animator (con blend trees),
+                     partículas (Shuriken), cámara y orden de dibujo, IMGUI, GUIText y AudioSource
 originales/          binarios originales (fuera de git) y catalogo.json con sus sha256
 tools/originales.py  inventario y descarga de los originales desde itch.io
 tools/build_web.sh   versión web de un juego en dist/<slug> a partir de la plantilla
@@ -218,7 +230,7 @@ PLAN.md              plan por fases con checkpoints
 ## Jugar
 
 ```sh
-cargo run --release -p iman            # PC (o proyecto-nutria, the-electric-eel-attack, que-no-caiga, retro-penal, da-car, super-happy-jump)
+cargo run --release -p iman            # PC (o proyecto-nutria, the-electric-eel-attack, que-no-caiga, retro-penal, da-car, super-happy-jump, one-button-prototype)
 tools/build_web.sh iman                # web: sirve dist/iman con cualquier servidor estático
 ```
 

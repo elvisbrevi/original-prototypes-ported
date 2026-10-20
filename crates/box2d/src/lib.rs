@@ -7,8 +7,10 @@
 //! (arranque en caliente y solver de bloque), las islas con el sueño de los cuerpos, el impacto
 //! continuo (TOI) y la articulación de revolución con límites y motor. Para la física 2D de Unity
 //! (`crates/unity`) incluye también los sensores, los eventos de contacto por fixture, la consulta
-//! por AABB con `b2TestOverlap`, `DestroyFixture`, `ApplyForceToCenter` y `SetMassData`. Quedan
-//! fuera las aristas, las cadenas, el resto de articulaciones y el rayo.
+//! por AABB con `b2TestOverlap`, `DestroyFixture`, `ApplyForceToCenter`, `SetMassData` y el
+//! `b2PolygonShape::Set` del Box2D 2.3.1 publicado, con la soldadura de vértices
+//! (`PolygonShape::set_soldando`). Quedan fuera las aristas, las cadenas, el resto de
+//! articulaciones y el rayo.
 //!
 //! Los nombres siguen a los del original (en `snake_case`) para poder compararlo línea a línea.
 //! Los cálculos son en `f32`, como el `float32` de Box2D; el original compilado a asm.js hace las

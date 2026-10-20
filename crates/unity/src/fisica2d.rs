@@ -1,9 +1,13 @@
-// Física 2D de Unity 4.x: Box2D (crates/box2d) con un cuerpo por Rigidbody2D y los Collider2D
-// como fixtures del Rigidbody2D más cercano hacia arriba en la jerarquía. Los colisionadores sin
-// Rigidbody2D son estáticos (aquí, un cuerpo estático por objeto). Antes de cada paso se llevan a
-// Box2D los Transform que movió el código (como un SetTransform que además despierta al cuerpo)
-// y después del paso los cuerpos escriben su posición en su Transform. Los BeginContact y
-// EndContact de Box2D son los OnTriggerEnter2D/Exit2D y OnCollisionEnter2D/Exit2D.
+// Física 2D de Unity 4.x y 5.x: Box2D (crates/box2d) con un cuerpo por Rigidbody2D y los
+// Collider2D como fixtures del Rigidbody2D más cercano hacia arriba en la jerarquía. Los
+// colisionadores sin Rigidbody2D son estáticos (aquí, un cuerpo estático por objeto). Antes de
+// cada paso se llevan a Box2D los Transform que movió el código (como un SetTransform que además
+// despierta al cuerpo) y después del paso los cuerpos escriben su posición en su Transform. Un
+// PolygonCollider2D son varias fixtures, una por pieza convexa (ver poligonos.rs). Los
+// BeginContact y EndContact de Box2D, agrupados por par de colisionadores (Unity avisa cuando
+// empieza a tocarse la primera fixture y cuando deja de tocarse la última), son los
+// OnTriggerEnter2D/Exit2D y OnCollisionEnter2D/Exit2D. Con Interpolate, el Transform del cuerpo
+// se dibuja entre la pose de antes y la de después del último paso.
 
 use std::collections::{HashMap, HashSet};
 
@@ -23,15 +27,17 @@ const MATERIAL_POR_DEFECTO: MaterialFisico = MaterialFisico {
     rebote: 0.0,
 };
 
-#[derive(Clone, Copy, PartialEq, Debug)]
+#[derive(Clone, PartialEq, Debug)]
 pub enum Forma2D {
     /// BoxCollider2D: el tamaño.
     Caja(Vec2),
     /// CircleCollider2D: el radio.
     Circulo(f32),
+    /// PolygonCollider2D: los caminos cerrados.
+    Poligono(Vec<Vec<Vec2>>),
 }
 
-#[derive(Clone, Copy)]
+#[derive(Clone)]
 pub struct Colisionador2D {
     pub activo: bool,
     pub trigger: bool,
@@ -68,28 +74,8 @@ pub struct Rigidbody2D {
     pub cinematico: bool,
     /// RigidbodySleepMode2D: 0 NeverSleep, 1 StartAwake, 2 StartAsleep.
     pub sueno: u32,
-}
-
-impl Rigidbody2D {
-    pub fn nuevo(
-        masa: f32,
-        arrastre: f32,
-        arrastre_angular: f32,
-        escala_gravedad: f32,
-        angulo_fijo: bool,
-        cinematico: bool,
-        sueno: u32,
-    ) -> Self {
-        Self {
-            masa,
-            arrastre,
-            arrastre_angular,
-            escala_gravedad,
-            angulo_fijo,
-            cinematico,
-            sueno,
-        }
-    }
+    /// RigidbodyInterpolation2D: 0 None, 1 Interpolate (2 Extrapolate no se traduce).
+    pub interpolacion: u32,
 }
 
 /// OnTriggerEnter2D/Exit2D (si alguno de los dos es trigger) u OnCollisionEnter2D/Exit2D.
@@ -100,10 +86,19 @@ pub struct Contacto2D {
     /// Los objetos de los dos colisionadores.
     pub a: Id,
     pub b: Id,
+    /// Los índices de los dos colisionadores en sus objetos (Collision2D.collider).
+    pub ca: usize,
+    pub cb: usize,
 }
 
-/// Lo que define la fixture de un colisionador: si cambia, se vuelve a crear.
-#[derive(Clone, Copy, PartialEq, Debug)]
+/// Un colisionador: el objeto y su índice entre los colisionadores del objeto.
+type Clave = (Id, usize);
+
+/// Una pose 2D: posición y ángulo.
+type Pose = (Vec2, f32);
+
+/// Lo que define las fixtures de un colisionador: si cambia, se vuelven a crear.
+#[derive(Clone, PartialEq, Debug)]
 struct Firma {
     cuerpo: BodyId,
     centro: Vec2,
@@ -115,14 +110,16 @@ struct Firma {
 }
 
 struct FixtureActual {
-    fixture: FixtureId,
+    fixtures: Vec<FixtureId>,
     firma: Firma,
 }
 
 struct CuerpoActual {
     cuerpo: BodyId,
-    /// La pose (posición, ángulo) del Transform la última vez que se sincronizó.
-    pose: (Vec2, f32),
+    /// La pose del Transform la última vez que se sincronizó.
+    pose: Pose,
+    /// La pose del cuerpo antes del último paso (para interpolar).
+    anterior: Pose,
 }
 
 pub struct Fisica2d {
@@ -132,10 +129,12 @@ pub struct Fisica2d {
     rayos_tocan_triggers: bool,
     cuerpos: HashMap<Id, CuerpoActual>,
     estaticos: HashMap<Id, CuerpoActual>,
-    fixtures: HashMap<(Id, usize), FixtureActual>,
-    /// Dato de usuario de cada fixture -> (objeto, índice del colisionador). Nunca se reutiliza.
-    datos: HashMap<usize, (Id, usize)>,
+    fixtures: HashMap<Clave, FixtureActual>,
+    /// Dato de usuario de cada fixture -> colisionador. Nunca se reutiliza.
+    datos: HashMap<usize, Clave>,
     siguiente_dato: usize,
+    /// Cuántos pares de fixtures se tocan en cada par de colisionadores.
+    toques: HashMap<(Clave, Clave), u32>,
 }
 
 impl Fisica2d {
@@ -152,6 +151,7 @@ impl Fisica2d {
             fixtures: HashMap::new(),
             datos: HashMap::new(),
             siguiente_dato: 1,
+            toques: HashMap::new(),
         }
     }
 
@@ -159,9 +159,11 @@ impl Fisica2d {
         self.fixtures.retain(|_, f| f.firma.cuerpo != cuerpo);
     }
 
-    fn quitar_fixture(&mut self, clave: (Id, usize)) {
+    fn quitar_fixture(&mut self, clave: Clave) {
         if let Some(f) = self.fixtures.remove(&clave) {
-            self.world.destroy_fixture(f.fixture);
+            for fixture in f.fixtures {
+                self.world.destroy_fixture(fixture);
+            }
         }
     }
 
@@ -186,6 +188,8 @@ impl Fisica2d {
         }
         self.quitar_cuerpo(id);
         self.quitar_estatico(id);
+        // Unity no avisa del final de los contactos de un objeto destruido.
+        self.toques.retain(|(a, b), _| a.0 != id && b.0 != id);
     }
 }
 
@@ -199,7 +203,7 @@ fn de_b2(v: B2Vec2) -> Vec2 {
 
 impl Escena {
     /// La pose 2D (posición y giro en z) del Transform de un objeto.
-    fn pose(&self, id: Id) -> (Vec2, f32) {
+    fn pose(&self, id: Id) -> Pose {
         let p = self.posicion(id);
         (vec2(p.x, p.y), Escena::angulo_z(self.rotacion(id)))
     }
@@ -248,14 +252,20 @@ impl Escena {
                         ..Default::default()
                     };
                     let cuerpo = self.fisica.world.create_body(&def);
-                    self.fisica
-                        .cuerpos
-                        .insert(id, CuerpoActual { cuerpo, pose });
+                    self.fisica.cuerpos.insert(
+                        id,
+                        CuerpoActual {
+                            cuerpo,
+                            pose,
+                            anterior: pose,
+                        },
+                    );
                 }
                 Some(c) if c.pose != pose => {
                     // El código movió el Transform: se teletransporta el cuerpo.
                     let cuerpo = c.cuerpo;
                     c.pose = pose;
+                    c.anterior = pose;
                     self.fisica
                         .world
                         .set_transform(cuerpo, a_b2(pose.0), pose.1);
@@ -271,7 +281,7 @@ impl Escena {
             let n = self.objeto(id).colisionadores.len();
             for i in 0..n {
                 let obj = self.objeto(id);
-                let col = obj.colisionadores[i];
+                let col = obj.colisionadores[i].clone();
                 if obj.destruido || !col.activo || !self.activo_en_jerarquia(id) {
                     self.fisica.quitar_fixture((id, i));
                     continue;
@@ -299,9 +309,14 @@ impl Escena {
                                     user_data: id,
                                     ..Default::default()
                                 });
-                                self.fisica
-                                    .estaticos
-                                    .insert(id, CuerpoActual { cuerpo, pose });
+                                self.fisica.estaticos.insert(
+                                    id,
+                                    CuerpoActual {
+                                        cuerpo,
+                                        pose,
+                                        anterior: pose,
+                                    },
+                                );
                                 cuerpo
                             }
                         };
@@ -317,16 +332,40 @@ impl Escena {
                 let relativa = marco_cuerpo.inverse() * self.matriz_mundo(id);
                 let c = relativa.transform_point3(vec3(col.centro.x, col.centro.y, 0.0));
                 let escala = self.escala(id);
-                let forma = match col.forma {
+                let mut angulo = Escena::angulo_z(self.rotacion(id)) - ang_d;
+                let forma = match &col.forma {
                     Forma2D::Caja(t) => {
                         Forma2D::Caja(vec2((t.x * escala.x).abs(), (t.y * escala.y).abs()))
                     }
                     Forma2D::Circulo(r) => Forma2D::Circulo(r * escala.x.abs().max(escala.y.abs())),
+                    // Los puntos (con el centro) pasan enteros al marco del cuerpo, con la
+                    // escala y el giro.
+                    Forma2D::Poligono(caminos) => {
+                        angulo = 0.0;
+                        Forma2D::Poligono(
+                            caminos
+                                .iter()
+                                .map(|camino| {
+                                    camino
+                                        .iter()
+                                        .map(|&p| {
+                                            let q = relativa.transform_point3(vec3(
+                                                p.x + col.centro.x,
+                                                p.y + col.centro.y,
+                                                0.0,
+                                            ));
+                                            vec2(q.x, q.y)
+                                        })
+                                        .collect()
+                                })
+                                .collect(),
+                        )
+                    }
                 };
                 let firma = Firma {
                     cuerpo,
                     centro: vec2(c.x, c.y),
-                    angulo: Escena::angulo_z(self.rotacion(id)) - ang_d,
+                    angulo,
                     forma,
                     trigger: col.trigger,
                     friccion: col.material.friccion,
@@ -344,7 +383,7 @@ impl Escena {
                     masas.insert(vieja.firma.cuerpo);
                 }
                 self.fisica.quitar_fixture((id, i));
-                let shape = match firma.forma {
+                let shapes = match &firma.forma {
                     Forma2D::Caja(t) => {
                         let mut p = PolygonShape::default();
                         p.set_as_box_oriented(
@@ -353,31 +392,36 @@ impl Escena {
                             a_b2(firma.centro),
                             firma.angulo,
                         );
-                        Shape::Polygon(p)
+                        vec![Shape::Polygon(p)]
                     }
                     Forma2D::Circulo(r) => {
-                        let mut s = CircleShape::new(r);
+                        let mut s = CircleShape::new(*r);
                         s.p = a_b2(firma.centro);
-                        Shape::Circle(s)
+                        vec![Shape::Circle(s)]
                     }
+                    Forma2D::Poligono(caminos) => piezas_convexas(caminos),
                 };
-                let fixture = self.fisica.world.create_fixture(
-                    cuerpo,
-                    &FixtureDef {
-                        shape,
-                        friction: firma.friccion,
-                        restitution: firma.rebote,
-                        density: 1.0,
-                        is_sensor: firma.trigger,
-                    },
-                );
-                let dato = self.fisica.siguiente_dato;
-                self.fisica.siguiente_dato += 1;
-                self.fisica.world.set_fixture_user_data(fixture, dato);
-                self.fisica.datos.insert(dato, (id, i));
+                let mut fixtures = Vec::with_capacity(shapes.len());
+                for shape in shapes {
+                    let fixture = self.fisica.world.create_fixture(
+                        cuerpo,
+                        &FixtureDef {
+                            shape,
+                            friction: firma.friccion,
+                            restitution: firma.rebote,
+                            density: 1.0,
+                            is_sensor: firma.trigger,
+                        },
+                    );
+                    let dato = self.fisica.siguiente_dato;
+                    self.fisica.siguiente_dato += 1;
+                    self.fisica.world.set_fixture_user_data(fixture, dato);
+                    self.fisica.datos.insert(dato, (id, i));
+                    fixtures.push(fixture);
+                }
                 self.fisica
                     .fixtures
-                    .insert((id, i), FixtureActual { fixture, firma });
+                    .insert((id, i), FixtureActual { fixtures, firma });
                 masas.insert(cuerpo);
             }
         }
@@ -415,6 +459,10 @@ impl Escena {
             self.fisica.iteraciones_velocidad,
             self.fisica.iteraciones_posicion,
         );
+        for c in self.fisica.cuerpos.values_mut() {
+            let body = self.fisica.world.body(c.cuerpo);
+            c.anterior = (de_b2(body.get_position()), body.get_angle());
+        }
         self.fisica.world.step(dt, v, p);
         let cuerpos: Vec<(Id, BodyId)> = self
             .fisica
@@ -428,22 +476,7 @@ impl Escena {
                 continue;
             }
             let (pos, ang) = (de_b2(body.get_position()), body.get_angle());
-            let z = self.posicion(id).z;
-            self.fijar_posicion(id, vec3(pos.x, pos.y, z));
-            if !self
-                .objeto(id)
-                .cuerpo
-                .as_ref()
-                .is_some_and(|rb| rb.angulo_fijo)
-            {
-                let resto = self.rotacion(id);
-                let actual = Escena::angulo_z(resto);
-                self.fijar_rotacion(id, Quat::from_rotation_z(ang - actual) * resto);
-            }
-            let pose = self.pose(id);
-            if let Some(c) = self.fisica.cuerpos.get_mut(&id) {
-                c.pose = pose;
-            }
+            self.escribir_pose(id, pos, ang);
         }
         let eventos = self
             .fisica
@@ -463,6 +496,27 @@ impl Escena {
             if !self.existe(a) || !self.existe(b) {
                 continue;
             }
+            let clave = if (a, ia) <= (b, ib) {
+                ((a, ia), (b, ib))
+            } else {
+                ((b, ib), (a, ia))
+            };
+            let n = self.fisica.toques.entry(clave).or_insert(0);
+            if e.begin {
+                *n += 1;
+                if *n > 1 {
+                    continue;
+                }
+            } else {
+                if *n == 0 {
+                    continue;
+                }
+                *n -= 1;
+                if *n > 0 {
+                    continue;
+                }
+                self.fisica.toques.remove(&clave);
+            }
             let trigger = |s: &Self, id: Id, i: usize| {
                 s.objeto(id)
                     .colisionadores
@@ -474,6 +528,8 @@ impl Escena {
                 trigger: trigger(self, a, ia) || trigger(self, b, ib),
                 a,
                 b,
+                ca: ia,
+                cb: ib,
             });
         }
         // Los datos de fixtures ya borradas no vuelven a aparecer.
@@ -481,15 +537,79 @@ impl Escena {
             .fisica
             .fixtures
             .values()
-            .map(|f| self.fisica.world.fixture(f.fixture).user_data())
+            .flat_map(|f| f.fixtures.iter())
+            .map(|&f| self.fisica.world.fixture(f).user_data())
             .collect();
         self.fisica.datos.retain(|d, _| vivos.contains(d));
         contactos
     }
 
-    /// Physics2D.OverlapCircle: el primer colisionador de las capas de `mascara` que toca el
-    /// círculo (su objeto).
-    pub fn superpone_circulo(&self, centro: Vec2, radio: f32, mascara: u32) -> Option<Id> {
+    /// La pose del cuerpo de `id` pasada a su Transform (y recordada para no teletransportarlo).
+    fn escribir_pose(&mut self, id: Id, pos: Vec2, ang: f32) {
+        let z = self.posicion(id).z;
+        self.fijar_posicion(id, vec3(pos.x, pos.y, z));
+        if !self
+            .objeto(id)
+            .cuerpo
+            .as_ref()
+            .is_some_and(|rb| rb.angulo_fijo)
+        {
+            let resto = self.rotacion(id);
+            let actual = Escena::angulo_z(resto);
+            self.fijar_rotacion(id, Quat::from_rotation_z(ang - actual) * resto);
+        }
+        let pose = self.pose(id);
+        if let Some(c) = self.fisica.cuerpos.get_mut(&id) {
+            c.pose = pose;
+        }
+    }
+
+    /// Los cuerpos con Interpolate: la pose de antes del último paso y la actual.
+    fn interpolados(&self) -> Vec<(Id, Pose, Pose)> {
+        let mut v: Vec<_> = self
+            .fisica
+            .cuerpos
+            .iter()
+            .filter(|(id, _)| {
+                self.objeto(**id)
+                    .cuerpo
+                    .as_ref()
+                    .is_some_and(|rb| rb.interpolacion == 1)
+            })
+            .map(|(&id, c)| {
+                let body = self.fisica.world.body(c.cuerpo);
+                (
+                    id,
+                    c.anterior,
+                    (de_b2(body.get_position()), body.get_angle()),
+                )
+            })
+            .collect();
+        v.sort_by_key(|x| x.0);
+        v
+    }
+
+    /// Antes de los FixedUpdate de un frame: los cuerpos con Interpolate vuelven a tener en su
+    /// Transform la pose de la física, la que ven los scripts en FixedUpdate.
+    pub fn restaurar_interpolados(&mut self) {
+        for (id, _, (pos, ang)) in self.interpolados() {
+            self.escribir_pose(id, pos, ang);
+        }
+    }
+
+    /// Después de los FixedUpdate: los cuerpos con Interpolate se dibujan (y los ve Update) a
+    /// una fracción `t` entre la pose de antes del último paso y la de después:
+    /// t = (Time.time - Time.fixedTime) / Time.fixedDeltaTime.
+    pub fn interpolar(&mut self, t: f32) {
+        let t = t.clamp(0.0, 1.0);
+        for (id, (p0, a0), (p1, a1)) in self.interpolados() {
+            self.escribir_pose(id, p0.lerp(p1, t), a0 + (a1 - a0) * t);
+        }
+    }
+
+    /// Las fixtures (con su colisionador) de las capas de `mascara` que tocan un círculo, en el
+    /// orden en que las devuelve el árbol de Box2D.
+    fn tocan_circulo(&self, centro: Vec2, radio: f32, mascara: u32) -> Vec<Clave> {
         let aabb = Aabb {
             lower_bound: b2vec2(centro.x - radio, centro.y - radio),
             upper_bound: b2vec2(centro.x + radio, centro.y + radio),
@@ -501,21 +621,61 @@ impl Escena {
         });
         let circulo = Shape::Circle(CircleShape::new(radio));
         let xf = B2Transform::new(a_b2(centro), 0.0);
-        candidatas.into_iter().find_map(|f| {
-            let fixture = self.fisica.world.fixture(f);
-            let &(id, i) = self.fisica.datos.get(&fixture.user_data())?;
-            let obj = self.objeto(id);
-            if mascara & (1 << obj.capa) == 0 {
-                return None;
+        candidatas
+            .into_iter()
+            .filter_map(|f| {
+                let fixture = self.fisica.world.fixture(f);
+                let &(id, i) = self.fisica.datos.get(&fixture.user_data())?;
+                let obj = self.objeto(id);
+                if mascara & (1 << obj.capa) == 0 {
+                    return None;
+                }
+                if obj.colisionadores[i].trigger && !self.fisica.rayos_tocan_triggers {
+                    return None;
+                }
+                self.fisica
+                    .world
+                    .test_overlap_fixture(f, &circulo, &xf)
+                    .then_some((id, i))
+            })
+            .collect()
+    }
+
+    /// Physics2D.OverlapCircle: el primer colisionador de las capas de `mascara` que toca el
+    /// círculo (su objeto).
+    pub fn superpone_circulo(&self, centro: Vec2, radio: f32, mascara: u32) -> Option<Id> {
+        self.tocan_circulo(centro, radio, mascara)
+            .first()
+            .map(|c| c.0)
+    }
+
+    /// Physics2D.OverlapCircleAll: todos los colisionadores que tocan el círculo (objeto e
+    /// índice), una vez cada uno.
+    pub fn superpone_circulo_todos(&self, centro: Vec2, radio: f32, mascara: u32) -> Vec<Clave> {
+        let mut vistos = Vec::new();
+        for c in self.tocan_circulo(centro, radio, mascara) {
+            if !vistos.contains(&c) {
+                vistos.push(c);
             }
-            if obj.colisionadores[i].trigger && !self.fisica.rayos_tocan_triggers {
-                return None;
-            }
-            self.fisica
-                .world
-                .test_overlap_fixture(f, &circulo, &xf)
-                .then_some(id)
-        })
+        }
+        vistos
+    }
+
+    /// Collider2D.bounds: la caja del mundo (mínimo y máximo) que envuelve las fixtures del
+    /// colisionador, con la pose actual de su cuerpo.
+    pub fn limites(&self, id: Id, i: usize) -> Option<(Vec2, Vec2)> {
+        let f = self.fisica.fixtures.get(&(id, i))?;
+        let mut caja: Option<(Vec2, Vec2)> = None;
+        for &fixture in &f.fixtures {
+            let fx = self.fisica.world.fixture(fixture);
+            let a = fx.shape.compute_aabb(&self.fisica.world.body(fx.body).xf);
+            let (lo, hi) = (de_b2(a.lower_bound), de_b2(a.upper_bound));
+            caja = Some(match caja {
+                None => (lo, hi),
+                Some((l, h)) => (l.min(lo), h.max(hi)),
+            });
+        }
+        caja
     }
 
     fn cuerpo_de(&self, id: Id) -> Option<BodyId> {
@@ -547,4 +707,25 @@ impl Escena {
     pub fn plano(p: Vec3) -> Vec2 {
         vec2(p.x, p.y)
     }
+}
+
+/// Las piezas convexas de los caminos de un PolygonCollider2D, ya en el marco del cuerpo, como
+/// polígonos de Box2D (con el Set que suelda los vértices cercanos). Las piezas sin área, o que
+/// tras soldar quedan con menos de tres vértices, se descartan: Box2D las rechazaría con un
+/// b2Assert y las cambiaría por una caja de 2x2.
+fn piezas_convexas(caminos: &[Vec<Vec2>]) -> Vec<Shape> {
+    let mut shapes = Vec::new();
+    for camino in caminos {
+        for pieza in crate::poligonos::descomponer(camino) {
+            if crate::poligonos::area(&pieza) <= f32::EPSILON {
+                continue;
+            }
+            let puntos: Vec<B2Vec2> = pieza.iter().map(|&p| a_b2(p)).collect();
+            let mut p = PolygonShape::default();
+            if p.set_soldando(&puntos) {
+                shapes.push(Shape::Polygon(p));
+            }
+        }
+    }
+    shapes
 }

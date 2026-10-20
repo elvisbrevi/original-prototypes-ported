@@ -24,13 +24,32 @@ pub struct Proyecto {
     pub materiales_fisicos: HashMap<String, MaterialFisico>,
     pub estilos: HashMap<String, Estilo>,
     pub fuentes: HashMap<String, DatosFuente>,
+    /// La escena de un juego de una sola escena (Unity 4: mainData).
+    #[serde(default)]
     pub escena: Vec<DatosObjeto>,
+    /// Las escenas en el orden de BuildSettings (Application.LoadLevel(i)).
+    #[serde(default)]
+    pub escenas: Vec<Vec<DatosObjeto>>,
     pub prefabs: HashMap<String, Vec<DatosObjeto>>,
 }
 
 impl Proyecto {
     pub fn leer(json: &str) -> Self {
         serde_json::from_str(json).expect("escena.json")
+    }
+
+    /// Cuántas escenas tiene el build (Application.levelCount).
+    pub fn niveles(&self) -> usize {
+        self.escenas.len().max(1)
+    }
+
+    /// Los objetos de la escena `nivel`.
+    pub fn objetos_de(&self, nivel: usize) -> &[DatosObjeto] {
+        if self.escenas.is_empty() {
+            &self.escena
+        } else {
+            &self.escenas[nivel]
+        }
     }
 }
 
@@ -71,6 +90,18 @@ pub struct Clip {
     pub bucle: bool,
     /// Curva de sprite: (tiempo, sprite) con interpolación por escalón.
     pub claves: Vec<(f32, String)>,
+    /// Curvas constantes de propiedades de otros componentes.
+    #[serde(default)]
+    pub valores: Vec<ValorAnimado>,
+}
+
+/// Una propiedad que el clip deja fija mientras se reproduce (una curva constante).
+#[derive(Deserialize, Clone, Debug)]
+pub struct ValorAnimado {
+    pub componente: String,
+    /// El nombre serializado, como "m_Size.x".
+    pub propiedad: String,
+    pub valor: f32,
 }
 
 #[derive(Deserialize, Clone)]
@@ -91,18 +122,36 @@ pub struct Parametro {
 #[derive(Deserialize, Clone)]
 pub struct Estado {
     pub nombre: String,
+    /// El clip del estado; vacío si es un blend tree.
     pub clip: String,
+    #[serde(default)]
+    pub mezcla: Option<Mezcla1D>,
     pub velocidad: f32,
     pub bucle: bool,
     pub transiciones: Vec<Transicion>,
 }
 
+/// Un blend tree 1D: cada clip con su umbral del parámetro, de menor a mayor.
+#[derive(Deserialize, Clone)]
+pub struct Mezcla1D {
+    pub parametro: String,
+    pub umbrales: Vec<f32>,
+    pub clips: Vec<String>,
+}
+
 #[derive(Deserialize, Clone)]
 pub struct Transicion {
     pub destino: usize,
-    /// En tiempo normalizado del estado de origen (Unity 4 no tiene duraciones fijas).
+    /// En tiempo normalizado del estado de origen, o en segundos si `duracion_fija` (Unity 5).
     pub duracion: f32,
+    #[serde(default)]
+    pub duracion_fija: bool,
     pub desfase: f32,
+    /// Has Exit Time (Unity 5): solo sale cuando el tiempo normalizado llega a `salida`.
+    #[serde(default)]
+    pub con_salida: bool,
+    #[serde(default)]
+    pub salida: f32,
     pub atomica: bool,
     pub a_si_misma: bool,
     pub condiciones: Vec<Condicion>,
@@ -142,6 +191,14 @@ pub struct Estilo {
     pub normal: EstadoEstilo,
     pub hover: EstadoEstilo,
     pub active: EstadoEstilo,
+    /// Los estados "on" (un botón activado, una ventana con el foco). Si el estilo no los trae,
+    /// se usan los normales.
+    #[serde(default)]
+    pub on_normal: Option<EstadoEstilo>,
+    #[serde(default)]
+    pub on_hover: Option<EstadoEstilo>,
+    #[serde(default)]
+    pub on_active: Option<EstadoEstilo>,
     /// Izquierda, derecha, arriba, abajo.
     pub borde: [f32; 4],
     pub relleno: [f32; 4],
@@ -204,6 +261,14 @@ pub enum Componente {
         material: Option<String>,
         radio: f32,
     },
+    PolygonCollider2D {
+        activo: bool,
+        trigger: bool,
+        centro: [f32; 2],
+        material: Option<String>,
+        /// Los caminos del polígono (cada uno cerrado), en el espacio local.
+        caminos: Vec<Vec<[f32; 2]>>,
+    },
     Rigidbody2D {
         masa: f32,
         arrastre: f32,
@@ -212,10 +277,16 @@ pub enum Componente {
         angulo_fijo: bool,
         cinematico: bool,
         sueno: u32,
+        /// RigidbodyInterpolation2D: 0 None, 1 Interpolate, 2 Extrapolate.
+        #[serde(default)]
+        interpolacion: u32,
     },
     Animator {
         activo: bool,
         controlador: String,
+        /// AnimatorUpdateMode: 0 Normal, 1 AnimatePhysics, 2 UnscaledTime.
+        #[serde(default)]
+        modo: u32,
     },
     AudioSource {
         activo: bool,
@@ -238,6 +309,24 @@ pub enum Componente {
         campo_vision: f32,
         cerca: f32,
         lejos: f32,
+    },
+    /// GUIText: texto en coordenadas de la vista (la posición del Transform), dibujado por el
+    /// GUILayer de la cámara.
+    #[serde(rename = "GUIText")]
+    TextoGui {
+        activo: bool,
+        texto: String,
+        fuente: Option<String>,
+        /// 0: el tamaño de la fuente.
+        tamano: u32,
+        estilo: u32,
+        /// TextAnchor del texto respecto a su posición.
+        anclaje: u32,
+        /// TextAlignment de las líneas: 0 Left, 1 Center, 2 Right.
+        alineacion: u32,
+        desplazamiento: [f32; 2],
+        interlineado: f32,
+        color: [f32; 4],
     },
     ParticleSystem(Box<DatosParticulas>),
     ParticleSystemRenderer {

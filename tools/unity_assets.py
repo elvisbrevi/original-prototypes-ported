@@ -88,11 +88,40 @@ def generador(env, managed):
     return g
 
 
-def leer_campos(obj):
+def leer_campos(obj, nodos=None):
     try:
-        return obj.read_typetree()
+        return obj.read_typetree(nodes=nodos) if nodos is not None else obj.read_typetree()
     except Exception as e:
         return {"_error": f"{type(e).__name__}: {e}"[:200]}
+
+
+ALIAS = {"library/unity default resources": "unity default resources",
+         "resources/unity_builtin_extra": "unity_builtin_extra"}
+
+
+def monoscript(archivo, ptr, archivos):
+    """El MonoScript (type tree) al que apunta m_Script, siguiendo las referencias externas por el
+    nombre del archivo. En los builds de Unity 5 sin type trees, el deref de UnityPy no las
+    resuelve."""
+    if ptr is None or ptr.m_PathID == 0:
+        return None
+    nombre = archivo.name if ptr.m_FileID == 0 else archivo.externals[ptr.m_FileID - 1].path
+    destino = archivos.get(os.path.basename(ALIAS.get(nombre, nombre)))
+    obj = destino.objects.get(ptr.m_PathID) if destino else None
+    return obj.read_typetree() if obj is not None else None
+
+
+def campos_monobehaviour(obj, script, generador):
+    """Los campos de un MonoBehaviour con el type tree generado de su clase. m_Script sale corrido
+    (m_Enabled se lee sin alinear) y se quita; el resto se lee bien."""
+    clase = (script["m_Namespace"] + "." if script.get("m_Namespace") else "") + script["m_ClassName"]
+    try:
+        nodos = generador.get_nodes_up(script["m_AssemblyName"], clase)
+    except Exception as e:
+        return {"_error": f"{type(e).__name__}: {e}"[:200]}
+    campos = leer_campos(obj, nodos)
+    campos.pop("m_Script", None)
+    return campos
 
 
 def vec(v):
@@ -103,8 +132,9 @@ def puntero(p):
     return [p.m_FileID, p.m_PathID] if p is not None else None
 
 
-def escena(archivo, con_campos):
-    """GameObjects de un SerializedFile con su Transform y sus componentes."""
+def escena(archivo, generador, archivos):
+    """GameObjects de un SerializedFile con su Transform y sus componentes; con `generador`, los
+    campos de los MonoBehaviour."""
     objetos = []
     for obj in archivo.objects.values():
         if obj.type.name != "GameObject":
@@ -128,11 +158,11 @@ def escena(archivo, con_campos):
                     comp.update(posicion=vec(t.m_LocalPosition), rotacion=vec(t.m_LocalRotation),
                                 escala=vec(t.m_LocalScale), padre=puntero(getattr(t, "m_Father", None)))
                 elif tipo == "MonoBehaviour":
-                    mb = comp_obj.read()
-                    script = mb.m_Script.deref_parse_as_object() if mb.m_Script else None
-                    comp["script"] = getattr(script, "m_ClassName", None)
-                    if con_campos:
-                        comp["campos"] = leer_campos(comp_obj)
+                    mb = comp_obj.read(check_read=False)
+                    script = monoscript(archivo, mb.m_Script, archivos)
+                    comp["script"] = script.get("m_ClassName") if script else None
+                    if generador is not None and script:
+                        comp["campos"] = campos_monobehaviour(comp_obj, script, generador)
                 else:
                     comp["campos"] = leer_campos(comp_obj)
             except Exception as e:
@@ -174,8 +204,9 @@ def datos_sprite(sprite):
 
 def exportar(ruta, salida, managed=None):
     env = UnityPy.load(ruta)
-    if managed:
-        env.typetree_generator = generador(env, managed)
+    gen = generador(env, managed) if managed else None
+    archivos = {os.path.basename(n): a for k, f in env.files.items()
+                for _, n, a in recorrer(k, f) if isinstance(a, SerializedFile)}
     usados = set()
     cuenta = collections.Counter()
     errores = []
@@ -186,7 +217,7 @@ def exportar(ruta, salida, managed=None):
     for k, f in env.files.items():
         for _, nombre, archivo in recorrer(k, f):
             if isinstance(archivo, SerializedFile):
-                objetos = escena(archivo, bool(managed))
+                objetos = escena(archivo, gen, archivos)
                 if objetos:
                     destino = unico(os.path.join(salida, "escenas"), os.path.basename(nombre) + ".json", usados)
                     with open(destino, "w", encoding="utf-8") as out:

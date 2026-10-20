@@ -3,13 +3,16 @@
 // (MouseDown, MouseUp y al final Repaint, que es cuando se dibuja). Un botón se aprieta con
 // MouseDown (pasa a ser el hotControl) y responde con MouseUp dentro de su rectángulo. Cada
 // estado del estilo (normal, hover, active) tiene su fondo: si el del estado no tiene, no se
-// dibuja ninguno. Las ventanas se dibujan encima del resto y recortan su contenido.
+// dibuja ninguno. Las ventanas se dibujan encima del resto y recortan su contenido; la que tiene el
+// foco (la última en la que se apretó el ratón) se dibuja con el estado "on" de su estilo. Aparte,
+// texto_gui dibuja los GUIText, que pinta el GUILayer de la cámara antes de OnGUI.
 
 use std::collections::HashMap;
 
 use macroquad::prelude::*;
 
 use crate::datos::{EstadoEstilo, Estilo};
+use crate::escena::TextoGui;
 
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub enum Evento {
@@ -25,6 +28,8 @@ pub struct FuenteGui {
     pub negrita: Option<Font>,
     pub ascenso: f32,
     pub alto_linea: f32,
+    /// El tamaño de la fuente en Unity (Font.fontSize), el que usa un estilo con tamaño 0.
+    pub tamano_defecto: f32,
 }
 
 enum Comando {
@@ -53,6 +58,8 @@ pub struct Gui {
     pub raton: Option<Vec2>,
     /// GUIUtility.hotControl.
     caliente: i32,
+    /// La ventana con el foco (su id de GUI.Window).
+    enfocada: Option<i32>,
     siguiente_id: i32,
     usado: bool,
     origen: Vec2,
@@ -73,6 +80,7 @@ impl Gui {
             evento: Evento::Repaint,
             raton: None,
             caliente: 0,
+            enfocada: None,
             siguiente_id: 1,
             usado: false,
             origen: Vec2::ZERO,
@@ -162,20 +170,31 @@ impl Gui {
         }
     }
 
-    /// GUI.Window: el fondo del estilo y el contenido, con coordenadas relativas a la ventana y
-    /// recortado por ella. Devuelve el rectángulo (no se puede arrastrar).
+    /// GUI.Window(id, rect, función, título): el fondo del estilo con el título y el contenido,
+    /// con coordenadas relativas a la ventana y recortado por ella. Apretar el ratón dentro le da
+    /// el foco. Devuelve el rectángulo (no se puede arrastrar).
     pub fn ventana(
         &mut self,
+        id: i32,
         rect: Rect,
+        titulo: &str,
         estilo: &Estilo,
         contenido: impl FnOnce(&mut Gui),
     ) -> Rect {
-        let _id = self.nuevo_id();
+        let _control = self.nuevo_id();
         let (capa, origen, recorte, siguiente) =
             (self.capa, self.origen, self.recorte, self.siguiente_id);
         self.capa = 1;
+        if self.evento == Evento::MouseDown && self.contiene(rect) {
+            self.enfocada = Some(id);
+        }
         if self.evento == Evento::Repaint {
-            self.dibujar_estilo(rect, "", estilo, &estilo.normal);
+            let estado = if self.enfocada == Some(id) {
+                estilo.on_normal.as_ref().unwrap_or(&estilo.normal)
+            } else {
+                &estilo.normal
+            };
+            self.dibujar_estilo(rect, titulo, estilo, estado);
         }
         self.origen = rect.point();
         self.recorte = Some(rect);
@@ -210,7 +229,7 @@ impl Gui {
         };
         let negrita = estilo.estilo & 1 != 0;
         let tamano = if estilo.tamano == 0 {
-            16
+            fuente.tamano_defecto.round() as u32
         } else {
             estilo.tamano
         } as u16;
@@ -291,6 +310,64 @@ impl Gui {
             uv,
             color: WHITE,
         });
+    }
+
+    /// Dibuja un GUIText en una pantalla de `ancho` x `alto`: su posición es la del Transform en
+    /// coordenadas de la vista (0 a 1, con y hacia arriba) más el desplazamiento en píxeles, y el
+    /// anclaje dice qué punto del bloque de texto queda ahí. Cada línea se alinea en el bloque.
+    pub fn texto_gui(&self, t: &TextoGui, posicion: Vec2, ancho: f32, alto: f32) {
+        if !t.activo || t.texto.is_empty() {
+            return;
+        }
+        let Some(nombre) = t.fuente.as_ref() else {
+            return;
+        };
+        let Some(fuente) = self.fuentes.get(nombre) else {
+            return;
+        };
+        let font = if t.estilo & 1 != 0 {
+            fuente.negrita.as_ref().unwrap_or(&fuente.normal)
+        } else {
+            &fuente.normal
+        };
+        let tamano = if t.tamano == 0 {
+            fuente.tamano_defecto
+        } else {
+            t.tamano as f32
+        };
+        let alto_linea = fuente.alto_linea * tamano * t.interlineado;
+        let lineas: Vec<&str> = t.texto.lines().collect();
+        let anchos: Vec<f32> = lineas
+            .iter()
+            .map(|l| measure_text(l, Some(font), tamano as u16, 1.0).width)
+            .collect();
+        let bloque = vec2(
+            anchos.iter().copied().fold(0.0, f32::max),
+            alto_linea * lineas.len() as f32,
+        );
+        let punto = vec2(
+            posicion.x * ancho + t.desplazamiento.x,
+            (1.0 - posicion.y) * alto - t.desplazamiento.y,
+        );
+        let fx = [0.0, 0.5, 1.0][t.anclaje as usize % 3];
+        let fy = [0.0, 0.5, 1.0][t.anclaje as usize / 3];
+        let esquina = punto - bloque * vec2(fx, fy);
+        let alinear = [0.0, 0.5, 1.0][(t.alineacion as usize).min(2)];
+        for (i, (linea, w)) in lineas.iter().zip(&anchos).enumerate() {
+            let x = esquina.x + (bloque.x - w) * alinear;
+            let y = esquina.y + i as f32 * alto_linea + fuente.ascenso * tamano;
+            draw_text_ex(
+                linea,
+                x.round(),
+                y.round(),
+                TextParams {
+                    font: Some(font),
+                    font_size: tamano as u16,
+                    color: t.color,
+                    ..Default::default()
+                },
+            );
+        }
     }
 
     /// Dibuja lo que dejó el Repaint: primero la GUI de los scripts y encima las ventanas.

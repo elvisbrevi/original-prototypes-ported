@@ -2,7 +2,7 @@
 name = "unity"
 version = "0.1.0"
 edition = "2024"
-description = "Las piezas del motor de Unity 4.x (2D) que usan los ports del museo"
+description = "Las piezas del motor de Unity 4.x y 5.x (2D) que usan los ports del museo"
 
 [dependencies]
 box2d = { path = "../box2d" }

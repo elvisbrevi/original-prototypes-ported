@@ -1,12 +1,13 @@
-// Animator de Mecanim (Unity 4) con lo que usan los juegos 2D: una capa, estados con un clip de
-// sprites cada uno, parámetros float/int/bool y transiciones con condiciones, también desde
-// AnyState. En Unity 4 la duración de una transición está en tiempo normalizado del estado de
-// origen. Las curvas de sprite no se mezclan: durante una transición se ve el sprite del estado
-// que pesa más.
+// Animator de Mecanim (Unity 4 y 5) con lo que usan los juegos 2D: una capa, estados con un clip
+// de sprites o un blend tree 1D, parámetros float/int/bool y transiciones con condiciones, también
+// desde AnyState. La duración de una transición está en tiempo normalizado del estado de origen
+// (en Unity 5 puede ser fija, en segundos). Las curvas de sprite no se mezclan: durante una
+// transición se ve el sprite del estado que pesa más, y en un blend tree, el del clip que pesa
+// más.
 
 use std::collections::HashMap;
 
-use crate::datos::{Clip, Controlador, Transicion};
+use crate::datos::{Clip, Controlador, Transicion, ValorAnimado};
 
 #[derive(Clone, Copy, Debug)]
 enum Valor {
@@ -24,6 +25,10 @@ struct TransicionActiva {
 
 pub struct Animator {
     pub activo: bool,
+    /// AnimatorUpdateMode: 0 Normal (con Update), 1 AnimatePhysics (con cada FixedUpdate).
+    pub modo: u32,
+    /// El valor original de cada propiedad que animó algún clip (Write Defaults).
+    pub defectos: HashMap<String, f32>,
     controlador: Controlador,
     parametros: HashMap<String, Valor>,
     pub estado: usize,
@@ -47,6 +52,8 @@ impl Animator {
             .collect();
         Self {
             activo,
+            modo: 0,
+            defectos: HashMap::new(),
             controlador: controlador.clone(),
             parametros,
             estado: controlador.defecto,
@@ -78,7 +85,56 @@ impl Animator {
         &self.controlador.estados[self.estado].nombre
     }
 
-    fn cumple(&self, t: &Transicion) -> bool {
+    fn numero(&self, nombre: &str) -> f32 {
+        match self.parametros.get(nombre) {
+            Some(Valor::Numero(x)) => *x,
+            _ => 0.0,
+        }
+    }
+
+    /// Los pesos de los clips de un blend tree 1D con el valor actual de su parámetro.
+    fn pesos(&self, estado: usize) -> Option<Vec<f32>> {
+        let m = self.controlador.estados[estado].mezcla.as_ref()?;
+        let x = self.numero(&m.parametro);
+        let u = &m.umbrales;
+        let mut w = vec![0.0; u.len()];
+        if x <= u[0] {
+            w[0] = 1.0;
+        } else if x >= u[u.len() - 1] {
+            w[u.len() - 1] = 1.0;
+        } else {
+            let i = (0..u.len() - 1)
+                .find(|&i| x <= u[i + 1])
+                .expect("entre umbrales");
+            let f = (x - u[i]) / (u[i + 1] - u[i]);
+            w[i] = 1.0 - f;
+            w[i + 1] = f;
+        }
+        Some(w)
+    }
+
+    /// El largo de un estado en tiempo de clip: el de su clip, o en un blend tree, la media de
+    /// los de sus clips según sus pesos.
+    fn largo(&self, clips: &HashMap<String, Clip>, estado: usize) -> f32 {
+        let e = &self.controlador.estados[estado];
+        match (&e.mezcla, self.pesos(estado)) {
+            (Some(m), Some(w)) => m
+                .clips
+                .iter()
+                .zip(w)
+                .map(|(c, w)| clips.get(c).map_or(0.0, |c| c.fin) * w)
+                .sum(),
+            _ => clips.get(&e.clip).map_or(0.0, |c| c.fin),
+        }
+    }
+
+    fn cumple(&self, clips: &HashMap<String, Clip>, t: &Transicion) -> bool {
+        if t.con_salida {
+            let largo = self.largo(clips, self.estado);
+            if largo <= 0.0 || self.tiempo / largo < t.salida {
+                return false;
+            }
+        }
         t.condiciones.iter().all(|c| {
             let v = c.parametro.as_ref().and_then(|p| self.parametros.get(p));
             match (c.modo, v) {
@@ -96,12 +152,15 @@ impl Animator {
     /// La duración en segundos de un estado (la de su clip, a su velocidad).
     fn duracion(&self, clips: &HashMap<String, Clip>, estado: usize) -> f32 {
         let e = &self.controlador.estados[estado];
-        clips.get(&e.clip).map_or(0.0, |c| c.fin) / e.velocidad.max(1e-6)
+        self.largo(clips, estado) / e.velocidad.max(1e-6)
     }
 
     fn empezar(&mut self, clips: &HashMap<String, Clip>, t: &Transicion) {
-        let largo_origen = self.duracion(clips, self.estado);
-        let duracion = t.duracion * largo_origen;
+        let duracion = if t.duracion_fija {
+            t.duracion
+        } else {
+            t.duracion * self.duracion(clips, self.estado)
+        };
         let tiempo_destino = t.desfase * self.duracion(clips, t.destino);
         if duracion <= 0.0 {
             self.estado = t.destino;
@@ -129,12 +188,12 @@ impl Animator {
                 .controlador
                 .desde_cualquiera
                 .iter()
-                .find(|t| (t.destino != self.estado || t.a_si_misma) && self.cumple(t))
+                .find(|t| (t.destino != self.estado || t.a_si_misma) && self.cumple(clips, t))
                 .or_else(|| {
                     self.controlador.estados[self.estado]
                         .transiciones
                         .iter()
-                        .find(|t| self.cumple(t))
+                        .find(|t| self.cumple(clips, t))
                 })
                 .cloned();
             if let Some(t) = elegida {
@@ -153,13 +212,37 @@ impl Animator {
                 self.transicion = None;
             }
         }
+        let (clip, bucle, t) = self.visible(clips)?;
+        Some(muestrear(clip, bucle, t).to_owned())
+    }
+
+    /// El clip que se ve (el del estado que pesa más en la transición, y en un blend tree el del
+    /// clip que pesa más), si hace bucle y el tiempo dentro de él.
+    fn visible<'a>(&self, clips: &'a HashMap<String, Clip>) -> Option<(&'a Clip, bool, f32)> {
         let (estado, tiempo) = match &self.transicion {
             Some(tr) if tr.transcurrido / tr.duracion >= 0.5 => (tr.destino, tr.tiempo_destino),
             _ => (self.estado, self.tiempo),
         };
         let e = &self.controlador.estados[estado];
-        let clip = clips.get(&e.clip)?;
-        Some(muestrear(clip, e.bucle, tiempo).to_owned())
+        match (&e.mezcla, self.pesos(estado)) {
+            (Some(m), Some(w)) => {
+                // A igual peso, el primero.
+                let i = (0..w.len()).fold(0, |a, i| if w[i] > w[a] { i } else { a });
+                let clip = clips.get(&m.clips[i])?;
+                let largo = self.largo(clips, estado);
+                let normalizado = if largo > 0.0 { tiempo / largo } else { 0.0 };
+                Some((clip, e.bucle, normalizado * clip.fin))
+            }
+            _ => Some((clips.get(&e.clip)?, e.bucle, tiempo)),
+        }
+    }
+
+    /// Las propiedades que fija el clip que se ve (ver Escena::animar_colisionador).
+    pub fn valores<'a>(&self, clips: &'a HashMap<String, Clip>) -> &'a [ValorAnimado] {
+        if !self.activo {
+            return &[];
+        }
+        self.visible(clips).map_or(&[], |(c, _, _)| &c.valores)
     }
 }
 
@@ -191,6 +274,7 @@ mod tests {
             fps: 1.0 / paso,
             fin,
             bucle: true,
+            valores: Vec::new(),
             claves: sprites
                 .iter()
                 .enumerate()
@@ -203,7 +287,10 @@ mod tests {
         Transicion {
             destino,
             duracion,
+            duracion_fija: false,
             desfase: 0.0,
+            con_salida: false,
+            salida: 0.0,
             atomica: true,
             a_si_misma: false,
             condiciones: vec![Condicion {
@@ -220,6 +307,7 @@ mod tests {
         let estado = |nombre: &str, transiciones| Estado {
             nombre: nombre.into(),
             clip: nombre.into(),
+            mezcla: None,
             velocidad: 1.0,
             bucle: true,
             transiciones,
@@ -271,5 +359,37 @@ mod tests {
         // 0,25 de 0,2 s = 0,05 s.
         a.actualizar(&clips, 0.06);
         assert_eq!(a.nombre_estado(), "Run");
+    }
+
+    #[test]
+    fn blend_tree_1d_muestra_el_clip_que_mas_pesa() {
+        let (mut c, mut clips) = controlador();
+        c.parametros.push(Parametro {
+            nombre: "vSpeed".into(),
+            tipo: "float".into(),
+            defecto: Value::from(0.0),
+        });
+        c.estados[1].clip = String::new();
+        c.estados[1].mezcla = Some(crate::datos::Mezcla1D {
+            parametro: "vSpeed".into(),
+            umbrales: vec![-10.0, -2.0, 2.0],
+            clips: vec!["cae".into(), "arriba".into(), "sube".into()],
+        });
+        for n in ["cae", "arriba", "sube"] {
+            clips.insert(n.into(), clip(1.0 / 60.0, &[n]));
+        }
+        let mut a = Animator::nuevo(true, &c);
+        a.set_bool("Ground", false);
+        a.set_float("vSpeed", 5.0);
+        a.actualizar(&clips, 0.3);
+        a.actualizar(&clips, 0.02);
+        assert_eq!(a.nombre_estado(), "Jump");
+        assert_eq!(a.actualizar(&clips, 0.02).as_deref(), Some("sube"));
+        a.set_float("vSpeed", -5.0);
+        assert_eq!(a.actualizar(&clips, 0.02).as_deref(), Some("arriba"));
+        a.set_float("vSpeed", -7.0);
+        assert_eq!(a.actualizar(&clips, 0.02).as_deref(), Some("cae"));
+        a.set_float("vSpeed", -30.0);
+        assert_eq!(a.actualizar(&clips, 0.02).as_deref(), Some("cae"));
     }
 }

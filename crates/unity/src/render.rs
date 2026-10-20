@@ -1,7 +1,8 @@
 // La cámara y el dibujo de los SpriteRenderer y los ParticleSystemRenderer. Como en Unity, la cola
 // transparente se ordena por sorting layer, luego por order in layer y luego de lejos a cerca de
-// la cámara. La cámara puede ser de perspectiva (Field of View vertical) u ortográfica; sin girar,
-// los sprites paralelos a la pantalla se proyectan como rectángulos.
+// la cámara (por la profundidad en la vista si es ortográfica). La cámara puede ser de
+// perspectiva (Field of View vertical) u ortográfica; sin girar, los sprites paralelos a la
+// pantalla se proyectan como rectángulos.
 
 use std::collections::HashMap;
 
@@ -202,7 +203,13 @@ pub fn dibujar(escena: &Escena, proyecto: &Proyecto, recursos: &Recursos, camara
         if !escena.activo_en_jerarquia(id) {
             continue;
         }
-        let distancia = escena.posicion(id).distance_squared(camara.posicion);
+        // Con cámara ortográfica se ordena por la profundidad en la vista; con perspectiva, por
+        // la distancia a la cámara.
+        let distancia = if camara.ortografica {
+            (camara.rotacion.inverse() * (escena.posicion(id) - camara.posicion)).z
+        } else {
+            escena.posicion(id).distance_squared(camara.posicion)
+        };
         if let Some(s) = &o.sprite
             && s.activo
             && s.sprite.is_some()

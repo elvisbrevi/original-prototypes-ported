@@ -56,6 +56,8 @@ fn fuentes(proyecto: &Proyecto) -> HashMap<String, FuenteGui> {
             // hhea de Arial: ascenso 1854, descenso 434 e interlínea 67 de 2048.
             ascenso: 1854.0 / 2048.0,
             alto_linea: (1854.0 + 434.0 + 67.0) / 2048.0,
+            // La Arial integrada de Unity es de 13.
+            tamano_defecto: 13.0,
         },
     );
     let redondeada = &proyecto.fuentes["Arial Rounded Bold"];
@@ -66,6 +68,7 @@ fn fuentes(proyecto: &Proyecto) -> HashMap<String, FuenteGui> {
             negrita: Some(cargar(include_bytes!("../fuentes/Nunito-Black.ttf"))),
             ascenso: redondeada.ascenso / redondeada.tamano,
             alto_linea: redondeada.interlineado / redondeada.tamano,
+            tamano_defecto: redondeada.tamano,
         },
     );
     f

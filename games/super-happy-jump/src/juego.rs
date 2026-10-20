@@ -436,7 +436,7 @@ impl Juego {
                 let rect = Rect::new(ANCHO / 2.0 - 250.0, 100.0, 500.0, 400.0);
                 self.hud.window_rect_fin = rect;
                 let ventana = self.estilo("ventana");
-                gui.ventana(rect, &ventana, |gui| self.ventana_fin(gui));
+                gui.ventana(0, rect, "", &ventana, |gui| self.ventana_fin(gui));
                 if gui.button(boton, "", &self.estilo("button_play")) {
                     self.play(self.hud.id, 0);
                     self.estaticos.spawn_activo = true;

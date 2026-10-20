@@ -354,6 +354,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "one-button-prototype"
+version = "0.1.0"
+dependencies = [
+ "macroquad",
+ "museo",
+ "unity",
+]
+
+[[package]]
 name = "png"
 version = "0.17.16"
 source = "registry+https://github.com/rust-lang/crates.io-index"

@@ -8,7 +8,7 @@ use macroquad::prelude::{Color, Mat4, Quat, Vec2, Vec3, vec3};
 use serde_json::Value;
 
 use crate::animator::Animator;
-use crate::datos::{Componente, DatosObjeto, Proyecto};
+use crate::datos::{Componente, DatosObjeto, Proyecto, ValorAnimado};
 use crate::fisica2d::{Colisionador2D, Fisica2d, Forma2D, Rigidbody2D};
 use crate::particulas::Particulas;
 
@@ -52,6 +52,20 @@ pub struct FuenteAudio {
     pub al_despertar: bool,
 }
 
+/// GUIText: un texto en coordenadas de la vista, dibujado por el GUILayer.
+pub struct TextoGui {
+    pub activo: bool,
+    pub texto: String,
+    pub fuente: Option<String>,
+    pub tamano: u32,
+    pub estilo: u32,
+    pub anclaje: u32,
+    pub alineacion: u32,
+    pub desplazamiento: Vec2,
+    pub interlineado: f32,
+    pub color: Color,
+}
+
 pub struct DatosCamara {
     pub fondo: Color,
     pub ortografica: bool,
@@ -77,6 +91,7 @@ pub struct Objeto {
     pub audio: Vec<FuenteAudio>,
     pub scripts: Vec<Script>,
     pub camara: Option<DatosCamara>,
+    pub texto_gui: Option<TextoGui>,
     pub destruido: bool,
 }
 
@@ -98,14 +113,20 @@ pub struct Escena {
 }
 
 impl Escena {
-    /// Application.LoadLevel: la escena del proyecto, con sus objetos en el orden del archivo.
+    /// Application.LoadLevel: la primera escena del proyecto, con sus objetos en el orden del
+    /// archivo.
     pub fn cargar(proyecto: &Proyecto) -> Self {
+        Self::cargar_nivel(proyecto, 0)
+    }
+
+    /// Application.LoadLevel(nivel).
+    pub fn cargar_nivel(proyecto: &Proyecto, nivel: usize) -> Self {
         let mut escena = Self {
             objetos: Vec::new(),
             originales: HashMap::new(),
             fisica: Fisica2d::nueva(&proyecto.fisica2d),
         };
-        let originales = escena.crear(proyecto, &proyecto.escena);
+        let originales = escena.crear(proyecto, proyecto.objetos_de(nivel));
         escena.originales = originales;
         escena
     }
@@ -159,6 +180,7 @@ impl Escena {
             audio: Vec::new(),
             scripts: Vec::new(),
             camara: None,
+            texto_gui: None,
             destruido: false,
         };
         let mut renderer_particulas = None;
@@ -206,6 +228,24 @@ impl Escena {
                     Forma2D::Circulo(*radio),
                     material(m),
                 )),
+                Componente::PolygonCollider2D {
+                    activo,
+                    trigger,
+                    centro,
+                    material: m,
+                    caminos,
+                } => obj.colisionadores.push(Colisionador2D::nuevo(
+                    *activo,
+                    *trigger,
+                    Vec2::from(*centro),
+                    Forma2D::Poligono(
+                        caminos
+                            .iter()
+                            .map(|c| c.iter().map(|&p| Vec2::from(p)).collect())
+                            .collect(),
+                    ),
+                    material(m),
+                )),
                 Componente::Rigidbody2D {
                     masa,
                     arrastre,
@@ -214,25 +254,52 @@ impl Escena {
                     angulo_fijo,
                     cinematico,
                     sueno,
+                    interpolacion,
                 } => {
-                    obj.cuerpo = Some(Rigidbody2D::nuevo(
-                        *masa,
-                        *arrastre,
-                        *arrastre_angular,
-                        *escala_gravedad,
-                        *angulo_fijo,
-                        *cinematico,
-                        *sueno,
-                    ))
+                    obj.cuerpo = Some(Rigidbody2D {
+                        masa: *masa,
+                        arrastre: *arrastre,
+                        arrastre_angular: *arrastre_angular,
+                        escala_gravedad: *escala_gravedad,
+                        angulo_fijo: *angulo_fijo,
+                        cinematico: *cinematico,
+                        sueno: *sueno,
+                        interpolacion: *interpolacion,
+                    })
                 }
                 Componente::Animator {
                     activo,
                     controlador,
+                    modo,
                 } => {
-                    obj.animator = Some(Animator::nuevo(
-                        *activo,
-                        &proyecto.controladores[controlador],
-                    ))
+                    let mut a = Animator::nuevo(*activo, &proyecto.controladores[controlador]);
+                    a.modo = *modo;
+                    obj.animator = Some(a)
+                }
+                Componente::TextoGui {
+                    activo,
+                    texto,
+                    fuente,
+                    tamano,
+                    estilo,
+                    anclaje,
+                    alineacion,
+                    desplazamiento,
+                    interlineado,
+                    color: c,
+                } => {
+                    obj.texto_gui = Some(TextoGui {
+                        activo: *activo,
+                        texto: texto.clone(),
+                        fuente: fuente.clone(),
+                        tamano: *tamano,
+                        estilo: *estilo,
+                        anclaje: *anclaje,
+                        alineacion: *alineacion,
+                        desplazamiento: Vec2::from(*desplazamiento),
+                        interlineado: *interlineado,
+                        color: color(*c),
+                    })
                 }
                 Componente::AudioSource {
                     activo,
@@ -482,6 +549,55 @@ impl Escena {
                 self.objeto_mut(p).hijos.retain(|&h| h != id);
             }
             self.objetos[id] = None;
+        }
+    }
+
+    /// Los valores que un clip deja fijos en el BoxCollider2D del objeto (m_Size.x, m_Size.y,
+    /// m_Offset.x, m_Offset.y), con Write Defaults: las propiedades que el estado actual no anima
+    /// vuelven al valor que tenían cuando el Animator las tocó por primera vez. Las propiedades
+    /// que el componente no tiene (como m_Center, el nombre de Unity 4) no se aplican.
+    pub fn animar_colisionador(&mut self, id: Id, valores: &[ValorAnimado]) {
+        let obj = self.objeto_mut(id);
+        let Some(i) = obj
+            .colisionadores
+            .iter()
+            .position(|c| matches!(c.forma, Forma2D::Caja(_)))
+        else {
+            return;
+        };
+        let Some(animator) = obj.animator.as_mut() else {
+            return;
+        };
+        let col = &mut obj.colisionadores[i];
+        let leer = |c: &Colisionador2D, p: &str| match (&c.forma, p) {
+            (Forma2D::Caja(t), "m_Size.x") => Some(t.x),
+            (Forma2D::Caja(t), "m_Size.y") => Some(t.y),
+            (_, "m_Offset.x") => Some(c.centro.x),
+            (_, "m_Offset.y") => Some(c.centro.y),
+            _ => None,
+        };
+        let escribir = |c: &mut Colisionador2D, p: &str, v: f32| match (&mut c.forma, p) {
+            (Forma2D::Caja(t), "m_Size.x") => t.x = v,
+            (Forma2D::Caja(t), "m_Size.y") => t.y = v,
+            (_, "m_Offset.x") => c.centro.x = v,
+            (_, "m_Offset.y") => c.centro.y = v,
+            _ => {}
+        };
+        for v in valores.iter().filter(|v| v.componente == "BoxCollider2D") {
+            let Some(actual) = leer(col, &v.propiedad) else {
+                continue;
+            };
+            animator
+                .defectos
+                .entry(v.propiedad.clone())
+                .or_insert(actual);
+        }
+        for (p, defecto) in &animator.defectos {
+            let valor = valores
+                .iter()
+                .find(|v| v.componente == "BoxCollider2D" && &v.propiedad == p)
+                .map_or(*defecto, |v| v.valor);
+            escribir(col, p, valor);
         }
     }
 

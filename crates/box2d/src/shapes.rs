@@ -2,8 +2,10 @@
 // Physics de Construct 2 no crea).
 
 use crate::collision::Aabb;
-use crate::math::{Transform, Vec2, cross, cross_vs, dot, max_v, min_v, mul_rv, mul_xv, vec2};
-use crate::settings::{MAX_POLYGON_VERTICES, PI, POLYGON_RADIUS};
+use crate::math::{
+    Transform, Vec2, cross, cross_vs, distance_squared, dot, max_v, min_v, mul_rv, mul_xv, vec2,
+};
+use crate::settings::{LINEAR_SLOP, MAX_POLYGON_VERTICES, PI, POLYGON_RADIUS};
 
 #[derive(Clone, Copy, Debug, Default)]
 pub struct MassData {
@@ -82,7 +84,40 @@ impl PolygonShape {
             return;
         }
         let n = count.min(MAX_POLYGON_VERTICES);
-        let ps = &vertices[..n];
+        self.envolver(&vertices[..n]);
+    }
+
+    /// Set de Box2D 2.3.1 tal como se publicó (el que usa Unity): antes de la envolvente suelda
+    /// los puntos a menos de sqrt(0.5 * b2_linearSlop) de uno anterior. Si quedan menos de tres,
+    /// Box2D hace b2Assert(false) y SetAsBox(1, 1); aquí también, y devuelve false.
+    pub fn set_soldando(&mut self, vertices: &[Vec2]) -> bool {
+        let count = vertices.len();
+        if count < 3 {
+            self.set_as_box(1.0, 1.0);
+            return false;
+        }
+        let n = count.min(MAX_POLYGON_VERTICES);
+        let mut ps = [Vec2::ZERO; MAX_POLYGON_VERTICES];
+        let mut temp_count = 0;
+        for &v in &vertices[..n] {
+            let unico = ps[..temp_count]
+                .iter()
+                .all(|&p| distance_squared(v, p) >= 0.5 * LINEAR_SLOP);
+            if unico {
+                ps[temp_count] = v;
+                temp_count += 1;
+            }
+        }
+        if temp_count < 3 {
+            self.set_as_box(1.0, 1.0);
+            return false;
+        }
+        self.envolver(&ps[..temp_count])
+    }
+
+    /// La envoltura de regalo de Set sobre `ps` (ya soldados o no). False si queda degenerada.
+    fn envolver(&mut self, ps: &[Vec2]) -> bool {
+        let n = ps.len();
         let mut i0 = 0;
         let mut x0 = ps[0].x;
         for (i, p) in ps.iter().enumerate().skip(1) {
@@ -121,7 +156,7 @@ impl PolygonShape {
         }
         if m < 3 {
             self.set_as_box(1.0, 1.0);
-            return;
+            return false;
         }
         self.count = m;
         for i in 0..m {
@@ -134,6 +169,7 @@ impl PolygonShape {
             self.normals[i].normalize();
         }
         self.centroid = compute_centroid(&self.vertices[..m]);
+        true
     }
 
     pub fn compute_aabb(&self, xf: &Transform) -> Aabb {

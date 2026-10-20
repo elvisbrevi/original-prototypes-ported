@@ -1,0 +1,16 @@
+{
+  "pantalla": [960, 600],
+  "pasos": [
+    { "esperar": 2500 },
+    { "captura": "nivel1" },
+    { "zona": [480, 300], "ms": 80, "despues": 300 },
+    { "captura": "salto" },
+    { "tecla": "p", "despues": 400 },
+    { "captura": "menu" },
+    { "zona": [530, 260], "ms": 80, "despues": 1200 },
+    { "captura": "nivel2" },
+    { "tecla": "p", "despues": 400 },
+    { "zona": [430, 360], "ms": 80, "despues": 1300 },
+    { "captura": "nivel3" }
+  ]
+}

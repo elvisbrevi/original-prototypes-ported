@@ -5,14 +5,14 @@ Plan de trabajo para recrear en Rust + macroquad todos los juegos publicados en
 Está pensado para avanzar en varias sesiones: marca cada casilla al completarla e incluye el cambio
 del plan en el mismo commit.
 
-**Siguiente paso:** 2.7 One Button Prototype (Unity 5.1, Mono): extraer el build de Linux
-(`_Linux.zip`) en su propia carpeta de `originales/`, decompilar `Assembly-CSharp.dll` y
-`-firstpass` con ILSpy (las referencias de Unity 5.1.2 vienen en el mismo build) y reutilizar
-`crates/unity` (escena.json, física 2D sobre Box2D, Animator, sprites, IMGUI), ampliándolo con lo
-que pida Unity 5.1 (cámara ortográfica, otros componentes de los Standard Assets 2D). Seguir la
-plantilla con el paso 6 ampliado. La fase 4 (publicar las versiones web en itch.io) espera la
-confirmación del dueño de la cuenta: 4.1 y 4.2 se pueden preparar en cuanto la dé. El 0.7 (GitHub
-Pages) queda pendiente de decidir si se publica.
+**Siguiente paso:** 2.8 The Meaning of Christmas (Java + libGDX, Android): extraer el APK en su
+propia carpeta de `originales/` (ya lo abre `unzip`), decompilar `classes.dex` con JADX y apktool
+(instalados en `~/.local/opt`; para las herramientas Android de REA falta `REA_JADX_MCP_JAR`, o
+se usa JADX directamente y REA para el triaje del APK), pasar la música de MP3 a OGG y traducir
+el juego a macroquad (libGDX se traduce casi 1:1). Seguir la plantilla con el paso 6 ampliado. La
+fase 4 (publicar las versiones web en itch.io) espera la confirmación del dueño de la cuenta: 4.1
+y 4.2 se pueden preparar en cuanto la dé. El 0.7 (GitHub Pages) queda pendiente de decidir si se
+publica.
 
 ## Reglas
 
@@ -71,8 +71,10 @@ Herramientas de extracción por stack (checkpoint 0.8; las salidas van a `origin
 - XNA 3.1: `games/iman/tools/xnb_extract.py` (XNB v4 sin comprimir, `SpriteFont`, bancos XACT).
 - Unity: `~/.venvs/museo/bin/python -I tools/unity_assets.py inventario|exportar|emscripten ...`.
   Lee Unity 3.4, 4.6 (`web.unity3d`) y 5.1; con `--managed <carpeta Managed>` vuelca también los
-  campos de los MonoBehaviour. AssetRipper no hizo falta. Para un port, el `tools/extraer.py` del
-  juego (el de Super Happy Jump es el modelo) escribe el `escena.json` que lee `crates/unity`.
+  campos de los MonoBehaviour (en los builds de Unity 5 sin type trees, con el MonoScript
+  resuelto a mano). AssetRipper no hizo falta. Para un port, el `tools/extraer.py` del juego
+  escribe el `escena.json` que lee `crates/unity`: el de Super Happy Jump es el modelo para un
+  bundle de Unity 4 y el de One Button Prototype para un build de Unity 5 con varias escenas.
 - Construct 2: `python3 -I tools/c2_eventos.py resumen|eventos|fuente <carpeta html5>` (proyecto,
   tipos, layouts, tabla de referencias del runtime minificado y hojas de eventos en pseudocódigo).
 - Android: `~/.local/opt/jadx/bin/jadx -d <salida> <apk>` y
@@ -133,7 +135,7 @@ cada juego en la fase 2).
 | Super Happy Jump | `web.unity3d` (385 KB) | Unity 4.6.0f3, Web Player | ✅ hecho | ver pendientes en 2.6 |
 | Que No Caiga | HTML5 (39 archivos) | Construct 2 | ✅ hecho | ver pendientes en 2.3 |
 | Retro Penal | HTML5 + NW.js (win/osx/linux) | Construct 2 | ✅ hecho | ver pendientes en 2.4 |
-| One Button Prototype | Mac, Linux, APK y WebGL | Unity 5.1.2f1, Mono | ILSpy (Standard Assets 2D + clases propias); escenas con UnityPy/AssetRipper | física 2D (Box2D) |
+| One Button Prototype | Mac, Linux, APK y WebGL | Unity 5.1.2f1, Mono | ✅ hecho | ver pendientes en 2.7 |
 | Neuro Battle | `Neuro Battle.zip` (WebGL) | Unity 5.1.1f1, IL2CPP → asm.js | **sin DLL de C#**: metadatos IL2CPP + escenas + observar el juego (REA browser) | el más difícil; el WebGL de 2015 puede no correr en navegadores actuales. El `.data` ya se desempaqueta (`unity_assets.py emscripten`): escenas, sprites y nombres de scripts legibles |
 | Da Car | HTML5 (32 archivos) | Construct 2 + Box2D (asm.js) | ✅ hecho | ver pendientes en 2.5 |
 
@@ -251,16 +253,32 @@ Orden sugerido: primero lo que reutiliza herramientas ya hechas y luego lo más 
   probaron solo en emulación de Chromium; las monedas y el récord se probaron con un cambio
   temporal; las versiones de iOS y Android no están en itch.io (solo enlaces a las tiendas).
 
-### 2.7 One Button Prototype (Unity 5.1, Mono)
-- [ ] Triaje REA de `Assembly-CSharp.dll` y `-firstpass` (ya identificado: Standard Assets 2D +
-  `GUI_Prototipo`, `PlatformerDragon2D`, `Platformer2DDragonControl`).
-- [ ] Escenas y sprites con UnityPy/AssetRipper (posiciones, colisionadores, capas).
-- [ ] Física 2D: ampliar `crates/unity` (Box2D, como Unity) con lo que use (por ejemplo
-  `Physics2D.OverlapCircleAll`, `CircleCollider2D` en el suelo, `velocity` en el aire).
-- [ ] Port nativo jugable.
-- [ ] Web + táctil (un solo botón).
-- [ ] README del juego + ficha del museo.
-- [ ] Pendientes anotados.
+### 2.7 One Button Prototype (Unity 5.1, Mono) ✅
+- [x] Triaje REA de `Assembly-CSharp.dll` y `-firstpass` (`inspect-managed-artifact` e
+  `inspect-managed-members` de los seis tipos del juego y de `FPSCounter`): compilados el
+  22-jul-2015 (cabecera PE). Los builds de escritorio y Android son de ese día; el WebGL del
+  17-ago-2015 tiene las mismas escenas (comparadas con UnityPy) y los mismos literales en IL2CPP.
+- [x] Escenas y sprites con UnityPy (sin type trees: TypeTreeGeneratorAPI para los MonoBehaviour)
+  en `games/one-button-prototype/tools/extraer.py`: las tres escenas, sprites de malla ajustada
+  con su `uvTransform`, texturas recortadas, clips (también las curvas constantes del
+  `BoxCollider2D`), controladores con blend tree, la `GameSkin` integrada y OpenSans.
+- [x] `crates/unity` ampliado para Unity 5.1: varias escenas, `PolygonCollider2D` (piezas
+  convexas), contactos por par de colisionadores con `OnCollisionEnter2D`, `OverlapCircleAll`,
+  `bounds`, interpolación, Animator con blend trees 1D, *AnimatePhysics*, curvas sobre el
+  colisionador con *Write Defaults*, `GUI.Window` con título y foco, `GUIText`, `SmoothDamp`.
+  `crates/box2d` ganó el `Set` con soldadura de Box2D 2.3.1, comparado bit a bit con un C++
+  compilado como el de Unity en la escena nueva «rebote».
+- [x] Port nativo jugable.
+- [x] Web + táctil (un solo botón: el toque).
+- [x] README del juego + ficha del museo.
+- [x] Pendientes anotados: `import-managed-reconstruction` no se hizo (REA pide la Evidence de
+  miembros entera en la llamada, unos 250 KB; el payload se regenera con
+  `tools/rea_reconstruction.py`); las fuentes de la GUI son Liberation Sans en lugar de Arial; lo
+  que Unity hace por dentro (interpolación, *AnimatePhysics*, foco de las ventanas, `bounds`, la
+  curva de `m_Center` sin aplicar, las piezas de los polígonos) se dedujo y no se pudo comparar
+  con el original en marcha; los niveles no se jugaron de principio a fin sin ayuda (la estrella
+  se probó con un cambio temporal) y no se probó pisar un dragón; los controles táctiles se
+  probaron solo en emulación de Chromium.
 
 ### 2.8 The Meaning of Christmas (libGDX)
 - [ ] Configurar JADX para REA (`REA_JADX_MCP_JAR`) o usar JADX directamente; triaje del APK.
@@ -307,7 +325,8 @@ Orden sugerido: primero lo que reutiliza herramientas ya hechas y luego lo más 
 - [x] README de los juegos y fichas del museo con un mismo enfoque: qué juego es, con qué y cuándo
   se hizo y que ahora está portado, sin separar «original» y «port». «Cómo se hizo» ampliado con
   los detalles técnicos de cada port: IMAN, Proyecto Nutria, The Electric Eel Attack, Que No Caiga,
-  Retro Penal, Da Car y Super Happy Jump (paso 6 de la plantilla para los siguientes).
+  Retro Penal, Da Car, Super Happy Jump y One Button Prototype (paso 6 de la plantilla para los
+  siguientes).
 
 ## Fase 4 — Publicación en itch.io
 
@@ -329,9 +348,11 @@ los demás la estrenan. Nada se sube sin la confirmación del dueño de la cuent
 - [ ] **4.3** Configurar cada página para jugar en el navegador, desde el panel de itch.io (butler
   no lo hace): tipo HTML, marco del tamaño del juego (640×480 IMAN y The Electric Eel Attack,
   1280×720 Proyecto Nutria, 400×500 Que No Caiga y Retro Penal, 800×450 Da Car, 960×600 Super
-  Happy Jump), «Mobile friendly» con su orientación y botón de pantalla completa.
+  Happy Jump y One Button Prototype), «Mobile friendly» con su orientación y botón de pantalla
+  completa.
 - [ ] **4.4** Publicar uno a uno, con confirmación, los ports ya hechos: Proyecto Nutria, IMAN, The
-  Electric Eel Attack, Que No Caiga, Retro Penal, Da Car y Super Happy Jump. Probar cada página
+  Electric Eel Attack, Que No Caiga, Retro Penal, Da Car, Super Happy Jump y One Button
+  Prototype. Probar cada página
   publicada en escritorio y en móvil (`tools/humo/web.mjs` adaptado a una URL, o a mano).
 - [ ] **4.5** Desde entonces, cada port nuevo se publica al cerrar su checkpoint (paso 8 de la
   plantilla), también con confirmación.

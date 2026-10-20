@@ -1,0 +1,6480 @@
+{
+ "version": "4.6.0f3",
+ "producto": "Super Happy Jump",
+ "compania": "Elvis Brevi",
+ "pantalla_web": [
+  960,
+  600
+ ],
+ "tiempo": {
+  "paso_fijo": 0.019999999552965164,
+  "paso_maximo": 0.3333333432674408,
+  "escala": 0.0
+ },
+ "fisica2d": {
+  "gravedad": [
+   0.0,
+   -9.81
+  ],
+  "iteraciones_velocidad": 8,
+  "iteraciones_posicion": 3,
+  "umbral_velocidad": 1.0,
+  "correccion_lineal_maxima": 0.20000000298023224,
+  "correccion_angular_maxima": 8.0,
+  "traslacion_maxima": 100.0,
+  "rotacion_maxima": 360.0,
+  "baumgarte": 0.20000000298023224,
+  "baumgarte_toi": 0.75,
+  "tiempo_para_dormir": 0.5,
+  "tolerancia_lineal": 0.009999999776482582,
+  "tolerancia_angular": 2.0,
+  "rayos_tocan_triggers": true,
+  "matriz": [
+   4294967295,
+   4294967295,
+   4294967295,
+   4294967295,
+   4294967295,
+   4294967295,
+   4294967295,
+   4294967295,
+   4294967295,
+   4294967295,
+   4294967295,
+   4294967295,
+   4294967295,
+   4294967295,
+   4294967295,
+   4294967295,
+   4294967295,
+   4294967295,
+   4294967295,
+   4294967295,
+   4294967295,
+   4294967295,
+   4294967295,
+   4294967295,
+   4294967295,
+   4294967295,
+   4294967295,
+   4294967295,
+   4294967295,
+   4294967295,
+   4294967295,
+   4294967295
+  ]
+ },
+ "capas_orden": [
+  "Default",
+  "Background",
+  "MiddleGround",
+  "Player",
+  "Front"
+ ],
+ "capas": {
+  "0": "Default",
+  "1": "TransparentFX",
+  "2": "Ignore Raycast",
+  "4": "Water",
+  "5": "UI",
+  "8": "Player",
+  "9": "Suelo"
+ },
+ "texturas": {
+  "cerca": [
+   32,
+   30
+  ],
+  "murob": [
+   22,
+   151
+  ],
+  "pixel": [
+   2,
+   100
+  ],
+  "pixel-large": [
+   2,
+   128
+  ],
+  "CFX_T_Smoke_4Frames": [
+   512,
+   128
+  ],
+  "cinta": [
+   200,
+   53
+  ],
+  "hero": [
+   1320,
+   360
+  ],
+  "CFX_T_Anim4_Triangle3": [
+   512,
+   128
+  ],
+  "bach": [
+   47,
+   45
+  ],
+  "button_play": [
+   128,
+   103
+  ],
+  "label_record": [
+   256,
+   70
+  ],
+  "base_titulo": [
+   512,
+   112
+  ],
+  "window": [
+   512,
+   219
+  ],
+  "suelo": [
+   100,
+   15
+  ],
+  "titulo": [
+   281,
+   400
+  ],
+  "muro": [
+   22,
+   151
+  ],
+  "coin": [
+   256,
+   32
+  ]
+ },
+ "sprites": {
+  "cerca": {
+   "textura": "cerca",
+   "rect": [
+    0.0,
+    0.0,
+    32.0,
+    30.0
+   ],
+   "pivote": [
+    0.5,
+    0.5
+   ],
+   "tamano": [
+    0.32,
+    0.3
+   ],
+   "ppu": 100.0
+  },
+  "murob": {
+   "textura": "murob",
+   "rect": [
+    0.0,
+    0.0,
+    22.0,
+    151.0
+   ],
+   "pivote": [
+    0.5,
+    0.5
+   ],
+   "tamano": [
+    0.22,
+    1.51
+   ],
+   "ppu": 100.0
+  },
+  "pixel": {
+   "textura": "pixel",
+   "rect": [
+    0.0,
+    0.0,
+    1.0,
+    100.0
+   ],
+   "pivote": [
+    0.5,
+    0.5
+   ],
+   "tamano": [
+    0.01,
+    1.0
+   ],
+   "ppu": 100.0
+  },
+  "pixel-large": {
+   "textura": "pixel-large",
+   "rect": [
+    0.0,
+    0.0,
+    0.6399999856948853,
+    128.0
+   ],
+   "pivote": [
+    0.5,
+    0.5
+   ],
+   "tamano": [
+    0.01,
+    2.0
+   ],
+   "ppu": 64.0
+  },
+  "bach": {
+   "textura": "bach",
+   "rect": [
+    0.0,
+    0.0,
+    47.0,
+    45.0
+   ],
+   "pivote": [
+    0.5,
+    0.5
+   ],
+   "tamano": [
+    0.47,
+    0.45
+   ],
+   "ppu": 100.0
+  },
+  "suelo": {
+   "textura": "suelo",
+   "rect": [
+    0.0,
+    0.0,
+    100.0,
+    15.0
+   ],
+   "pivote": [
+    0.5,
+    0.5
+   ],
+   "tamano": [
+    1.0,
+    0.15
+   ],
+   "ppu": 100.0
+  },
+  "muro": {
+   "textura": "muro",
+   "rect": [
+    0.0,
+    0.0,
+    22.0,
+    151.0
+   ],
+   "pivote": [
+    0.5,
+    0.5
+   ],
+   "tamano": [
+    0.22,
+    1.51
+   ],
+   "ppu": 100.0
+  },
+  "hero_0": {
+   "textura": "hero",
+   "rect": [
+    18.0,
+    6.0,
+    72.0,
+    106.0
+   ],
+   "pivote": [
+    0.5,
+    0.5
+   ],
+   "tamano": [
+    0.72,
+    1.06
+   ],
+   "ppu": 100.0
+  },
+  "coin_0": {
+   "textura": "coin",
+   "rect": [
+    0.0,
+    0.0,
+    30.0,
+    32.0
+   ],
+   "pivote": [
+    0.5,
+    0.5
+   ],
+   "tamano": [
+    0.3,
+    0.32
+   ],
+   "ppu": 100.0
+  },
+  "hero_1": {
+   "textura": "hero",
+   "rect": [
+    144.0,
+    7.0,
+    68.0,
+    103.0
+   ],
+   "pivote": [
+    0.5,
+    0.5
+   ],
+   "tamano": [
+    0.68,
+    1.03
+   ],
+   "ppu": 100.0
+  },
+  "coin_1": {
+   "textura": "coin",
+   "rect": [
+    32.0,
+    0.0,
+    30.0,
+    32.0
+   ],
+   "pivote": [
+    0.5,
+    0.5
+   ],
+   "tamano": [
+    0.3,
+    0.32
+   ],
+   "ppu": 100.0
+  },
+  "hero_2": {
+   "textura": "hero",
+   "rect": [
+    255.0,
+    4.0,
+    75.0,
+    109.0
+   ],
+   "pivote": [
+    0.5,
+    0.5
+   ],
+   "tamano": [
+    0.75,
+    1.09
+   ],
+   "ppu": 100.0
+  },
+  "coin_2": {
+   "textura": "coin",
+   "rect": [
+    66.0,
+    0.0,
+    26.0,
+    32.0
+   ],
+   "pivote": [
+    0.5,
+    0.5
+   ],
+   "tamano": [
+    0.26,
+    0.32
+   ],
+   "ppu": 100.0
+  },
+  "hero_3": {
+   "textura": "hero",
+   "rect": [
+    376.0,
+    5.0,
+    74.0,
+    107.0
+   ],
+   "pivote": [
+    0.5,
+    0.5
+   ],
+   "tamano": [
+    0.74,
+    1.07
+   ],
+   "ppu": 100.0
+  },
+  "coin_3": {
+   "textura": "coin",
+   "rect": [
+    100.0,
+    0.0,
+    22.0,
+    32.0
+   ],
+   "pivote": [
+    0.5,
+    0.5
+   ],
+   "tamano": [
+    0.22,
+    0.32
+   ],
+   "ppu": 100.0
+  },
+  "hero_4": {
+   "textura": "hero",
+   "rect": [
+    503.0,
+    7.0,
+    68.0,
+    105.0
+   ],
+   "pivote": [
+    0.5,
+    0.5
+   ],
+   "tamano": [
+    0.68,
+    1.05
+   ],
+   "ppu": 100.0
+  },
+  "coin_4": {
+   "textura": "coin",
+   "rect": [
+    138.0,
+    0.0,
+    10.0,
+    32.0
+   ],
+   "pivote": [
+    0.5,
+    0.5
+   ],
+   "tamano": [
+    0.1,
+    0.32
+   ],
+   "ppu": 100.0
+  },
+  "hero_5": {
+   "textura": "hero",
+   "rect": [
+    620.0,
+    6.0,
+    70.0,
+    106.0
+   ],
+   "pivote": [
+    0.5,
+    0.5
+   ],
+   "tamano": [
+    0.7,
+    1.06
+   ],
+   "ppu": 100.0
+  },
+  "coin_5": {
+   "textura": "coin",
+   "rect": [
+    164.0,
+    0.0,
+    22.0,
+    32.0
+   ],
+   "pivote": [
+    0.5,
+    0.5
+   ],
+   "tamano": [
+    0.22,
+    0.32
+   ],
+   "ppu": 100.0
+  },
+  "hero_6": {
+   "textura": "hero",
+   "rect": [
+    741.0,
+    9.0,
+    68.0,
+    101.0
+   ],
+   "pivote": [
+    0.5,
+    0.5
+   ],
+   "tamano": [
+    0.68,
+    1.01
+   ],
+   "ppu": 100.0
+  },
+  "coin_6": {
+   "textura": "coin",
+   "rect": [
+    194.0,
+    0.0,
+    26.0,
+    32.0
+   ],
+   "pivote": [
+    0.5,
+    0.5
+   ],
+   "tamano": [
+    0.26,
+    0.32
+   ],
+   "ppu": 100.0
+  },
+  "hero_7": {
+   "textura": "hero",
+   "rect": [
+    862.0,
+    6.0,
+    67.0,
+    104.0
+   ],
+   "pivote": [
+    0.5,
+    0.5
+   ],
+   "tamano": [
+    0.67,
+    1.04
+   ],
+   "ppu": 100.0
+  },
+  "coin_7": {
+   "textura": "coin",
+   "rect": [
+    224.0,
+    0.0,
+    30.0,
+    32.0
+   ],
+   "pivote": [
+    0.5,
+    0.5
+   ],
+   "tamano": [
+    0.3,
+    0.32
+   ],
+   "ppu": 100.0
+  },
+  "hero_8": {
+   "textura": "hero",
+   "rect": [
+    976.0,
+    4.0,
+    75.0,
+    108.0
+   ],
+   "pivote": [
+    0.5,
+    0.5
+   ],
+   "tamano": [
+    0.75,
+    1.08
+   ],
+   "ppu": 100.0
+  },
+  "hero_9": {
+   "textura": "hero",
+   "rect": [
+    1098.0,
+    6.0,
+    71.0,
+    105.0
+   ],
+   "pivote": [
+    0.5,
+    0.5
+   ],
+   "tamano": [
+    0.71,
+    1.05
+   ],
+   "ppu": 100.0
+  },
+  "hero_10": {
+   "textura": "hero",
+   "rect": [
+    1217.0,
+    7.0,
+    71.0,
+    104.0
+   ],
+   "pivote": [
+    0.5,
+    0.5
+   ],
+   "tamano": [
+    0.71,
+    1.04
+   ],
+   "ppu": 100.0
+  },
+  "hero_13": {
+   "textura": "hero",
+   "rect": [
+    257.0,
+    116.0,
+    82.0,
+    99.0
+   ],
+   "pivote": [
+    0.5,
+    0.5
+   ],
+   "tamano": [
+    0.82,
+    0.99
+   ],
+   "ppu": 100.0
+  },
+  "hero_15": {
+   "textura": "hero",
+   "rect": [
+    520.0,
+    126.0,
+    72.0,
+    103.0
+   ],
+   "pivote": [
+    0.5,
+    0.5
+   ],
+   "tamano": [
+    0.72,
+    1.03
+   ],
+   "ppu": 100.0
+  },
+  "hero_16": {
+   "textura": "hero",
+   "rect": [
+    16.0,
+    236.0,
+    96.0,
+    113.0
+   ],
+   "pivote": [
+    0.5,
+    0.5
+   ],
+   "tamano": [
+    0.96,
+    1.13
+   ],
+   "ppu": 100.0
+  },
+  "hero_17": {
+   "textura": "hero",
+   "rect": [
+    138.0,
+    275.0,
+    113.0,
+    62.0
+   ],
+   "pivote": [
+    0.5,
+    0.5
+   ],
+   "tamano": [
+    1.13,
+    0.62
+   ],
+   "ppu": 100.0
+  },
+  "hero_18": {
+   "textura": "hero",
+   "rect": [
+    256.0,
+    249.0,
+    110.0,
+    91.0
+   ],
+   "pivote": [
+    0.5,
+    0.5
+   ],
+   "tamano": [
+    1.1,
+    0.91
+   ],
+   "ppu": 100.0
+  },
+  "hero_19": {
+   "textura": "hero",
+   "rect": [
+    405.0,
+    237.0,
+    62.0,
+    111.0
+   ],
+   "pivote": [
+    0.5,
+    0.5
+   ],
+   "tamano": [
+    0.62,
+    1.11
+   ],
+   "ppu": 100.0
+  },
+  "hero_20": {
+   "textura": "hero",
+   "rect": [
+    511.0,
+    241.0,
+    76.0,
+    101.0
+   ],
+   "pivote": [
+    0.5,
+    0.5
+   ],
+   "tamano": [
+    0.76,
+    1.01
+   ],
+   "ppu": 100.0
+  },
+  "hero_21": {
+   "textura": "hero",
+   "rect": [
+    644.0,
+    238.0,
+    82.0,
+    104.0
+   ],
+   "pivote": [
+    0.5,
+    0.5
+   ],
+   "tamano": [
+    0.82,
+    1.04
+   ],
+   "ppu": 100.0
+  },
+  "hero_22": {
+   "textura": "hero",
+   "rect": [
+    775.0,
+    235.0,
+    83.0,
+    108.0
+   ],
+   "pivote": [
+    0.5,
+    0.5
+   ],
+   "tamano": [
+    0.83,
+    1.08
+   ],
+   "ppu": 100.0
+  },
+  "hero_23": {
+   "textura": "hero",
+   "rect": [
+    902.0,
+    235.0,
+    84.0,
+    106.0
+   ],
+   "pivote": [
+    0.5,
+    0.5
+   ],
+   "tamano": [
+    0.84,
+    1.06
+   ],
+   "ppu": 100.0
+  },
+  "hero_24": {
+   "textura": "hero",
+   "rect": [
+    1033.0,
+    236.0,
+    81.0,
+    107.0
+   ],
+   "pivote": [
+    0.5,
+    0.5
+   ],
+   "tamano": [
+    0.81,
+    1.07
+   ],
+   "ppu": 100.0
+  }
+ },
+ "clips": {
+  "Dead_Tim": {
+   "fps": 30.0,
+   "fin": 0.30000001192092896,
+   "bucle": false,
+   "claves": [
+    [
+     0.0,
+     "hero_16"
+    ],
+    [
+     0.03333333507180214,
+     "hero_17"
+    ],
+    [
+     0.06666667014360428,
+     "hero_18"
+    ],
+    [
+     0.10000000149011612,
+     "hero_19"
+    ],
+    [
+     0.13333334028720856,
+     "hero_20"
+    ],
+    [
+     0.1666666716337204,
+     "hero_21"
+    ],
+    [
+     0.20000000298023224,
+     "hero_22"
+    ],
+    [
+     0.23333333432674408,
+     "hero_23"
+    ],
+    [
+     0.2666666805744171,
+     "hero_24"
+    ]
+   ]
+  },
+  "Idle_Tim": {
+   "fps": 60.0,
+   "fin": 0.01666666753590107,
+   "bucle": true,
+   "claves": [
+    [
+     0.0,
+     "hero_15"
+    ]
+   ]
+  },
+  "Jump_Tim3": {
+   "fps": 60.0,
+   "fin": 0.01666666753590107,
+   "bucle": true,
+   "claves": [
+    [
+     0.0,
+     "hero_13"
+    ]
+   ]
+  },
+  "Moneda": {
+   "fps": 10.0,
+   "fin": 0.800000011920929,
+   "bucle": true,
+   "claves": [
+    [
+     0.0,
+     "coin_0"
+    ],
+    [
+     0.10000000149011612,
+     "coin_1"
+    ],
+    [
+     0.20000000298023224,
+     "coin_2"
+    ],
+    [
+     0.30000001192092896,
+     "coin_3"
+    ],
+    [
+     0.4000000059604645,
+     "coin_4"
+    ],
+    [
+     0.5,
+     "coin_5"
+    ],
+    [
+     0.6000000238418579,
+     "coin_6"
+    ],
+    [
+     0.699999988079071,
+     "coin_7"
+    ]
+   ]
+  },
+  "Run_Tim": {
+   "fps": 24.0,
+   "fin": 0.458333283662796,
+   "bucle": true,
+   "claves": [
+    [
+     0.0,
+     "hero_0"
+    ],
+    [
+     0.0416666679084301,
+     "hero_1"
+    ],
+    [
+     0.0833333358168602,
+     "hero_2"
+    ],
+    [
+     0.125,
+     "hero_3"
+    ],
+    [
+     0.1666666716337204,
+     "hero_4"
+    ],
+    [
+     0.2083333432674408,
+     "hero_5"
+    ],
+    [
+     0.25,
+     "hero_6"
+    ],
+    [
+     0.2916666567325592,
+     "hero_7"
+    ],
+    [
+     0.3333333134651184,
+     "hero_8"
+    ],
+    [
+     0.3749999701976776,
+     "hero_9"
+    ],
+    [
+     0.4166666269302368,
+     "hero_10"
+    ]
+   ]
+  }
+ },
+ "controladores": {
+  "Character": {
+   "clips": [
+    "Idle_Tim",
+    "Run_Tim",
+    "Jump_Tim3",
+    "Dead_Tim"
+   ],
+   "parametros": [
+    {
+     "nombre": "Speed",
+     "tipo": "float",
+     "defecto": 0.0
+    },
+    {
+     "nombre": "Ground",
+     "tipo": "bool",
+     "defecto": false
+    },
+    {
+     "nombre": "vSpeed",
+     "tipo": "float",
+     "defecto": 0.0
+    },
+    {
+     "nombre": "Dead",
+     "tipo": "bool",
+     "defecto": false
+    }
+   ],
+   "estados": [
+    {
+     "nombre": "Idle_Tim",
+     "clip": "Idle_Tim",
+     "velocidad": 1.0,
+     "bucle": true,
+     "transiciones": [
+      {
+       "destino": 1,
+       "duracion": 0.0,
+       "desfase": 0.0,
+       "atomica": true,
+       "a_si_misma": false,
+       "condiciones": [
+        {
+         "modo": 3,
+         "parametro": "Speed",
+         "umbral": 0.009999999776482582,
+         "salida": 0.0
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "nombre": "Run_Tim",
+     "clip": "Run_Tim",
+     "velocidad": 1.0,
+     "bucle": true,
+     "transiciones": [
+      {
+       "destino": 0,
+       "duracion": 0.0,
+       "desfase": 0.0,
+       "atomica": true,
+       "a_si_misma": false,
+       "condiciones": [
+        {
+         "modo": 4,
+         "parametro": "Speed",
+         "umbral": 0.009999999776482582,
+         "salida": 0.0
+        }
+       ]
+      },
+      {
+       "destino": 3,
+       "duracion": 0.0,
+       "desfase": 0.0,
+       "atomica": true,
+       "a_si_misma": false,
+       "condiciones": [
+        {
+         "modo": 1,
+         "parametro": "Dead",
+         "umbral": 0.0,
+         "salida": 0.0
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "nombre": "JumpAndFall",
+     "clip": "Jump_Tim3",
+     "velocidad": 1.0,
+     "bucle": true,
+     "transiciones": [
+      {
+       "destino": 0,
+       "duracion": 0.25,
+       "desfase": 0.0,
+       "atomica": true,
+       "a_si_misma": false,
+       "condiciones": [
+        {
+         "modo": 1,
+         "parametro": "Ground",
+         "umbral": 0.0,
+         "salida": 0.0
+        }
+       ]
+      },
+      {
+       "destino": 3,
+       "duracion": 0.0,
+       "desfase": 0.0,
+       "atomica": true,
+       "a_si_misma": false,
+       "condiciones": [
+        {
+         "modo": 1,
+         "parametro": "Dead",
+         "umbral": 0.0,
+         "salida": 0.0
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "nombre": "Dead_Tim",
+     "clip": "Dead_Tim",
+     "velocidad": 1.0,
+     "bucle": false,
+     "transiciones": []
+    }
+   ],
+   "defecto": 0,
+   "desde_cualquiera": [
+    {
+     "destino": 2,
+     "duracion": 0.10000000149011612,
+     "desfase": 0.0,
+     "atomica": true,
+     "a_si_misma": false,
+     "condiciones": [
+      {
+       "modo": 2,
+       "parametro": "Dead",
+       "umbral": 0.0,
+       "salida": 0.0
+      },
+      {
+       "modo": 2,
+       "parametro": "Ground",
+       "umbral": 0.0,
+       "salida": 0.0
+      }
+     ]
+    }
+   ]
+  },
+  "coin_0": {
+   "clips": [
+    "Moneda"
+   ],
+   "parametros": [],
+   "estados": [
+    {
+     "nombre": "Moneda",
+     "clip": "Moneda",
+     "velocidad": 1.0,
+     "bucle": true,
+     "transiciones": []
+    }
+   ],
+   "defecto": 0,
+   "desde_cualquiera": []
+  }
+ },
+ "materiales": {
+  "Default-Diffuse": {
+   "shader": "Diffuse",
+   "textura": null,
+   "tinte": null,
+   "color": [
+    1.0,
+    1.0,
+    1.0,
+    0.5
+   ]
+  },
+  "CFX_Anim_Triangle3_Add": {
+   "shader": "Particles/Additive",
+   "textura": "CFX_T_Anim4_Triangle3",
+   "tinte": [
+    0.5,
+    0.5,
+    0.5,
+    0.5
+   ],
+   "color": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ]
+  },
+  "CFX_Anim_Triangle3_Mult": {
+   "shader": "Particles/Multiply",
+   "textura": "CFX_T_Anim4_Triangle3",
+   "tinte": [
+    0.5,
+    0.5,
+    0.5,
+    0.5
+   ],
+   "color": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ]
+  },
+  "CFX_Smoke_4frms": {
+   "shader": "Particles/Alpha Blended",
+   "textura": "CFX_T_Smoke_4Frames",
+   "tinte": [
+    0.5,
+    0.5,
+    0.5,
+    0.5
+   ],
+   "color": null
+  },
+  "Font Material": {
+   "shader": null,
+   "textura": "Font Texture",
+   "tinte": null,
+   "color": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ]
+  }
+ },
+ "materiales_fisicos": {
+  "Slippery": {
+   "friccion": 0.0,
+   "rebote": 0.0
+  }
+ },
+ "estilos": {
+  "GUI": {
+   "normal": {
+    "fondo": "cinta",
+    "color": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   },
+   "hover": {
+    "fondo": null,
+    "color": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   },
+   "active": {
+    "fondo": null,
+    "color": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   },
+   "borde": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "relleno": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "fuente": "Arial",
+   "tamano": 30,
+   "estilo": 1,
+   "alineacion": 4,
+   "ajuste": false,
+   "recorte": 0,
+   "desplazamiento": [
+    0.0,
+    0.0
+   ]
+  },
+  "button_play": {
+   "normal": {
+    "fondo": "button_play",
+    "color": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   },
+   "hover": {
+    "fondo": null,
+    "color": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   },
+   "active": {
+    "fondo": null,
+    "color": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   },
+   "borde": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "relleno": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "fuente": "Arial",
+   "tamano": 18,
+   "estilo": 0,
+   "alineacion": 0,
+   "ajuste": false,
+   "recorte": 0,
+   "desplazamiento": [
+    0.0,
+    0.0
+   ]
+  },
+  "ventana": {
+   "normal": {
+    "fondo": "window",
+    "color": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   },
+   "hover": {
+    "fondo": null,
+    "color": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   },
+   "active": {
+    "fondo": null,
+    "color": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   },
+   "borde": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "relleno": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "fuente": "Arial",
+   "tamano": 18,
+   "estilo": 0,
+   "alineacion": 0,
+   "ajuste": false,
+   "recorte": 0,
+   "desplazamiento": [
+    0.0,
+    0.0
+   ]
+  },
+  "font_default": {
+   "normal": {
+    "fondo": "cinta",
+    "color": [
+     0.21014,
+     0.227941,
+     0.043577,
+     1.0
+    ]
+   },
+   "hover": {
+    "fondo": null,
+    "color": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   },
+   "active": {
+    "fondo": null,
+    "color": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   },
+   "borde": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "relleno": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "fuente": "Arial Rounded Bold",
+   "tamano": 54,
+   "estilo": 0,
+   "alineacion": 4,
+   "ajuste": false,
+   "recorte": 0,
+   "desplazamiento": [
+    0.0,
+    0.0
+   ]
+  },
+  "label_record": {
+   "normal": {
+    "fondo": "label_record",
+    "color": [
+     0.514706,
+     0.335968,
+     0.109753,
+     1.0
+    ]
+   },
+   "hover": {
+    "fondo": null,
+    "color": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   },
+   "active": {
+    "fondo": null,
+    "color": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   },
+   "borde": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "relleno": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "fuente": "Arial Rounded Bold",
+   "tamano": 45,
+   "estilo": 1,
+   "alineacion": 4,
+   "ajuste": false,
+   "recorte": 0,
+   "desplazamiento": [
+    0.0,
+    0.0
+   ]
+  },
+  "base_titulo": {
+   "normal": {
+    "fondo": "base_titulo",
+    "color": [
+     0.441176,
+     0.380884,
+     0.191393,
+     1.0
+    ]
+   },
+   "hover": {
+    "fondo": null,
+    "color": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   },
+   "active": {
+    "fondo": null,
+    "color": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   },
+   "borde": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "relleno": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "fuente": "Arial",
+   "tamano": 35,
+   "estilo": 1,
+   "alineacion": 4,
+   "ajuste": false,
+   "recorte": 0,
+   "desplazamiento": [
+    0.0,
+    -10.0
+   ]
+  },
+  "titulo": {
+   "normal": {
+    "fondo": "titulo",
+    "color": [
+     0.441176,
+     0.380884,
+     0.191393,
+     1.0
+    ]
+   },
+   "hover": {
+    "fondo": null,
+    "color": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   },
+   "active": {
+    "fondo": null,
+    "color": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   },
+   "borde": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "relleno": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "fuente": "Arial",
+   "tamano": 35,
+   "estilo": 1,
+   "alineacion": 4,
+   "ajuste": false,
+   "recorte": 0,
+   "desplazamiento": [
+    0.0,
+    -10.0
+   ]
+  }
+ },
+ "fuentes": {
+  "Arial Rounded Bold": {
+   "tamano": 16.0,
+   "ascenso": 15.140625,
+   "interlineado": 18.515625,
+   "nombres": [
+    "Arial Rounded MT Bold"
+   ]
+  }
+ },
+ "escena": [
+  {
+   "id": 18,
+   "nombre": "cerca",
+   "activo": true,
+   "capa": 0,
+   "etiqueta": "Untagged",
+   "posicion": [
+    0.248,
+    0.2,
+    0.0
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    1.57,
+    1.5,
+    1.0
+   ],
+   "padre": 29,
+   "hijos": [],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "cerca",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Background",
+     "orden": 1
+    }
+   ]
+  },
+  {
+   "id": 19,
+   "nombre": "cerca",
+   "activo": true,
+   "capa": 0,
+   "etiqueta": "Untagged",
+   "posicion": [
+    -0.25,
+    0.2,
+    0.0
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    1.57,
+    1.5,
+    1.0
+   ],
+   "padre": 60,
+   "hijos": [],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "cerca",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Background",
+     "orden": 1
+    }
+   ]
+  },
+  {
+   "id": 20,
+   "nombre": "suelos",
+   "activo": true,
+   "capa": 9,
+   "etiqueta": "Suelo",
+   "posicion": [
+    -7.0,
+    1.034015,
+    4.837402
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "padre": null,
+   "hijos": [
+    77,
+    32,
+    78,
+    66,
+    82,
+    47,
+    37,
+    27,
+    68,
+    29,
+    48,
+    60,
+    28,
+    58,
+    21,
+    30,
+    40,
+    50,
+    59,
+    69
+   ],
+   "componentes": []
+  },
+  {
+   "id": 21,
+   "nombre": "suelo",
+   "activo": true,
+   "capa": 9,
+   "etiqueta": "Suelo",
+   "posicion": [
+    26.0,
+    -3.034015,
+    -4.837402
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    2.0,
+    2.0,
+    1.0
+   ],
+   "padre": 20,
+   "hijos": [
+    81,
+    72
+   ],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "suelo",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Front",
+     "orden": 0
+    },
+    {
+     "tipo": "BoxCollider2D",
+     "activo": true,
+     "trigger": false,
+     "centro": [
+      0.0,
+      0.0
+     ],
+     "material": "Slippery",
+     "tamano": [
+      1.0,
+      0.15
+     ]
+    }
+   ]
+  },
+  {
+   "id": 22,
+   "nombre": "cerca",
+   "activo": true,
+   "capa": 0,
+   "etiqueta": "Untagged",
+   "posicion": [
+    0.248,
+    0.2,
+    0.0
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    1.57,
+    1.5,
+    1.0
+   ],
+   "padre": 50,
+   "hijos": [],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "cerca",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Background",
+     "orden": 1
+    }
+   ]
+  },
+  {
+   "id": 23,
+   "nombre": "cerca",
+   "activo": true,
+   "capa": 0,
+   "etiqueta": "Untagged",
+   "posicion": [
+    0.248,
+    0.2,
+    0.0
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    1.57,
+    1.5,
+    1.0
+   ],
+   "padre": 66,
+   "hijos": [],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "cerca",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Background",
+     "orden": 1
+    }
+   ]
+  },
+  {
+   "id": 24,
+   "nombre": "pixel-large",
+   "activo": true,
+   "capa": 0,
+   "etiqueta": "Untagged",
+   "posicion": [
+    0.0,
+    0.2,
+    10.0
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    2000.0,
+    4.5,
+    1.0
+   ],
+   "padre": 49,
+   "hijos": [],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "pixel-large",
+     "color": [
+      0.5,
+      0.937931,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Background",
+     "orden": 0
+    }
+   ]
+  },
+  {
+   "id": 25,
+   "nombre": "cerca",
+   "activo": true,
+   "capa": 0,
+   "etiqueta": "Untagged",
+   "posicion": [
+    -0.25,
+    0.2,
+    0.0
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    1.57,
+    1.5,
+    1.0
+   ],
+   "padre": 66,
+   "hijos": [],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "cerca",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Background",
+     "orden": 1
+    }
+   ]
+  },
+  {
+   "id": 26,
+   "nombre": "cerca",
+   "activo": true,
+   "capa": 0,
+   "etiqueta": "Untagged",
+   "posicion": [
+    -0.25,
+    0.2,
+    0.0
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    1.57,
+    1.5,
+    1.0
+   ],
+   "padre": 68,
+   "hijos": [],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "cerca",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Background",
+     "orden": 1
+    }
+   ]
+  },
+  {
+   "id": 27,
+   "nombre": "suelo",
+   "activo": true,
+   "capa": 9,
+   "etiqueta": "Suelo",
+   "posicion": [
+    12.0,
+    -3.034015,
+    -4.837402
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    2.0,
+    2.0,
+    1.0
+   ],
+   "padre": 20,
+   "hijos": [
+    38,
+    62
+   ],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "suelo",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Front",
+     "orden": 0
+    },
+    {
+     "tipo": "BoxCollider2D",
+     "activo": true,
+     "trigger": false,
+     "centro": [
+      0.0,
+      0.0
+     ],
+     "material": "Slippery",
+     "tamano": [
+      1.0,
+      0.15
+     ]
+    }
+   ]
+  },
+  {
+   "id": 28,
+   "nombre": "suelo",
+   "activo": true,
+   "capa": 9,
+   "etiqueta": "Suelo",
+   "posicion": [
+    22.0,
+    -3.034015,
+    -4.837402
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    2.0,
+    2.0,
+    1.0
+   ],
+   "padre": 20,
+   "hijos": [
+    65,
+    53
+   ],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "suelo",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Front",
+     "orden": 0
+    },
+    {
+     "tipo": "BoxCollider2D",
+     "activo": true,
+     "trigger": false,
+     "centro": [
+      0.0,
+      0.0
+     ],
+     "material": "Slippery",
+     "tamano": [
+      1.0,
+      0.15
+     ]
+    }
+   ]
+  },
+  {
+   "id": 29,
+   "nombre": "suelo",
+   "activo": true,
+   "capa": 9,
+   "etiqueta": "Suelo",
+   "posicion": [
+    16.0,
+    -3.034015,
+    -4.837402
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    2.0,
+    2.0,
+    1.0
+   ],
+   "padre": 20,
+   "hijos": [
+    51,
+    18
+   ],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "suelo",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Front",
+     "orden": 0
+    },
+    {
+     "tipo": "BoxCollider2D",
+     "activo": true,
+     "trigger": false,
+     "centro": [
+      0.0,
+      0.0
+     ],
+     "material": "Slippery",
+     "tamano": [
+      1.0,
+      0.15
+     ]
+    }
+   ]
+  },
+  {
+   "id": 30,
+   "nombre": "suelo",
+   "activo": true,
+   "capa": 9,
+   "etiqueta": "Suelo",
+   "posicion": [
+    28.0,
+    -3.034015,
+    -4.837402
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    2.0,
+    2.0,
+    1.0
+   ],
+   "padre": 20,
+   "hijos": [
+    43,
+    55
+   ],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "suelo",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Front",
+     "orden": 0
+    },
+    {
+     "tipo": "BoxCollider2D",
+     "activo": true,
+     "trigger": false,
+     "centro": [
+      0.0,
+      0.0
+     ],
+     "material": "Slippery",
+     "tamano": [
+      1.0,
+      0.15
+     ]
+    }
+   ]
+  },
+  {
+   "id": 31,
+   "nombre": "cerca",
+   "activo": true,
+   "capa": 0,
+   "etiqueta": "Untagged",
+   "posicion": [
+    -0.25,
+    0.2,
+    0.0
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    1.57,
+    1.5,
+    1.0
+   ],
+   "padre": 58,
+   "hijos": [],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "cerca",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Background",
+     "orden": 1
+    }
+   ]
+  },
+  {
+   "id": 32,
+   "nombre": "suelo",
+   "activo": true,
+   "capa": 9,
+   "etiqueta": "Suelo",
+   "posicion": [
+    0.0,
+    -3.034015,
+    -4.837402
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    2.0,
+    2.0,
+    1.0
+   ],
+   "padre": 20,
+   "hijos": [
+    56,
+    41
+   ],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "suelo",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Front",
+     "orden": 0
+    },
+    {
+     "tipo": "BoxCollider2D",
+     "activo": true,
+     "trigger": false,
+     "centro": [
+      0.0,
+      0.0
+     ],
+     "material": "Slippery",
+     "tamano": [
+      1.0,
+      0.15
+     ]
+    }
+   ]
+  },
+  {
+   "id": 33,
+   "nombre": "cerca",
+   "activo": true,
+   "capa": 0,
+   "etiqueta": "Untagged",
+   "posicion": [
+    0.248,
+    0.2,
+    0.0
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    1.57,
+    1.5,
+    1.0
+   ],
+   "padre": 40,
+   "hijos": [],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "cerca",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Background",
+     "orden": 1
+    }
+   ]
+  },
+  {
+   "id": 34,
+   "nombre": "cerca",
+   "activo": true,
+   "capa": 0,
+   "etiqueta": "Untagged",
+   "posicion": [
+    0.248,
+    0.2,
+    0.0
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    1.57,
+    1.5,
+    1.0
+   ],
+   "padre": 82,
+   "hijos": [],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "cerca",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Background",
+     "orden": 1
+    }
+   ]
+  },
+  {
+   "id": 35,
+   "nombre": "cerca",
+   "activo": true,
+   "capa": 0,
+   "etiqueta": "Untagged",
+   "posicion": [
+    0.248,
+    0.2,
+    0.0
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    1.57,
+    1.5,
+    1.0
+   ],
+   "padre": 78,
+   "hijos": [],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "cerca",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Background",
+     "orden": 1
+    }
+   ]
+  },
+  {
+   "id": 36,
+   "nombre": "cerca",
+   "activo": true,
+   "capa": 0,
+   "etiqueta": "Untagged",
+   "posicion": [
+    0.248,
+    0.2,
+    0.0
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    1.57,
+    1.5,
+    1.0
+   ],
+   "padre": 59,
+   "hijos": [],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "cerca",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Background",
+     "orden": 1
+    }
+   ]
+  },
+  {
+   "id": 37,
+   "nombre": "suelo",
+   "activo": true,
+   "capa": 9,
+   "etiqueta": "Suelo",
+   "posicion": [
+    10.0,
+    -3.034015,
+    -4.837402
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    2.0,
+    2.0,
+    1.0
+   ],
+   "padre": 20,
+   "hijos": [
+    73,
+    39
+   ],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "suelo",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Front",
+     "orden": 0
+    },
+    {
+     "tipo": "BoxCollider2D",
+     "activo": true,
+     "trigger": false,
+     "centro": [
+      0.0,
+      0.0
+     ],
+     "material": "Slippery",
+     "tamano": [
+      1.0,
+      0.15
+     ]
+    }
+   ]
+  },
+  {
+   "id": 38,
+   "nombre": "cerca",
+   "activo": true,
+   "capa": 0,
+   "etiqueta": "Untagged",
+   "posicion": [
+    -0.25,
+    0.2,
+    0.0
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    1.57,
+    1.5,
+    1.0
+   ],
+   "padre": 27,
+   "hijos": [],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "cerca",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Background",
+     "orden": 1
+    }
+   ]
+  },
+  {
+   "id": 39,
+   "nombre": "cerca",
+   "activo": true,
+   "capa": 0,
+   "etiqueta": "Untagged",
+   "posicion": [
+    0.248,
+    0.2,
+    0.0
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    1.57,
+    1.5,
+    1.0
+   ],
+   "padre": 37,
+   "hijos": [],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "cerca",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Background",
+     "orden": 1
+    }
+   ]
+  },
+  {
+   "id": 40,
+   "nombre": "suelo",
+   "activo": true,
+   "capa": 9,
+   "etiqueta": "Suelo",
+   "posicion": [
+    30.0,
+    -3.034015,
+    -4.837402
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    2.0,
+    2.0,
+    1.0
+   ],
+   "padre": 20,
+   "hijos": [
+    75,
+    33
+   ],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "suelo",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Front",
+     "orden": 0
+    },
+    {
+     "tipo": "BoxCollider2D",
+     "activo": true,
+     "trigger": false,
+     "centro": [
+      0.0,
+      0.0
+     ],
+     "material": "Slippery",
+     "tamano": [
+      1.0,
+      0.15
+     ]
+    }
+   ]
+  },
+  {
+   "id": 41,
+   "nombre": "cerca",
+   "activo": true,
+   "capa": 0,
+   "etiqueta": "Untagged",
+   "posicion": [
+    0.248,
+    0.2,
+    0.0
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    1.57,
+    1.5,
+    1.0
+   ],
+   "padre": 32,
+   "hijos": [],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "cerca",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Background",
+     "orden": 1
+    }
+   ]
+  },
+  {
+   "id": 42,
+   "nombre": "cerca",
+   "activo": true,
+   "capa": 0,
+   "etiqueta": "Untagged",
+   "posicion": [
+    -0.25,
+    0.2,
+    0.0
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    1.57,
+    1.5,
+    1.0
+   ],
+   "padre": 47,
+   "hijos": [],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "cerca",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Background",
+     "orden": 1
+    }
+   ]
+  },
+  {
+   "id": 43,
+   "nombre": "cerca",
+   "activo": true,
+   "capa": 0,
+   "etiqueta": "Untagged",
+   "posicion": [
+    -0.25,
+    0.2,
+    0.0
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    1.57,
+    1.5,
+    1.0
+   ],
+   "padre": 30,
+   "hijos": [],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "cerca",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Background",
+     "orden": 1
+    }
+   ]
+  },
+  {
+   "id": 44,
+   "nombre": "cerca",
+   "activo": true,
+   "capa": 0,
+   "etiqueta": "Untagged",
+   "posicion": [
+    0.248,
+    0.2,
+    0.0
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    1.57,
+    1.5,
+    1.0
+   ],
+   "padre": 69,
+   "hijos": [],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "cerca",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Background",
+     "orden": 1
+    }
+   ]
+  },
+  {
+   "id": 45,
+   "nombre": "cerca",
+   "activo": true,
+   "capa": 0,
+   "etiqueta": "Untagged",
+   "posicion": [
+    0.248,
+    0.2,
+    0.0
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    1.57,
+    1.5,
+    1.0
+   ],
+   "padre": 47,
+   "hijos": [],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "cerca",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Background",
+     "orden": 1
+    }
+   ]
+  },
+  {
+   "id": 46,
+   "nombre": "cerca",
+   "activo": true,
+   "capa": 0,
+   "etiqueta": "Untagged",
+   "posicion": [
+    -0.25,
+    0.2,
+    0.0
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    1.57,
+    1.5,
+    1.0
+   ],
+   "padre": 78,
+   "hijos": [],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "cerca",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Background",
+     "orden": 1
+    }
+   ]
+  },
+  {
+   "id": 47,
+   "nombre": "suelo",
+   "activo": true,
+   "capa": 9,
+   "etiqueta": "Suelo",
+   "posicion": [
+    8.0,
+    -3.034015,
+    -4.837402
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    2.0,
+    2.0,
+    1.0
+   ],
+   "padre": 20,
+   "hijos": [
+    42,
+    45
+   ],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "suelo",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Front",
+     "orden": 0
+    },
+    {
+     "tipo": "BoxCollider2D",
+     "activo": true,
+     "trigger": false,
+     "centro": [
+      0.0,
+      0.0
+     ],
+     "material": "Slippery",
+     "tamano": [
+      1.0,
+      0.15
+     ]
+    }
+   ]
+  },
+  {
+   "id": 48,
+   "nombre": "suelo",
+   "activo": true,
+   "capa": 9,
+   "etiqueta": "Suelo",
+   "posicion": [
+    18.0,
+    -3.034015,
+    -4.837402
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    2.0,
+    2.0,
+    1.0
+   ],
+   "padre": 20,
+   "hijos": [
+    52,
+    61
+   ],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "suelo",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Front",
+     "orden": 0
+    },
+    {
+     "tipo": "BoxCollider2D",
+     "activo": true,
+     "trigger": false,
+     "centro": [
+      0.0,
+      0.0
+     ],
+     "material": "Slippery",
+     "tamano": [
+      1.0,
+      0.15
+     ]
+    }
+   ]
+  },
+  {
+   "id": 49,
+   "nombre": "Main Camera",
+   "activo": true,
+   "capa": 0,
+   "etiqueta": "MainCamera",
+   "posicion": [
+    0.0,
+    1.892416,
+    -10.0
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "padre": null,
+   "hijos": [
+    83,
+    74,
+    54,
+    24
+   ],
+   "componentes": [
+    {
+     "tipo": "Camera",
+     "activo": true,
+     "fondo": [
+      0.192157,
+      0.301961,
+      0.47451,
+      0.019608
+     ],
+     "ortografica": false,
+     "tamano_ortografico": 5.0,
+     "campo_vision": 48.00002670288086,
+     "cerca": 0.30000001192092896,
+     "lejos": 1000.0,
+     "borrado": 1
+    },
+    {
+     "tipo": "GUILayer",
+     "activo": true
+    },
+    {
+     "tipo": "FlareLayer",
+     "activo": true
+    },
+    {
+     "tipo": "AudioListener",
+     "activo": true
+    },
+    {
+     "tipo": "MonoBehaviour",
+     "activo": true,
+     "script": "CameraRunner",
+     "campos": {
+      "player": {
+       "objeto": 63
+      },
+      "y": 2.0
+     }
+    },
+    {
+     "tipo": "MonoBehaviour",
+     "activo": true,
+     "script": "HUD",
+     "campos": {
+      "guiSkin": {
+       "MonoBehaviour": "skin"
+      },
+      "windowRectFin": [
+       152.0,
+       21.0,
+       630.0,
+       380.0
+      ]
+     }
+    },
+    {
+     "tipo": "AudioSource",
+     "activo": true,
+     "clip": "click",
+     "al_despertar": false,
+     "volumen": 1.0,
+     "tono": 1.0,
+     "bucle": false,
+     "mudo": false
+    }
+   ]
+  },
+  {
+   "id": 50,
+   "nombre": "suelo",
+   "activo": true,
+   "capa": 9,
+   "etiqueta": "Suelo",
+   "posicion": [
+    32.0,
+    -3.034015,
+    -4.837402
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    2.0,
+    2.0,
+    1.0
+   ],
+   "padre": 20,
+   "hijos": [
+    64,
+    22
+   ],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "suelo",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Front",
+     "orden": 0
+    },
+    {
+     "tipo": "BoxCollider2D",
+     "activo": true,
+     "trigger": false,
+     "centro": [
+      0.0,
+      0.0
+     ],
+     "material": "Slippery",
+     "tamano": [
+      1.0,
+      0.15
+     ]
+    }
+   ]
+  },
+  {
+   "id": 51,
+   "nombre": "cerca",
+   "activo": true,
+   "capa": 0,
+   "etiqueta": "Untagged",
+   "posicion": [
+    -0.25,
+    0.2,
+    0.0
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    1.57,
+    1.5,
+    1.0
+   ],
+   "padre": 29,
+   "hijos": [],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "cerca",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Background",
+     "orden": 1
+    }
+   ]
+  },
+  {
+   "id": 52,
+   "nombre": "cerca",
+   "activo": true,
+   "capa": 0,
+   "etiqueta": "Untagged",
+   "posicion": [
+    -0.25,
+    0.2,
+    0.0
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    1.57,
+    1.5,
+    1.0
+   ],
+   "padre": 48,
+   "hijos": [],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "cerca",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Background",
+     "orden": 1
+    }
+   ]
+  },
+  {
+   "id": 53,
+   "nombre": "cerca",
+   "activo": true,
+   "capa": 0,
+   "etiqueta": "Untagged",
+   "posicion": [
+    0.248,
+    0.2,
+    0.0
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    1.57,
+    1.5,
+    1.0
+   ],
+   "padre": 28,
+   "hijos": [],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "cerca",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Background",
+     "orden": 1
+    }
+   ]
+  },
+  {
+   "id": 54,
+   "nombre": "pixel",
+   "activo": true,
+   "capa": 0,
+   "etiqueta": "Untagged",
+   "posicion": [
+    0.0,
+    -5.0,
+    10.0
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    2000.0,
+    2.0,
+    1.0
+   ],
+   "padre": 49,
+   "hijos": [],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "pixel",
+     "color": [
+      0.545098,
+      0.486275,
+      0.12549,
+      1.0
+     ],
+     "capa_orden": "Front",
+     "orden": -1
+    }
+   ]
+  },
+  {
+   "id": 55,
+   "nombre": "cerca",
+   "activo": true,
+   "capa": 0,
+   "etiqueta": "Untagged",
+   "posicion": [
+    0.248,
+    0.2,
+    0.0
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    1.57,
+    1.5,
+    1.0
+   ],
+   "padre": 30,
+   "hijos": [],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "cerca",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Background",
+     "orden": 1
+    }
+   ]
+  },
+  {
+   "id": 56,
+   "nombre": "cerca",
+   "activo": true,
+   "capa": 0,
+   "etiqueta": "Untagged",
+   "posicion": [
+    -0.25,
+    0.2,
+    0.0
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    1.57,
+    1.5,
+    1.0
+   ],
+   "padre": 32,
+   "hijos": [],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "cerca",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Background",
+     "orden": 1
+    }
+   ]
+  },
+  {
+   "id": 57,
+   "nombre": "cerca",
+   "activo": true,
+   "capa": 0,
+   "etiqueta": "Untagged",
+   "posicion": [
+    0.248,
+    0.2,
+    0.0
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    1.57,
+    1.5,
+    1.0
+   ],
+   "padre": 60,
+   "hijos": [],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "cerca",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Background",
+     "orden": 1
+    }
+   ]
+  },
+  {
+   "id": 58,
+   "nombre": "suelo",
+   "activo": true,
+   "capa": 9,
+   "etiqueta": "Suelo",
+   "posicion": [
+    24.0,
+    -3.034015,
+    -4.837402
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    2.0,
+    2.0,
+    1.0
+   ],
+   "padre": 20,
+   "hijos": [
+    31,
+    80
+   ],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "suelo",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Front",
+     "orden": 0
+    },
+    {
+     "tipo": "BoxCollider2D",
+     "activo": true,
+     "trigger": false,
+     "centro": [
+      0.0,
+      0.0
+     ],
+     "material": "Slippery",
+     "tamano": [
+      1.0,
+      0.15
+     ]
+    }
+   ]
+  },
+  {
+   "id": 59,
+   "nombre": "suelo",
+   "activo": true,
+   "capa": 9,
+   "etiqueta": "Suelo",
+   "posicion": [
+    34.0,
+    -3.034015,
+    -4.837402
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    2.0,
+    2.0,
+    1.0
+   ],
+   "padre": 20,
+   "hijos": [
+    76,
+    36
+   ],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "suelo",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Front",
+     "orden": 0
+    },
+    {
+     "tipo": "BoxCollider2D",
+     "activo": true,
+     "trigger": false,
+     "centro": [
+      0.0,
+      0.0
+     ],
+     "material": "Slippery",
+     "tamano": [
+      1.0,
+      0.15
+     ]
+    }
+   ]
+  },
+  {
+   "id": 60,
+   "nombre": "suelo",
+   "activo": true,
+   "capa": 9,
+   "etiqueta": "Suelo",
+   "posicion": [
+    20.0,
+    -3.034015,
+    -4.837402
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    2.0,
+    2.0,
+    1.0
+   ],
+   "padre": 20,
+   "hijos": [
+    19,
+    57
+   ],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "suelo",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Front",
+     "orden": 0
+    },
+    {
+     "tipo": "BoxCollider2D",
+     "activo": true,
+     "trigger": false,
+     "centro": [
+      0.0,
+      0.0
+     ],
+     "material": "Slippery",
+     "tamano": [
+      1.0,
+      0.15
+     ]
+    }
+   ]
+  },
+  {
+   "id": 61,
+   "nombre": "cerca",
+   "activo": true,
+   "capa": 0,
+   "etiqueta": "Untagged",
+   "posicion": [
+    0.248,
+    0.2,
+    0.0
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    1.57,
+    1.5,
+    1.0
+   ],
+   "padre": 48,
+   "hijos": [],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "cerca",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Background",
+     "orden": 1
+    }
+   ]
+  },
+  {
+   "id": 62,
+   "nombre": "cerca",
+   "activo": true,
+   "capa": 0,
+   "etiqueta": "Untagged",
+   "posicion": [
+    0.248,
+    0.2,
+    0.0
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    1.57,
+    1.5,
+    1.0
+   ],
+   "padre": 27,
+   "hijos": [],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "cerca",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Background",
+     "orden": 1
+    }
+   ]
+  },
+  {
+   "id": 63,
+   "nombre": "Character",
+   "activo": true,
+   "capa": 8,
+   "etiqueta": "Player",
+   "posicion": [
+    -5.084745,
+    -0.91,
+    0.0
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "padre": null,
+   "hijos": [
+    86
+   ],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "hero_0",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Player",
+     "orden": 0
+    },
+    {
+     "tipo": "CircleCollider2D",
+     "activo": true,
+     "trigger": false,
+     "centro": [
+      -0.06,
+      -0.34
+     ],
+     "material": null,
+     "radio": 0.1899999976158142
+    },
+    {
+     "tipo": "BoxCollider2D",
+     "activo": true,
+     "trigger": false,
+     "centro": [
+      -0.06,
+      0.08
+     ],
+     "material": "Slippery",
+     "tamano": [
+      0.38,
+      0.83
+     ]
+    },
+    {
+     "tipo": "Rigidbody2D",
+     "masa": 1.0,
+     "arrastre": 0.0,
+     "arrastre_angular": 0.05000000074505806,
+     "escala_gravedad": 1.5,
+     "angulo_fijo": true,
+     "cinematico": false,
+     "sueno": 1,
+     "interpolacion": 0,
+     "deteccion": 0
+    },
+    {
+     "tipo": "Animator",
+     "activo": true,
+     "controlador": "Character"
+    },
+    {
+     "tipo": "MonoBehaviour",
+     "activo": false,
+     "script": "TimControllerScript",
+     "campos": {
+      "maxSpeed": 5.5,
+      "groundCheck": {
+       "objeto": 86
+      },
+      "whatIsGround": 4294965247,
+      "jumpForce": 300.0,
+      "canDoubleJump": 1,
+      "controlJump": 1
+     }
+    },
+    {
+     "tipo": "MonoBehaviour",
+     "activo": true,
+     "script": "PlatformerCharacter2D",
+     "campos": {
+      "maxSpeed": 8.0,
+      "jumpForce": 400.0,
+      "crouchSpeed": 0.36000001430511475,
+      "airControl": 1,
+      "whatIsGround": 512,
+      "anim": null,
+      "canDoubleJump": 1,
+      "polvo": {
+       "prefab": "polvo"
+      },
+      "hitSalto": {
+       "prefab": "dobleSalto"
+      }
+     }
+    },
+    {
+     "tipo": "MonoBehaviour",
+     "activo": true,
+     "script": "Platformer2DUserControl",
+     "campos": {}
+    },
+    {
+     "tipo": "AudioSource",
+     "activo": true,
+     "clip": "jump",
+     "al_despertar": false,
+     "volumen": 1.0,
+     "tono": 1.0,
+     "bucle": false,
+     "mudo": false
+    },
+    {
+     "tipo": "AudioSource",
+     "activo": true,
+     "clip": "step",
+     "al_despertar": false,
+     "volumen": 1.0,
+     "tono": 1.0,
+     "bucle": true,
+     "mudo": false
+    }
+   ]
+  },
+  {
+   "id": 64,
+   "nombre": "cerca",
+   "activo": true,
+   "capa": 0,
+   "etiqueta": "Untagged",
+   "posicion": [
+    -0.25,
+    0.2,
+    0.0
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    1.57,
+    1.5,
+    1.0
+   ],
+   "padre": 50,
+   "hijos": [],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "cerca",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Background",
+     "orden": 1
+    }
+   ]
+  },
+  {
+   "id": 65,
+   "nombre": "cerca",
+   "activo": true,
+   "capa": 0,
+   "etiqueta": "Untagged",
+   "posicion": [
+    -0.25,
+    0.2,
+    0.0
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    1.57,
+    1.5,
+    1.0
+   ],
+   "padre": 28,
+   "hijos": [],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "cerca",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Background",
+     "orden": 1
+    }
+   ]
+  },
+  {
+   "id": 66,
+   "nombre": "suelo",
+   "activo": true,
+   "capa": 9,
+   "etiqueta": "Suelo",
+   "posicion": [
+    4.0,
+    -3.034015,
+    -4.837402
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    2.0,
+    2.0,
+    1.0
+   ],
+   "padre": 20,
+   "hijos": [
+    25,
+    23
+   ],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "suelo",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Front",
+     "orden": 0
+    },
+    {
+     "tipo": "BoxCollider2D",
+     "activo": true,
+     "trigger": false,
+     "centro": [
+      0.0,
+      0.0
+     ],
+     "material": "Slippery",
+     "tamano": [
+      1.0,
+      0.15
+     ]
+    }
+   ]
+  },
+  {
+   "id": 67,
+   "nombre": "cerca",
+   "activo": true,
+   "capa": 0,
+   "etiqueta": "Untagged",
+   "posicion": [
+    -0.25,
+    0.2,
+    0.0
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    1.57,
+    1.5,
+    1.0
+   ],
+   "padre": 77,
+   "hijos": [],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "cerca",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Background",
+     "orden": 1
+    }
+   ]
+  },
+  {
+   "id": 68,
+   "nombre": "suelo",
+   "activo": true,
+   "capa": 9,
+   "etiqueta": "Suelo",
+   "posicion": [
+    14.0,
+    -3.034015,
+    -4.837402
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    2.0,
+    2.0,
+    1.0
+   ],
+   "padre": 20,
+   "hijos": [
+    26,
+    70
+   ],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "suelo",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Front",
+     "orden": 0
+    },
+    {
+     "tipo": "BoxCollider2D",
+     "activo": true,
+     "trigger": false,
+     "centro": [
+      0.0,
+      0.0
+     ],
+     "material": "Slippery",
+     "tamano": [
+      1.0,
+      0.15
+     ]
+    }
+   ]
+  },
+  {
+   "id": 69,
+   "nombre": "suelo",
+   "activo": true,
+   "capa": 9,
+   "etiqueta": "Suelo",
+   "posicion": [
+    36.0,
+    -3.034015,
+    -4.837402
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    2.0,
+    2.0,
+    1.0
+   ],
+   "padre": 20,
+   "hijos": [
+    85,
+    44
+   ],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "suelo",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Front",
+     "orden": 0
+    },
+    {
+     "tipo": "BoxCollider2D",
+     "activo": true,
+     "trigger": false,
+     "centro": [
+      0.0,
+      0.0
+     ],
+     "material": "Slippery",
+     "tamano": [
+      1.0,
+      0.15
+     ]
+    }
+   ]
+  },
+  {
+   "id": 70,
+   "nombre": "cerca",
+   "activo": true,
+   "capa": 0,
+   "etiqueta": "Untagged",
+   "posicion": [
+    0.248,
+    0.2,
+    0.0
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    1.57,
+    1.5,
+    1.0
+   ],
+   "padre": 68,
+   "hijos": [],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "cerca",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Background",
+     "orden": 1
+    }
+   ]
+  },
+  {
+   "id": 71,
+   "nombre": "ScreenshotView",
+   "activo": true,
+   "capa": 0,
+   "etiqueta": "Untagged",
+   "posicion": [
+    -3.709132,
+    -1.348278,
+    -20.645105
+   ],
+   "rotacion": [
+    0.5,
+    -0.5,
+    0.5,
+    0.5
+   ],
+   "escala": [
+    0.5,
+    0.5,
+    0.5
+   ],
+   "padre": null,
+   "hijos": [],
+   "componentes": [
+    {
+     "tipo": "MeshFilter"
+    },
+    {
+     "tipo": "MeshCollider",
+     "activo": true
+    },
+    {
+     "tipo": "MeshRenderer",
+     "activo": true
+    }
+   ]
+  },
+  {
+   "id": 72,
+   "nombre": "cerca",
+   "activo": true,
+   "capa": 0,
+   "etiqueta": "Untagged",
+   "posicion": [
+    0.248,
+    0.2,
+    0.0
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    1.57,
+    1.5,
+    1.0
+   ],
+   "padre": 21,
+   "hijos": [],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "cerca",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Background",
+     "orden": 1
+    }
+   ]
+  },
+  {
+   "id": 73,
+   "nombre": "cerca",
+   "activo": true,
+   "capa": 0,
+   "etiqueta": "Untagged",
+   "posicion": [
+    -0.25,
+    0.2,
+    0.0
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    1.57,
+    1.5,
+    1.0
+   ],
+   "padre": 37,
+   "hijos": [],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "cerca",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Background",
+     "orden": 1
+    }
+   ]
+  },
+  {
+   "id": 74,
+   "nombre": "GroundSpawn",
+   "activo": true,
+   "capa": 0,
+   "etiqueta": "Untagged",
+   "posicion": [
+    11.282809,
+    -5.006439,
+    10.0
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "padre": 49,
+   "hijos": [],
+   "componentes": [
+    {
+     "tipo": "MeshFilter"
+    },
+    {
+     "tipo": "MeshCollider",
+     "activo": true
+    },
+    {
+     "tipo": "MeshRenderer",
+     "activo": true
+    },
+    {
+     "tipo": "MonoBehaviour",
+     "activo": true,
+     "script": "Spawn",
+     "campos": {
+      "muro": {
+       "prefab": "muro"
+      },
+      "spawnMin": 2.5,
+      "spawnMax": 2.5,
+      "yMin": -1.0,
+      "yMax": -3.4000000953674316
+     }
+    }
+   ]
+  },
+  {
+   "id": 75,
+   "nombre": "cerca",
+   "activo": true,
+   "capa": 0,
+   "etiqueta": "Untagged",
+   "posicion": [
+    -0.25,
+    0.2,
+    0.0
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    1.57,
+    1.5,
+    1.0
+   ],
+   "padre": 40,
+   "hijos": [],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "cerca",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Background",
+     "orden": 1
+    }
+   ]
+  },
+  {
+   "id": 76,
+   "nombre": "cerca",
+   "activo": true,
+   "capa": 0,
+   "etiqueta": "Untagged",
+   "posicion": [
+    -0.25,
+    0.2,
+    0.0
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    1.57,
+    1.5,
+    1.0
+   ],
+   "padre": 59,
+   "hijos": [],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "cerca",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Background",
+     "orden": 1
+    }
+   ]
+  },
+  {
+   "id": 77,
+   "nombre": "suelo",
+   "activo": true,
+   "capa": 9,
+   "etiqueta": "Suelo",
+   "posicion": [
+    -2.0,
+    -3.034015,
+    -4.837402
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    2.0,
+    2.0,
+    1.0
+   ],
+   "padre": 20,
+   "hijos": [
+    67,
+    79
+   ],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "suelo",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Front",
+     "orden": 0
+    },
+    {
+     "tipo": "BoxCollider2D",
+     "activo": true,
+     "trigger": false,
+     "centro": [
+      0.0,
+      0.0
+     ],
+     "material": "Slippery",
+     "tamano": [
+      1.0,
+      0.15
+     ]
+    }
+   ]
+  },
+  {
+   "id": 78,
+   "nombre": "suelo",
+   "activo": true,
+   "capa": 9,
+   "etiqueta": "Suelo",
+   "posicion": [
+    2.0,
+    -3.034015,
+    -4.837402
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    2.0,
+    2.0,
+    1.0
+   ],
+   "padre": 20,
+   "hijos": [
+    46,
+    35
+   ],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "suelo",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Front",
+     "orden": 0
+    },
+    {
+     "tipo": "BoxCollider2D",
+     "activo": true,
+     "trigger": false,
+     "centro": [
+      0.0,
+      0.0
+     ],
+     "material": "Slippery",
+     "tamano": [
+      1.0,
+      0.15
+     ]
+    }
+   ]
+  },
+  {
+   "id": 79,
+   "nombre": "cerca",
+   "activo": true,
+   "capa": 0,
+   "etiqueta": "Untagged",
+   "posicion": [
+    0.248,
+    0.2,
+    0.0
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    1.57,
+    1.5,
+    1.0
+   ],
+   "padre": 77,
+   "hijos": [],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "cerca",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Background",
+     "orden": 1
+    }
+   ]
+  },
+  {
+   "id": 80,
+   "nombre": "cerca",
+   "activo": true,
+   "capa": 0,
+   "etiqueta": "Untagged",
+   "posicion": [
+    0.248,
+    0.2,
+    0.0
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    1.57,
+    1.5,
+    1.0
+   ],
+   "padre": 58,
+   "hijos": [],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "cerca",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Background",
+     "orden": 1
+    }
+   ]
+  },
+  {
+   "id": 81,
+   "nombre": "cerca",
+   "activo": true,
+   "capa": 0,
+   "etiqueta": "Untagged",
+   "posicion": [
+    -0.25,
+    0.2,
+    0.0
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    1.57,
+    1.5,
+    1.0
+   ],
+   "padre": 21,
+   "hijos": [],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "cerca",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Background",
+     "orden": 1
+    }
+   ]
+  },
+  {
+   "id": 82,
+   "nombre": "suelo",
+   "activo": true,
+   "capa": 9,
+   "etiqueta": "Suelo",
+   "posicion": [
+    6.0,
+    -3.034015,
+    -4.837402
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    2.0,
+    2.0,
+    1.0
+   ],
+   "padre": 20,
+   "hijos": [
+    84,
+    34
+   ],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "suelo",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Front",
+     "orden": 0
+    },
+    {
+     "tipo": "BoxCollider2D",
+     "activo": true,
+     "trigger": false,
+     "centro": [
+      0.0,
+      0.0
+     ],
+     "material": "Slippery",
+     "tamano": [
+      1.0,
+      0.15
+     ]
+    }
+   ]
+  },
+  {
+   "id": 83,
+   "nombre": "Destroyer",
+   "activo": true,
+   "capa": 0,
+   "etiqueta": "Untagged",
+   "posicion": [
+    -14.80173,
+    0.0,
+    10.0
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    1.0,
+    20.0,
+    1.0
+   ],
+   "padre": 49,
+   "hijos": [],
+   "componentes": [
+    {
+     "tipo": "MeshFilter"
+    },
+    {
+     "tipo": "MeshRenderer",
+     "activo": true
+    },
+    {
+     "tipo": "BoxCollider2D",
+     "activo": true,
+     "trigger": true,
+     "centro": [
+      0.0,
+      0.0
+     ],
+     "material": null,
+     "tamano": [
+      1.0,
+      1.0
+     ]
+    },
+    {
+     "tipo": "Rigidbody2D",
+     "masa": 1.0,
+     "arrastre": 0.0,
+     "arrastre_angular": 0.05000000074505806,
+     "escala_gravedad": 0.0,
+     "angulo_fijo": false,
+     "cinematico": false,
+     "sueno": 1,
+     "interpolacion": 0,
+     "deteccion": 0
+    },
+    {
+     "tipo": "MonoBehaviour",
+     "activo": true,
+     "script": "Destroyer",
+     "campos": {
+      "amount": 40.0
+     }
+    }
+   ]
+  },
+  {
+   "id": 84,
+   "nombre": "cerca",
+   "activo": true,
+   "capa": 0,
+   "etiqueta": "Untagged",
+   "posicion": [
+    -0.25,
+    0.2,
+    0.0
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    1.57,
+    1.5,
+    1.0
+   ],
+   "padre": 82,
+   "hijos": [],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "cerca",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Background",
+     "orden": 1
+    }
+   ]
+  },
+  {
+   "id": 85,
+   "nombre": "cerca",
+   "activo": true,
+   "capa": 0,
+   "etiqueta": "Untagged",
+   "posicion": [
+    -0.25,
+    0.2,
+    0.0
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    1.57,
+    1.5,
+    1.0
+   ],
+   "padre": 69,
+   "hijos": [],
+   "componentes": [
+    {
+     "tipo": "SpriteRenderer",
+     "activo": true,
+     "sprite": "cerca",
+     "color": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+     ],
+     "capa_orden": "Background",
+     "orden": 1
+    }
+   ]
+  },
+  {
+   "id": 86,
+   "nombre": "GroundCheck",
+   "activo": true,
+   "capa": 8,
+   "etiqueta": "Untagged",
+   "posicion": [
+    0.0,
+    -0.648658,
+    0.0
+   ],
+   "rotacion": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "escala": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "padre": 63,
+   "hijos": [],
+   "componentes": []
+  }
+ ],
+ "prefabs": {
+  "muro": [
+   {
+    "id": 163,
+    "nombre": "muro",
+    "activo": true,
+    "capa": 0,
+    "etiqueta": "Muro",
+    "posicion": [
+     -33.895252,
+     -3.607973,
+     0.0
+    ],
+    "rotacion": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "escala": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "padre": null,
+    "hijos": [
+     159,
+     162,
+     165,
+     164
+    ],
+    "componentes": []
+   },
+   {
+    "id": 159,
+    "nombre": "muro",
+    "activo": true,
+    "capa": 0,
+    "etiqueta": "Muro",
+    "posicion": [
+     0.0,
+     8.0,
+     0.0
+    ],
+    "rotacion": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "escala": [
+     4.0,
+     4.0,
+     1.0
+    ],
+    "padre": 163,
+    "hijos": [],
+    "componentes": [
+     {
+      "tipo": "SpriteRenderer",
+      "activo": true,
+      "sprite": "murob",
+      "color": [
+       1.0,
+       1.0,
+       1.0,
+       1.0
+      ],
+      "capa_orden": "MiddleGround",
+      "orden": 0
+     },
+     {
+      "tipo": "BoxCollider2D",
+      "activo": true,
+      "trigger": true,
+      "centro": [
+       0.0,
+       0.0
+      ],
+      "material": null,
+      "tamano": [
+       0.2,
+       1.5
+      ]
+     },
+     {
+      "tipo": "MonoBehaviour",
+      "activo": true,
+      "script": "Muro",
+      "campos": {}
+     },
+     {
+      "tipo": "Rigidbody2D",
+      "masa": 1.0,
+      "arrastre": 0.0,
+      "arrastre_angular": 0.05000000074505806,
+      "escala_gravedad": 0.0,
+      "angulo_fijo": false,
+      "cinematico": false,
+      "sueno": 1,
+      "interpolacion": 0,
+      "deteccion": 0
+     },
+     {
+      "tipo": "AudioSource",
+      "activo": true,
+      "clip": "dead",
+      "al_despertar": false,
+      "volumen": 1.0,
+      "tono": 1.0,
+      "bucle": false,
+      "mudo": false
+     }
+    ]
+   },
+   {
+    "id": 162,
+    "nombre": "muro",
+    "activo": true,
+    "capa": 0,
+    "etiqueta": "Muro",
+    "posicion": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "rotacion": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "escala": [
+     4.0,
+     4.0,
+     1.0
+    ],
+    "padre": 163,
+    "hijos": [],
+    "componentes": [
+     {
+      "tipo": "SpriteRenderer",
+      "activo": true,
+      "sprite": "muro",
+      "color": [
+       1.0,
+       1.0,
+       1.0,
+       1.0
+      ],
+      "capa_orden": "MiddleGround",
+      "orden": 0
+     },
+     {
+      "tipo": "BoxCollider2D",
+      "activo": true,
+      "trigger": true,
+      "centro": [
+       0.0,
+       0.0
+      ],
+      "material": null,
+      "tamano": [
+       0.2,
+       1.5
+      ]
+     },
+     {
+      "tipo": "MonoBehaviour",
+      "activo": true,
+      "script": "Muro",
+      "campos": {}
+     },
+     {
+      "tipo": "Rigidbody2D",
+      "masa": 1.0,
+      "arrastre": 0.0,
+      "arrastre_angular": 0.05000000074505806,
+      "escala_gravedad": 0.0,
+      "angulo_fijo": false,
+      "cinematico": false,
+      "sueno": 1,
+      "interpolacion": 0,
+      "deteccion": 0
+     },
+     {
+      "tipo": "AudioSource",
+      "activo": true,
+      "clip": "dead",
+      "al_despertar": false,
+      "volumen": 1.0,
+      "tono": 1.0,
+      "bucle": false,
+      "mudo": false
+     }
+    ]
+   },
+   {
+    "id": 165,
+    "nombre": "PowerUp",
+    "activo": true,
+    "capa": 0,
+    "etiqueta": "Untagged",
+    "posicion": [
+     0.0,
+     4.031403,
+     0.0
+    ],
+    "rotacion": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "escala": [
+     2.5,
+     2.5,
+     1.0
+    ],
+    "padre": 163,
+    "hijos": [],
+    "componentes": [
+     {
+      "tipo": "SpriteRenderer",
+      "activo": true,
+      "sprite": "coin_0",
+      "color": [
+       1.0,
+       1.0,
+       1.0,
+       1.0
+      ],
+      "capa_orden": "MiddleGround",
+      "orden": 0
+     },
+     {
+      "tipo": "Animator",
+      "activo": true,
+      "controlador": "coin_0"
+     },
+     {
+      "tipo": "MonoBehaviour",
+      "activo": true,
+      "script": "PowerUp",
+      "campos": {}
+     },
+     {
+      "tipo": "AudioSource",
+      "activo": true,
+      "clip": "coin",
+      "al_despertar": false,
+      "volumen": 1.0,
+      "tono": 1.0,
+      "bucle": false,
+      "mudo": false
+     },
+     {
+      "tipo": "BoxCollider2D",
+      "activo": true,
+      "trigger": true,
+      "centro": [
+       0.0,
+       0.0
+      ],
+      "material": null,
+      "tamano": [
+       0.3,
+       0.32
+      ]
+     }
+    ]
+   },
+   {
+    "id": 164,
+    "nombre": "bach",
+    "activo": true,
+    "capa": 0,
+    "etiqueta": "Untagged",
+    "posicion": [
+     0.055786,
+     -0.317179,
+     0.0
+    ],
+    "rotacion": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "escala": [
+     0.5,
+     0.5,
+     1.0
+    ],
+    "padre": 163,
+    "hijos": [],
+    "componentes": [
+     {
+      "tipo": "SpriteRenderer",
+      "activo": true,
+      "sprite": "bach",
+      "color": [
+       0.727941,
+       1.0,
+       0.808621,
+       1.0
+      ],
+      "capa_orden": "MiddleGround",
+      "orden": 1
+     }
+    ]
+   }
+  ],
+  "polvo": [
+   {
+    "id": 160,
+    "nombre": "polvo",
+    "activo": true,
+    "capa": 0,
+    "etiqueta": "Particula",
+    "posicion": [
+     -12.442952,
+     -1.152459,
+     0.0
+    ],
+    "rotacion": [
+     -0.501518,
+     -0.498478,
+     0.498478,
+     0.501518
+    ],
+    "escala": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "padre": null,
+    "hijos": [],
+    "componentes": [
+     {
+      "tipo": "ParticleSystem",
+      "duracion": 2.799999952316284,
+      "retraso": 0.0,
+      "velocidad_simulacion": 1.0,
+      "bucle": true,
+      "precalentar": false,
+      "al_despertar": true,
+      "espacio_local": true,
+      "inicial": {
+       "vida": {
+        "modo": 0,
+        "escalar": 1.0,
+        "max": [
+         [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+         ]
+        ],
+        "min": [
+         [
+          0.0,
+          0.333333,
+          0.0,
+          0.0
+         ]
+        ]
+       },
+       "rapidez": {
+        "modo": 0,
+        "escalar": 1.42,
+        "max": [
+         [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+         ]
+        ],
+        "min": [
+         [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+         ]
+        ]
+       },
+       "color": {
+        "modo": 0,
+        "max_color": [
+         0.988235,
+         0.909804,
+         0.388235,
+         0.376471
+        ],
+        "min_color": [
+         1.0,
+         1.0,
+         1.0,
+         1.0
+        ],
+        "max": {
+         "colores": [
+          [
+           0.0,
+           1.0,
+           1.0,
+           1.0
+          ],
+          [
+           1.0,
+           1.0,
+           1.0,
+           1.0
+          ]
+         ],
+         "alfas": [
+          [
+           0.0,
+           1.0
+          ],
+          [
+           1.0,
+           1.0
+          ]
+         ]
+        },
+        "min": {
+         "colores": [
+          [
+           0.0,
+           1.0,
+           1.0,
+           1.0
+          ],
+          [
+           1.0,
+           1.0,
+           1.0,
+           1.0
+          ]
+         ],
+         "alfas": [
+          [
+           0.0,
+           1.0
+          ],
+          [
+           1.0,
+           1.0
+          ]
+         ]
+        }
+       },
+       "tamano": {
+        "modo": 3,
+        "escalar": 1.06,
+        "max": [
+         [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+         ]
+        ],
+        "min": [
+         [
+          0.0,
+          0.679245,
+          0.0,
+          0.0
+         ]
+        ]
+       },
+       "rotacion": {
+        "modo": 0,
+        "escalar": 0.0,
+        "max": [
+         [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+         ],
+         [
+          1.0,
+          1.0,
+          0.0,
+          0.0
+         ]
+        ],
+        "min": [
+         [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+         ],
+         [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+         ]
+        ]
+       },
+       "gravedad": 0.0,
+       "heredar_velocidad": 0.47999998927116394,
+       "maximo": 30
+      },
+      "forma": {
+       "tipo": 0,
+       "radio": 0.20000000298023224,
+       "angulo": 80.0,
+       "largo": 5.0,
+       "caja": [
+        1.0,
+        1.0,
+        1.0
+       ],
+       "direccion_aleatoria": false
+      },
+      "emision": {
+       "tipo": 0,
+       "ritmo": {
+        "modo": 0,
+        "escalar": 20.0,
+        "max": [
+         [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+         ],
+         [
+          1.0,
+          1.0,
+          0.0,
+          0.0
+         ]
+        ],
+        "min": [
+         [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+         ],
+         [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+         ]
+        ]
+       },
+       "rafagas": []
+      },
+      "tamano_en_vida": {
+       "modo": 1,
+       "escalar": 2.0,
+       "max": [
+        [
+         0.0,
+         0.25,
+         0.0,
+         0.75
+        ],
+        [
+         1.0,
+         1.0,
+         0.75,
+         1.288194
+        ]
+       ],
+       "min": [
+        [
+         0.0,
+         0.0,
+         0.0,
+         0.0
+        ],
+        [
+         1.0,
+         0.0,
+         0.0,
+         0.0
+        ]
+       ]
+      },
+      "color_en_vida": {
+       "modo": 1,
+       "max_color": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+       ],
+       "min_color": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+       ],
+       "max": {
+        "colores": [
+         [
+          0.0,
+          1.0,
+          1.0,
+          1.0
+         ],
+         [
+          1.0,
+          0.8,
+          0.8,
+          0.8
+         ]
+        ],
+        "alfas": [
+         [
+          0.0,
+          0.0
+         ],
+         [
+          0.250004,
+          1.0
+         ],
+         [
+          0.749996,
+          1.0
+         ],
+         [
+          1.0,
+          0.0
+         ]
+        ]
+       },
+       "min": {
+        "colores": [
+         [
+          0.0,
+          1.0,
+          1.0,
+          1.0
+         ],
+         [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+         ]
+        ],
+        "alfas": [
+         [
+          0.0,
+          1.0
+         ],
+         [
+          1.0,
+          1.0
+         ]
+        ]
+       }
+      },
+      "hoja": {
+       "cuadro": {
+        "modo": 3,
+        "escalar": 1.0,
+        "max": [
+         [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+         ]
+        ],
+        "min": [
+         [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+         ]
+        ]
+       },
+       "x": 4,
+       "y": 1,
+       "tipo": 0,
+       "fila": 0,
+       "ciclos": 1.0,
+       "fila_aleatoria": true
+      },
+      "velocidad_en_vida": {
+       "x": {
+        "modo": 3,
+        "escalar": 0.5,
+        "max": [
+         [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+         ]
+        ],
+        "min": [
+         [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+         ]
+        ]
+       },
+       "y": {
+        "modo": 3,
+        "escalar": 0.0,
+        "max": [
+         [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+         ]
+        ],
+        "min": [
+         [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+         ]
+        ]
+       },
+       "z": {
+        "modo": 3,
+        "escalar": 3.17,
+        "max": [
+         [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+         ]
+        ],
+        "min": [
+         [
+          0.0,
+          0.315457,
+          0.0,
+          0.0
+         ]
+        ]
+       },
+       "mundo": false
+      }
+     },
+     {
+      "tipo": "ParticleSystemRenderer",
+      "activo": true,
+      "material": "CFX_Smoke_4frms",
+      "modo": 0,
+      "escala_largo": 2.0,
+      "escala_velocidad": 0.0,
+      "tamano_maximo": 0.5,
+      "orden_particulas": 0,
+      "capa_orden": "Default",
+      "orden": 0
+     },
+     {
+      "tipo": "CircleCollider2D",
+      "activo": true,
+      "trigger": true,
+      "centro": [
+       -0.0,
+       -0.0
+      ],
+      "material": null,
+      "radio": 1.2680001258850098
+     }
+    ]
+   }
+  ],
+  "dobleSalto": [
+   {
+    "id": 158,
+    "nombre": "dobleSalto",
+    "activo": true,
+    "capa": 0,
+    "etiqueta": "FxTemporaire",
+    "posicion": [
+     -11.986979,
+     -1.789578,
+     0.0
+    ],
+    "rotacion": [
+     0.000421,
+     -0.707107,
+     -0.707107,
+     0.000421
+    ],
+    "escala": [
+     0.5,
+     0.5,
+     0.5
+    ],
+    "padre": null,
+    "hijos": [
+     161
+    ],
+    "componentes": [
+     {
+      "tipo": "ParticleSystem",
+      "duracion": 0.5,
+      "retraso": 0.0,
+      "velocidad_simulacion": 1.0,
+      "bucle": false,
+      "precalentar": false,
+      "al_despertar": true,
+      "espacio_local": true,
+      "inicial": {
+       "vida": {
+        "modo": 3,
+        "escalar": 0.2,
+        "max": [
+         [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+         ]
+        ],
+        "min": [
+         [
+          0.0,
+          0.5,
+          0.0,
+          0.0
+         ]
+        ]
+       },
+       "rapidez": {
+        "modo": 0,
+        "escalar": 0.01,
+        "max": [
+         [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+         ]
+        ],
+        "min": [
+         [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+         ]
+        ]
+       },
+       "color": {
+        "modo": 0,
+        "max_color": [
+         1.0,
+         1.0,
+         1.0,
+         1.0
+        ],
+        "min_color": [
+         1.0,
+         1.0,
+         1.0,
+         1.0
+        ],
+        "max": {
+         "colores": [
+          [
+           0.0,
+           1.0,
+           1.0,
+           1.0
+          ],
+          [
+           1.0,
+           1.0,
+           1.0,
+           1.0
+          ]
+         ],
+         "alfas": [
+          [
+           0.0,
+           1.0
+          ],
+          [
+           1.0,
+           1.0
+          ]
+         ]
+        },
+        "min": {
+         "colores": [
+          [
+           0.0,
+           1.0,
+           1.0,
+           1.0
+          ],
+          [
+           1.0,
+           1.0,
+           1.0,
+           1.0
+          ]
+         ],
+         "alfas": [
+          [
+           0.0,
+           1.0
+          ],
+          [
+           1.0,
+           1.0
+          ]
+         ]
+        }
+       },
+       "tamano": {
+        "modo": 3,
+        "escalar": 0.3,
+        "max": [
+         [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+         ]
+        ],
+        "min": [
+         [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+         ]
+        ]
+       },
+       "rotacion": {
+        "modo": 0,
+        "escalar": 0.0,
+        "max": [
+         [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+         ]
+        ],
+        "min": [
+         [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+         ]
+        ]
+       },
+       "gravedad": 0.0,
+       "heredar_velocidad": 0.0,
+       "maximo": 20
+      },
+      "forma": {
+       "tipo": 2,
+       "radio": 0.20000000298023224,
+       "angulo": 0.0,
+       "largo": 5.0,
+       "caja": [
+        1.0,
+        1.0,
+        1.0
+       ],
+       "direccion_aleatoria": false
+      },
+      "emision": {
+       "tipo": 0,
+       "ritmo": {
+        "modo": 0,
+        "escalar": 0.0,
+        "max": [
+         [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+         ]
+        ],
+        "min": [
+         [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+         ]
+        ]
+       },
+       "rafagas": [
+        [
+         0.05000000074505806,
+         10
+        ]
+       ]
+      },
+      "tamano_en_vida": {
+       "modo": 1,
+       "escalar": 1.0,
+       "max": [
+        [
+         0.0,
+         0.501976,
+         0.498024,
+         0.498024
+        ],
+        [
+         1.0,
+         1.0,
+         0.498024,
+         0.498024
+        ]
+       ],
+       "min": [
+        [
+         0.0,
+         0.0,
+         0.0,
+         0.0
+        ],
+        [
+         1.0,
+         0.0,
+         0.0,
+         0.0
+        ]
+       ]
+      },
+      "color_en_vida": {
+       "modo": 1,
+       "max_color": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+       ],
+       "min_color": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+       ],
+       "max": {
+        "colores": [
+         [
+          0.0,
+          1.0,
+          0.972549,
+          0.717647
+         ],
+         [
+          0.397055,
+          1.0,
+          0.901961,
+          0.0
+         ],
+         [
+          0.770596,
+          1.0,
+          0.607843,
+          0.0
+         ],
+         [
+          1.0,
+          0.654902,
+          0.4,
+          0.0
+         ]
+        ],
+        "alfas": [
+         [
+          0.0,
+          1.0
+         ],
+         [
+          0.749996,
+          0.498039
+         ],
+         [
+          1.0,
+          0.039216
+         ]
+        ]
+       },
+       "min": {
+        "colores": [
+         [
+          0.0,
+          1.0,
+          1.0,
+          1.0
+         ],
+         [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+         ]
+        ],
+        "alfas": [
+         [
+          0.0,
+          1.0
+         ],
+         [
+          1.0,
+          1.0
+         ]
+        ]
+       }
+      },
+      "hoja": {
+       "cuadro": {
+        "modo": 1,
+        "escalar": 1.0,
+        "max": [
+         [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+         ],
+         [
+          1.0,
+          1.0,
+          1.0,
+          0.0
+         ]
+        ],
+        "min": [
+         [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+         ],
+         [
+          1.0,
+          1.0,
+          1.0,
+          0.0
+         ]
+        ]
+       },
+       "x": 4,
+       "y": 1,
+       "tipo": 0,
+       "fila": 0,
+       "ciclos": 1.0,
+       "fila_aleatoria": true
+      }
+     },
+     {
+      "tipo": "ParticleSystemRenderer",
+      "activo": true,
+      "material": "CFX_Anim_Triangle3_Add",
+      "modo": 1,
+      "escala_largo": 5.0,
+      "escala_velocidad": 0.0,
+      "tamano_maximo": 0.10000000149011612,
+      "orden_particulas": 0,
+      "capa_orden": "Default",
+      "orden": 0
+     },
+     {
+      "tipo": "MonoBehaviour",
+      "activo": true,
+      "script": "CFX_AutoDestructShuriken",
+      "campos": {
+       "OnlyDeactivate": 0
+      }
+     }
+    ]
+   },
+   {
+    "id": 161,
+    "nombre": "Black Hit",
+    "activo": true,
+    "capa": 0,
+    "etiqueta": "FxTemporaire",
+    "posicion": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "rotacion": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "escala": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "padre": 158,
+    "hijos": [],
+    "componentes": [
+     {
+      "tipo": "ParticleSystem",
+      "duracion": 0.5,
+      "retraso": 0.0,
+      "velocidad_simulacion": 1.0,
+      "bucle": false,
+      "precalentar": false,
+      "al_despertar": true,
+      "espacio_local": true,
+      "inicial": {
+       "vida": {
+        "modo": 3,
+        "escalar": 0.2,
+        "max": [
+         [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+         ]
+        ],
+        "min": [
+         [
+          0.0,
+          0.5,
+          0.0,
+          0.0
+         ]
+        ]
+       },
+       "rapidez": {
+        "modo": 0,
+        "escalar": 0.01,
+        "max": [
+         [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+         ]
+        ],
+        "min": [
+         [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+         ]
+        ]
+       },
+       "color": {
+        "modo": 0,
+        "max_color": [
+         1.0,
+         1.0,
+         1.0,
+         1.0
+        ],
+        "min_color": [
+         1.0,
+         1.0,
+         1.0,
+         1.0
+        ],
+        "max": {
+         "colores": [
+          [
+           0.0,
+           1.0,
+           1.0,
+           1.0
+          ],
+          [
+           1.0,
+           1.0,
+           1.0,
+           1.0
+          ]
+         ],
+         "alfas": [
+          [
+           0.0,
+           1.0
+          ],
+          [
+           1.0,
+           1.0
+          ]
+         ]
+        },
+        "min": {
+         "colores": [
+          [
+           0.0,
+           1.0,
+           1.0,
+           1.0
+          ],
+          [
+           1.0,
+           1.0,
+           1.0,
+           1.0
+          ]
+         ],
+         "alfas": [
+          [
+           0.0,
+           1.0
+          ],
+          [
+           1.0,
+           1.0
+          ]
+         ]
+        }
+       },
+       "tamano": {
+        "modo": 3,
+        "escalar": 0.5,
+        "max": [
+         [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+         ]
+        ],
+        "min": [
+         [
+          0.0,
+          0.8,
+          0.0,
+          0.0
+         ]
+        ]
+       },
+       "rotacion": {
+        "modo": 0,
+        "escalar": 0.0,
+        "max": [
+         [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+         ]
+        ],
+        "min": [
+         [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+         ]
+        ]
+       },
+       "gravedad": 0.0,
+       "heredar_velocidad": 0.0,
+       "maximo": 14
+      },
+      "forma": {
+       "tipo": 2,
+       "radio": 0.009999999776482582,
+       "angulo": 0.0,
+       "largo": 5.0,
+       "caja": [
+        1.0,
+        1.0,
+        1.0
+       ],
+       "direccion_aleatoria": false
+      },
+      "emision": {
+       "tipo": 0,
+       "ritmo": {
+        "modo": 0,
+        "escalar": 0.0,
+        "max": [
+         [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+         ]
+        ],
+        "min": [
+         [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+         ]
+        ]
+       },
+       "rafagas": [
+        [
+         0.05000000074505806,
+         4
+        ]
+       ]
+      },
+      "tamano_en_vida": {
+       "modo": 1,
+       "escalar": 1.0,
+       "max": [
+        [
+         0.0,
+         0.501976,
+         0.498024,
+         0.498024
+        ],
+        [
+         1.0,
+         1.0,
+         0.498024,
+         0.498024
+        ]
+       ],
+       "min": [
+        [
+         0.0,
+         0.0,
+         0.0,
+         0.0
+        ],
+        [
+         1.0,
+         0.0,
+         0.0,
+         0.0
+        ]
+       ]
+      },
+      "color_en_vida": {
+       "modo": 1,
+       "max_color": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+       ],
+       "min_color": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+       ],
+       "max": {
+        "colores": [
+         [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+         ],
+         [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+         ]
+        ],
+        "alfas": [
+         [
+          0.0,
+          1.0
+         ],
+         [
+          1.0,
+          0.039216
+         ]
+        ]
+       },
+       "min": {
+        "colores": [
+         [
+          0.0,
+          1.0,
+          1.0,
+          1.0
+         ],
+         [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+         ]
+        ],
+        "alfas": [
+         [
+          0.0,
+          1.0
+         ],
+         [
+          1.0,
+          1.0
+         ]
+        ]
+       }
+      },
+      "hoja": {
+       "cuadro": {
+        "modo": 1,
+        "escalar": 1.0,
+        "max": [
+         [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+         ],
+         [
+          1.0,
+          1.0,
+          1.0,
+          0.0
+         ]
+        ],
+        "min": [
+         [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+         ],
+         [
+          1.0,
+          1.0,
+          1.0,
+          0.0
+         ]
+        ]
+       },
+       "x": 4,
+       "y": 1,
+       "tipo": 0,
+       "fila": 0,
+       "ciclos": 1.0,
+       "fila_aleatoria": true
+      }
+     },
+     {
+      "tipo": "ParticleSystemRenderer",
+      "activo": true,
+      "material": "CFX_Anim_Triangle3_Mult",
+      "modo": 1,
+      "escala_largo": 4.0,
+      "escala_velocidad": 0.0,
+      "tamano_maximo": 0.10000000149011612,
+      "orden_particulas": 0,
+      "capa_orden": "Default",
+      "orden": 0
+     },
+     {
+      "tipo": "MonoBehaviour",
+      "activo": true,
+      "script": "CFX_AutoDestructShuriken",
+      "campos": {
+       "OnlyDeactivate": 0
+      }
+     }
+    ]
+   }
+  ]
+ }
+}

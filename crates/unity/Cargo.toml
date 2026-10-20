@@ -1,0 +1,11 @@
+[package]
+name = "unity"
+version = "0.1.0"
+edition = "2024"
+description = "Las piezas del motor de Unity 4.x (2D) que usan los ports del museo"
+
+[dependencies]
+box2d = { path = "../box2d" }
+macroquad = { version = "0.4", features = ["audio"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"

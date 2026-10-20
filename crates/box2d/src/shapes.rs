@@ -62,6 +62,17 @@ impl PolygonShape {
         self.centroid = Vec2::ZERO;
     }
 
+    /// SetAsBox con centro y ángulo (el BoxCollider2D de Unity con su desplazamiento).
+    pub fn set_as_box_oriented(&mut self, hx: f32, hy: f32, center: Vec2, angle: f32) {
+        self.set_as_box(hx, hy);
+        self.centroid = center;
+        let xf = Transform::new(center, angle);
+        for i in 0..self.count {
+            self.vertices[i] = mul_xv(&xf, self.vertices[i]);
+            self.normals[i] = mul_rv(xf.q, self.normals[i]);
+        }
+    }
+
     /// Set: la envolvente convexa (envoltura de regalo) de los puntos. El box2d.js de Construct 2
     /// tiene comentada la soldadura de vértices cercanos.
     pub fn set(&mut self, vertices: &[Vec2]) {

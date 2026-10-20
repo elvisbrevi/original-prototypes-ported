@@ -1,12 +1,13 @@
-// b2Collision, b2CollideCircle y b2CollidePolygon: AABB, manifolds y la colisión entre círculos
-// y polígonos.
+// b2Collision, b2CollideCircle y b2CollidePolygon: AABB, manifolds, la colisión entre círculos
+// y polígonos y b2TestOverlap.
 
+use crate::distance::{DistanceInput, DistanceProxy, SimplexCache, distance};
 use crate::math::{
     Transform, Vec2, cross_vs, distance_squared, dot, max_v, min_v, mul_rv, mul_t_rv, mul_t_xv,
     mul_t_xx, mul_xv, vec2,
 };
 use crate::settings::{EPSILON, LINEAR_SLOP, MAX_FLOAT, MAX_MANIFOLD_POINTS};
-use crate::shapes::{CircleShape, PolygonShape};
+use crate::shapes::{CircleShape, PolygonShape, Shape};
 
 pub const E_VERTEX: u8 = 0;
 pub const E_FACE: u8 = 1;
@@ -190,6 +191,20 @@ pub fn test_overlap_aabb(a: &Aabb, b: &Aabb) -> bool {
         return false;
     }
     true
+}
+
+/// b2TestOverlap entre dos formas: la distancia de GJK con los radios es casi cero.
+pub fn test_overlap(shape_a: &Shape, xf_a: &Transform, shape_b: &Shape, xf_b: &Transform) -> bool {
+    let input = DistanceInput {
+        proxy_a: DistanceProxy::new(shape_a),
+        proxy_b: DistanceProxy::new(shape_b),
+        transform_a: *xf_a,
+        transform_b: *xf_b,
+        use_radii: true,
+    };
+    let mut cache = SimplexCache::default();
+    let output = distance(&mut cache, &input);
+    output.distance < 10.0 * EPSILON
 }
 
 pub fn collide_circles(

@@ -55,6 +55,20 @@
                 importObject.env.museo_beta = function () {
                     return window.museo.beta;
                 };
+                // crates/museo (preferencias.rs): enteros guardados por juego en localStorage.
+                importObject.env.museo_pref_leer = function (clave, defecto) {
+                    try {
+                        var v = window.localStorage.getItem("museo:" + document.title + ":" + clave);
+                        return v === null ? defecto : (parseInt(v, 10) | 0);
+                    } catch (e) {
+                        return defecto;
+                    }
+                };
+                importObject.env.museo_pref_guardar = function (clave, valor) {
+                    try {
+                        window.localStorage.setItem("museo:" + document.title + ":" + clave, String(valor));
+                    } catch (e) {}
+                };
             },
         });
         load("{{WASM}}");

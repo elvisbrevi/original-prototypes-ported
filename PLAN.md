@@ -5,11 +5,14 @@ Plan de trabajo para recrear en Rust + macroquad todos los juegos publicados en
 Está pensado para avanzar en varias sesiones: marca cada casilla al completarla e incluye el cambio
 del plan en el mismo commit.
 
-**Siguiente paso:** 2.6 Super Happy Jump (Unity 4.6 Web Player): abrir `web.unity3d` con
-`tools/unity_assets.py`, decompilar `Assembly-CSharp.dll` con ILSpy y seguir la plantilla (con el
-paso 6 ampliado: «Cómo se hizo» con los detalles técnicos del port). La fase 4 (publicar las
-versiones web en itch.io) espera la confirmación del dueño de la cuenta: 4.1 y 4.2 se pueden
-preparar en cuanto la dé. El 0.7 (GitHub Pages) queda pendiente de decidir si se publica.
+**Siguiente paso:** 2.7 One Button Prototype (Unity 5.1, Mono): extraer el build de Linux
+(`_Linux.zip`) en su propia carpeta de `originales/`, decompilar `Assembly-CSharp.dll` y
+`-firstpass` con ILSpy (las referencias de Unity 5.1.2 vienen en el mismo build) y reutilizar
+`crates/unity` (escena.json, física 2D sobre Box2D, Animator, sprites, IMGUI), ampliándolo con lo
+que pida Unity 5.1 (cámara ortográfica, otros componentes de los Standard Assets 2D). Seguir la
+plantilla con el paso 6 ampliado. La fase 4 (publicar las versiones web en itch.io) espera la
+confirmación del dueño de la cuenta: 4.1 y 4.2 se pueden preparar en cuanto la dé. El 0.7 (GitHub
+Pages) queda pendiente de decidir si se publica.
 
 ## Reglas
 
@@ -68,7 +71,8 @@ Herramientas de extracción por stack (checkpoint 0.8; las salidas van a `origin
 - XNA 3.1: `games/iman/tools/xnb_extract.py` (XNB v4 sin comprimir, `SpriteFont`, bancos XACT).
 - Unity: `~/.venvs/museo/bin/python -I tools/unity_assets.py inventario|exportar|emscripten ...`.
   Lee Unity 3.4, 4.6 (`web.unity3d`) y 5.1; con `--managed <carpeta Managed>` vuelca también los
-  campos de los MonoBehaviour. AssetRipper no hizo falta.
+  campos de los MonoBehaviour. AssetRipper no hizo falta. Para un port, el `tools/extraer.py` del
+  juego (el de Super Happy Jump es el modelo) escribe el `escena.json` que lee `crates/unity`.
 - Construct 2: `python3 -I tools/c2_eventos.py resumen|eventos|fuente <carpeta html5>` (proyecto,
   tipos, layouts, tabla de referencias del runtime minificado y hojas de eventos en pseudocódigo).
 - Android: `~/.local/opt/jadx/bin/jadx -d <salida> <apk>` y
@@ -126,7 +130,7 @@ cada juego en la fase 2).
 | Go Ball | 3 zips (Win32, Win64, macOS) | Unity 3.4.0f5, Mono, con `.mdb` | ILSpy de `Assembly-CSharp` y `Assembly-UnityScript`; escenas `level0..4` con `unity_assets.py` | 3D + física PhysX; UnityPy lee texturas, mallas, audio y campos de MonoBehaviour (los PPtr salen con los bytes invertidos) |
 | The Meaning of Christmas | APK (7,8 MB) | Java + libGDX | REA Android + JADX; assets en `assets/data` | música en MP3 (macroquad no lo lee: convertir a OGG); el juego está en `com.badlogic.gdx.helloworld` (plantilla de libGDX) |
 | Fast Car Racer | — | Android (`cl.gioco.fcr`) | — | **sin binario**: itch.io solo enlaza a Google Play |
-| Super Happy Jump | `web.unity3d` (385 KB) | Unity 4.6.0f3, Web Player | UnityPy para abrir el bundle `UnityWeb` → `Assembly-CSharp.dll` + assets | formato UnityWeb comprimido con LZMA |
+| Super Happy Jump | `web.unity3d` (385 KB) | Unity 4.6.0f3, Web Player | ✅ hecho | ver pendientes en 2.6 |
 | Que No Caiga | HTML5 (39 archivos) | Construct 2 | ✅ hecho | ver pendientes en 2.3 |
 | Retro Penal | HTML5 + NW.js (win/osx/linux) | Construct 2 | ✅ hecho | ver pendientes en 2.4 |
 | One Button Prototype | Mac, Linux, APK y WebGL | Unity 5.1.2f1, Mono | ILSpy (Standard Assets 2D + clases propias); escenas con UnityPy/AssetRipper | física 2D (Box2D) |
@@ -223,19 +227,36 @@ Orden sugerido: primero lo que reutiliza herramientas ya hechas y luego lo más 
   emulada por CDP en Chromium, que llega a la página, y una inclinación fija forzada en nativo); no
   se jugó hasta la meta sin ayuda (la meta se probó con un cambio temporal).
 
-### 2.6 Super Happy Jump (Unity 4.6 Web Player)
-- [ ] Abrir `web.unity3d` con UnityPy: `Assembly-CSharp.dll`, escena, sprites y audio.
-- [ ] Triaje REA del ensamblado + ILSpy (referencias de UnityEngine 4.6).
-- [ ] Port nativo jugable (toque = salto, doble toque = doble salto: encaja con móvil).
-- [ ] Web + táctil.
-- [ ] README del juego + ficha del museo.
-- [ ] Pendientes anotados.
+### 2.6 Super Happy Jump (Unity 4.6 Web Player) ✅
+- [x] Abrir `web.unity3d` con UnityPy: `Assembly-CSharp.dll` (compilado el 9-dic-2014, cabecera
+  PE), la escena, los prefabs, sprites, clips de Mecanim, partículas, la `GUISkin` y el audio, con
+  `games/super-happy-jump/tools/extraer.py` → `assets/escena.json`.
+- [x] Triaje REA del ensamblado (`inspect-managed-artifact`, `inspect-managed-members`, 132 métodos
+  importados con `import-managed-reconstruction`; REA no abre el formato `UnityWeb`) + ILSpy, con
+  el `UnityEngine.dll` de Unity 5.1.2 de One Button Prototype (el de 4.6 no viene en el bundle).
+- [x] Crate compartido `crates/unity`: Time, GameObjects, física 2D sobre `crates/box2d` (que ganó
+  sensores, eventos por fixture, `QueryAABB`, `DestroyFixture`, `ApplyForceToCenter` y
+  `SetMassData`, comparados bit a bit con el C++ en la escena «corredor»), Animator, partículas
+  (Shuriken), cámara y orden de dibujo, IMGUI y AudioSource. `museo::Preferencias` para los
+  `PlayerPrefs` (archivo en PC, `localStorage` en la web).
+- [x] Port nativo jugable: los scripts del juego y el frame de Unity en `src/juego.rs`.
+- [x] Web + táctil (se juega tocando la pantalla, sin botones).
+- [x] README del juego + ficha del museo.
+- [x] Pendientes anotados: las fuentes son Liberation Sans en lugar de Arial y Nunito en lugar de
+  Arial Rounded MT Bold (incrustada en el original, de Monotype, no redistribuible); el Box2D del
+  Web Player es de versión desconocida (se usa 2.3.1); lo que Unity hace por dentro (despertar al
+  cuerpo movido por código, estados de estilo sin fondo, sprites en las transiciones de Mecanim,
+  partículas estiradas) se dedujo y no se pudo comparar con el original en marcha, porque el
+  Unity Web Player ya no corre; el sonido no se probó en hardware real; los controles táctiles se
+  probaron solo en emulación de Chromium; las monedas y el récord se probaron con un cambio
+  temporal; las versiones de iOS y Android no están en itch.io (solo enlaces a las tiendas).
 
 ### 2.7 One Button Prototype (Unity 5.1, Mono)
 - [ ] Triaje REA de `Assembly-CSharp.dll` y `-firstpass` (ya identificado: Standard Assets 2D +
   `GUI_Prototipo`, `PlatformerDragon2D`, `Platformer2DDragonControl`).
 - [ ] Escenas y sprites con UnityPy/AssetRipper (posiciones, colisionadores, capas).
-- [ ] Física 2D: decidir entre reimplementar lo necesario o usar un motor (p. ej. rapier2d).
+- [ ] Física 2D: ampliar `crates/unity` (Box2D, como Unity) con lo que use (por ejemplo
+  `Physics2D.OverlapCircleAll`, `CircleCollider2D` en el suelo, `velocity` en el aire).
 - [ ] Port nativo jugable.
 - [ ] Web + táctil (un solo botón).
 - [ ] README del juego + ficha del museo.
@@ -286,14 +307,14 @@ Orden sugerido: primero lo que reutiliza herramientas ya hechas y luego lo más 
 - [x] README de los juegos y fichas del museo con un mismo enfoque: qué juego es, con qué y cuándo
   se hizo y que ahora está portado, sin separar «original» y «port». «Cómo se hizo» ampliado con
   los detalles técnicos de cada port: IMAN, Proyecto Nutria, The Electric Eel Attack, Que No Caiga,
-  Retro Penal y Da Car (paso 6 de la plantilla para los siguientes).
+  Retro Penal, Da Car y Super Happy Jump (paso 6 de la plantilla para los siguientes).
 
 ## Fase 4 — Publicación en itch.io
 
 Cada página de itch.io pasa a ofrecer el port para jugar en el navegador. Los juegos que ya tenían
 versión web (Que No Caiga, Retro Penal y Da Car en HTML5; One Button Prototype y Neuro Battle en
-WebGL) la reemplazan por la del port, y los demás la estrenan. Nada se sube sin la confirmación
-del dueño de la cuenta (regla 4).
+WebGL; Super Happy Jump en el Unity Web Player, que ya no corre) la reemplazan por la del port, y
+los demás la estrenan. Nada se sube sin la confirmación del dueño de la cuenta (regla 4).
 
 - [ ] **4.1** Preparar la publicación: butler (la herramienta de itch.io) con una API key que no
   entra al repo, y `tools/publicar_itch.sh <slug>`, que compila la web con `tools/build_web.sh` y
@@ -307,10 +328,10 @@ del dueño de la cuenta (regla 4).
   enlazar a este repo.
 - [ ] **4.3** Configurar cada página para jugar en el navegador, desde el panel de itch.io (butler
   no lo hace): tipo HTML, marco del tamaño del juego (640×480 IMAN y The Electric Eel Attack,
-  1280×720 Proyecto Nutria, 400×500 Que No Caiga y Retro Penal, 800×450 Da Car), «Mobile friendly»
-  con su orientación y botón de pantalla completa.
+  1280×720 Proyecto Nutria, 400×500 Que No Caiga y Retro Penal, 800×450 Da Car, 960×600 Super
+  Happy Jump), «Mobile friendly» con su orientación y botón de pantalla completa.
 - [ ] **4.4** Publicar uno a uno, con confirmación, los ports ya hechos: Proyecto Nutria, IMAN, The
-  Electric Eel Attack, Que No Caiga, Retro Penal y Da Car. Probar cada página publicada en
-  escritorio y en móvil (`tools/humo/web.mjs` adaptado a una URL, o a mano).
+  Electric Eel Attack, Que No Caiga, Retro Penal, Da Car y Super Happy Jump. Probar cada página
+  publicada en escritorio y en móvil (`tools/humo/web.mjs` adaptado a una URL, o a mano).
 - [ ] **4.5** Desde entonces, cada port nuevo se publica al cerrar su checkpoint (paso 8 de la
   plantilla), también con confirmación.

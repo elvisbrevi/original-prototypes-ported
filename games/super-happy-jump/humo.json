@@ -1,0 +1,13 @@
+{
+  "pantalla": [960, 600],
+  "pasos": [
+    { "esperar": 2500 },
+    { "captura": "titulo" },
+    { "zona": [870, 520], "ms": 100, "despues": 700 },
+    { "captura": "carrera" },
+    { "zona": [480, 300], "ms": 80, "despues": 200 },
+    { "captura": "salto" },
+    { "esperar": 7000 },
+    { "captura": "fin" }
+  ]
+}

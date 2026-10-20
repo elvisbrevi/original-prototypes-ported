@@ -20,7 +20,7 @@ compila todo en nativo y en wasm ([GitHub Actions](.github/workflows/build.yml))
 | 2011 | [Go Ball](#go-ball) | Unity 3.4 (C# + UnityScript) | pendiente |
 | 2011 | [The Meaning of Christmas](#the-meaning-of-christmas) | Java + libGDX (Android) | pendiente |
 | 2013 | [Fast Car Racer](#fast-car-racer) | Android (Google Play) | bloqueado: falta el binario |
-| 2014 | [Super Happy Jump](#super-happy-jump) | Unity 4.6 (Web Player, iOS, Android) | pendiente |
+| 2014 | [Super Happy Jump](#super-happy-jump) | Unity 4.6 (Web Player, iOS, Android) | ✅ [games/super-happy-jump](games/super-happy-jump) |
 | 2014–15 | [Que No Caiga](#que-no-caiga) | Construct 2 (HTML5) | ✅ [games/que-no-caiga](games/que-no-caiga) |
 | 2015 | [Retro Penal](#retro-penal) | Construct 2 (HTML5 + NW.js) | ✅ [games/retro-penal](games/retro-penal) |
 | 2015 | [One Button Prototype](#one-button-prototype) | Unity 5.1 (Mac, Linux, Android, WebGL) | pendiente |
@@ -112,11 +112,17 @@ confirmar» y se cierran en el triaje de cada juego.
 
 ### Super Happy Jump
 
-- **De qué trata:** juego de saltos infinito: toca para saltar, toca dos veces para el doble salto,
-  recoge monedas y no toques los cactus.
-- **Hecho en 2014** con Unity 4.6.0f3 (Unity Web Player; también iOS y Android), publicado desde
-  noviembre de 2014 (fecha exacta por confirmar).
-- **Ahora:** pendiente de portar.
+![Super Happy Jump](games/super-happy-jump/docs/salto.png)
+
+- **De qué trata:** juego de saltos infinito. Un vaquero corre solo; se toca para saltar y otra vez
+  en el aire para el doble salto. Cada 2,5 segundos aparece una pareja de cactus con una moneda en
+  el hueco: la moneda suma un punto y tocar un cactus termina la partida. Guarda el mejor puntaje.
+- **Hecho en 2014** con Unity 4.6.0f3 para el Unity Web Player (también salió en iOS y Android):
+  compilado el 9-dic-2014, según la cabecera de su `Assembly-CSharp.dll`.
+- **Ahora:** ✅ portado a Rust + macroquad en [games/super-happy-jump](games/super-happy-jump):
+  los scripts traducidos del C# decompilado, y la física 2D (sobre `crates/box2d`), el Animator,
+  las partículas y la GUI de `OnGUI` recreados en `crates/unity`, con las imágenes, los sonidos,
+  la escena y los prefabs de siempre. Se juega con el ratón o tocando la pantalla.
 - **itch.io:** [elvisbrevi.itch.io/super-happy-jump](https://elvisbrevi.itch.io/super-happy-jump)
 
 ### Que No Caiga
@@ -189,12 +195,15 @@ confirmar» y se cierran en el triaje de cada juego.
 
 ```
 games/<slug>/        un crate de Cargo por juego (port + assets extraídos + referencia del original)
-crates/museo/        piezas comunes: pantalla virtual con bandas, paso fijo y controles táctiles;
-                     plantilla web (index.html + mq_js_bundle.js de macroquad) en crates/museo/web
+crates/museo/        piezas comunes: pantalla virtual con bandas, paso fijo, controles táctiles y
+                     preferencias guardadas (récords); plantilla web (index.html + mq_js_bundle.js
+                     de macroquad) en crates/museo/web
 crates/xna/          equivalentes de XNA 3.1 (Rectangle, Clamp, SpriteBatch.Draw, SpriteFont, Random)
 crates/construct2/   runtime de Construct 2: data.js, Sprite, Text, Audio, comportamientos, colisiones
-crates/box2d/        Box2D 2.3.1 en Rust (el del comportamiento Physics de Construct 2), comparado
-                     bit a bit con el C++ original (crates/box2d/comparar)
+crates/box2d/        Box2D 2.3.1 en Rust (el del comportamiento Physics de Construct 2 y la física
+                     2D de Unity), comparado bit a bit con el C++ original (crates/box2d/comparar)
+crates/unity/        piezas de Unity 4.x: escena.json, Time, GameObjects, física 2D, Animator,
+                     partículas (Shuriken), cámara y orden de dibujo, IMGUI y AudioSource
 originales/          binarios originales (fuera de git) y catalogo.json con sus sha256
 tools/originales.py  inventario y descarga de los originales desde itch.io
 tools/build_web.sh   versión web de un juego en dist/<slug> a partir de la plantilla
@@ -209,7 +218,7 @@ PLAN.md              plan por fases con checkpoints
 ## Jugar
 
 ```sh
-cargo run --release -p iman            # PC (o proyecto-nutria, the-electric-eel-attack, que-no-caiga, retro-penal, da-car)
+cargo run --release -p iman            # PC (o proyecto-nutria, the-electric-eel-attack, que-no-caiga, retro-penal, da-car, super-happy-jump)
 tools/build_web.sh iman                # web: sirve dist/iman con cualquier servidor estático
 ```
 

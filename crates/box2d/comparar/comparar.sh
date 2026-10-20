@@ -19,7 +19,7 @@ sed -i 's/#define b2_maxPolygonVertices\t8/#define b2_maxPolygonVertices\t16/' "
 g++ -O2 -std=c++11 -I"$trabajo" "$raiz/crates/box2d/comparar/escenas.cpp" \
     $(find "$trabajo/Box2D" -name '*.cpp') -o "$trabajo/escenas"
 cargo build --release -q -p box2d --example escenas --manifest-path "$raiz/Cargo.toml"
-for escena in caja pila bala moto; do
+for escena in caja pila bala moto corredor; do
     "$trabajo/escenas" "$escena" > "$trabajo/c_$escena.txt"
     "$raiz/target/release/examples/escenas" "$escena" > "$trabajo/rs_$escena.txt"
     if cmp -s "$trabajo/c_$escena.txt" "$trabajo/rs_$escena.txt"; then

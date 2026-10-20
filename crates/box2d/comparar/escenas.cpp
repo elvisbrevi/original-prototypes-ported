@@ -63,8 +63,142 @@ static b2Body* circulo(b2World& w, float x, float y, float r) {
     return b;
 }
 
+// Para la escena "corredor": BeginContact y EndContact con los datos de usuario de las fixtures.
+struct Oyente : b2ContactListener {
+    int paso = 0;
+    void BeginContact(b2Contact* c) override {
+        printf("B %d %d %d\n", paso, (int)(intptr_t)c->GetFixtureA()->GetUserData(), (int)(intptr_t)c->GetFixtureB()->GetUserData());
+    }
+    void EndContact(b2Contact* c) override {
+        printf("E %d %d %d\n", paso, (int)(intptr_t)c->GetFixtureA()->GetUserData(), (int)(intptr_t)c->GetFixtureB()->GetUserData());
+    }
+};
+
+struct Consulta : b2QueryCallback {
+    b2CircleShape circulo;
+    b2Transform xf;
+    int tocados = 0;
+    bool ReportFixture(b2Fixture* f) override {
+        if (b2TestOverlap(&circulo, 0, f->GetShape(), 0, xf, f->GetBody()->GetTransform())) tocados += (int)(intptr_t)f->GetUserData();
+        return true;
+    }
+};
+
+static b2Fixture* caja_fija(b2Body* b, float hx, float hy, b2Vec2 centro, bool sensor, int dato, float densidad) {
+    b2PolygonShape s;
+    s.SetAsBox(hx, hy, centro, 0.0f);
+    b2FixtureDef fd;
+    fd.shape = &s;
+    fd.isSensor = sensor;
+    fd.friction = 0.0f;
+    fd.density = densidad;
+    fd.userData = (void*)(intptr_t)dato;
+    return b->CreateFixture(&fd);
+}
+
+// Como Super Happy Jump: un corredor (círculo y caja, rotación fija, masa 1) sobre tramos de
+// suelo, con saltos por fuerza, sensores dinámicos y estáticos, un sensor que se teletransporta y
+// la consulta del suelo bajo los pies.
+static void corredor() {
+    b2World w(b2Vec2(0.0f, -9.81f));
+    Oyente oyente;
+    w.SetContactListener(&oyente);
+    std::vector<b2Body*> suelo;
+    for (int k = 0; k < 8; ++k) {
+        b2BodyDef bd;
+        bd.position.Set(-9.0f + 2.0f * k, -2.0f);
+        b2Body* b = w.CreateBody(&bd);
+        caja_fija(b, 1.0f, 0.15f, b2Vec2(0, 0), false, 1, 0.0f);
+        suelo.push_back(b);
+        cuerpos.push_back(b);
+    }
+    b2BodyDef bd;
+    bd.type = b2_dynamicBody;
+    bd.position.Set(-5.0f, -0.9f);
+    bd.fixedRotation = true;
+    bd.gravityScale = 1.5f;
+    bd.angularDamping = 0.05f;
+    b2Body* j = w.CreateBody(&bd);
+    b2CircleShape c;
+    c.m_radius = 0.19f;
+    c.m_p.Set(-0.06f, -0.34f);
+    b2FixtureDef fd;
+    fd.shape = &c;
+    fd.density = 1.0f;
+    fd.friction = 0.4f;
+    fd.userData = (void*)(intptr_t)10;
+    j->CreateFixture(&fd);
+    caja_fija(j, 0.19f, 0.415f, b2Vec2(-0.06f, 0.08f), false, 20, 1.0f);
+    b2MassData md;
+    j->GetMassData(&md);
+    md.I *= 1.0f / md.mass;
+    md.mass = 1.0f;
+    j->SetMassData(&md);
+    cuerpos.push_back(j);
+    // Un cactus: cuerpo dinámico sin gravedad con un sensor.
+    bd = b2BodyDef();
+    bd.type = b2_dynamicBody;
+    bd.position.Set(4.0f, -1.5f);
+    bd.gravityScale = 0.0f;
+    b2Body* cactus = w.CreateBody(&bd);
+    caja_fija(cactus, 0.4f, 3.0f, b2Vec2(0, 0), true, 100, 1.0f);
+    cuerpos.push_back(cactus);
+    // Una moneda: sensor estático.
+    bd = b2BodyDef();
+    bd.position.Set(8.0f, 0.5f);
+    b2Body* moneda = w.CreateBody(&bd);
+    caja_fija(moneda, 0.375f, 0.4f, b2Vec2(0, 0), true, 1000, 0.0f);
+    // El Destroyer: dinámico, sin gravedad, con un sensor alto, movido por SetTransform.
+    bd = b2BodyDef();
+    bd.type = b2_dynamicBody;
+    bd.position.Set(-16.0f, 0.0f);
+    bd.gravityScale = 0.0f;
+    b2Body* destructor = w.CreateBody(&bd);
+    caja_fija(destructor, 0.5f, 10.0f, b2Vec2(0, 0), true, 10000, 1.0f);
+    b2Fixture* polvo = nullptr;
+    for (int i = 0; i < 300; ++i) {
+        oyente.paso = i;
+        b2Vec2 v = j->GetLinearVelocity();
+        j->SetLinearVelocity(b2Vec2(i < 200 ? 8.0f : 0.0f, v.y));
+        if (i == 40 || i == 52 || i == 120) {
+            j->SetLinearVelocity(b2Vec2(j->GetLinearVelocity().x, 0.0f));
+            j->ApplyForceToCenter(b2Vec2(0.0f, 400.0f), true);
+        }
+        if (i == 30) {
+            b2CircleShape p;
+            p.m_radius = 1.268f;
+            p.m_p.Set(-1.0f, -0.65f);
+            b2FixtureDef f;
+            f.shape = &p;
+            f.isSensor = true;
+            f.density = 1.0f;
+            f.userData = (void*)(intptr_t)30;
+            polvo = j->CreateFixture(&f);
+        }
+        if (i == 60 && polvo) { j->DestroyFixture(polvo); polvo = nullptr; }
+        b2Vec2 pj = j->GetPosition();
+        destructor->SetTransform(b2Vec2(pj.x - 10.8f, 0.0f), 0.0f);
+        destructor->SetAwake(true);
+        if (i % 25 == 0) {
+            b2Body* t = suelo[(i / 25) % 8];
+            t->SetTransform(b2Vec2(t->GetPosition().x + 16.0f, -2.0f), 0.0f);
+        }
+        Consulta q;
+        q.circulo.m_radius = 0.2f;
+        q.xf.Set(b2Vec2(pj.x, pj.y - 0.6487f), 0.0f);
+        b2AABB aabb;
+        aabb.lowerBound = q.xf.p - b2Vec2(0.2f, 0.2f);
+        aabb.upperBound = q.xf.p + b2Vec2(0.2f, 0.2f);
+        w.QueryAABB(&q, aabb);
+        printf("Q %d %d\n", i, q.tocados);
+        w.Step(0.02f, 8, 3);
+        imprimir(i);
+    }
+}
+
 int main(int argc, char** argv) {
     const char* escena = argc > 1 ? argv[1] : "caja";
+    if (!strcmp(escena, "corredor")) { corredor(); return 0; }
     b2World w(b2Vec2(0.0f, 10.0f));
     if (!strcmp(escena, "caja")) {
         cuerpos.push_back(caja_estatica(w, 0, 0, 20, 0.5f));

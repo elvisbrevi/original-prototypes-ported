@@ -1,7 +1,8 @@
 """Build an REA import-managed-reconstruction payload from ILSpy output.
 
-Usage: python3 -I tools/rea_reconstruction.py <members.json> <ilspy project dir> <out.json>
+Usage: python3 -I tools/rea_reconstruction.py <members.json> <ilspy project dir> <out.json> [references]
 Methods are located by declaring type file + name; overloaded names are matched by parameter count.
+[references] describes the reference assemblies given to ILSpy (default: XNA Framework 3.1).
 """
 import json
 import os
@@ -29,7 +30,7 @@ def method_spans(text):
         i += 1
 
 
-def main(members_path, project, out_path):
+def main(members_path, project, out_path, references="Microsoft XNA Framework Redistributable 3.1 assemblies"):
     evidence = json.load(open(members_path))
     result = evidence["normalized_result"]
     methods = []
@@ -73,10 +74,10 @@ def main(members_path, project, out_path):
             "version": "9.1.0.7988",
             "family": "ilspy",
             "executable_sha256": None,
-            "options": ["-p", "-r", "xna31/ref", "-o", "cs2"],
+            "options": ["-p", "-r", "<references>", "-o", os.path.basename(os.path.normpath(project))],
         },
         "methods": methods,
-        "notes": ["References resolved against Microsoft XNA Framework Redistributable 3.1 assemblies."],
+        "notes": [f"References resolved against {references}."],
     }
     json.dump(payload, open(out_path, "w"))
     print(f"{len(methods)} methods mapped, {len(skipped)} skipped")
@@ -85,4 +86,4 @@ def main(members_path, project, out_path):
 
 
 if __name__ == "__main__":
-    main(*sys.argv[1:4])
+    main(*sys.argv[1:5])

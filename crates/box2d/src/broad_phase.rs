@@ -86,6 +86,11 @@ impl BroadPhase {
             .collect()
     }
 
+    /// Query: los proxies cuyo AABB ancho toca `aabb`, hasta que `callback` devuelva false.
+    pub fn query(&self, aabb: &Aabb, callback: impl FnMut(i32) -> bool) {
+        self.tree.query(aabb, callback);
+    }
+
     pub fn get_fat_aabb(&self, proxy_id: i32) -> &Aabb {
         self.tree.get_fat_aabb(proxy_id)
     }

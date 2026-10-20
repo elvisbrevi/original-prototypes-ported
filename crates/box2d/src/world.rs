@@ -4,7 +4,7 @@
 
 use crate::broad_phase::{BroadPhase, NULL_PROXY};
 use crate::collision::{
-    Aabb, Manifold, collide_circles, collide_polygon_and_circle, collide_polygons,
+    Aabb, Manifold, collide_circles, collide_polygon_and_circle, collide_polygons, test_overlap,
 };
 use crate::contact_solver::{ContactInput, ContactSolver, Position, TimeStep, Velocity};
 use crate::distance::DistanceProxy;
@@ -15,7 +15,7 @@ use crate::settings::{
     MAX_ROTATION_SQUARED, MAX_SUB_STEPS, MAX_TOI_CONTACTS, MAX_TRANSLATION,
     MAX_TRANSLATION_SQUARED, TIME_TO_SLEEP,
 };
-use crate::shapes::Shape;
+use crate::shapes::{MassData, Shape};
 use crate::toi::{ToiInput, ToiState, time_of_impact};
 
 pub type BodyId = usize;
@@ -142,6 +142,26 @@ pub struct Body {
     pub user_data: usize,
 }
 
+impl Fixture {
+    pub fn is_sensor(&self) -> bool {
+        self.is_sensor
+    }
+
+    pub fn user_data(&self) -> usize {
+        self.user_data
+    }
+}
+
+/// BeginContact o EndContact de b2ContactListener, con las dos fixtures y sus datos de usuario.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct ContactEvent {
+    pub begin: bool,
+    pub fixture_a: FixtureId,
+    pub fixture_b: FixtureId,
+    pub user_a: usize,
+    pub user_b: usize,
+}
+
 impl Body {
     pub fn is_awake(&self) -> bool {
         self.flags & AWAKE_FLAG != 0
@@ -238,6 +258,8 @@ impl Body {
 
 pub struct Fixture {
     density: f32,
+    /// b2Fixture::m_userData (Unity: el colisionador).
+    user_data: usize,
     next: Option<FixtureId>,
     pub body: BodyId,
     pub shape: Shape,
@@ -338,6 +360,8 @@ pub struct World {
     inv_dt0: f32,
     /// BeginContact: los datos de usuario de los dos cuerpos, en orden.
     pub begin_contacts: Vec<(usize, usize)>,
+    /// BeginContact y EndContact por fixture, si se piden (`Some`): los triggers de Unity.
+    pub fixture_events: Option<Vec<ContactEvent>>,
 }
 
 impl World {
@@ -362,7 +386,91 @@ impl World {
             new_fixture: false,
             inv_dt0: 0.0,
             begin_contacts: Vec::new(),
+            fixture_events: None,
         }
+    }
+
+    pub fn fixture(&self, f: FixtureId) -> &Fixture {
+        self.fixtures.get(f)
+    }
+
+    pub fn set_fixture_user_data(&mut self, f: FixtureId, user_data: usize) {
+        self.fixtures.get_mut(f).user_data = user_data;
+    }
+
+    /// Las fixtures de un cuerpo, en el orden de su lista (la última creada primero).
+    pub fn body_fixtures(&self, b: BodyId) -> Vec<FixtureId> {
+        let mut lista = Vec::new();
+        let mut f = self.bodies.get(b).fixture_list;
+        while let Some(fi) = f {
+            lista.push(fi);
+            f = self.fixtures.get(fi).next;
+        }
+        lista
+    }
+
+    /// b2Body::ApplyForceToCenter.
+    pub fn apply_force_to_center(&mut self, b: BodyId, force: Vec2, wake: bool) {
+        let body = self.bodies.get_mut(b);
+        if body.body_type != BodyType::Dynamic {
+            return;
+        }
+        if wake && !body.is_awake() {
+            body.set_awake(true);
+        }
+        if body.is_awake() {
+            body.force += force;
+        }
+    }
+
+    /// b2Body::GetMassData.
+    pub fn get_mass_data(&self, b: BodyId) -> MassData {
+        let body = self.bodies.get(b);
+        MassData {
+            mass: body.mass,
+            center: body.sweep.local_center,
+            i: body.i + body.mass * dot(body.sweep.local_center, body.sweep.local_center),
+        }
+    }
+
+    /// b2Body::SetMassData.
+    pub fn set_mass_data(&mut self, b: BodyId, mass_data: &MassData) {
+        let body = self.bodies.get_mut(b);
+        if body.body_type != BodyType::Dynamic {
+            return;
+        }
+        body.inv_mass = 0.0;
+        body.i = 0.0;
+        body.inv_i = 0.0;
+        body.mass = mass_data.mass;
+        if body.mass <= 0.0 {
+            body.mass = 1.0;
+        }
+        body.inv_mass = 1.0 / body.mass;
+        if mass_data.i > 0.0 && body.flags & FIXED_ROTATION_FLAG == 0 {
+            body.i = mass_data.i - body.mass * dot(mass_data.center, mass_data.center);
+            body.inv_i = 1.0 / body.i;
+        }
+        let old_center = body.sweep.c;
+        body.sweep.local_center = mass_data.center;
+        body.sweep.c = mul_xv(&body.xf, body.sweep.local_center);
+        body.sweep.c0 = body.sweep.c;
+        body.linear_velocity += cross_sv(body.angular_velocity, body.sweep.c - old_center);
+    }
+
+    /// b2World::QueryAABB: las fixtures cuyo AABB ancho toca `aabb`, hasta que `callback`
+    /// devuelva false.
+    pub fn query_aabb(&self, aabb: &Aabb, mut callback: impl FnMut(FixtureId) -> bool) {
+        self.broad_phase.query(aabb, |proxy_id| {
+            callback(self.broad_phase.get_user_data(proxy_id))
+        });
+    }
+
+    /// b2TestOverlap entre la forma de una fixture (en la posición actual de su cuerpo) y otra.
+    pub fn test_overlap_fixture(&self, f: FixtureId, shape: &Shape, xf: &Transform) -> bool {
+        let fixture = self.fixtures.get(f);
+        let xf_f = self.bodies.get(fixture.body).xf;
+        test_overlap(&fixture.shape, &xf_f, shape, xf)
     }
 
     pub fn set_gravity(&mut self, gravity: Vec2) {
@@ -497,6 +605,7 @@ impl World {
             proxy_aabb: Aabb::default(),
             proxy_count: 0,
             is_sensor: def.is_sensor,
+            user_data: 0,
         };
         let f = self.fixtures.insert(fixture);
         if self.bodies.get(b).is_active() {
@@ -509,6 +618,40 @@ impl World {
         }
         self.new_fixture = true;
         f
+    }
+
+    /// b2Body::DestroyFixture: borra sus contactos (con EndContact si se tocaban), su proxy y
+    /// recalcula la masa del cuerpo.
+    pub fn destroy_fixture(&mut self, f: FixtureId) {
+        let b = self.fixtures.get(f).body;
+        // Se quita de la lista simple del cuerpo.
+        let mut anterior: Option<FixtureId> = None;
+        let mut actual = self.bodies.get(b).fixture_list;
+        while let Some(fi) = actual {
+            let siguiente = self.fixtures.get(fi).next;
+            if fi == f {
+                match anterior {
+                    Some(a) => self.fixtures.get_mut(a).next = siguiente,
+                    None => self.bodies.get_mut(b).fixture_list = siguiente,
+                }
+                break;
+            }
+            anterior = Some(fi);
+            actual = siguiente;
+        }
+        let mut edge = self.bodies.get(b).contact_list;
+        while let Some(e) = edge {
+            edge = self.contact_edge(e).next;
+            let c = self.contacts.get(e.id);
+            if c.fixture_a == f || c.fixture_b == f {
+                self.destroy_contact(e.id);
+            }
+        }
+        if self.bodies.get(b).is_active() {
+            self.destroy_proxies(f);
+        }
+        self.fixtures.remove(f);
+        self.reset_mass_data(b);
     }
 
     fn create_proxies(&mut self, f: FixtureId, xf: &Transform) {
@@ -888,7 +1031,10 @@ impl World {
         };
         let body_a = self.fixtures.get(fixture_a).body;
         let body_b = self.fixtures.get(fixture_b).body;
-        // EndContact: Construct 2 no hace nada.
+        // EndContact: Construct 2 no hace nada; los triggers de Unity sí.
+        if self.contacts.get(c).flags & C_TOUCHING_FLAG != 0 {
+            self.record_event(false, fixture_a, fixture_b);
+        }
         if let Some(p) = prev {
             self.contacts.get_mut(p).next = next;
         }
@@ -944,8 +1090,8 @@ impl World {
         let mut manifold = old_manifold;
         let touching;
         if sensor {
-            // Ningún juego crea sensores.
-            touching = false;
+            // Los sensores no generan manifolds.
+            touching = test_overlap(&fa.shape, &xf_a, &fb.shape, &xf_b);
             manifold.point_count = 0;
         } else {
             match (&fa.shape, &fb.shape) {
@@ -992,6 +1138,24 @@ impl World {
             let ua = self.bodies.get(body_a).user_data;
             let ub = self.bodies.get(body_b).user_data;
             self.begin_contacts.push((ua, ub));
+            self.record_event(true, fixture_a, fixture_b);
+        }
+        if was_touching && !touching {
+            self.record_event(false, fixture_a, fixture_b);
+        }
+    }
+
+    fn record_event(&mut self, begin: bool, fixture_a: FixtureId, fixture_b: FixtureId) {
+        let user_a = self.fixtures.get(fixture_a).user_data;
+        let user_b = self.fixtures.get(fixture_b).user_data;
+        if let Some(events) = &mut self.fixture_events {
+            events.push(ContactEvent {
+                begin,
+                fixture_a,
+                fixture_b,
+                user_a,
+                user_b,
+            });
         }
     }
 

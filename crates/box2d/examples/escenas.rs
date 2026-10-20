@@ -1,10 +1,12 @@
 // Escenas de comparación con el Box2D 2.3.1 original (ver tests/README en el README del crate):
 // imprime x, y y ángulo de cada cuerpo en cada paso, en hexadecimal como printf("%a").
-// Uso: cargo run -p box2d --example escenas -- <caja|pila|bala|moto>
+// Uso: cargo run -p box2d --example escenas -- <caja|pila|bala|moto|corredor>
 
+use box2d::collision::Aabb;
+use box2d::math::Transform;
 use box2d::settings::PI;
 use box2d::shapes::{CircleShape, PolygonShape};
-use box2d::world::{BodyDef, BodyId, BodyType, FixtureDef, World};
+use box2d::world::{BodyDef, BodyId, BodyType, FixtureDef, FixtureId, World};
 use box2d::{Shape, Vec2, vec2};
 
 /// printf("%a") de un float promovido a double.
@@ -119,8 +121,172 @@ fn circulo(w: &mut World, x: f32, y: f32, r: f32) -> BodyId {
     b
 }
 
+#[allow(clippy::too_many_arguments)] // los mismos argumentos que caja_fija en escenas.cpp
+fn caja_fija(
+    w: &mut World,
+    b: BodyId,
+    hx: f32,
+    hy: f32,
+    centro: Vec2,
+    sensor: bool,
+    dato: usize,
+    densidad: f32,
+) -> FixtureId {
+    let mut s = PolygonShape::default();
+    s.set_as_box_oriented(hx, hy, centro, 0.0);
+    let f = w.create_fixture(
+        b,
+        &FixtureDef {
+            shape: Shape::Polygon(s),
+            friction: 0.0,
+            restitution: 0.0,
+            density: densidad,
+            is_sensor: sensor,
+        },
+    );
+    w.set_fixture_user_data(f, dato);
+    f
+}
+
+/// Imprime los BeginContact (B) y EndContact (E) pendientes, como el oyente de escenas.cpp.
+fn eventos(w: &mut World, paso: usize) {
+    for e in w.fixture_events.as_mut().expect("eventos").drain(..) {
+        let letra = if e.begin { "B" } else { "E" };
+        println!("{letra} {paso} {} {}", e.user_a, e.user_b);
+    }
+}
+
+/// Como Super Happy Jump: ver corredor() en escenas.cpp.
+fn corredor() {
+    let mut w = World::new(vec2(0.0, -9.81));
+    w.fixture_events = Some(Vec::new());
+    let mut cuerpos = Vec::new();
+    let mut suelo = Vec::new();
+    for k in 0..8 {
+        let b = w.create_body(&BodyDef {
+            position: vec2(-9.0 + 2.0 * k as f32, -2.0),
+            ..Default::default()
+        });
+        caja_fija(&mut w, b, 1.0, 0.15, Vec2::ZERO, false, 1, 0.0);
+        suelo.push(b);
+        cuerpos.push(b);
+    }
+    let j = w.create_body(&BodyDef {
+        body_type: BodyType::Dynamic,
+        position: vec2(-5.0, -0.9),
+        fixed_rotation: true,
+        gravity_scale: 1.5,
+        angular_damping: 0.05,
+        ..Default::default()
+    });
+    let mut c = CircleShape::new(0.19);
+    c.p = vec2(-0.06, -0.34);
+    let f = w.create_fixture(
+        j,
+        &FixtureDef {
+            shape: Shape::Circle(c),
+            friction: 0.4,
+            restitution: 0.0,
+            density: 1.0,
+            is_sensor: false,
+        },
+    );
+    w.set_fixture_user_data(f, 10);
+    caja_fija(&mut w, j, 0.19, 0.415, vec2(-0.06, 0.08), false, 20, 1.0);
+    let mut md = w.get_mass_data(j);
+    md.i *= 1.0 / md.mass;
+    md.mass = 1.0;
+    w.set_mass_data(j, &md);
+    cuerpos.push(j);
+    let cactus = w.create_body(&BodyDef {
+        body_type: BodyType::Dynamic,
+        position: vec2(4.0, -1.5),
+        gravity_scale: 0.0,
+        ..Default::default()
+    });
+    caja_fija(&mut w, cactus, 0.4, 3.0, Vec2::ZERO, true, 100, 1.0);
+    cuerpos.push(cactus);
+    let moneda = w.create_body(&BodyDef {
+        position: vec2(8.0, 0.5),
+        ..Default::default()
+    });
+    caja_fija(&mut w, moneda, 0.375, 0.4, Vec2::ZERO, true, 1000, 0.0);
+    let destructor = w.create_body(&BodyDef {
+        body_type: BodyType::Dynamic,
+        position: vec2(-16.0, 0.0),
+        gravity_scale: 0.0,
+        ..Default::default()
+    });
+    caja_fija(&mut w, destructor, 0.5, 10.0, Vec2::ZERO, true, 10000, 1.0);
+    let mut polvo = None;
+    for i in 0..300 {
+        let v = w.body(j).linear_velocity;
+        w.body_mut(j)
+            .set_linear_velocity(vec2(if i < 200 { 8.0 } else { 0.0 }, v.y));
+        if i == 40 || i == 52 || i == 120 {
+            let vx = w.body(j).linear_velocity.x;
+            w.body_mut(j).set_linear_velocity(vec2(vx, 0.0));
+            w.apply_force_to_center(j, vec2(0.0, 400.0), true);
+        }
+        if i == 30 {
+            let mut p = CircleShape::new(1.268);
+            p.p = vec2(-1.0, -0.65);
+            let f = w.create_fixture(
+                j,
+                &FixtureDef {
+                    shape: Shape::Circle(p),
+                    friction: 0.2,
+                    restitution: 0.0,
+                    density: 1.0,
+                    is_sensor: true,
+                },
+            );
+            w.set_fixture_user_data(f, 30);
+            polvo = Some(f);
+        }
+        if i == 60
+            && let Some(f) = polvo.take()
+        {
+            w.destroy_fixture(f);
+            eventos(&mut w, i);
+        }
+        let pj = w.body(j).get_position();
+        w.set_transform(destructor, vec2(pj.x - 10.8, 0.0), 0.0);
+        w.body_mut(destructor).set_awake(true);
+        if i % 25 == 0 {
+            let t = suelo[(i / 25) % 8];
+            let x = w.body(t).get_position().x;
+            w.set_transform(t, vec2(x + 16.0, -2.0), 0.0);
+        }
+        let circulo = Shape::Circle(CircleShape::new(0.2));
+        let xf = Transform::new(vec2(pj.x, pj.y - 0.6487), 0.0);
+        let aabb = Aabb {
+            lower_bound: xf.p - vec2(0.2, 0.2),
+            upper_bound: xf.p + vec2(0.2, 0.2),
+        };
+        let mut tocadas = Vec::new();
+        w.query_aabb(&aabb, |f| {
+            tocadas.push(f);
+            true
+        });
+        let tocados: usize = tocadas
+            .into_iter()
+            .filter(|&f| w.test_overlap_fixture(f, &circulo, &xf))
+            .map(|f| w.fixture(f).user_data())
+            .sum();
+        println!("Q {i} {tocados}");
+        w.step(0.02, 8, 3);
+        eventos(&mut w, i);
+        imprimir(&w, &cuerpos, i);
+    }
+}
+
 fn main() {
     let escena = std::env::args().nth(1).unwrap_or_else(|| "caja".into());
+    if escena == "corredor" {
+        corredor();
+        return;
+    }
     let mut w = World::new(vec2(0.0, 10.0));
     let mut cuerpos = Vec::new();
     match escena.as_str() {

@@ -18,7 +18,7 @@ compila todo en nativo y en wasm ([GitHub Actions](.github/workflows/build.yml))
 | 2009 | [IMAN](#iman) | C# + XNA 3.1 (Windows) | ✅ [games/iman](games/iman) |
 | 2011 | [The Electric Eel Attack](#the-electric-eel-attack) | C# + XNA 3.1 + motor propio (Windows) | ✅ [games/the-electric-eel-attack](games/the-electric-eel-attack) |
 | 2011 | [Go Ball](#go-ball) | Unity 3.4 (C# + UnityScript) | pendiente |
-| 2011 | [The Meaning of Christmas](#the-meaning-of-christmas) | Java + libGDX (Android) | pendiente |
+| 2011 | [The Meaning of Christmas](#the-meaning-of-christmas) | Java + libGDX (Android) | ✅ [games/the-meaning-of-christmas](games/the-meaning-of-christmas) |
 | 2013 | [Fast Car Racer](#fast-car-racer) | Android (Google Play) | bloqueado: falta el binario |
 | 2014 | [Super Happy Jump](#super-happy-jump) | Unity 4.6 (Web Player, iOS, Android) | ✅ [games/super-happy-jump](games/super-happy-jump) |
 | 2014–15 | [Que No Caiga](#que-no-caiga) | Construct 2 (HTML5) | ✅ [games/que-no-caiga](games/que-no-caiga) |
@@ -93,10 +93,20 @@ confirmar» y se cierran en el triaje de cada juego.
 
 ### The Meaning of Christmas
 
-- **De qué trata:** puzle navideño, con «Noche de paz» como música. Por confirmar en el triaje.
-- **Hecho en diciembre de 2011** con Java + libGDX para Android (APK final del 1-ene-2012; video:
-  1-ene-2012).
-- **Ahora:** pendiente de portar.
+![The Meaning of Christmas](games/the-meaning-of-christmas/docs/fuego.png)
+
+- **De qué trata:** juego navideño sobre el consumismo. Caen regalos y desde abajo sube una
+  montaña de dinero, que crece con cada regalo que llega a ella. Hay que quemar los regalos de
+  tres en tres, tocándolos a la misma altura, dentro de la franja de fuego que enciende el
+  primero; cada regalo quemado suma puntos y hace bajar el dinero. Cuando el dinero llena la
+  pantalla, se pierde. En el título suena «Noche de paz».
+- **Hecho en diciembre de 2011** con Java + libGDX 0.9.2 para Android, sobre el «hello world» de
+  libGDX: el APK se armó el 1-ene-2012, según las fechas del zip (video: 1-ene-2012).
+- **Ahora:** ✅ portado a Rust + macroquad en
+  [games/the-meaning-of-christmas](games/the-meaning-of-christmas): el juego traducido del Java
+  decompilado con JADX, y lo que usa de libGDX (la fuente por defecto, la animación, el tiempo
+  del frame) traducido del libGDX del mismo APK, con las imágenes, la fuente y la música de
+  siempre (pasada de MP3 a Ogg). Se juega con el ratón o tocando la pantalla, en vertical.
 - **itch.io:** [elvisbrevi.itch.io/the-meaning-of-christmas](https://elvisbrevi.itch.io/the-meaning-of-christmas) ·
   [video](https://vimeo.com/34446793)
 
@@ -230,7 +240,7 @@ PLAN.md              plan por fases con checkpoints
 ## Jugar
 
 ```sh
-cargo run --release -p iman            # PC (o proyecto-nutria, the-electric-eel-attack, que-no-caiga, retro-penal, da-car, super-happy-jump, one-button-prototype)
+cargo run --release -p iman            # PC (o proyecto-nutria, the-electric-eel-attack, the-meaning-of-christmas, que-no-caiga, retro-penal, da-car, super-happy-jump, one-button-prototype)
 tools/build_web.sh iman                # web: sirve dist/iman con cualquier servidor estático
 ```
 

@@ -5,14 +5,13 @@ Plan de trabajo para recrear en Rust + macroquad todos los juegos publicados en
 Está pensado para avanzar en varias sesiones: marca cada casilla al completarla e incluye el cambio
 del plan en el mismo commit.
 
-**Siguiente paso:** 2.8 The Meaning of Christmas (Java + libGDX, Android): extraer el APK en su
-propia carpeta de `originales/` (ya lo abre `unzip`), decompilar `classes.dex` con JADX y apktool
-(instalados en `~/.local/opt`; para las herramientas Android de REA falta `REA_JADX_MCP_JAR`, o
-se usa JADX directamente y REA para el triaje del APK), pasar la música de MP3 a OGG y traducir
-el juego a macroquad (libGDX se traduce casi 1:1). Seguir la plantilla con el paso 6 ampliado. La
-fase 4 (publicar las versiones web en itch.io) espera la confirmación del dueño de la cuenta: 4.1
-y 4.2 se pueden preparar en cuanto la dé. El 0.7 (GitHub Pages) queda pendiente de decidir si se
-publica.
+**Siguiente paso:** 2.9 Go Ball (Unity 3.4, Windows y macOS): extraer uno de los zips en su
+propia carpeta de `originales/`, decompilar `Assembly-CSharp.dll` y `Assembly-UnityScript.dll`
+con ILSpy (con sus `.mdb`), leer las escenas `level0..4` con `tools/unity_assets.py` y decidir el
+enfoque 3D (cámara y mallas de macroquad, y la física: PhysX en el original). Reutilizar lo que
+sirva de `crates/unity`. Seguir la plantilla con el paso 6 ampliado. La fase 4 (publicar las
+versiones web en itch.io) espera la confirmación del dueño de la cuenta: 4.1 y 4.2 se pueden
+preparar en cuanto la dé. El 0.7 (GitHub Pages) queda pendiente de decidir si se publica.
 
 ## Reglas
 
@@ -53,11 +52,16 @@ python3 -I tools/originales.py descargar
 sudo apt install python3.12-venv
 python3 -m venv ~/.venvs/museo && ~/.venvs/museo/bin/pip install -r tools/requirements-unity.txt
 
-# Android: JADX 1.5.6 y apktool 3.0.3 (Java 21) en ~/.local/opt
+# Android: JADX 1.5.6 y apktool 3.0.3 (Java 21) en ~/.local/opt; REA busca `apktool` en el PATH
 sudo apt install openjdk-21-jre-headless
 curl -LO https://github.com/skylot/jadx/releases/download/v1.5.6/jadx-1.5.6.zip   # unzip -d ~/.local/opt/jadx
 curl -L -o ~/.local/opt/apktool/apktool_3.0.3.jar \
   https://github.com/iBotPeaches/Apktool/releases/download/v3.0.3/apktool_3.0.3.jar
+printf '#!/bin/sh\nexec java -jar "$HOME/.local/opt/apktool/apktool_3.0.3.jar" "$@"\n' > ~/.local/bin/apktool
+chmod +x ~/.local/bin/apktool
+
+# Audio: ffmpeg para pasar MP3 a Ogg Vorbis (macroquad no lee MP3)
+sudo apt install ffmpeg
 
 # Tests de humo (checkpoint 0.9): Playwright con el Chromium de la caché de Playwright o $CHROMIUM
 sudo apt install xvfb xdotool imagemagick
@@ -78,8 +82,10 @@ Herramientas de extracción por stack (checkpoint 0.8; las salidas van a `origin
 - Construct 2: `python3 -I tools/c2_eventos.py resumen|eventos|fuente <carpeta html5>` (proyecto,
   tipos, layouts, tabla de referencias del runtime minificado y hojas de eventos en pseudocódigo).
 - Android: `~/.local/opt/jadx/bin/jadx -d <salida> <apk>` y
-  `java -jar ~/.local/opt/apktool/apktool_3.0.3.jar d -o <salida> <apk>`. Para las herramientas
-  Android de REA falta un JAR de JADX MCP en `REA_JADX_MCP_JAR` (checkpoint 2.8).
+  `java -jar ~/.local/opt/apktool/apktool_3.0.3.jar d -o <salida> <apk>`. REA usa apktool
+  (`decode-android-resources`) con el lanzador `~/.local/bin/apktool`; sus herramientas de JADX
+  piden un JAR de JADX MCP en `REA_JADX_MCP_JAR`, que no está. Para un port, el
+  `tools/extraer.py` de The Meaning of Christmas lee el APK como zip y pasa el MP3 a Ogg.
 
 ## Fase 0 — Infraestructura
 
@@ -130,7 +136,7 @@ cada juego en la fase 2).
 | IMAN | `IMAN_(Prototipo).rar` | XNA 3.1 | ✅ hecho | ver pendientes de IMAN |
 | The Electric Eel Attack | `The_Electric_Eel_Attack.zip` (7 MB) | XNA 3.1 + `Engine.dll` propio | ✅ hecho | ver pendientes en 2.2 |
 | Go Ball | 3 zips (Win32, Win64, macOS) | Unity 3.4.0f5, Mono, con `.mdb` | ILSpy de `Assembly-CSharp` y `Assembly-UnityScript`; escenas `level0..4` con `unity_assets.py` | 3D + física PhysX; UnityPy lee texturas, mallas, audio y campos de MonoBehaviour (los PPtr salen con los bytes invertidos) |
-| The Meaning of Christmas | APK (7,8 MB) | Java + libGDX | REA Android + JADX; assets en `assets/data` | música en MP3 (macroquad no lo lee: convertir a OGG); el juego está en `com.badlogic.gdx.helloworld` (plantilla de libGDX) |
+| The Meaning of Christmas | APK (7,8 MB) | Java + libGDX 0.9.2 | ✅ hecho | ver pendientes en 2.8 |
 | Fast Car Racer | — | Android (`cl.gioco.fcr`) | — | **sin binario**: itch.io solo enlaza a Google Play |
 | Super Happy Jump | `web.unity3d` (385 KB) | Unity 4.6.0f3, Web Player | ✅ hecho | ver pendientes en 2.6 |
 | Que No Caiga | HTML5 (39 archivos) | Construct 2 | ✅ hecho | ver pendientes en 2.3 |
@@ -280,14 +286,24 @@ Orden sugerido: primero lo que reutiliza herramientas ya hechas y luego lo más 
   se probó con un cambio temporal) y no se probó pisar un dragón; los controles táctiles se
   probaron solo en emulación de Chromium.
 
-### 2.8 The Meaning of Christmas (libGDX)
-- [ ] Configurar JADX para REA (`REA_JADX_MCP_JAR`) o usar JADX directamente; triaje del APK.
-- [ ] Decompilar `classes.dex` a Java (libGDX se traduce casi 1:1 a macroquad).
-- [ ] Assets de `assets/data`; MP3 → OGG.
-- [ ] Port nativo jugable.
-- [ ] Web + táctil.
-- [ ] README del juego + ficha del museo.
-- [ ] Pendientes anotados.
+### 2.8 The Meaning of Christmas (libGDX) ✅
+- [x] Triaje: REA `decode-android-resources` (con apktool en el PATH) para el manifiesto y los
+  textos; JADX directamente para el código (las herramientas de REA que lo recuperan piden un JAR
+  de JADX MCP). libGDX 0.9.2 sobre su «hello world», APK armado el 1-ene-2012 y firmado con el
+  certificado de depuración.
+- [x] `classes.dex` decompilado con JADX 1.5.6: las siete clases del juego en `reference/java`, y
+  lo que usa de libGDX (`BitmapFont`, `Animation`, `WindowedMean`, `AndroidGraphics`) leído del
+  mismo APK.
+- [x] Assets de `assets/data` y la fuente `arial-15` de libGDX con
+  `games/the-meaning-of-christmas/tools/extraer.py`; MP3 → Ogg Vorbis con ffmpeg.
+- [x] Port nativo jugable (320×480, en vertical).
+- [x] Web + táctil (se juega tocando).
+- [x] README del juego + ficha del museo.
+- [x] Pendientes anotados: el sonido no se probó en hardware real; en la web el título queda en
+  silencio hasta el primer toque (que ya empieza la partida); los controles táctiles se probaron
+  solo en emulación de Chromium; la quema de regalos y el final de la partida se probaron con
+  cambios temporales (un jugador automático y el dinero cerca del tope); faltan las herramientas
+  JADX de REA (`REA_JADX_MCP_JAR`).
 
 ### 2.9 Go Ball (Unity 3.4)
 - [ ] Triaje REA + ILSpy de `Assembly-CSharp.dll` y `Assembly-UnityScript.dll` (con sus `.mdb`).
@@ -325,8 +341,8 @@ Orden sugerido: primero lo que reutiliza herramientas ya hechas y luego lo más 
 - [x] README de los juegos y fichas del museo con un mismo enfoque: qué juego es, con qué y cuándo
   se hizo y que ahora está portado, sin separar «original» y «port». «Cómo se hizo» ampliado con
   los detalles técnicos de cada port: IMAN, Proyecto Nutria, The Electric Eel Attack, Que No Caiga,
-  Retro Penal, Da Car, Super Happy Jump y One Button Prototype (paso 6 de la plantilla para los
-  siguientes).
+  Retro Penal, Da Car, Super Happy Jump, One Button Prototype y The Meaning of Christmas (paso 6
+  de la plantilla para los siguientes).
 
 ## Fase 4 — Publicación en itch.io
 
@@ -348,11 +364,11 @@ los demás la estrenan. Nada se sube sin la confirmación del dueño de la cuent
 - [ ] **4.3** Configurar cada página para jugar en el navegador, desde el panel de itch.io (butler
   no lo hace): tipo HTML, marco del tamaño del juego (640×480 IMAN y The Electric Eel Attack,
   1280×720 Proyecto Nutria, 400×500 Que No Caiga y Retro Penal, 800×450 Da Car, 960×600 Super
-  Happy Jump y One Button Prototype), «Mobile friendly» con su orientación y botón de pantalla
-  completa.
+  Happy Jump y One Button Prototype, 320×480 en vertical The Meaning of Christmas), «Mobile
+  friendly» con su orientación y botón de pantalla completa.
 - [ ] **4.4** Publicar uno a uno, con confirmación, los ports ya hechos: Proyecto Nutria, IMAN, The
-  Electric Eel Attack, Que No Caiga, Retro Penal, Da Car, Super Happy Jump y One Button
-  Prototype. Probar cada página
+  Electric Eel Attack, The Meaning of Christmas, Que No Caiga, Retro Penal, Da Car, Super Happy
+  Jump y One Button Prototype. Probar cada página
   publicada en escritorio y en móvil (`tools/humo/web.mjs` adaptado a una URL, o a mano).
 - [ ] **4.5** Desde entonces, cada port nuevo se publica al cerrar su checkpoint (paso 8 de la
   plantilla), también con confirmación.

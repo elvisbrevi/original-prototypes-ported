@@ -1,0 +1,11 @@
+{
+  "pantalla": [320, 480],
+  "pasos": [
+    { "esperar": 2500 },
+    { "captura": "titulo" },
+    { "zona": [160, 240], "ms": 80, "despues": 4000 },
+    { "captura": "juego" },
+    { "esperar": 15000 },
+    { "captura": "dinero" }
+  ]
+}

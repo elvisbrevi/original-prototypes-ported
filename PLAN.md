@@ -5,11 +5,11 @@ Plan de trabajo para recrear en Rust + macroquad todos los juegos publicados en
 Está pensado para avanzar en varias sesiones: marca cada casilla al completarla e incluye el cambio
 del plan en el mismo commit.
 
-**Siguiente paso:** 2.9 Go Ball (Unity 3.4, Windows y macOS): extraer uno de los zips en su
-propia carpeta de `originales/`, decompilar `Assembly-CSharp.dll` y `Assembly-UnityScript.dll`
-con ILSpy (con sus `.mdb`), leer las escenas `level0..4` con `tools/unity_assets.py` y decidir el
-enfoque 3D (cámara y mallas de macroquad, y la física: PhysX en el original). Reutilizar lo que
-sirva de `crates/unity`. Seguir la plantilla con el paso 6 ampliado. La fase 4 (publicar las
+**Siguiente paso:** 2.9 Go Ball (Unity 3.4): el triaje está hecho (ver 2.9). Falta escribir
+`games/go-ball/tools/extraer.py` (el de One Button Prototype es el modelo; Unity 3.4 trae las
+seis escenas en `mainData` y `level0..4`), extraer mallas, texturas, materiales, luces,
+animaciones heredadas y partículas, y decidir el enfoque 3D propuesto en 2.9 antes de portar.
+Reutilizar lo que sirva de `crates/unity`. Seguir la plantilla con el paso 6 ampliado. La fase 4 (publicar las
 versiones web en itch.io) espera la confirmación del dueño de la cuenta: 4.1 y 4.2 se pueden
 preparar en cuanto la dé. El 0.7 (GitHub Pages) queda pendiente de decidir si se publica.
 
@@ -135,7 +135,7 @@ cada juego en la fase 2).
 | Proyecto Nutria | `Proyecto_Nutria.rar` (1,5 MB) | XNA 3.1, XNB v4 | ✅ hecho | sin audio en el original; ver pendientes en 2.1 |
 | IMAN | `IMAN_(Prototipo).rar` | XNA 3.1 | ✅ hecho | ver pendientes de IMAN |
 | The Electric Eel Attack | `The_Electric_Eel_Attack.zip` (7 MB) | XNA 3.1 + `Engine.dll` propio | ✅ hecho | ver pendientes en 2.2 |
-| Go Ball | 3 zips (Win32, Win64, macOS) | Unity 3.4.0f5, Mono, con `.mdb` | ILSpy de `Assembly-CSharp` y `Assembly-UnityScript`; escenas `level0..4` con `unity_assets.py` | 3D + física PhysX; UnityPy lee texturas, mallas, audio y campos de MonoBehaviour (los PPtr salen con los bytes invertidos) |
+| Go Ball | 3 zips (Win32, Win64, macOS) | Unity 3.4.0f5, Mono, con `.mdb` | triaje hecho (2.9); escenas en `mainData` y `level0..4` con `unity_assets.py` | 3D + física PhysX (una esfera contra `MeshCollider`); UnityPy lee texturas, mallas, audio y campos de MonoBehaviour (los PPtr salen con los bytes invertidos) |
 | The Meaning of Christmas | APK (7,8 MB) | Java + libGDX 0.9.2 | ✅ hecho | ver pendientes en 2.8 |
 | Fast Car Racer | — | Android (`cl.gioco.fcr`) | — | **sin binario**: itch.io solo enlaza a Google Play |
 | Super Happy Jump | `web.unity3d` (385 KB) | Unity 4.6.0f3, Web Player | ✅ hecho | ver pendientes en 2.6 |
@@ -306,7 +306,41 @@ Orden sugerido: primero lo que reutiliza herramientas ya hechas y luego lo más 
   JADX de REA (`REA_JADX_MCP_JAR`).
 
 ### 2.9 Go Ball (Unity 3.4)
-- [ ] Triaje REA + ILSpy de `Assembly-CSharp.dll` y `Assembly-UnityScript.dll` (con sus `.mdb`).
+- [x] Triaje REA + ILSpy de `Assembly-CSharp.dll` y `Assembly-UnityScript.dll` (con sus `.mdb`),
+  del build de Windows de 32 bits extraído en `originales/go-ball/win32` (sin el `.exe` ni el
+  `.pdb`):
+  - Compilados el 22-sep-2011 a las 04:15 UTC (cabecera PE), Unity 3.4.0f5. REA
+    `inspect-managed-artifact` de `Assembly-CSharp.dll`
+    (`ev_f3b10410c604e1409754d98b8d98c4beb49b09d7eb0ab19ef296839fedf7eb78`) e
+    `inspect-managed-members` de los seis tipos del juego: 35 métodos y 30 literales
+    (`ev_8022ac3d81b5715672524d9edfad7041f0da03cf1ef2468f9c8b827d41080d8f`).
+  - Seis escenas en `BuildSettings`: `menuPrincipal` (en `mainData`, con un terreno con árboles
+    y la bola de adorno) y `nivel1` a `nivel5` (`level0` a `level4`). `PlayerSettings`: «Go
+    Ball», 1024×600 (640×480 en web). Sin lightmaps.
+  - Scripts (unas 600 líneas propias): `Bola` (la bola, un `Rigidbody` con `SphereCollider`:
+    `AddForce` horizontal en modo `Acceleration` con el eje «Horizontal» y salto con «Saltar»
+    fijando la velocidad vertical; muere con la «Sierra», con `OnParticleCollision` o al salir
+    de `limiteMin`/`limiteMax`; «Explosivo1» la empuja), `MoverObjeto` (objetos que se arrastran
+    con el ratón en horizontal o vertical, de 0,05 en 0,05, o que van y vienen solos; la rama
+    de rotación compara la y con los límites horizontales), `Objetivo` (la meta, que gira con
+    iTween `RotateBy` en *ping-pong*), `Camara` (sigue a la bola; botones de salir, maximizar,
+    opciones, que no hace nada, y reiniciar, con ventanas que pausan con `timeScale`),
+    `Transicion` (fundidos con un `GUITexture` y la carga de niveles), `EmpezarJuego` (el menú) y
+    `TimedObjectDestructor` (UnityScript). Además, `iTween` (4640 líneas, de terceros) y
+    `WaterSimple` (Standard Assets) en `-firstpass`.
+  - Lo que pide del motor: render 3D con los shaders integrados de Unity 3.4 y sus luces, un
+    terreno con árboles (solo en el menú), el agua de los Standard Assets, animaciones heredadas
+    (`Animation`, 29), partículas heredadas (`EllipsoidParticleEmitter`, `ParticleAnimator`,
+    `ParticleRenderer` y `WorldParticleCollider`), `GUITexture`, IMGUI con `GUISkin`,
+    `OnMouseDown`/`OnMouseDrag` (rayos contra los colisionadores), `AudioSource` y PhysX 2.8:
+    la única cosa dinámica es la bola (y unos sistemas de partículas «OuterCore» con
+    `Rigidbody` en `nivel2` y `nivel3`), contra 148 `MeshCollider` que el código y las
+    animaciones mueven. `PhysicsManager`: *bounce threshold* 2, *sleep velocity* 0,15, velocidad
+    angular máxima 7 (limita lo que rueda la bola) y 6 iteraciones.
+  - Propuesta de enfoque, a decidir: el render 3D con macroquad y shaders GLSL que imiten los
+    integrados que usen los materiales, y para la física, un solver propio de una esfera contra
+    triángulos (con el roce, el rebote y el límite de velocidad angular de PhysX documentados)
+    en vez de un motor 3D completo, porque PhysX no se puede traducir.
 - [ ] Escenas `level0..4`: comprobar qué herramienta lee Unity 3.4; extraer mallas y texturas.
 - [ ] Decidir el enfoque si es 3D (cámara y mallas de macroquad) y la física.
 - [ ] Port nativo jugable.

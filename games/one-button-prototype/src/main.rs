@@ -55,6 +55,7 @@ fn fuentes(proyecto: &Proyecto) -> HashMap<String, FuenteGui> {
             ascenso: arial.ascenso / arial.tamano,
             alto_linea: arial.interlineado / arial.tamano,
             tamano_defecto: arial.tamano,
+            escala: 1.0,
         },
     );
     let open = &proyecto.fuentes["OpenSansRegular"];
@@ -66,6 +67,7 @@ fn fuentes(proyecto: &Proyecto) -> HashMap<String, FuenteGui> {
             ascenso: open.ascenso / open.tamano,
             alto_linea: open.interlineado / open.tamano,
             tamano_defecto: open.tamano,
+            escala: 1.0,
         },
     );
     f

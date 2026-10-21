@@ -6,9 +6,9 @@ Está pensado para avanzar en varias sesiones: marca cada casilla al completarla
 del plan en el mismo commit.
 
 **Siguiente paso:** 2.10 Neuro Battle (Unity 5.1.1 WebGL con IL2CPP): la lógica ya está
-reconstruida del asm.js (`reference/`), las escenas extraídas (`assets/escena.json`) y el
-original observado en Chromium; falta el port nativo con `crates/unity` (física 2D con contactos
-entre triggers kinematic, Animator, la GUI con `DrawTexture` y `Label`). Seguir
+reconstruida del asm.js (`reference/`), las escenas extraídas, el original observado en
+Chromium y el port nativo jugable; faltan la versión web con controles táctiles, el README con
+sus capturas y los pendientes. Seguir
 la plantilla con el paso 6 ampliado. La fase 4 (publicar las versiones web en itch.io) espera la
 confirmación del dueño de la cuenta: 4.1 y 4.2 se pueden preparar en cuanto la dé. El 0.7 (GitHub
 Pages) queda pendiente de decidir si se publica.
@@ -525,7 +525,35 @@ Orden sugerido: primero lo que reutiliza herramientas ya hechas y luego lo más 
     contactos** (el Box2D estándar no los crea; Unity 5.5 agregó `useFullKinematicContacts`
     para los sólidos): el port tiene que permitirlo. Si la «E» de «PLAY» sigue apretada al
     entrar al nivel, también activa el zoom.
-- [ ] Port nativo jugable.
+- [x] Port nativo jugable: los cuatro scripts de menú y los catorce del nivel en
+  `games/neuro-battle/src/juego.rs`, con el frame de Unity 5.1 (LoadLevel al empezar el frame
+  siguiente, Physics2D a paso fijo con sus mensajes, lo destruido borrado después de la física y
+  después de los Update, Start antes del primer Update, el Animator en modo Normal y OnGUI).
+  - `crates/box2d`: `World::sensores_cinematicos` (dos cuerpos kinematic se tocan si hay un
+    sensor, como se observó en el original) y `b2Filter` con `SetFilterData`/`Refilter` (con 32
+    bits de categoría y máscara, para las capas de Unity). La escena nueva «neuronas» de
+    `comparar.sh` (un cuerpo dinámico teletransportado contra una pared, patas kinematic que giran,
+    una pieza que se une pasando su fixture al cuerpo del jugador, un enemigo estático, una bala
+    que el filtro deja atravesar la pared y un cambio de capa a mitad) es idéntica bit a bit al C++
+    compilado con los mismos cambios; las seis de siempre siguen idénticas.
+  - `crates/unity`: la matriz de colisiones por capas (antes se ignoraba; en One Button Prototype
+    y Super Happy Jump todas las capas chocan), los contactos entre triggers kinematic,
+    `GetButton`/`GetButtonUp` en el InputManager, los ejes en el proyecto 2D,
+    `Escena::instanciar_datos` (clona un objeto de la escena, con «(Clone)»),
+    `Audio::play_one_shot`, `azar_entero` y `FuenteGui::escala` (una fuente sustituta más grande
+    para que mida como la original).
+  - Comparado con el original en Chromium: la unión de piezas (se unen al tocarse las puntas de
+    las patas, se arrastran y giran con la neurona), el inicio del nivel, el «game over» a los 5 s
+    con el puntaje en el mismo lugar (Micro 5 a 2,1 veces el tamaño de «Light Pixel-7»), el
+    puntaje que se acumula entre partidas (5 y luego 10 segundos: `contadorTiempo` es estático y
+    nunca vuelve a 0, verificado en el original) y la E: con el original a 20 fps, una E de 40 ms
+    muestra las instrucciones, de 120 ms las salta y de 250 ms además entra con zoom, como predice
+    `GetKey` con la carga al frame siguiente; el port hace lo mismo. Con WebAudio intervenido, el
+    original pone la ganancia en 100 en `PlayOneShot(clip, 100)` (sonido saturado); el port
+    también. Probado en Xvfb con cambios temporales (sin enemigos): unir piezas en cadena,
+    disparar con la de ataque unida (la bala la destruye el borde) y soltar la última con Alt.
+  - `Application.Quit` (Esc en el título) no hace nada, como en el WebGL, el único build del
+    original.
 - [ ] Web + táctil.
 - [ ] README del juego + ficha del museo.
 - [ ] Pendientes anotados.

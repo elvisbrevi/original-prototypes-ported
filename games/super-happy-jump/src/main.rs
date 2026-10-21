@@ -58,6 +58,7 @@ fn fuentes(proyecto: &Proyecto) -> HashMap<String, FuenteGui> {
             alto_linea: (1854.0 + 434.0 + 67.0) / 2048.0,
             // La Arial integrada de Unity es de 13.
             tamano_defecto: 13.0,
+            escala: 1.0,
         },
     );
     let redondeada = &proyecto.fuentes["Arial Rounded Bold"];
@@ -69,6 +70,7 @@ fn fuentes(proyecto: &Proyecto) -> HashMap<String, FuenteGui> {
             ascenso: redondeada.ascenso / redondeada.tamano,
             alto_linea: redondeada.interlineado / redondeada.tamano,
             tamano_defecto: redondeada.tamano,
+            escala: 1.0,
         },
     );
     f

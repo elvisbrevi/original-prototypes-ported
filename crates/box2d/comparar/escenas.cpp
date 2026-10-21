@@ -329,10 +329,159 @@ static void rebote() {
     }
 }
 
+// Para la escena "neuronas": la primera vez que una pata del jugador (11 a 14) empieza a tocar una
+// pata de la pieza (21 a 24).
+struct OyenteNeuronas : Oyente {
+    bool union_ = false;
+    void BeginContact(b2Contact* c) override {
+        Oyente::BeginContact(c);
+        int a = (int)(intptr_t)c->GetFixtureA()->GetUserData();
+        int b = (int)(intptr_t)c->GetFixtureB()->GetUserData();
+        if ((a >= 11 && a <= 14 && b >= 21 && b <= 24) || (b >= 11 && b <= 14 && a >= 21 && a <= 24)) union_ = true;
+    }
+};
+
+static b2Body* cuerpo(b2World& w, b2BodyType tipo, float x, float y, float angulo) {
+    b2BodyDef bd;
+    bd.type = tipo;
+    bd.position.Set(x, y);
+    bd.angle = angulo;
+    bd.gravityScale = 0.0f;
+    bd.angularDamping = 0.05f;
+    return w.CreateBody(&bd);
+}
+
+static b2Fixture* caja_neurona(b2Body* b, float hx, float hy, b2Vec2 centro, float angulo, int dato, bool sensor) {
+    b2PolygonShape s;
+    s.SetAsBox(hx, hy, centro, angulo);
+    return fixture(b, &s, dato, 0.4f, 0.0f, 1.0f, sensor);
+}
+
+// La capa de Unity como categoría y su fila de la matriz de colisiones de Neuro Battle como
+// máscara: la capa 0 no choca con la 8 (los muros) y la 9 (las neuronas) no choca consigo misma.
+static void capa(b2Fixture* f, int capa) {
+    b2Filter filtro;
+    filtro.categoryBits = (uint16)(1 << capa);
+    filtro.maskBits = capa == 0 ? 0xFEC9 : capa == 8 ? 0xFEC8 : 0xFDC9;
+    f->SetFilterData(filtro);
+}
+
+// La pose de la pata k (0 izquierda, 1 derecha, 2 abajo, 3 arriba) de una neurona en (x, y) que
+// gira `angulo`: a una unidad del centro, cruzada.
+static const float PATA_X[4] = {-1.0f, 1.0f, 0.0f, 0.0f};
+static const float PATA_Y[4] = {0.0f, 0.0f, -1.0f, 1.0f};
+static const float PATA_A[4] = {1.5707964f, -1.5707964f, 3.1415927f, 0.0f};
+static void pose_pata(int k, float x, float y, float angulo, b2Vec2* p, float* a) {
+    float c = cosf(angulo), s = sinf(angulo);
+    p->Set(x + c * PATA_X[k] - s * PATA_Y[k], y + s * PATA_X[k] + c * PATA_Y[k]);
+    *a = angulo + PATA_A[k];
+}
+
+// Como Neuro Battle (con el Box2D de Unity 5.1, que deja tocarse a dos cuerpos kinematic si uno es
+// un trigger): la neurona del jugador es un cuerpo dinámico sin gravedad que el código mueve
+// teletransportándolo (Transform.Translate) contra una pared; sus cuatro patas son cuerpos
+// kinematic con triggers que giran con su centro. Una pieza libre (un trigger estático y cuatro
+// patas kinematic quietas) se une al tocarse las patas: su trigger pasa al cuerpo del jugador y
+// sus patas lo siguen. Un enemigo (un trigger estático) se teletransporta hacia el jugador. Las
+// fixtures tienen las capas de Unity: una bala (un trigger dinámico) atraviesa la pared, y a mitad
+// de camino el enemigo pasa a la capa de las neuronas (SetFilterData) y deja de tocar al jugador.
+static void neuronas() {
+    b2World w(b2Vec2(0.0f, -9.81f));
+    OyenteNeuronas oyente;
+    w.SetContactListener(&oyente);
+    capa(caja_neurona(cuerpo(w, b2_staticBody, 9.0f, 0.0f, 0.0f), 0.96f, 3.0f, b2Vec2(0, 0), 0.0f, 1, false), 8);
+    b2Body* base = cuerpo(w, b2_dynamicBody, 0.0f, 0.0f, 0.0f);
+    capa(caja_neurona(base, 0.5f, 0.5f, b2Vec2(0, 0), 0.0f, 10, false), 9);
+    masa_uno(base);
+    cuerpos.push_back(base);
+    b2Body* patas[4];
+    b2Body* libres[4];
+    for (int k = 0; k < 4; ++k) {
+        b2Vec2 p; float a;
+        pose_pata(k, 0.0f, 0.0f, 0.0f, &p, &a);
+        patas[k] = cuerpo(w, b2_kinematicBody, p.x, p.y, a);
+        capa(caja_neurona(patas[k], 0.085f, 0.47f, b2Vec2(0, 0), 0.0f, 11 + k, true), 0);
+        pose_pata(k, 4.2f, 0.6f, 0.0f, &p, &a);
+        libres[k] = cuerpo(w, b2_kinematicBody, p.x, p.y, a);
+        capa(caja_neurona(libres[k], 0.075f, 0.47f, b2Vec2(0, 0), 0.0f, 21 + k, true), 0);
+    }
+    cuerpos.push_back(patas[0]);
+    cuerpos.push_back(libres[0]);
+    b2Body* pieza = cuerpo(w, b2_staticBody, 4.2f, 0.6f, 0.0f);
+    b2PolygonShape cuadrado;
+    cuadrado.SetAsBox(0.5f, 0.5f);
+    b2Fixture* raiz = fixture(pieza, &cuadrado, 20, 0.4f, 0.0f, 1.0f, true);
+    capa(raiz, 9);
+    b2Body* enemigo = cuerpo(w, b2_staticBody, -3.0f, 4.0f, 0.0f);
+    b2Fixture* f_enemigo = caja_neurona(enemigo, 0.73f, 0.74f, b2Vec2(0, 0), 0.0f, 30, true);
+    capa(f_enemigo, 0);
+    cuerpos.push_back(enemigo);
+    b2Body* bala = cuerpo(w, b2_dynamicBody, 2.0f, 1.0f, 0.0f);
+    capa(caja_neurona(bala, 0.425f, 0.4f, b2Vec2(0, 0), 0.0f, 40, true), 0);
+    cuerpos.push_back(bala);
+    float centro = 0.0f;
+    bool unida = false;
+    b2Vec2 rel_libre[4];
+    float rel_angulo[4];
+    for (int i = 0; i < 300; ++i) {
+        oyente.paso = i;
+        // Transform.Translate en el espacio propio, y el giro del centro (BaseRotacion).
+        float vx = i < 150 ? 6.0f : -6.0f, vy = i < 60 ? 0.0f : (i < 200 ? 1.5f : -3.0f);
+        float ab = base->GetAngle();
+        b2Vec2 pb = base->GetPosition();
+        float dx = vx * 0.02f, dy = vy * 0.02f;
+        pb.Set(pb.x + cosf(ab) * dx - sinf(ab) * dy, pb.y + sinf(ab) * dx + cosf(ab) * dy);
+        base->SetTransform(pb, ab);
+        base->SetAwake(true);
+        centro += i < 100 ? 0.0f : 1.7453293f * 0.02f;
+        for (int k = 0; k < 4; ++k) {
+            b2Vec2 p; float a;
+            pose_pata(k, pb.x, pb.y, ab + centro, &p, &a);
+            patas[k]->SetTransform(p, a);
+            patas[k]->SetAwake(true);
+            if (unida) {
+                float c = cosf(ab + centro), s = sinf(ab + centro);
+                p.Set(pb.x + c * rel_libre[k].x - s * rel_libre[k].y, pb.y + s * rel_libre[k].x + c * rel_libre[k].y);
+                libres[k]->SetTransform(p, ab + centro + rel_angulo[k]);
+                libres[k]->SetAwake(true);
+            }
+        }
+        b2Vec2 pe = enemigo->GetPosition();
+        float sx = pb.x - pe.x >= 0.0f ? 1.0f : -1.0f, sy = pb.y - pe.y >= 0.0f ? 1.0f : -1.0f;
+        enemigo->SetTransform(b2Vec2(pe.x + sx * 3.0f * 0.02f, pe.y + sy * 1.5f * 0.02f), 0.0f);
+        b2Vec2 pa = bala->GetPosition();
+        bala->SetTransform(b2Vec2(pa.x + 0.3f, pa.y), 0.0f);
+        if (i == 160) capa(f_enemigo, 9);
+        w.Step(0.02f, 8, 3);
+        imprimir(i);
+        if (oyente.union_ && !unida) {
+            // La pieza se une: su trigger pasa al cuerpo del jugador (en su marco) y sus patas
+            // quedan fijas respecto del centro.
+            unida = true;
+            float ac = base->GetAngle() + centro;
+            b2Vec2 pb2 = base->GetPosition();
+            b2Vec2 pp = pieza->GetPosition();
+            float c = cosf(base->GetAngle()), s = sinf(base->GetAngle());
+            b2Vec2 d(pp.x - pb2.x, pp.y - pb2.y);
+            pieza->DestroyFixture(raiz);
+            capa(caja_neurona(base, 0.5f, 0.5f, b2Vec2(c * d.x + s * d.y, -s * d.x + c * d.y), -base->GetAngle(), 25, true), 9);
+            masa_uno(base);
+            float cc = cosf(ac), sc = sinf(ac);
+            for (int k = 0; k < 4; ++k) {
+                b2Vec2 q = libres[k]->GetPosition();
+                b2Vec2 e(q.x - pb2.x, q.y - pb2.y);
+                rel_libre[k].Set(cc * e.x + sc * e.y, -sc * e.x + cc * e.y);
+                rel_angulo[k] = libres[k]->GetAngle() - ac;
+            }
+        }
+    }
+}
+
 int main(int argc, char** argv) {
     const char* escena = argc > 1 ? argv[1] : "caja";
     if (!strcmp(escena, "corredor")) { corredor(); return 0; }
     if (!strcmp(escena, "rebote")) { rebote(); return 0; }
+    if (!strcmp(escena, "neuronas")) { neuronas(); return 0; }
     b2World w(b2Vec2(0.0f, 10.0f));
     if (!strcmp(escena, "caja")) {
         cuerpos.push_back(caja_estatica(w, 0, 0, 20, 0.5f));

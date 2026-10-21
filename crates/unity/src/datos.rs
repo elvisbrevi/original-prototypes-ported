@@ -31,6 +31,9 @@ pub struct Proyecto {
     #[serde(default)]
     pub escenas: Vec<Vec<DatosObjeto>>,
     pub prefabs: HashMap<String, Vec<DatosObjeto>>,
+    /// Los ejes del InputManager que lee el juego (si los usa).
+    #[serde(default)]
+    pub ejes: Vec<crate::datos3d::Eje>,
 }
 
 impl Proyecto {

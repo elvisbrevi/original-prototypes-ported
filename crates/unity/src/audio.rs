@@ -40,6 +40,20 @@ impl Audio {
         );
     }
 
+    /// AudioSource.PlayOneShot(clip, volumeScale): suena encima de lo que ya suene. En el WebGL
+    /// de Unity 5.1 el volumen pasa tal cual a la ganancia de WebAudio, sin recortarlo a 1.
+    pub fn play_one_shot(&self, clip: &str, volumen: f32) {
+        if let Some(s) = self.sonidos.get(clip) {
+            play_sound(
+                s,
+                PlaySoundParams {
+                    looped: false,
+                    volume: volumen,
+                },
+            );
+        }
+    }
+
     /// AudioSource.Stop.
     pub fn stop(&self, fuente: &FuenteAudio) {
         if let Some(s) = fuente.clip.as_ref().and_then(|c| self.sonidos.get(c)) {

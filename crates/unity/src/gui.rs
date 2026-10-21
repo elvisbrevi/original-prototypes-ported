@@ -36,6 +36,9 @@ pub struct FuenteGui {
     pub alto_linea: f32,
     /// El tamaño de la fuente en Unity (Font.fontSize), el que usa un estilo con tamaño 0.
     pub tamano_defecto: f32,
+    /// Cuánto más grande se dibuja la fuente que la reemplaza para que sus letras midan como las
+    /// de la original (1 si es la misma o una de métricas iguales).
+    pub escala: f32,
 }
 
 enum Comando {
@@ -317,7 +320,8 @@ impl Gui {
         } else {
             &fuente.normal
         };
-        let ancho = measure_text(texto, Some(font), tamano, 1.0).width;
+        let dibujo = (tamano as f32 * fuente.escala).round() as u16;
+        let ancho = measure_text(texto, Some(font), dibujo, 1.0).width;
         let alto = fuente.alto_linea * tamano as f32;
         let [izq, der, arr, aba] = estilo.relleno;
         let area = Rect::new(
@@ -337,7 +341,7 @@ impl Gui {
             texto: texto.to_owned(),
             fuente: nombre,
             negrita,
-            tamano,
+            tamano: dibujo,
             x: x.round(),
             y: y.round(),
             color: Color::new(
@@ -466,10 +470,11 @@ impl Gui {
             t.tamano as f32
         };
         let alto_linea = fuente.alto_linea * tamano * t.interlineado;
+        let dibujo = (tamano * fuente.escala).round() as u16;
         let lineas: Vec<&str> = t.texto.lines().collect();
         let anchos: Vec<f32> = lineas
             .iter()
-            .map(|l| measure_text(l, Some(font), tamano as u16, 1.0).width)
+            .map(|l| measure_text(l, Some(font), dibujo, 1.0).width)
             .collect();
         let bloque = vec2(
             anchos.iter().copied().fold(0.0, f32::max),
@@ -492,7 +497,7 @@ impl Gui {
                 y.round(),
                 TextParams {
                     font: Some(font),
-                    font_size: tamano as u16,
+                    font_size: dibujo,
                     color: t.color,
                     ..Default::default()
                 },

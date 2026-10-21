@@ -91,6 +91,26 @@ pub struct FixtureDef {
     pub is_sensor: bool,
 }
 
+/// b2Filter: dos fixtures chocan si la máscara de cada una tiene la categoría de la otra (o, con
+/// el mismo grupo distinto de 0, si el grupo es positivo). Los bits son de 32 para las 32 capas
+/// de Unity (en Box2D, de 16).
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct Filter {
+    pub category_bits: u32,
+    pub mask_bits: u32,
+    pub group_index: i16,
+}
+
+impl Default for Filter {
+    fn default() -> Self {
+        Self {
+            category_bits: 0x0001,
+            mask_bits: 0xFFFF,
+            group_index: 0,
+        }
+    }
+}
+
 /// Referencia a una arista de la lista de un cuerpo: el contacto (o la articulación) y su lado
 /// (0: nodeA/edgeA, 1: nodeB/edgeB).
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -269,6 +289,7 @@ pub struct Fixture {
     proxy_aabb: Aabb,
     proxy_count: usize,
     is_sensor: bool,
+    filter: Filter,
 }
 
 struct Contact {
@@ -362,6 +383,9 @@ pub struct World {
     pub begin_contacts: Vec<(usize, usize)>,
     /// BeginContact y EndContact por fixture, si se piden (`Some`): los triggers de Unity.
     pub fixture_events: Option<Vec<ContactEvent>>,
+    /// Cambio de Unity 5.1 (no está en Box2D): dos cuerpos kinematic también se tocan si una de
+    /// las dos fixtures es un sensor (un trigger). Apagado, como en Box2D.
+    pub sensores_cinematicos: bool,
 }
 
 impl World {
@@ -387,6 +411,7 @@ impl World {
             inv_dt0: 0.0,
             begin_contacts: Vec::new(),
             fixture_events: None,
+            sensores_cinematicos: false,
         }
     }
 
@@ -396,6 +421,37 @@ impl World {
 
     pub fn set_fixture_user_data(&mut self, f: FixtureId, user_data: usize) {
         self.fixtures.get_mut(f).user_data = user_data;
+    }
+
+    /// b2Fixture::SetFilterData (con Refilter: los contactos de la fixture se vuelven a filtrar y
+    /// sus proxies buscan pares nuevos).
+    pub fn set_fixture_filter(&mut self, f: FixtureId, filter: Filter) {
+        self.fixtures.get_mut(f).filter = filter;
+        let body = self.fixtures.get(f).body;
+        let mut edge = self.bodies.get(body).contact_list;
+        while let Some(e) = edge {
+            let ce = *self.contact_edge(e);
+            let c = self.contacts.get(e.id);
+            if c.fixture_a == f || c.fixture_b == f {
+                self.contacts.get_mut(e.id).flags |= C_FILTER_FLAG;
+            }
+            edge = ce.next;
+        }
+        let fixture = self.fixtures.get(f);
+        if fixture.proxy_count > 0 && fixture.proxy_id != NULL_PROXY {
+            let proxy = fixture.proxy_id;
+            self.broad_phase.touch_proxy(proxy);
+        }
+    }
+
+    /// b2ContactFilter::ShouldCollide, el filtro por defecto de Box2D.
+    fn filter_collide(&self, fixture_a: FixtureId, fixture_b: FixtureId) -> bool {
+        let a = self.fixtures.get(fixture_a).filter;
+        let b = self.fixtures.get(fixture_b).filter;
+        if a.group_index == b.group_index && a.group_index != 0 {
+            return a.group_index > 0;
+        }
+        (a.mask_bits & b.category_bits) != 0 && (a.category_bits & b.mask_bits) != 0
     }
 
     /// Las fixtures de un cuerpo, en el orden de su lista (la última creada primero).
@@ -605,6 +661,7 @@ impl World {
             proxy_aabb: Aabb::default(),
             proxy_count: 0,
             is_sensor: def.is_sensor,
+            filter: Filter::default(),
             user_data: 0,
         };
         let f = self.fixtures.insert(fixture);
@@ -776,12 +833,20 @@ impl World {
         }
     }
 
-    /// ShouldCollide (entre cuerpos: al menos uno dinámico y sin articulación que lo impida).
-    fn should_collide(&self, b: BodyId, other: BodyId) -> bool {
+    /// ShouldCollide (b2Body::ShouldCollide del cuerpo de B con el de A: al menos uno dinámico y
+    /// sin articulación que lo impida). Con `sensores_cinematicos`, dos cuerpos kinematic también
+    /// se tocan si una de las fixtures es un sensor.
+    fn should_collide(&self, fixture_a: FixtureId, fixture_b: FixtureId) -> bool {
+        let (fa, fb) = (self.fixtures.get(fixture_a), self.fixtures.get(fixture_b));
+        let sensor = fa.is_sensor || fb.is_sensor;
+        let (b, other) = (fb.body, fa.body);
         let body = self.bodies.get(b);
-        if body.body_type != BodyType::Dynamic
-            && self.bodies.get(other).body_type != BodyType::Dynamic
-        {
+        let tipo = self.bodies.get(other).body_type;
+        let cinematicos = self.sensores_cinematicos
+            && sensor
+            && body.body_type == BodyType::Kinematic
+            && tipo == BodyType::Kinematic;
+        if body.body_type != BodyType::Dynamic && tipo != BodyType::Dynamic && !cinematicos {
             return false;
         }
         let mut jn = body.joint_list;
@@ -958,11 +1023,14 @@ impl World {
             }
             edge = ce.next;
         }
-        if !self.should_collide(body_b, body_a) {
+        if !self.should_collide(fixture_a, fixture_b) {
             return;
         }
-        // El filtro de Construct 2 deja chocar todo (y el de Box2D, con los filtros por
-        // defecto, también).
+        // El filtro por defecto de Box2D (Construct 2 deja todo con los filtros por defecto; Unity
+        // pone la capa como categoría y su fila de la matriz de colisiones como máscara).
+        if !self.filter_collide(fixture_a, fixture_b) {
+            return;
+        }
         // b2Contact::Create: el registro pone el polígono primero en los contactos con círculos.
         let es_circulo =
             |w: &Self, f: FixtureId| matches!(w.fixtures.get(f).shape, Shape::Circle(_));
@@ -1173,7 +1241,9 @@ impl World {
             let body_a = self.fixtures.get(fixture_a).body;
             let body_b = self.fixtures.get(fixture_b).body;
             if flags & C_FILTER_FLAG != 0 {
-                if !self.should_collide(body_b, body_a) {
+                if !self.should_collide(fixture_a, fixture_b)
+                    || !self.filter_collide(fixture_a, fixture_b)
+                {
                     c = next;
                     self.destroy_contact(ci);
                     continue;

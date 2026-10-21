@@ -35,4 +35,6 @@ pub mod world;
 
 pub use math::{Vec2, vec2};
 pub use shapes::{CircleShape, PolygonShape, Shape};
-pub use world::{BodyDef, BodyId, BodyType, ContactEvent, FixtureDef, FixtureId, JointId, World};
+pub use world::{
+    BodyDef, BodyId, BodyType, ContactEvent, Filter, FixtureDef, FixtureId, JointId, World,
+};

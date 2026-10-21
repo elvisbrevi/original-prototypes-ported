@@ -7,14 +7,17 @@
 // BeginContact y EndContact de Box2D, agrupados por par de colisionadores (Unity avisa cuando
 // empieza a tocarse la primera fixture y cuando deja de tocarse la última), son los
 // OnTriggerEnter2D/Exit2D y OnCollisionEnter2D/Exit2D. Con Interpolate, el Transform del cuerpo
-// se dibuja entre la pose de antes y la de después del último paso.
+// se dibuja entre la pose de antes y la de después del último paso. Como en Unity 5.1 (observado
+// en Neuro Battle), dos cuerpos kinematic se tocan si uno de los colisionadores es un trigger. La
+// matriz de colisiones por capas es el filtro de Box2D: la capa del objeto como categoría y su
+// fila de la matriz como máscara.
 
 use std::collections::{HashMap, HashSet};
 
 use box2d::collision::Aabb;
 use box2d::math::Transform as B2Transform;
 use box2d::shapes::{CircleShape, PolygonShape};
-use box2d::world::{BodyDef, BodyId, BodyType, FixtureDef, FixtureId, World};
+use box2d::world::{BodyDef, BodyId, BodyType, Filter, FixtureDef, FixtureId, World};
 use box2d::{Shape, Vec2 as B2Vec2, vec2 as b2vec2};
 use macroquad::prelude::{Mat4, Quat, Vec2, Vec3, vec2, vec3};
 
@@ -107,6 +110,7 @@ struct Firma {
     trigger: bool,
     friccion: f32,
     rebote: f32,
+    capa: u32,
 }
 
 struct FixtureActual {
@@ -127,6 +131,8 @@ pub struct Fisica2d {
     iteraciones_velocidad: i32,
     iteraciones_posicion: i32,
     rayos_tocan_triggers: bool,
+    /// m_LayerCollisionMatrix: con qué capas choca cada capa.
+    matriz: Vec<u32>,
     cuerpos: HashMap<Id, CuerpoActual>,
     estaticos: HashMap<Id, CuerpoActual>,
     fixtures: HashMap<Clave, FixtureActual>,
@@ -141,11 +147,13 @@ impl Fisica2d {
     pub fn nueva(ajustes: &AjustesFisica2d) -> Self {
         let mut world = World::new(b2vec2(ajustes.gravedad[0], ajustes.gravedad[1]));
         world.fixture_events = Some(Vec::new());
+        world.sensores_cinematicos = true;
         Self {
             world,
             iteraciones_velocidad: ajustes.iteraciones_velocidad,
             iteraciones_posicion: ajustes.iteraciones_posicion,
             rayos_tocan_triggers: ajustes.rayos_tocan_triggers,
+            matriz: ajustes.matriz.clone(),
             cuerpos: HashMap::new(),
             estaticos: HashMap::new(),
             fixtures: HashMap::new(),
@@ -370,6 +378,7 @@ impl Escena {
                     trigger: col.trigger,
                     friccion: col.material.friccion,
                     rebote: col.material.rebote,
+                    capa: self.objeto(id).capa,
                 };
                 if self
                     .fisica
@@ -416,6 +425,18 @@ impl Escena {
                     let dato = self.fisica.siguiente_dato;
                     self.fisica.siguiente_dato += 1;
                     self.fisica.world.set_fixture_user_data(fixture, dato);
+                    let capa = firma.capa.min(31);
+                    let filtro = Filter {
+                        category_bits: 1 << capa,
+                        mask_bits: self
+                            .fisica
+                            .matriz
+                            .get(capa as usize)
+                            .copied()
+                            .unwrap_or(u32::MAX),
+                        group_index: 0,
+                    };
+                    self.fisica.world.set_fixture_filter(fixture, filtro);
                     self.fisica.datos.insert(dato, (id, i));
                     fixtures.push(fixture);
                 }

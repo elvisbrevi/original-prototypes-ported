@@ -54,3 +54,12 @@ pub mod tiempo;
 pub fn azar_entre(min: f32, max: f32) -> f32 {
     min + (max - min) * macroquad::rand::gen_range(0.0, 1.0)
 }
+
+/// Random.Range(min, max) de enteros: de min a max - 1, con el azar de macroquad (sin el sesgo de
+/// convertir a entero un float negativo).
+pub fn azar_entero(min: i32, max: i32) -> i32 {
+    if max <= min {
+        return min;
+    }
+    min + macroquad::rand::gen_range(0, max - min)
+}

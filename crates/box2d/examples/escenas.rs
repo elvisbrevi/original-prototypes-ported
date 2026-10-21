@@ -1,12 +1,14 @@
 // Escenas de comparación con el Box2D 2.3.1 original (ver tests/README en el README del crate):
 // imprime x, y y ángulo de cada cuerpo en cada paso, en hexadecimal como printf("%a").
-// Uso: cargo run -p box2d --example escenas -- <caja|pila|bala|moto|corredor|rebote>
+// Uso: cargo run -p box2d --example escenas -- <caja|pila|bala|moto|corredor|rebote|neuronas>
+
+use std::f32::consts::FRAC_PI_2;
 
 use box2d::collision::Aabb;
 use box2d::math::Transform;
 use box2d::settings::PI;
 use box2d::shapes::{CircleShape, PolygonShape};
-use box2d::world::{BodyDef, BodyId, BodyType, FixtureDef, FixtureId, World};
+use box2d::world::{BodyDef, BodyId, BodyType, Filter, FixtureDef, FixtureId, World};
 use box2d::{Shape, Vec2, vec2};
 
 /// printf("%a") de un float promovido a double.
@@ -481,6 +483,200 @@ fn rebote() {
     }
 }
 
+fn cuerpo(w: &mut World, tipo: BodyType, x: f32, y: f32, angulo: f32) -> BodyId {
+    w.create_body(&BodyDef {
+        body_type: tipo,
+        position: vec2(x, y),
+        angle: angulo,
+        gravity_scale: 0.0,
+        angular_damping: 0.05,
+        ..Default::default()
+    })
+}
+
+#[allow(clippy::too_many_arguments)]
+fn caja_neurona(
+    w: &mut World,
+    b: BodyId,
+    hx: f32,
+    hy: f32,
+    centro: Vec2,
+    angulo: f32,
+    dato: usize,
+    sensor: bool,
+) -> FixtureId {
+    let mut s = PolygonShape::default();
+    s.set_as_box_oriented(hx, hy, centro, angulo);
+    fixture(w, b, Shape::Polygon(s), dato, 0.4, 0.0, 1.0, sensor)
+}
+
+/// Ver capa() en escenas.cpp.
+fn capa(w: &mut World, f: FixtureId, capa: u32) {
+    let mascara = match capa {
+        0 => 0xFEC9,
+        8 => 0xFEC8,
+        _ => 0xFDC9,
+    };
+    w.set_fixture_filter(
+        f,
+        Filter {
+            category_bits: 1 << capa,
+            mask_bits: mascara,
+            group_index: 0,
+        },
+    );
+}
+
+/// Ver pose_pata() en escenas.cpp.
+fn pose_pata(k: usize, x: f32, y: f32, angulo: f32) -> (Vec2, f32) {
+    const PATA_X: [f32; 4] = [-1.0, 1.0, 0.0, 0.0];
+    const PATA_Y: [f32; 4] = [0.0, 0.0, -1.0, 1.0];
+    const PATA_A: [f32; 4] = [FRAC_PI_2, -FRAC_PI_2, PI, 0.0];
+    let (c, s) = (angulo.cos(), angulo.sin());
+    (
+        vec2(
+            x + c * PATA_X[k] - s * PATA_Y[k],
+            y + s * PATA_X[k] + c * PATA_Y[k],
+        ),
+        angulo + PATA_A[k],
+    )
+}
+
+/// Como Neuro Battle: ver neuronas() en escenas.cpp.
+fn neuronas() {
+    let mut w = World::new(vec2(0.0, -9.81));
+    w.fixture_events = Some(Vec::new());
+    w.sensores_cinematicos = true;
+    let mut cuerpos = Vec::new();
+    let pared = cuerpo(&mut w, BodyType::Static, 9.0, 0.0, 0.0);
+    let f = caja_neurona(&mut w, pared, 0.96, 3.0, Vec2::ZERO, 0.0, 1, false);
+    capa(&mut w, f, 8);
+    let base = cuerpo(&mut w, BodyType::Dynamic, 0.0, 0.0, 0.0);
+    let f = caja_neurona(&mut w, base, 0.5, 0.5, Vec2::ZERO, 0.0, 10, false);
+    capa(&mut w, f, 9);
+    masa_uno(&mut w, base);
+    cuerpos.push(base);
+    let mut patas = Vec::new();
+    let mut libres = Vec::new();
+    for k in 0..4 {
+        let (p, a) = pose_pata(k, 0.0, 0.0, 0.0);
+        let b = cuerpo(&mut w, BodyType::Kinematic, p.x, p.y, a);
+        let f = caja_neurona(&mut w, b, 0.085, 0.47, Vec2::ZERO, 0.0, 11 + k, true);
+        capa(&mut w, f, 0);
+        patas.push(b);
+        let (p, a) = pose_pata(k, 4.2, 0.6, 0.0);
+        let b = cuerpo(&mut w, BodyType::Kinematic, p.x, p.y, a);
+        let f = caja_neurona(&mut w, b, 0.075, 0.47, Vec2::ZERO, 0.0, 21 + k, true);
+        capa(&mut w, f, 0);
+        libres.push(b);
+    }
+    cuerpos.push(patas[0]);
+    cuerpos.push(libres[0]);
+    let pieza = cuerpo(&mut w, BodyType::Static, 4.2, 0.6, 0.0);
+    let raiz = caja_neurona(&mut w, pieza, 0.5, 0.5, Vec2::ZERO, 0.0, 20, true);
+    capa(&mut w, raiz, 9);
+    let enemigo = cuerpo(&mut w, BodyType::Static, -3.0, 4.0, 0.0);
+    let f_enemigo = caja_neurona(&mut w, enemigo, 0.73, 0.74, Vec2::ZERO, 0.0, 30, true);
+    capa(&mut w, f_enemigo, 0);
+    cuerpos.push(enemigo);
+    let bala = cuerpo(&mut w, BodyType::Dynamic, 2.0, 1.0, 0.0);
+    let f = caja_neurona(&mut w, bala, 0.425, 0.4, Vec2::ZERO, 0.0, 40, true);
+    capa(&mut w, f, 0);
+    cuerpos.push(bala);
+    let mut centro = 0.0f32;
+    let mut unida = false;
+    let mut rel_libre = [Vec2::ZERO; 4];
+    let mut rel_angulo = [0.0f32; 4];
+    for i in 0..300 {
+        let vx = if i < 150 { 6.0f32 } else { -6.0 };
+        let vy = if i < 60 {
+            0.0f32
+        } else if i < 200 {
+            1.5
+        } else {
+            -3.0
+        };
+        let ab = w.body(base).get_angle();
+        let mut pb = w.body(base).get_position();
+        let (dx, dy) = (vx * 0.02, vy * 0.02);
+        pb = vec2(
+            pb.x + ab.cos() * dx - ab.sin() * dy,
+            pb.y + ab.sin() * dx + ab.cos() * dy,
+        );
+        w.set_transform(base, pb, ab);
+        w.body_mut(base).set_awake(true);
+        centro += if i < 100 { 0.0 } else { 1.745_329_3 * 0.02 };
+        for k in 0..4 {
+            let (p, a) = pose_pata(k, pb.x, pb.y, ab + centro);
+            w.set_transform(patas[k], p, a);
+            w.body_mut(patas[k]).set_awake(true);
+            if unida {
+                let (c, s) = ((ab + centro).cos(), (ab + centro).sin());
+                let r = rel_libre[k];
+                let p = vec2(pb.x + c * r.x - s * r.y, pb.y + s * r.x + c * r.y);
+                w.set_transform(libres[k], p, ab + centro + rel_angulo[k]);
+                w.body_mut(libres[k]).set_awake(true);
+            }
+        }
+        let pe = w.body(enemigo).get_position();
+        let sx = if pb.x - pe.x >= 0.0 { 1.0f32 } else { -1.0 };
+        let sy = if pb.y - pe.y >= 0.0 { 1.0f32 } else { -1.0 };
+        w.set_transform(
+            enemigo,
+            vec2(pe.x + sx * 3.0 * 0.02, pe.y + sy * 1.5 * 0.02),
+            0.0,
+        );
+        let pa = w.body(bala).get_position();
+        w.set_transform(bala, vec2(pa.x + 0.3, pa.y), 0.0);
+        if i == 160 {
+            capa(&mut w, f_enemigo, 9);
+        }
+        w.step(0.02, 8, 3);
+        let mut union = false;
+        for e in w.fixture_events.as_mut().expect("eventos").drain(..) {
+            let letra = if e.begin { "B" } else { "E" };
+            println!("{letra} {i} {} {}", e.user_a, e.user_b);
+            let (a, b) = (e.user_a, e.user_b);
+            if e.begin
+                && (((11..=14).contains(&a) && (21..=24).contains(&b))
+                    || ((11..=14).contains(&b) && (21..=24).contains(&a)))
+            {
+                union = true;
+            }
+        }
+        imprimir(&w, &cuerpos, i);
+        if union && !unida {
+            unida = true;
+            let ac = w.body(base).get_angle() + centro;
+            let pb2 = w.body(base).get_position();
+            let pp = w.body(pieza).get_position();
+            let ang = w.body(base).get_angle();
+            let (c, s) = (ang.cos(), ang.sin());
+            let d = vec2(pp.x - pb2.x, pp.y - pb2.y);
+            w.destroy_fixture(raiz);
+            let f = caja_neurona(
+                &mut w,
+                base,
+                0.5,
+                0.5,
+                vec2(c * d.x + s * d.y, -s * d.x + c * d.y),
+                -ang,
+                25,
+                true,
+            );
+            capa(&mut w, f, 9);
+            masa_uno(&mut w, base);
+            let (cc, sc) = (ac.cos(), ac.sin());
+            for k in 0..4 {
+                let q = w.body(libres[k]).get_position();
+                let e = vec2(q.x - pb2.x, q.y - pb2.y);
+                rel_libre[k] = vec2(cc * e.x + sc * e.y, -sc * e.x + cc * e.y);
+                rel_angulo[k] = w.body(libres[k]).get_angle() - ac;
+            }
+        }
+    }
+}
+
 fn main() {
     let escena = std::env::args().nth(1).unwrap_or_else(|| "caja".into());
     if escena == "corredor" {
@@ -489,6 +685,10 @@ fn main() {
     }
     if escena == "rebote" {
         rebote();
+        return;
+    }
+    if escena == "neuronas" {
+        neuronas();
         return;
     }
     let mut w = World::new(vec2(0.0, 10.0));

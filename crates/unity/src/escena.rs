@@ -396,6 +396,26 @@ impl Escena {
         raiz
     }
 
+    /// Object.Instantiate de un objeto de la escena (o de cualquier lista de datos): copia su
+    /// jerarquía como la guardó el archivo, la raíz en `posicion` y con `rotacion`, y le agrega
+    /// «(Clone)» al nombre de la raíz, como Unity. El estado de sus scripts lo copia el juego.
+    pub fn instanciar_datos(
+        &mut self,
+        proyecto: &Proyecto,
+        datos: &[DatosObjeto],
+        posicion: Vec3,
+        rotacion: Quat,
+    ) -> Id {
+        let ids = self.crear(proyecto, datos);
+        let raiz = ids[&datos[0].id];
+        let obj = self.objeto_mut(raiz);
+        obj.padre = None;
+        obj.local.posicion = posicion;
+        obj.local.rotacion = rotacion;
+        obj.nombre.push_str("(Clone)");
+        raiz
+    }
+
     /// El objeto de la escena cargada con este id del archivo original.
     pub fn original(&self, id: i64) -> Id {
         self.originales[&id]

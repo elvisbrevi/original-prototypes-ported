@@ -9,12 +9,12 @@
 use std::collections::HashMap;
 
 use macroquad::miniquad::{
-    BlendFactor, BlendState, BlendValue, BufferId, BufferLayout, BufferSource, BufferType,
-    BufferUsage, Bindings, Comparison, CullFace, Equation, FilterMode, FrontFaceOrder,
+    Bindings, BlendFactor, BlendState, BlendValue, BufferId, BufferLayout, BufferSource,
+    BufferType, BufferUsage, Comparison, CullFace, Equation, FilterMode, FrontFaceOrder,
     MipmapFilterMode, PassAction, Pipeline, PipelineParams, RenderPass, RenderingBackend,
-    ShaderMeta, ShaderSource, TextureAccess, TextureFormat, TextureId, TextureKind,
-    TextureParams, TextureSource, TextureWrap, UniformBlockLayout, UniformDesc, UniformType,
-    UniformsSource, VertexAttribute, VertexFormat,
+    ShaderMeta, ShaderSource, TextureAccess, TextureFormat, TextureId, TextureKind, TextureParams,
+    TextureSource, TextureWrap, UniformBlockLayout, UniformDesc, UniformType, UniformsSource,
+    VertexAttribute, VertexFormat,
 };
 use macroquad::prelude::{Color, Mat4, Quat, Vec2, Vec3, Vec4, vec2, vec3};
 
@@ -427,12 +427,18 @@ impl Render3d {
                 let Some(bytes) = archivos.get(nombre) else {
                     continue;
                 };
-                let imagen = macroquad::texture::Image::from_file_with_format(bytes, None)
-                    .expect("textura");
+                let imagen =
+                    macroquad::texture::Image::from_file_with_format(bytes, None).expect("textura");
                 // Unity guarda las filas de abajo hacia arriba (la v = 0 de las UV es la fila de
                 // abajo); el PNG va de arriba hacia abajo.
                 let fila = imagen.width as usize * 4;
-                let filas: Vec<u8> = imagen.bytes.chunks_exact(fila).rev().flatten().copied().collect();
+                let filas: Vec<u8> = imagen
+                    .bytes
+                    .chunks_exact(fila)
+                    .rev()
+                    .flatten()
+                    .copied()
+                    .collect();
                 let t = ctx.new_texture(
                     TextureAccess::Static,
                     TextureSource::Bytes(&filas),
@@ -871,15 +877,18 @@ impl Render3d {
         blanca: TextureId,
     ) -> Material3d {
         let tipo = tipo_de(m.shader.as_deref());
-        let principal = ["_MainTex", "_FrontTex"]
-            .iter()
-            .find_map(|n| m.textura(n));
+        let principal = ["_MainTex", "_FrontTex"].iter().find_map(|n| m.textura(n));
         let textura = principal
             .and_then(|t| t.textura.as_ref())
             .and_then(|t| texturas.get(t).copied())
             .unwrap_or(blanca);
         let st = principal.map_or([1.0, 1.0, 0.0, 0.0], |t| {
-            [t.escala[0], t.escala[1], t.desplazamiento[0], t.desplazamiento[1]]
+            [
+                t.escala[0],
+                t.escala[1],
+                t.desplazamiento[0],
+                t.desplazamiento[1],
+            ]
         });
         let brillo = m.shader.as_deref().is_some_and(|s| s.contains("Spec"));
         let especular = if brillo {
@@ -1058,7 +1067,12 @@ impl Render3d {
             color: Vec3::ZERO,
             rango: 1.0,
         });
-        let luz_posicion = [luz.posicion.x, luz.posicion.y, luz.posicion.z, 1.0 / luz.rango];
+        let luz_posicion = [
+            luz.posicion.x,
+            luz.posicion.y,
+            luz.posicion.z,
+            1.0 / luz.rango,
+        ];
         let luz_color = [luz.color.x, luz.color.y, luz.color.z, 1.0];
         let ambiente = v4(ambiente);
         let camara_mundo = [camara.posicion.x, camara.posicion.y, camara.posicion.z, 1.0];
@@ -1093,7 +1107,12 @@ impl Render3d {
                 ctx.apply_uniforms(UniformsSource::table(&UPasto {
                     mvp: columnas(vp),
                     onda: [self.tiempo * t.rapidez, t.fuerza, t.cantidad, d2],
-                    camara: [camara.posicion.x, camara.posicion.y, camara.posicion.z, 1.0 / d2],
+                    camara: [
+                        camara.posicion.x,
+                        camara.posicion.y,
+                        camara.posicion.z,
+                        1.0 / d2,
+                    ],
                     derecha: [derecha.x, derecha.y, derecha.z, 0.0],
                     arriba: [arriba.x, arriba.y, arriba.z, 0.0],
                     tinte: t.tinte,
@@ -1300,7 +1319,12 @@ impl Render3d {
     }
 
     /// Dibuja cuadros aditivos en la pantalla (los destellos de las luces) con una textura.
-    pub fn dibujar_pantalla(&mut self, pase: RenderPass, textura: &str, cuadros: &[CuadroPantalla]) {
+    pub fn dibujar_pantalla(
+        &mut self,
+        pase: RenderPass,
+        textura: &str,
+        cuadros: &[CuadroPantalla],
+    ) {
         let Some(t) = self.texturas.get(textura).copied() else {
             return;
         };

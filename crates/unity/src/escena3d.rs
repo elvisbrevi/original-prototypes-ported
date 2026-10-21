@@ -225,9 +225,9 @@ impl Escena3d {
                         radio: *radio,
                     },
                 )),
-                Componente3d::TerrainCollider { activo } => obj.colisionadores.push(
-                    Colisionador3d::nuevo(*activo, false, Forma3d::Terreno),
-                ),
+                Componente3d::TerrainCollider { activo } => obj
+                    .colisionadores
+                    .push(Colisionador3d::nuevo(*activo, false, Forma3d::Terreno)),
                 Componente3d::Rigidbody {
                     masa,
                     arrastre,
@@ -365,7 +365,10 @@ impl Escena3d {
 
     /// El objeto de la escena con este id del archivo original.
     pub fn original(&self, id: i64) -> Option<Id> {
-        self.originales.get(&id).copied().filter(|&i| self.existe(i))
+        self.originales
+            .get(&id)
+            .copied()
+            .filter(|&i| self.existe(i))
     }
 
     pub fn existe(&self, id: Id) -> bool {

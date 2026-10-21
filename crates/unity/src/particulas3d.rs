@@ -116,8 +116,7 @@ impl SistemaLegado {
                 } else {
                     0.0
                 },
-                velocidad_angular: e.velocidad_angular
-                    + azar(-1.0, 1.0) * e.velocidad_angular_azar,
+                velocidad_angular: e.velocidad_angular + azar(-1.0, 1.0) * e.velocidad_angular_azar,
                 energia,
                 energia_inicial: energia,
                 color: Color::new(1.0, 1.0, 1.0, 1.0),
@@ -168,7 +167,8 @@ impl SistemaLegado {
                         c0[3] + (c1[3] - c0[3]) * f,
                     );
                 }
-                p.velocidad += (Vec3::from(a.fuerza) + en_caja(Vec3::from(a.fuerza_azar) / 2.0)) * dt;
+                p.velocidad +=
+                    (Vec3::from(a.fuerza) + en_caja(Vec3::from(a.fuerza_azar) / 2.0)) * dt;
                 p.velocidad *= a.amortiguacion.powf(dt);
                 p.tamano += p.tamano * a.crecer * dt;
             }

@@ -64,10 +64,8 @@ impl Audio3d {
                 volume: volumen,
             },
         );
-        self.sonando.insert(
-            clip.clone(),
-            (!f.bucle).then_some(reloj + *duracion as f64),
-        );
+        self.sonando
+            .insert(clip.clone(), (!f.bucle).then_some(reloj + *duracion as f64));
     }
 
     /// AudioSource.Stop.

@@ -1,5 +1,6 @@
 // Generado por tools/extraer.py: los assets embebidos en el binario.
 
+#[rustfmt::skip]
 pub static MALLAS: &[(&str, &[u8])] = &[
     ("046_stoplight", include_bytes!("../assets/mallas/046_stoplight.bin")),
     ("BananaBush", include_bytes!("../assets/mallas/BananaBush.bin")),
@@ -28,6 +29,7 @@ pub static MALLAS: &[(&str, &[u8])] = &[
     ("soccer_bod", include_bytes!("../assets/mallas/soccer_bod.bin")),
 ];
 
+#[rustfmt::skip]
 pub static TEXTURAS: &[(&str, &[u8])] = &[
     ("85mmflare", include_bytes!("../assets/texturas/85mmflare.png")),
     ("AlderBark", include_bytes!("../assets/texturas/AlderBark.png")),
@@ -99,6 +101,7 @@ pub static TEXTURAS: &[(&str, &[u8])] = &[
     ("window", include_bytes!("../assets/texturas/window.png")),
 ];
 
+#[rustfmt::skip]
 pub static AUDIO: &[(&str, &[u8])] = &[
     ("click.ogg", include_bytes!("../assets/audio/click.ogg")),
     ("explosion.ogg", include_bytes!("../assets/audio/explosion.ogg")),

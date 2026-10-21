@@ -57,7 +57,12 @@ fn texturas_gui(proyecto: &Proyecto3d) -> HashMap<String, Texture2D> {
         .values()
         .flat_map(|e| {
             [
-                &e.normal, &e.hover, &e.active, &e.on_normal, &e.on_hover, &e.on_active,
+                &e.normal,
+                &e.hover,
+                &e.active,
+                &e.on_normal,
+                &e.on_hover,
+                &e.on_active,
             ]
             .into_iter()
             .filter_map(|s| s.fondo.clone())

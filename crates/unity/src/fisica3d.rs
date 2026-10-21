@@ -30,8 +30,14 @@ pub const ROCE: f32 = 0.6;
 pub enum Forma3d {
     /// MeshCollider no convexo: los triángulos de colisión de la malla.
     Malla(String),
-    Caja { centro: Vec3, tamano: Vec3 },
-    Esfera { centro: Vec3, radio: f32 },
+    Caja {
+        centro: Vec3,
+        tamano: Vec3,
+    },
+    Esfera {
+        centro: Vec3,
+        radio: f32,
+    },
     /// TerrainCollider (no se simula: no hay cuerpos sobre el terreno).
     Terreno,
 }
@@ -317,9 +323,7 @@ impl Fisica3d {
                 match &c.forma {
                     Forma3d::Malla(nombre) => {
                         c.triangulos = self.mallas.get(nombre).map_or(Vec::new(), |t| {
-                            t.iter()
-                                .map(|t| t.map(|p| m.transform_point3(p)))
-                                .collect()
+                            t.iter().map(|t| t.map(|p| m.transform_point3(p))).collect()
                         });
                         c.caja = caja_de(c.triangulos.iter().flatten().copied());
                     }
@@ -425,7 +429,10 @@ impl Fisica3d {
                             agregar(id, m.transform_point3(p + *cc));
                         }
                     }
-                    Forma3d::Esfera { centro: cc, radio: r } => {
+                    Forma3d::Esfera {
+                        centro: cc,
+                        radio: r,
+                    } => {
                         let (c2, r2) = esfera_mundo(&m, *cc, *r);
                         let d = centro - c2;
                         let dist = d.length();
@@ -452,12 +459,16 @@ impl Fisica3d {
             }
             let Some((centro_local, radio_local)) =
                 escena.objeto(id).cuerpo.as_ref().and_then(|_| {
-                    escena.objeto(id).colisionadores.iter().find_map(|c| match c.forma {
-                        Forma3d::Esfera { centro, radio } if c.activo && !c.trigger => {
-                            Some((centro, radio))
-                        }
-                        _ => None,
-                    })
+                    escena
+                        .objeto(id)
+                        .colisionadores
+                        .iter()
+                        .find_map(|c| match c.forma {
+                            Forma3d::Esfera { centro, radio } if c.activo && !c.trigger => {
+                                Some((centro, radio))
+                            }
+                            _ => None,
+                        })
                 })
             else {
                 // Un Rigidbody sin colisionador (los «OuterCore» de las llamas, sin gravedad)
@@ -544,7 +555,15 @@ impl Fisica3d {
                     nueva += k.normal * exceso;
                 }
             }
-            if escena.objeto(id).cuerpo.as_ref().expect("cuerpo").restricciones & 8 != 0 {
+            if escena
+                .objeto(id)
+                .cuerpo
+                .as_ref()
+                .expect("cuerpo")
+                .restricciones
+                & 8
+                != 0
+            {
                 nueva.z = centro.z;
             }
             let rot = escena.rotacion(id);

@@ -19,13 +19,13 @@ use std::collections::{HashMap, HashSet};
 use macroquad::prelude::*;
 use unity::audio3d::{Audio3d, volumen_3d};
 use unity::datos::{EstadoEstilo, Estilo};
-use unity::datos3d::{EstiloPiel, EstadoPiel, Proyecto3d, Value, referencia_objeto};
+use unity::datos3d::ParcheDetalle;
+use unity::datos3d::{EstadoPiel, EstiloPiel, Proyecto3d, Value, referencia_objeto};
 use unity::entrada::{Entrada, Teclas};
 use unity::escena3d::{Escena3d, Id, angulos_euler};
 use unity::fisica3d::{Fisica3d, Par};
 use unity::gui::{Evento, Gui};
 use unity::malla::Malla;
-use unity::datos3d::ParcheDetalle;
 use unity::render3d::{Billboards, Camara3d, CuadroPantalla, Render3d, luz_de};
 use unity::terreno::Terreno;
 use unity::tiempo::Tiempo;
@@ -271,9 +271,8 @@ impl Juego {
         self.pares.clear();
         self.raton_abajo = None;
         self.brillo_destello = 0.0;
-        let original = |escena: &Escena3d, v: &Value| {
-            referencia_objeto(v).and_then(|o| escena.original(o))
-        };
+        let original =
+            |escena: &Escena3d, v: &Value| referencia_objeto(v).and_then(|o| escena.original(o));
         let mut scripts = Vec::new();
         for id in self.escena.ids() {
             for s in &self.escena.objeto(id).scripts {
@@ -670,12 +669,12 @@ impl Juego {
                 let pos = self.escena.posicion(m.id);
                 m.screen_space = camara.a_pantalla(pos);
                 if m.horizontal {
-                    m.offset = pos
-                        - camara.a_mundo(vec3(raton.x, m.screen_space.y, m.screen_space.z));
+                    m.offset =
+                        pos - camara.a_mundo(vec3(raton.x, m.screen_space.y, m.screen_space.z));
                 }
                 if m.vertical {
-                    m.offset = pos
-                        - camara.a_mundo(vec3(m.screen_space.x, raton.y, m.screen_space.z));
+                    m.offset =
+                        pos - camara.a_mundo(vec3(m.screen_space.x, raton.y, m.screen_space.z));
                 }
             }
         }
@@ -991,7 +990,13 @@ impl Juego {
             Some(ImageFormat::Png),
         )
         .expect("alturas");
-        let alturas: Vec<u8> = alturas.bytes.as_chunks::<4>().0.iter().map(|p| p[0]).collect();
+        let alturas: Vec<u8> = alturas
+            .bytes
+            .as_chunks::<4>()
+            .0
+            .iter()
+            .map(|p| p[0])
+            .collect();
         let parches: Vec<ParcheDetalle> =
             serde_json::from_str(include_str!("../assets/terreno/parches.json")).expect("parches");
         let terreno = Terreno::nuevo(&self.proyecto.terreno, alturas, self.escena.posicion(id));
@@ -1019,7 +1024,12 @@ impl Juego {
         let Some((lid, luz)) = luz_de(&self.escena) else {
             return;
         };
-        let Some(nombre) = self.escena.objeto(lid).luz.as_ref().and_then(|l| l.destello.clone())
+        let Some(nombre) = self
+            .escena
+            .objeto(lid)
+            .luz
+            .as_ref()
+            .and_then(|l| l.destello.clone())
         else {
             return;
         };
@@ -1051,7 +1061,12 @@ impl Juego {
         let b = self.brillo_destello;
         let origen = vec2(pantalla.x, ALTO - pantalla.y);
         let centro = vec2(ANCHO, ALTO) / 2.0;
-        let color_luz = self.escena.objeto(lid).luz.as_ref().map_or(WHITE, |l| l.color);
+        let color_luz = self
+            .escena
+            .objeto(lid)
+            .luz
+            .as_ref()
+            .map_or(WHITE, |l| l.color);
         let cuadros: Vec<CuadroPantalla> = d
             .elementos
             .iter()

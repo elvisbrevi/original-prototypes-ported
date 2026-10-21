@@ -638,7 +638,7 @@ class Extractor:
             archivos = sorted(f for f in os.listdir(os.path.join(RAIZ, carpeta)) if f.endswith(ext) or not ext)
             filas = [f'    ({json.dumps(os.path.splitext(f)[0] if ext else f)}, include_bytes!("../assets/{carpeta}/{f}")),'
                      for f in archivos]
-            return [f"pub static {nombre}: &[(&str, &[u8])] = &["] + filas + ["];", ""]
+            return ["#[rustfmt::skip]", f"pub static {nombre}: &[(&str, &[u8])] = &["] + filas + ["];", ""]
         lineas = ["// Generado por tools/extraer.py: los assets embebidos en el binario.", ""]
         lineas += lista("MALLAS", "mallas", ".bin")
         lineas += lista("TEXTURAS", "texturas", ".png")

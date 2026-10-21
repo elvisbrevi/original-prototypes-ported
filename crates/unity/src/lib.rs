@@ -22,6 +22,7 @@
 //! - [`fisica3d`], cuerpos esféricos contra colisionadores estáticos (en lugar de PhysX) y rayos.
 //! - [`particulas3d`], las partículas heredadas (EllipsoidParticleEmitter y compañía).
 //! - [`entrada`], los ejes y botones del InputManager; [`audio3d`], AudioSource con distancia.
+//! - [`terreno`], el terreno (mapa de alturas, capas y pasto).
 //! - [`render3d`] y [`shaders3d`], el dibujo en el camino Forward con los shaders de Unity 3.4
 //!   reescritos en GLSL.
 
@@ -45,6 +46,7 @@ pub mod poligonos;
 pub mod render;
 pub mod render3d;
 pub mod shaders3d;
+pub mod terreno;
 pub mod tiempo;
 
 /// Random.Range(min, max) de floats: entre los dos (también si min > max), con el azar de

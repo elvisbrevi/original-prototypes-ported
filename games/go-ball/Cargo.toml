@@ -9,4 +9,5 @@ titulo = "Go Ball"
 [dependencies]
 macroquad = { version = "0.4", features = ["audio"] }
 museo = { path = "../../crates/museo" }
+serde_json = "1"
 unity = { path = "../../crates/unity" }

@@ -22,6 +22,7 @@ use crate::datos3d::{DatosMaterial, Proyecto3d};
 use crate::escena3d::{Escena3d, Id};
 use crate::malla::Malla;
 use crate::shaders3d::*;
+use crate::terreno::{Terreno, VerticeTerreno};
 
 /// El orden de los vértices de las caras de adelante después de la vista y del giro vertical del
 /// render target.
@@ -143,6 +144,47 @@ struct UColor {
     tinte: [f32; 4],
 }
 
+#[repr(C)]
+struct UTerreno {
+    mvp: [f32; 16],
+    repetir: [f32; 4],
+    ambiente: [f32; 4],
+    luz_posicion: [f32; 4],
+    luz_color: [f32; 4],
+}
+
+#[repr(C)]
+struct UPasto {
+    mvp: [f32; 16],
+    onda: [f32; 4],
+    camara: [f32; 4],
+    derecha: [f32; 4],
+    arriba: [f32; 4],
+    tinte: [f32; 4],
+    ambiente: [f32; 4],
+    luz_posicion: [f32; 4],
+    luz_color: [f32; 4],
+    corte: [f32; 4],
+}
+
+/// El terreno de la escena en la GPU: su malla, las capas y el pasto por prototipo.
+struct TerrenoGpu {
+    vertices: BufferId,
+    indices: BufferId,
+    n: i32,
+    control: TextureId,
+    capas: [TextureId; 2],
+    repetir: [f32; 4],
+    pasto: Vec<(BufferId, BufferId, i32, TextureId)>,
+    /// _WavingTint, la fuerza y la cantidad de las ondas, su rapidez y la distancia de los
+    /// detalles.
+    tinte: [f32; 4],
+    fuerza: f32,
+    cantidad: f32,
+    rapidez: f32,
+    distancia: f32,
+}
+
 /// La cámara de perspectiva de Unity (Field of View vertical, en grados).
 #[derive(Clone, Copy, Debug)]
 pub struct Camara3d {
@@ -240,6 +282,7 @@ pub struct Render3d {
     mallas: HashMap<String, MallaGpu>,
     texturas: HashMap<String, TextureId>,
     materiales: HashMap<String, Material3d>,
+    blanca: TextureId,
     iluminado: Pipeline,
     corteza: Pipeline,
     hojas: Pipeline,
@@ -251,6 +294,11 @@ pub struct Render3d {
     cielo: Pipeline,
     particulas: Pipeline,
     aditivo: Pipeline,
+    terreno_p: Pipeline,
+    pasto_p: Pipeline,
+    terreno: Option<TerrenoGpu>,
+    /// Time.time, para las ondas del pasto.
+    pub tiempo: f32,
     cubo: (BufferId, Vec<(BufferId, i32)>),
     dinamico: (BufferId, BufferId),
 }
@@ -583,6 +631,47 @@ impl Render3d {
             )
             .expect("shader color");
 
+        let terreno = ctx
+            .new_shader(
+                ShaderSource::Glsl {
+                    vertex: VS_TERRENO,
+                    fragment: &con_atenuacion(FS_TERRENO),
+                },
+                ShaderMeta {
+                    images: vec!["control".to_owned(), "capa0".to_owned(), "capa1".to_owned()],
+                    uniforms: uniformes(&[
+                        ("mvp", UniformType::Mat4),
+                        ("repetir", UniformType::Float4),
+                        ("ambiente", UniformType::Float4),
+                        ("luz_posicion", UniformType::Float4),
+                        ("luz_color", UniformType::Float4),
+                    ]),
+                },
+            )
+            .expect("shader terreno");
+        let pasto = ctx
+            .new_shader(
+                ShaderSource::Glsl {
+                    vertex: VS_PASTO,
+                    fragment: &con_atenuacion(FS_PASTO),
+                },
+                ShaderMeta {
+                    images: vec!["textura".to_owned()],
+                    uniforms: uniformes(&[
+                        ("mvp", UniformType::Mat4),
+                        ("onda", UniformType::Float4),
+                        ("camara", UniformType::Float4),
+                        ("derecha", UniformType::Float4),
+                        ("arriba", UniformType::Float4),
+                        ("tinte", UniformType::Float4),
+                        ("ambiente", UniformType::Float4),
+                        ("luz_posicion", UniformType::Float4),
+                        ("luz_color", UniformType::Float4),
+                        ("corte", UniformType::Float4),
+                    ]),
+                },
+            )
+            .expect("shader pasto");
         let base = PipelineParams {
             depth_test: Comparison::LessOrEqual,
             depth_write: true,
@@ -595,6 +684,15 @@ impl Render3d {
             ctx.new_pipeline(&malla, &attrs, shader, p)
         };
         let iluminado = pipeline(ilum, atributos_malla(), base);
+        let terreno_p = pipeline(terreno, atributos_malla(), base);
+        let pasto_p = pipeline(
+            pasto,
+            atributos_malla(),
+            PipelineParams {
+                cull_face: CullFace::Nothing,
+                ..base
+            },
+        );
         let corteza = pipeline(arbol, atributos_malla(), base);
         let hojas = pipeline(
             arbol,
@@ -746,6 +844,7 @@ impl Render3d {
             mallas: gpu,
             texturas,
             materiales,
+            blanca,
             iluminado,
             corteza,
             hojas,
@@ -757,6 +856,10 @@ impl Render3d {
             cielo,
             particulas,
             aditivo,
+            terreno_p,
+            pasto_p,
+            terreno: None,
+            tiempo: 0.0,
             cubo,
             dinamico,
         }
@@ -810,6 +913,91 @@ impl Render3d {
                 m.color("_TintColor", [0.5; 4])
             },
             cubos: [cubo("_RefractTex"), cubo("_ReflectTex")],
+        }
+    }
+
+    /// Sube a la GPU el terreno de la escena: la malla alrededor de `centro` (la cámara) hasta
+    /// `radio`, y el pasto de los parches a menos de la distancia de los detalles.
+    #[allow(clippy::too_many_arguments)]
+    pub fn cargar_terreno(
+        &mut self,
+        terreno: &Terreno,
+        parches: &[crate::datos3d::ParcheDetalle],
+        centro: Vec3,
+        radio: f32,
+        distancia: f32,
+        densidad: f32,
+    ) {
+        self.quitar_terreno();
+        let ctx = unsafe { macroquad::window::get_internal_gl() }.quad_context;
+        let (v, i) = terreno.malla(centro, radio);
+        let textura = |n: &Option<String>| {
+            n.as_ref()
+                .and_then(|n| self.texturas.get(n).copied())
+                .unwrap_or(self.blanca)
+        };
+        let d = &terreno.datos;
+        let tamano = [
+            d.escala[0] * (d.alturas[0] - 1) as f32,
+            d.escala[2] * (d.alturas[1] - 1) as f32,
+        ];
+        let capa = |k: usize| d.capas.get(k);
+        let repetir = |k: usize, e: usize| capa(k).map_or(1.0, |c| tamano[e] / c.tamano[e]);
+        let mut pasto = Vec::new();
+        for (k, vertices, indices) in terreno.pasto(parches, centro, distancia, densidad) {
+            pasto.push((
+                ctx.new_buffer(
+                    BufferType::VertexBuffer,
+                    BufferUsage::Immutable,
+                    BufferSource::slice(&vertices),
+                ),
+                ctx.new_buffer(
+                    BufferType::IndexBuffer,
+                    BufferUsage::Immutable,
+                    BufferSource::slice(&indices),
+                ),
+                indices.len() as i32,
+                textura(&d.detalles.prototipos[k].textura),
+            ));
+        }
+        let gpu = TerrenoGpu {
+            vertices: ctx.new_buffer(
+                BufferType::VertexBuffer,
+                BufferUsage::Immutable,
+                BufferSource::slice::<VerticeTerreno>(&v),
+            ),
+            indices: ctx.new_buffer(
+                BufferType::IndexBuffer,
+                BufferUsage::Immutable,
+                BufferSource::slice(&i),
+            ),
+            n: i.len() as i32,
+            control: textura(&d.mezcla.first().cloned().flatten()),
+            capas: [
+                textura(&capa(0).and_then(|c| c.textura.clone())),
+                textura(&capa(1).and_then(|c| c.textura.clone())),
+            ],
+            repetir: [repetir(0, 0), repetir(0, 1), repetir(1, 0), repetir(1, 1)],
+            pasto,
+            tinte: d.detalles.tinte,
+            fuerza: d.detalles.fuerza,
+            cantidad: d.detalles.cantidad,
+            rapidez: d.detalles.rapidez,
+            distancia,
+        };
+        self.terreno = Some(gpu);
+    }
+
+    /// Al cambiar de escena: libera el terreno.
+    pub fn quitar_terreno(&mut self) {
+        if let Some(t) = self.terreno.take() {
+            let ctx = unsafe { macroquad::window::get_internal_gl() }.quad_context;
+            ctx.delete_buffer(t.vertices);
+            ctx.delete_buffer(t.indices);
+            for (v, i, _, _) in t.pasto {
+                ctx.delete_buffer(v);
+                ctx.delete_buffer(i);
+            }
         }
     }
 
@@ -875,6 +1063,48 @@ impl Render3d {
         let ambiente = v4(ambiente);
         let camara_mundo = [camara.posicion.x, camara.posicion.y, camara.posicion.z, 1.0];
 
+        // El terreno (cola 1900) y su pasto (2200): el terreno, antes que todo lo opaco, y el pasto
+        // después (con el depth test, el orden entre opacos no cambia la imagen).
+        if let Some(t) = &self.terreno {
+            ctx.apply_pipeline(&self.terreno_p);
+            ctx.apply_bindings(&Bindings {
+                vertex_buffers: vec![t.vertices],
+                index_buffer: t.indices,
+                images: vec![t.control, t.capas[0], t.capas[1]],
+            });
+            ctx.apply_uniforms(UniformsSource::table(&UTerreno {
+                mvp: columnas(vp),
+                repetir: t.repetir,
+                ambiente,
+                luz_posicion,
+                luz_color,
+            }));
+            ctx.draw(0, t.n, 1);
+            let derecha = camara.rotacion * Vec3::X;
+            let arriba = camara.rotacion * Vec3::Y;
+            let d2 = t.distancia * t.distancia;
+            for (vb, ib, n, tex) in &t.pasto {
+                ctx.apply_pipeline(&self.pasto_p);
+                ctx.apply_bindings(&Bindings {
+                    vertex_buffers: vec![*vb],
+                    index_buffer: *ib,
+                    images: vec![*tex],
+                });
+                ctx.apply_uniforms(UniformsSource::table(&UPasto {
+                    mvp: columnas(vp),
+                    onda: [self.tiempo * t.rapidez, t.fuerza, t.cantidad, d2],
+                    camara: [camara.posicion.x, camara.posicion.y, camara.posicion.z, 1.0 / d2],
+                    derecha: [derecha.x, derecha.y, derecha.z, 0.0],
+                    arriba: [arriba.x, arriba.y, arriba.z, 0.0],
+                    tinte: t.tinte,
+                    ambiente,
+                    luz_posicion,
+                    luz_color,
+                    corte: [0.5, 0.0, 0.0, 0.0],
+                }));
+                ctx.draw(0, *n, 1);
+            }
+        }
         // Lo que hay que dibujar: (cola, distancia, objeto, submalla, material).
         let mut lista: Vec<(i32, f32, Id, usize, &str)> = Vec::new();
         for id in escena.ids() {

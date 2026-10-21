@@ -6,8 +6,8 @@ Está pensado para avanzar en varias sesiones: marca cada casilla al completarla
 del plan en el mismo commit.
 
 **Siguiente paso:** 2.9 Go Ball (Unity 3.4): triaje, extracción y enfoque hechos (ver 2.9).
-Falta cerrar el port nativo (el terreno del menú, calibrar el destello, pruebas) y seguir con la
-versión web.
+Port nativo hecho; falta cerrar la versión web con controles táctiles, el README del juego con
+su ficha del museo y los pendientes.
 Reutilizar lo que sirva de `crates/unity`. Seguir la plantilla con el paso 6 ampliado. La fase 4 (publicar las
 versiones web en itch.io) espera la confirmación del dueño de la cuenta: 4.1 y 4.2 se pueden
 preparar en cuanto la dé. El 0.7 (GitHub Pages) queda pendiente de decidir si se publica.
@@ -386,7 +386,23 @@ Orden sugerido: primero lo que reutiliza herramientas ya hechas y luego lo más 
   - El juego (`games/go-ball/src`): los siete scripts, iTween `RotateBy` y el frame de Unity
     3.4. Los niveles se ven como las capturas de itch.io y se juegan (arrastrar cajas, saltar,
     la meta, el fuego). Falta el terreno del menú.
-- [ ] Port nativo jugable.
+- [x] Port nativo jugable: el menú y los cinco niveles, de principio a fin (la meta del nivel 5
+  vuelve al menú).
+  - El terreno del menú (`crates/unity/src/terreno.rs`): la malla del mapa de alturas en la zona
+    que ve la cámara (filas en z, alturas sobre 32766), las dos capas mezcladas con el mapa de
+    control y unas 3400 matas de pasto en cuatro capas, como billboards que se balancean con el
+    viento (el programa de vértices de BillboardWavingDoublePass traducido). El reparto al azar de
+    las matas dentro de cada muestra no es el de Unity.
+  - El destello calibrado con las capturas de itch.io: la caída del rojo en la fila de la luz da
+    un resplandor (tamaño 50) de 1,25 altos de pantalla, o sea 2,5 % del alto por unidad de
+    tamaño; con eso coincide punto a punto en el nivel 1. Las sierras lo tapan y lo apagan, como
+    el rayo de oclusión de Unity contra sus MeshCollider.
+  - `src/recursos.rs` con `static` (con `const` el wasm repetía las texturas: 24 MB en vez de
+    14).
+  - Probado en Xvfb: el menú, «Jugar», arrastrar las cajas, rodar y saltar, la ventana de salir
+    (pausa y oscurece) y la vuelta al menú; con un cambio temporal (la bola puesta junto a la
+    meta o al peligro): la meta y el paso al nivel siguiente, la muerte en el fuego y en las
+    sierras con el reinicio, y el nivel 5 que vuelve al menú.
 - [ ] Web + táctil.
 - [ ] README del juego + ficha del museo.
 - [ ] Pendientes anotados.

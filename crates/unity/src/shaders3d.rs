@@ -227,6 +227,116 @@ void main() {
 }
 "#;
 
+/// Hidden/TerrainEngine/Splatmap/Lightmap-FirstPass: las capas mezcladas con el mapa de control
+/// (cada capa repetida según su tamaño) e iluminadas como Diffuse.
+pub const VS_TERRENO: &str = r#"#version 100
+attribute vec3 posicion;
+attribute vec3 normal;
+attribute vec2 uv;
+uniform mat4 mvp;
+varying vec2 v_uv;
+varying vec3 v_normal;
+varying vec3 v_mundo;
+void main() {
+    gl_Position = mvp * vec4(posicion, 1.0);
+    v_uv = uv;
+    v_normal = normal;
+    v_mundo = posicion;
+}
+"#;
+
+pub const FS_TERRENO: &str = r#"#version 100
+precision highp float;
+varying vec2 v_uv;
+varying vec3 v_normal;
+varying vec3 v_mundo;
+uniform sampler2D control;
+uniform sampler2D capa0;
+uniform sampler2D capa1;
+uniform vec4 repetir;
+uniform vec4 ambiente;
+uniform vec4 luz_posicion;
+uniform vec4 luz_color;
+ATENUACION
+void main() {
+    vec4 c = texture2D(control, v_uv);
+    vec3 albedo = texture2D(capa0, v_uv * repetir.xy).rgb * c.r
+        + texture2D(capa1, v_uv * repetir.zw).rgb * c.g;
+    vec3 n = normalize(v_normal);
+    vec3 d = luz_posicion.xyz - v_mundo;
+    float atten = atenuacion(dot(d, d) * luz_posicion.w * luz_posicion.w);
+    vec3 suma = albedo * luz_color.rgb * max(0.0, dot(n, normalize(d)));
+    gl_FragColor = vec4(clamp(albedo * ambiente.rgb, 0.0, 1.0) + clamp(suma * atten * 2.0, 0.0, 1.0), 1.0);
+}
+"#;
+
+/// Hidden/TerrainEngine/Details/BillboardWavingDoublePass: cada mata es un cuadro que mira a la
+/// cámara (la tangente lleva su desplazamiento) y cuyo borde de arriba se mueve con las ondas del
+/// viento (TerrainWaveGrass de Unity 3, con sus constantes). El color es el del vértice por el
+/// tinte de la onda, y se apaga hacia la distancia de los detalles.
+pub const VS_PASTO: &str = r#"#version 100
+attribute vec3 posicion;
+attribute vec3 normal;
+attribute vec2 uv;
+attribute vec4 color;
+attribute vec4 tangente;
+uniform mat4 mvp;
+uniform vec4 onda;
+uniform vec4 camara;
+uniform vec4 derecha;
+uniform vec4 arriba;
+uniform vec4 tinte;
+varying vec2 v_uv;
+varying vec4 v_color;
+varying vec3 v_mundo;
+void main() {
+    vec3 p = posicion;
+    vec3 rel = p - camara.xyz;
+    vec2 desplazamiento = dot(rel, rel) > onda.w ? vec2(0.0) : tangente.xy;
+    p += desplazamiento.x * derecha.xyz + desplazamiento.y * arriba.xyz;
+    vec4 ondas = p.x * vec4(0.012, 0.02, 0.06, 0.024) * onda.y
+        + p.z * vec4(0.006, 0.02, 0.02, 0.05) * onda.y
+        + vec4(1.2, 2.0, 1.6, 4.8) * onda.x;
+    ondas = fract(ondas) * 6.408849 - 3.1415927;
+    vec4 c3 = ondas * ondas * ondas;
+    vec4 s = ondas - 0.16161616 * c3 + 0.0083333 * c3 * ondas * ondas
+        - 0.00019841 * c3 * ondas * ondas * ondas * ondas;
+    s = s * s;
+    s = s * s;
+    float luz = dot(s, vec4(0.47193992, 0.47193992, 0.18877596, 0.094387978));
+    vec4 m = s * tangente.y;
+    p.x -= dot(m, vec4(0.024, 0.04, -0.12, 0.096)) * onda.z;
+    p.z -= dot(m, vec4(0.006, 0.02, -0.02, 0.1)) * onda.z;
+    gl_Position = mvp * vec4(p, 1.0);
+    v_uv = uv;
+    vec3 c = mix(vec3(0.5), tinte.rgb, luz) * color.rgb * 2.0;
+    rel = p - camara.xyz;
+    v_color = vec4(c, clamp(2.0 * (onda.w - dot(rel, rel)) * camara.w, 0.0, 1.0));
+    v_mundo = p;
+}
+"#;
+
+pub const FS_PASTO: &str = r#"#version 100
+precision highp float;
+varying vec2 v_uv;
+varying vec4 v_color;
+varying vec3 v_mundo;
+uniform sampler2D textura;
+uniform vec4 ambiente;
+uniform vec4 luz_posicion;
+uniform vec4 luz_color;
+uniform vec4 corte;
+ATENUACION
+void main() {
+    vec4 t = texture2D(textura, v_uv) * clamp(v_color, 0.0, 1.0);
+    if (t.a < corte.x) { discard; }
+    vec3 d = luz_posicion.xyz - v_mundo;
+    float atten = atenuacion(dot(d, d) * luz_posicion.w * luz_posicion.w);
+    vec3 suma = t.rgb * luz_color.rgb * max(0.0, normalize(d).y);
+    gl_FragColor = vec4(clamp(t.rgb * ambiente.rgb, 0.0, 1.0) + clamp(suma * atten * 2.0, 0.0, 1.0), 1.0);
+}
+"#;
+
 /// Inserta la función de atenuación en un shader de fragmento.
 pub fn con_atenuacion(fs: &str) -> String {
     fs.replace("ATENUACION", ATENUACION)

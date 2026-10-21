@@ -387,8 +387,7 @@ impl Escena3d {
             .collect()
     }
 
-    /// GameObject.activeInHierarchy (en Unity 3.x, `active` no se hereda: aquí ningún objeto
-    /// está inactivo, pero se respeta la jerarquía como en las versiones posteriores).
+    /// Si el objeto y sus padres están activos (en Go Ball todos lo están).
     pub fn activo_en_jerarquia(&self, id: Id) -> bool {
         let mut actual = Some(id);
         while let Some(i) = actual {

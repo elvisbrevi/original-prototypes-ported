@@ -25,7 +25,9 @@ use unity::escena3d::{Escena3d, Id, angulos_euler};
 use unity::fisica3d::{Fisica3d, Par};
 use unity::gui::{Evento, Gui};
 use unity::malla::Malla;
+use unity::datos3d::ParcheDetalle;
 use unity::render3d::{Billboards, Camara3d, CuadroPantalla, Render3d, luz_de};
+use unity::terreno::Terreno;
 use unity::tiempo::Tiempo;
 
 use crate::itween::RotarPor;
@@ -39,7 +41,7 @@ pub const ALTO: f32 = 600.0;
 const RAPIDEZ_DESTELLO: f32 = 3.0;
 /// El tamaño de los elementos del destello: tamaño / 100 * esto * el alto de la pantalla
 /// (calibrado con las capturas del original).
-const ESCALA_DESTELLO: f32 = 1.6;
+const ESCALA_DESTELLO: f32 = 2.5;
 
 #[derive(Default)]
 struct Estaticos {
@@ -175,6 +177,8 @@ pub struct Juego {
     estilos: HashMap<String, Estilo>,
     /// La textura del GUITexture de la cámara («pixel»).
     textura_gui: Option<Texture2D>,
+    /// La escena cambió y hay que subir (o quitar) su terreno en el próximo dibujo.
+    terreno_pendiente: bool,
 }
 
 fn campo_f32(c: &Value, n: &str) -> f32 {
@@ -248,6 +252,7 @@ impl Juego {
             brillo_destello: 0.0,
             estilos,
             textura_gui,
+            terreno_pendiente: true,
             escena,
             proyecto,
         };
@@ -261,6 +266,7 @@ impl Juego {
 
     /// Los scripts de la escena recién cargada, su Start y los AudioSource con Play On Awake.
     fn iniciar_escena(&mut self) {
+        self.terreno_pendiente = true;
         self.audio.parar_todo();
         self.pares.clear();
         self.raton_abajo = None;
@@ -919,6 +925,10 @@ impl Juego {
         let Some((cid, camara)) = self.camara() else {
             return;
         };
+        render.tiempo = self.tiempo.tiempo as f32;
+        if std::mem::take(&mut self.terreno_pendiente) {
+            self.subir_terreno(render, &camara);
+        }
         let datos = self.escena.objeto(cid).camara.clone().expect("cámara");
         let ajustes = self.proyecto.escenas[self.escena.nivel].ajustes.clone();
         let a = ajustes.ambiente;
@@ -961,6 +971,40 @@ impl Juego {
         );
         drop(billboards);
         self.destello(render, pase, &camara, ajustes.fuerza_destello);
+    }
+
+    /// El Terrain de la escena (el del menú): su malla hasta donde llega la cámara y el pasto hasta
+    /// la distancia de los detalles.
+    fn subir_terreno(&self, render: &mut Render3d, camara: &Camara3d) {
+        render.quitar_terreno();
+        let Some(id) = self
+            .escena
+            .ids()
+            .into_iter()
+            .find(|&i| self.escena.objeto(i).terreno.is_some())
+        else {
+            return;
+        };
+        let campos = self.escena.objeto(id).terreno.clone().unwrap_or_default();
+        let alturas = Image::from_file_with_format(
+            include_bytes!("../assets/terreno/alturas.png"),
+            Some(ImageFormat::Png),
+        )
+        .expect("alturas");
+        let alturas: Vec<u8> = alturas.bytes.as_chunks::<4>().0.iter().map(|p| p[0]).collect();
+        let parches: Vec<ParcheDetalle> =
+            serde_json::from_str(include_str!("../assets/terreno/parches.json")).expect("parches");
+        let terreno = Terreno::nuevo(&self.proyecto.terreno, alturas, self.escena.posicion(id));
+        let distancia = campo_f32(&campos, "distancia_detalles");
+        let densidad = campo_f32(&campos, "densidad_detalles");
+        render.cargar_terreno(
+            &terreno,
+            &parches,
+            camara.posicion,
+            camara.lejos + 4.0,
+            distancia,
+            densidad,
+        );
     }
 
     /// El LensFlare de la luz (FlareLayer de la cámara): los elementos en la línea que va de la

@@ -17,8 +17,9 @@ Escribe en games/go-ball/assets/:
                         dos cubemaps del diamante como <clave>_<cara>.png
     audio/<nombre>.ogg|.wav
                         los clips tal como vienen en el build
-    terreno/            el mapa de alturas (8 bits: el máximo es 219 de 65535), el mapa de mezcla y
-                        los parches de pasto del terreno del menú
+    terreno/            el mapa de alturas (8 bits: el máximo es 219 de 32766) y los parches de
+                        pasto del terreno del menú
+Y games/go-ball/src/recursos.rs, que embebe en el binario las mallas, las texturas y el audio.
 
 Unity 3.4 guarda los type trees de las clases del motor, pero los MonoBehaviour comparten uno solo
 (sin los campos del script): los de los scripts se generan con TypeTreeGeneratorAPI a partir de los
@@ -637,7 +638,7 @@ class Extractor:
             archivos = sorted(f for f in os.listdir(os.path.join(RAIZ, carpeta)) if f.endswith(ext) or not ext)
             filas = [f'    ({json.dumps(os.path.splitext(f)[0] if ext else f)}, include_bytes!("../assets/{carpeta}/{f}")),'
                      for f in archivos]
-            return [f"pub const {nombre}: &[(&str, &[u8])] = &["] + filas + ["];", ""]
+            return [f"pub static {nombre}: &[(&str, &[u8])] = &["] + filas + ["];", ""]
         lineas = ["// Generado por tools/extraer.py: los assets embebidos en el binario.", ""]
         lineas += lista("MALLAS", "mallas", ".bin")
         lineas += lista("TEXTURAS", "texturas", ".png")

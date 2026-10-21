@@ -5,9 +5,13 @@ Plan de trabajo para recrear en Rust + macroquad todos los juegos publicados en
 Está pensado para avanzar en varias sesiones: marca cada casilla al completarla e incluye el cambio
 del plan en el mismo commit.
 
-**Siguiente paso:** 2.9 Go Ball (Unity 3.4): triaje, extracción y enfoque hechos (ver 2.9).
-Port nativo y web, README y ficha hechos; falta anotar los pendientes.
-Reutilizar lo que sirva de `crates/unity`. Seguir la plantilla con el paso 6 ampliado. La fase 4 (publicar las
+**Siguiente paso:** 2.10 Neuro Battle (Unity 5.1 WebGL con IL2CPP, sin DLL de C#): el `.data`
+ya se desempaqueta con `tools/unity_assets.py emscripten`; falta recuperar tipos, métodos y
+textos de los metadatos IL2CPP (`global-metadata.dat`, con Il2CppDumper o similar), extraer
+escenas y sprites con un `games/neuro-battle/tools/extraer.py` (el de One Button Prototype es
+el modelo para Unity 5.1) y probar si el WebGL original corre en un navegador actual para
+observarlo con REA. Reutilizar lo que sirva de `crates/unity`. Seguir la plantilla con el paso
+6 ampliado. La fase 4 (publicar las
 versiones web en itch.io) espera la confirmación del dueño de la cuenta: 4.1 y 4.2 se pueden
 preparar en cuanto la dé. El 0.7 (GitHub Pages) queda pendiente de decidir si se publica.
 
@@ -76,7 +80,8 @@ Herramientas de extracción por stack (checkpoint 0.8; las salidas van a `origin
   campos de los MonoBehaviour (en los builds de Unity 5 sin type trees, con el MonoScript
   resuelto a mano). AssetRipper no hizo falta. Para un port, el `tools/extraer.py` del juego
   escribe el `escena.json` que lee `crates/unity`: el de Super Happy Jump es el modelo para un
-  bundle de Unity 4 y el de One Button Prototype para un build de Unity 5 con varias escenas.
+  bundle de Unity 4, el de One Button Prototype para un build de Unity 5 con varias escenas y el
+  de Go Ball para un juego 3D de Unity 3.4 (mallas, materiales, GUISkin y terreno).
 - Construct 2: `python3 -I tools/c2_eventos.py resumen|eventos|fuente <carpeta html5>` (proyecto,
   tipos, layouts, tabla de referencias del runtime minificado y hojas de eventos en pseudocódigo).
 - Android: `~/.local/opt/jadx/bin/jadx -d <salida> <apk>` y
@@ -133,7 +138,7 @@ cada juego en la fase 2).
 | Proyecto Nutria | `Proyecto_Nutria.rar` (1,5 MB) | XNA 3.1, XNB v4 | ✅ hecho | sin audio en el original; ver pendientes en 2.1 |
 | IMAN | `IMAN_(Prototipo).rar` | XNA 3.1 | ✅ hecho | ver pendientes de IMAN |
 | The Electric Eel Attack | `The_Electric_Eel_Attack.zip` (7 MB) | XNA 3.1 + `Engine.dll` propio | ✅ hecho | ver pendientes en 2.2 |
-| Go Ball | 3 zips (Win32, Win64, macOS) | Unity 3.4.0f5, Mono, con `.mdb` | triaje y extracción hechos (2.9, `games/go-ball/tools/extraer.py`) | 3D + física PhysX (una esfera contra `MeshCollider`); UnityPy lee texturas, mallas, audio y campos de MonoBehaviour (los PPtr salen con los bytes invertidos) |
+| Go Ball | 3 zips (Win32, Win64, macOS) | Unity 3.4.0f5, Mono, con `.mdb` | ✅ hecho | ver pendientes en 2.9 |
 | The Meaning of Christmas | APK (7,8 MB) | Java + libGDX 0.9.2 | ✅ hecho | ver pendientes en 2.8 |
 | Fast Car Racer | — | Android (`cl.gioco.fcr`) | — | **sin binario**: itch.io solo enlaza a Google Play |
 | Super Happy Jump | `web.unity3d` (385 KB) | Unity 4.6.0f3, Web Player | ✅ hecho | ver pendientes en 2.6 |
@@ -303,7 +308,7 @@ Orden sugerido: primero lo que reutiliza herramientas ya hechas y luego lo más 
   cambios temporales (un jugador automático y el dinero cerca del tope); faltan las herramientas
   JADX de REA (`REA_JADX_MCP_JAR`).
 
-### 2.9 Go Ball (Unity 3.4)
+### 2.9 Go Ball (Unity 3.4) ✅
 - [x] Triaje REA + ILSpy de `Assembly-CSharp.dll` y `Assembly-UnityScript.dll` (con sus `.mdb`),
   del build de Windows de 32 bits extraído en `originales/go-ball/win32` (sin el `.exe` ni el
   `.pdb`):
@@ -411,7 +416,18 @@ Orden sugerido: primero lo que reutiliza herramientas ya hechas y luego lo más 
 - [x] README del juego + ficha del museo, con capturas en `games/go-ball/docs`. «Cómo se hizo»
   cuenta el triaje con sus Evidence, la extracción, cada pieza del motor y su comparación con
   las capturas de itch.io.
-- [ ] Pendientes anotados.
+- [x] Pendientes anotados: `import-managed-reconstruction` no se hizo (como en 2.7, REA pide la
+  Evidence de miembros entera en la llamada, unos 250 KB por las referencias de todo el
+  ensamblado); lo que hace Unity por dentro (el ambiente sin doblar, la atenuación, el tamaño de
+  los elementos del destello, las fórmulas de las partículas heredadas, el reparto y las ondas
+  del pasto, los estados de estilo sin fondo) se dedujo y se comparó solo con las cinco capturas
+  de itch.io, que no muestran el menú ni las ventanas; la física es un solver propio, no PhysX;
+  los niveles no se jugaron de principio a fin sin ayuda (la meta, el fuego, las sierras y el
+  final del nivel 5 se probaron con la pelota puesta a mano); el sonido no se probó en hardware
+  real y en la web la música del menú espera al primer clic o toque (además, suena muy baja,
+  como en el original); los controles táctiles se probaron solo en emulación de Chromium; el
+  build de macOS (compilado aparte el mismo día) no se revisó en detalle; el eje de mando de
+  «Horizontal» no se portó.
 
 ### 2.10 Neuro Battle (Unity 5.1 WebGL / IL2CPP)
 - [ ] Desempaquetar `Neuro Battle.data` (paquete de archivos de Emscripten) y buscar los metadatos
@@ -463,11 +479,11 @@ los demás la estrenan. Nada se sube sin la confirmación del dueño de la cuent
 - [ ] **4.3** Configurar cada página para jugar en el navegador, desde el panel de itch.io (butler
   no lo hace): tipo HTML, marco del tamaño del juego (640×480 IMAN y The Electric Eel Attack,
   1280×720 Proyecto Nutria, 400×500 Que No Caiga y Retro Penal, 800×450 Da Car, 960×600 Super
-  Happy Jump y One Button Prototype, 320×480 en vertical The Meaning of Christmas), «Mobile
-  friendly» con su orientación y botón de pantalla completa.
+  Happy Jump y One Button Prototype, 1024×600 Go Ball, 320×480 en vertical The Meaning of
+  Christmas), «Mobile friendly» con su orientación y botón de pantalla completa.
 - [ ] **4.4** Publicar uno a uno, con confirmación, los ports ya hechos: Proyecto Nutria, IMAN, The
-  Electric Eel Attack, The Meaning of Christmas, Que No Caiga, Retro Penal, Da Car, Super Happy
-  Jump y One Button Prototype. Probar cada página
+  Electric Eel Attack, Go Ball, The Meaning of Christmas, Que No Caiga, Retro Penal, Da Car,
+  Super Happy Jump y One Button Prototype. Probar cada página
   publicada en escritorio y en móvil (`tools/humo/web.mjs` adaptado a una URL, o a mano).
 - [ ] **4.5** Desde entonces, cada port nuevo se publica al cerrar su checkpoint (paso 8 de la
   plantilla), también con confirmación.

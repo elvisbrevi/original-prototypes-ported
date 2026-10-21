@@ -65,6 +65,8 @@ cajas. Se juega en horizontal; en vertical el juego queda arriba y los controles
 | Botones de arriba a la derecha | Reiniciar, opciones (no hace nada), pantalla completa, salir al menú |
 | «Jugar» / «Salir» | En el menú |
 
+![la ventana de salir](docs/ventana.png)
+
 ## Cómo se hizo
 
 1. **Descarga**: los tres zips de la página de itch.io («Go Ball (Demo) Windows x32», «x64» y
@@ -312,7 +314,9 @@ Se comprobó aparte:
   comparación se hizo con las capturas de itch.io (que no muestran el menú ni las ventanas).
 - Los niveles no se jugaron de principio a fin sin ayuda: la meta, el fuego, las sierras y el
   final del nivel 5 se probaron con la pelota puesta a mano.
-- El sonido no se probó en hardware real (el servidor no tiene tarjeta de sonido).
+- El sonido no se probó en hardware real (el servidor no tiene tarjeta de sonido). En la web, la
+  música del menú no empieza hasta el primer clic o toque: los navegadores no dejan sonar nada
+  antes.
 - Los controles táctiles se probaron solo en emulación de Chromium.
 - El build de macOS no se revisó en detalle: es del mismo día, pero se compiló aparte (sus
   ensamblados y escenas no son idénticos byte a byte a los de Windows).

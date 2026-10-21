@@ -6,12 +6,18 @@
 // dibuja ninguno. Las ventanas se dibujan encima del resto y recortan su contenido; la que tiene el
 // foco (la última en la que se apretó el ratón) se dibuja con el estado "on" de su estilo. Aparte,
 // texto_gui dibuja los GUIText, que pinta el GUILayer de la cámara antes de OnGUI.
+//
+// Para Unity 3.x (Go Ball) hay además: fuentes de mapa de bits (la textura con un rectángulo por
+// carácter), GUI.color (que tiñe fondos y textos y vuelve a blanco en cada OnGUI), GUI.DrawTexture,
+// los tooltips de GUIContent (GUI.tooltip es el del último control bajo el ratón en el Repaint) y,
+// con `respaldo`, que un estado sin fondo use el estado normal entero, como el GUIStyle de Unity 3.
 
 use std::collections::HashMap;
 
 use macroquad::prelude::*;
 
 use crate::datos::{EstadoEstilo, Estilo};
+use crate::datos3d::FuenteMapa;
 use crate::escena::TextoGui;
 
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
@@ -52,6 +58,17 @@ enum Comando {
 
 pub struct Gui {
     fuentes: HashMap<String, FuenteGui>,
+    /// Las fuentes de mapa de bits (Unity 3.x), con su textura.
+    fuentes_mapa: HashMap<String, (Texture2D, FuenteMapa)>,
+    /// GUI.color.
+    pub color: Color,
+    /// GUI.tooltip.
+    pub tooltip: String,
+    /// Un estado sin fondo usa el estado normal (GUIStyle de Unity 3.x).
+    pub respaldo: bool,
+    /// GUIUtility.mouseUsed: el Repaint dibujó un botón con el ratón encima (lo pone en false
+    /// quien lo lee).
+    pub raton_sobre_control: bool,
     texturas: HashMap<String, Texture2D>,
     pub evento: Evento,
     /// Event.mousePosition; None si no hay puntero (un toque que ya terminó).
@@ -76,6 +93,11 @@ impl Gui {
     ) -> Self {
         Self {
             fuentes,
+            fuentes_mapa: HashMap::new(),
+            color: WHITE,
+            tooltip: String::new(),
+            respaldo: false,
+            raton_sobre_control: false,
             texturas,
             evento: Evento::Repaint,
             raton: None,
@@ -103,9 +125,17 @@ impl Gui {
         e
     }
 
+    /// Agrega fuentes de mapa de bits (Unity 3.x) con sus texturas.
+    pub fn con_fuentes_mapa(mut self, fuentes: HashMap<String, (Texture2D, FuenteMapa)>) -> Self {
+        self.fuentes_mapa = fuentes;
+        self
+    }
+
     /// Empieza una llamada a OnGUI para `evento`.
     pub fn empezar(&mut self, evento: Evento) {
         self.evento = evento;
+        self.color = WHITE;
+        self.tooltip.clear();
         self.siguiente_id = 1;
         self.usado = false;
         self.origen = Vec2::ZERO;
@@ -125,6 +155,46 @@ impl Gui {
 
     fn contiene(&self, r: Rect) -> bool {
         self.raton.is_some_and(|m| r.contains(m))
+    }
+
+    /// El estado que se dibuja: el pedido o, con `respaldo`, el normal si el pedido no tiene fondo.
+    fn estado<'a>(&self, estilo: &'a Estilo, pedido: &'a EstadoEstilo) -> &'a EstadoEstilo {
+        if self.respaldo && pedido.fondo.is_none() {
+            &estilo.normal
+        } else {
+            pedido
+        }
+    }
+
+    /// El tooltip de un control con el ratón encima (en el Repaint).
+    fn mirar_tooltip(&mut self, rect: Rect, tooltip: &str) {
+        if self.evento == Evento::Repaint && !tooltip.is_empty() && self.contiene(rect) {
+            self.tooltip = tooltip.to_owned();
+        }
+    }
+
+    /// GUI.DrawTexture(rect, textura): estirada en el rectángulo y teñida con GUI.color.
+    pub fn dibujar_textura(&mut self, rect: Rect, textura: &Texture2D) {
+        if self.evento == Evento::Repaint {
+            let abs = self.absoluto(rect);
+            self.textura(textura, abs, Rect::new(0.0, 0.0, 1.0, 1.0));
+        }
+    }
+
+    /// GUI.Button(rect, new GUIContent(texto, tooltip), estilo).
+    pub fn button_con_tooltip(
+        &mut self,
+        rect: Rect,
+        texto: &str,
+        tooltip: &str,
+        estilo: &Estilo,
+    ) -> bool {
+        let abs = self.absoluto(rect);
+        // GUIStyle.Draw: el tooltip del control con el ratón encima, si no está apretado.
+        if self.caliente != self.siguiente_id || !self.contiene(abs) {
+            self.mirar_tooltip(abs, tooltip);
+        }
+        self.button(rect, texto, estilo)
     }
 
     /// GUI.Label.
@@ -156,6 +226,9 @@ impl Gui {
                 false
             }
             Evento::Repaint => {
+                if self.contiene(abs) {
+                    self.raton_sobre_control = true;
+                }
                 let hover = self.contiene(abs) && (self.caliente == 0 || self.caliente == id);
                 let estado = if hover && self.caliente == id {
                     &estilo.active
@@ -164,6 +237,7 @@ impl Gui {
                 } else {
                     &estilo.normal
                 };
+                let estado = self.estado(estilo, estado);
                 self.dibujar_estilo(abs, texto, estilo, estado);
                 false
             }
@@ -194,6 +268,7 @@ impl Gui {
             } else {
                 &estilo.normal
             };
+            let estado = self.estado(estilo, estado);
             self.dibujar_estilo(rect, titulo, estilo, estado);
         }
         self.origen = rect.point();
@@ -224,6 +299,10 @@ impl Gui {
         let Some(nombre) = estilo.fuente.clone() else {
             return;
         };
+        if let Some((textura, mapa)) = self.fuentes_mapa.get(&nombre).cloned() {
+            self.texto_mapa(rect, texto, estilo, estado, &textura, &mapa);
+            return;
+        }
         let Some(fuente) = self.fuentes.get(&nombre) else {
             return;
         };
@@ -262,12 +341,63 @@ impl Gui {
             x: x.round(),
             y: y.round(),
             color: Color::new(
-                estado.color[0],
-                estado.color[1],
-                estado.color[2],
-                estado.color[3],
+                estado.color[0] * self.color.r,
+                estado.color[1] * self.color.g,
+                estado.color[2] * self.color.b,
+                estado.color[3] * self.color.a,
             ),
         });
+    }
+
+    /// El texto con una fuente de mapa de bits de Unity 3.x: una línea de alto `interlineado`,
+    /// alineada en el área sin el relleno; cada carácter se dibuja en su rectángulo `vert`
+    /// (relativo al borde de arriba de la línea, con y hacia arriba) y avanza su `ancho`.
+    fn texto_mapa(
+        &mut self,
+        rect: Rect,
+        texto: &str,
+        estilo: &Estilo,
+        estado: &EstadoEstilo,
+        textura: &Texture2D,
+        mapa: &FuenteMapa,
+    ) {
+        let caracteres: Vec<_> = texto
+            .chars()
+            .filter_map(|c| mapa.caracteres.get(&(c as u32).to_string()).copied())
+            .collect();
+        let ancho: f32 = caracteres.iter().map(|c| c.ancho * mapa.kerning).sum();
+        let alto = mapa.interlineado;
+        let [izq, der, arr, aba] = estilo.relleno;
+        let area = Rect::new(
+            rect.x + izq,
+            rect.y + arr,
+            rect.w - izq - der,
+            rect.h - arr - aba,
+        );
+        let fx = [0.0, 0.5, 1.0][estilo.alineacion as usize % 3];
+        let fy = [0.0, 0.5, 1.0][estilo.alineacion as usize / 3];
+        let mut x = (area.x + (area.w - ancho) * fx + estilo.desplazamiento[0]).round();
+        let y = (area.y + (area.h - alto) * fy + estilo.desplazamiento[1]).round();
+        let color = Color::new(
+            estado.color[0] * self.color.r,
+            estado.color[1] * self.color.g,
+            estado.color[2] * self.color.b,
+            estado.color[3] * self.color.a,
+        );
+        let guardado = self.color;
+        self.color = color;
+        for c in caracteres {
+            let [vx, vy, vw, vh] = c.vert;
+            let [u, v, uw, vh_uv] = c.uv;
+            if vw != 0.0 && vh != 0.0 {
+                let destino = Rect::new(x + vx, y - vy, vw, -vh);
+                // uv con el origen abajo; la textura (PNG) tiene el origen arriba.
+                let uv = Rect::new(u, 1.0 - (v + vh_uv), uw, vh_uv);
+                self.textura(textura, destino, uv);
+            }
+            x += c.ancho * mapa.kerning;
+        }
+        self.color = guardado;
     }
 
     /// El fondo estirado en el rectángulo, con los bordes sin estirar (nueve partes).
@@ -308,7 +438,7 @@ impl Gui {
             textura: t.clone(),
             destino,
             uv,
-            color: WHITE,
+            color: self.color,
         });
     }
 

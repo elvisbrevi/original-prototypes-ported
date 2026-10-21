@@ -59,7 +59,23 @@ void main() {
 impl Pantalla {
     /// Pantalla virtual de `ancho` x `alto`, escalada con filtro lineal.
     pub fn nueva(ancho: f32, alto: f32) -> Self {
-        let destino = render_target(ancho as u32, alto as u32);
+        Self::con_destino(ancho, alto, render_target(ancho as u32, alto as u32))
+    }
+
+    /// Pantalla virtual con búfer de profundidad, para dibujar en 3D con [`Pantalla::pase`].
+    pub fn nueva_3d(ancho: f32, alto: f32) -> Self {
+        let destino = render_target_ex(
+            ancho as u32,
+            alto as u32,
+            RenderTargetParams {
+                sample_count: 1,
+                depth: true,
+            },
+        );
+        Self::con_destino(ancho, alto, destino)
+    }
+
+    fn con_destino(ancho: f32, alto: f32, destino: RenderTarget) -> Self {
         destino.texture.set_filter(FilterMode::Linear);
         let opaco = load_material(
             ShaderSource::Glsl {
@@ -83,6 +99,12 @@ impl Pantalla {
 
     pub fn textura(&self) -> &Texture2D {
         &self.destino.texture
+    }
+
+    /// El render pass de miniquad de la pantalla virtual (guarda la imagen con la y invertida,
+    /// como todos los render targets de macroquad).
+    pub fn pase(&self) -> macroquad::miniquad::RenderPass {
+        self.destino.render_pass.raw_miniquad_id()
     }
 
     /// Dibuja en la pantalla virtual con `origen` (coordenadas de mundo) en la esquina superior

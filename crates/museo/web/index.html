@@ -52,6 +52,11 @@
                 importObject.env.museo_tactil_visible = function (visible) {
                     window.museo.tactilVisible = visible !== 0;
                 };
+                // miniquad 0.4 no trae glDepthMask (crates/unity lo usa para probar la
+                // profundidad sin escribirla en los objetos transparentes).
+                importObject.env.glDepthMask = function (flag) {
+                    gl.depthMask(flag !== 0);
+                };
                 importObject.env.museo_beta = function () {
                     return window.museo.beta;
                 };

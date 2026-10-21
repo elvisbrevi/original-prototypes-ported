@@ -157,6 +157,21 @@ impl Tactil {
         c.cruceta != Cruceta::Ninguna || !c.botones.is_empty() || c.start.is_some()
     }
 
+    /// Si un punto de la ventana cae sobre un control en pantalla (para que ese toque no cuente
+    /// también como clic en el juego).
+    pub fn en_control(&self, punto: Vec2) -> bool {
+        if !self.activo {
+            return false;
+        }
+        let c = &self.config;
+        let d = Disposicion::calcular(c);
+        (c.cruceta != Cruceta::Ninguna && punto.distance(d.cruceta) < d.radio_cruceta * 1.3)
+            || d.botones[..c.botones.len()]
+                .iter()
+                .any(|b| punto.distance(*b) < d.radio_boton * 1.25)
+            || (c.start.is_some() && d.start.contains(punto))
+    }
+
     /// Lee los toques del frame. Admite varios dedos a la vez (andar y saltar).
     pub fn actualizar(&mut self, pantalla: &Pantalla) -> Pulsados {
         // Un toque que empieza y termina en el mismo frame llega como Ended: cuenta como pulsado.

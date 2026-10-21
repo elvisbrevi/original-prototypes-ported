@@ -18,20 +18,33 @@
 //!
 //! - [`datos3d`], el proyecto extraído (escenas, materiales, mallas, piel, fuentes, terreno).
 //! - [`malla`], las mallas con sus submallas y sus triángulos de colisión.
+//! - [`escena3d`], GameObjects con MeshRenderer, colisionadores, Rigidbody, Light, Camera...
+//! - [`fisica3d`], cuerpos esféricos contra colisionadores estáticos (en lugar de PhysX) y rayos.
+//! - [`particulas3d`], las partículas heredadas (EllipsoidParticleEmitter y compañía).
+//! - [`entrada`], los ejes y botones del InputManager; [`audio3d`], AudioSource con distancia.
+//! - [`render3d`] y [`shaders3d`], el dibujo en el camino Forward con los shaders de Unity 3.4
+//!   reescritos en GLSL.
 
 pub mod animator;
 pub mod audio;
+pub mod audio3d;
 pub mod curvas;
 pub mod datos;
 pub mod datos3d;
+pub mod entrada;
 pub mod escena;
+pub mod escena3d;
 pub mod fisica2d;
+pub mod fisica3d;
 pub mod gui;
 pub mod malla;
 pub mod matematica;
 pub mod particulas;
+pub mod particulas3d;
 pub mod poligonos;
 pub mod render;
+pub mod render3d;
+pub mod shaders3d;
 pub mod tiempo;
 
 /// Random.Range(min, max) de floats: entre los dos (también si min > max), con el azar de

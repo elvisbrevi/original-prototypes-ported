@@ -5,9 +5,9 @@ Plan de trabajo para recrear en Rust + macroquad todos los juegos publicados en
 Está pensado para avanzar en varias sesiones: marca cada casilla al completarla e incluye el cambio
 del plan en el mismo commit.
 
-**Siguiente paso:** 2.9 Go Ball (Unity 3.4): triaje y extracción hechos (ver 2.9). Falta
-cerrar el enfoque 3D propuesto en 2.9 (render con shaders GLSL y física propia de una esfera
-contra triángulos) y portar.
+**Siguiente paso:** 2.9 Go Ball (Unity 3.4): triaje, extracción y enfoque hechos (ver 2.9).
+Falta cerrar el port nativo (el terreno del menú, calibrar el destello, pruebas) y seguir con la
+versión web.
 Reutilizar lo que sirva de `crates/unity`. Seguir la plantilla con el paso 6 ampliado. La fase 4 (publicar las
 versiones web en itch.io) espera la confirmación del dueño de la cuenta: 4.1 y 4.2 se pueden
 preparar en cuanto la dé. El 0.7 (GitHub Pages) queda pendiente de decidir si se publica.
@@ -360,7 +360,32 @@ Orden sugerido: primero lo que reutiliza herramientas ya hechas y luego lo más 
     hay animaciones que portar; lo que se mueve lo mueven los scripts e iTween.
   - Las capturas de la página de itch.io (1440×900, «Development Build») sirven de referencia
     visual; no van al repo.
-- [ ] Decidir el enfoque si es 3D (cámara y mallas de macroquad) y la física.
+- [x] Enfoque decidido y probado con los cinco niveles: el de la propuesta, en `crates/unity`.
+  - Render 3D propio con miniquad directamente (`render3d.rs`): búferes estáticos por malla,
+    texturas con mipmaps (Unity guarda las filas de abajo hacia arriba), cubemaps, la vista de
+    Unity (z hacia adelante, invertida como su `worldToCameraMatrix`), las colas 2000, 2450,
+    2901 y 3000, partículas como billboards y el destello de la luz en la pantalla.
+  - Los shaders de Unity 3.4 reescritos en GLSL desde su código ARB del build
+    (`shaders3d.rs`): Diffuse y Bumped Specular (ambiente + luz puntual por píxel con la
+    atenuación de Unity), Tree Soft Occlusion (luz por vértice y oclusión en las tangentes),
+    Cutout Soft Edge Unlit (dos pasadas), la nube (función fija), FX/Diamond (dos pasadas con
+    cubemaps), el skybox y Particles/Alpha Blended.
+  - miniquad 0.4 apaga el depth test cuando un pipeline no escribe profundidad: los
+    transparentes se dibujan con `glDepthMask(false)`, que en la web agrega el `index.html` de
+    `crates/museo` (el `mq_js_bundle.js` no lo trae).
+  - Física propia en lugar de PhysX (`fisica3d.rs`): una esfera contra triángulos de
+    MeshCollider, cajas y esferas, con impulsos secuenciales (6 iteraciones), roce 0,6 del
+    material por defecto, el «skin» de 0,01, la velocidad angular máxima de 7 (la bola no rueda
+    a más de 1,68 m/s), las restricciones y las fuerzas de `AddForce` que esperan al próximo
+    paso (desde `Update`, la aceleración depende de los fps, como en el original); rayos para
+    `OnMouseDown` y para las partículas.
+  - Partículas heredadas (`particulas3d.rs`), InputManager con el suavizado de los ejes
+    (`entrada.rs`), AudioSource con atenuación por distancia (`audio3d.rs`) y la GUI de Unity 3
+    (fuentes de mapa de bits, `GUI.color`, `DrawTexture`, tooltips, estados sin fondo) en
+    `gui.rs`, decompilando de `UnityEngine.dll` 3.4 `SendMouseEvents`, `GUI` y `GUIUtility`.
+  - El juego (`games/go-ball/src`): los siete scripts, iTween `RotateBy` y el frame de Unity
+    3.4. Los niveles se ven como las capturas de itch.io y se juegan (arrastrar cajas, saltar,
+    la meta, el fuego). Falta el terreno del menú.
 - [ ] Port nativo jugable.
 - [ ] Web + táctil.
 - [ ] README del juego + ficha del museo.

@@ -6,8 +6,8 @@ Está pensado para avanzar en varias sesiones: marca cada casilla al completarla
 del plan en el mismo commit.
 
 **Siguiente paso:** 2.9 Go Ball (Unity 3.4): triaje, extracción y enfoque hechos (ver 2.9).
-Port nativo hecho; falta cerrar la versión web con controles táctiles, el README del juego con
-su ficha del museo y los pendientes.
+Port nativo y web hechos; falta el README del juego con su ficha del museo y los
+pendientes.
 Reutilizar lo que sirva de `crates/unity`. Seguir la plantilla con el paso 6 ampliado. La fase 4 (publicar las
 versiones web en itch.io) espera la confirmación del dueño de la cuenta: 4.1 y 4.2 se pueden
 preparar en cuanto la dé. El 0.7 (GitHub Pages) queda pendiente de decidir si se publica.
@@ -403,7 +403,12 @@ Orden sugerido: primero lo que reutiliza herramientas ya hechas y luego lo más 
     (pausa y oscurece) y la vuelta al menú; con un cambio temporal (la bola puesta junto a la
     meta o al peligro): la meta y el paso al nivel siguiente, la muerte en el fuego y en las
     sierras con el reinicio, y el nivel 5 que vuelve al menú.
-- [ ] Web + táctil.
+- [x] Web + táctil: una cruceta horizontal y el botón «A» para saltar (las flechas y la de
+  arriba); fuera de los controles, el dedo hace de ratón (los botones de la GUI y arrastrar las
+  cajas; el primer dedo que empieza fuera de los controles). `humo.json`: el menú, «Jugar», rodar
+  y saltar, la ventana de salir y la vuelta al menú, en nativo y en la web (escritorio, móvil
+  horizontal y vertical). Arrastrar una caja con el dedo se probó aparte con Playwright (toques
+  de CDP en móvil horizontal). El wasm pesa 14 MB.
 - [ ] README del juego + ficha del museo.
 - [ ] Pendientes anotados.
 

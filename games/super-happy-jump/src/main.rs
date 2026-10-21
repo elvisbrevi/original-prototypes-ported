@@ -78,6 +78,8 @@ fn fuentes(proyecto: &Proyecto) -> HashMap<String, FuenteGui> {
 
 #[macroquad::main(window_conf)]
 async fn main() {
+    // Unity siembra Random con la hora al arrancar.
+    rand::srand(miniquad::date::now() as u64);
     let proyecto = Proyecto::leer(include_str!("../assets/escena.json"));
     let texturas: HashMap<String, Texture2D> = texturas!(
         "bach",

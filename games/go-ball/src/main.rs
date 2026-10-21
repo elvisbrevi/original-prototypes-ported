@@ -84,6 +84,8 @@ fn texturas_gui(proyecto: &Proyecto3d) -> HashMap<String, Texture2D> {
 
 #[macroquad::main(window_conf)]
 async fn main() {
+    // Unity siembra Random con la hora al arrancar (las partículas lo usan).
+    rand::srand(miniquad::date::now() as u64);
     let proyecto = Proyecto3d::leer(include_str!("../assets/escena.json"));
     let mallas: HashMap<String, Malla> = recursos::MALLAS
         .iter()

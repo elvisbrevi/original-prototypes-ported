@@ -55,6 +55,8 @@ fn teclas() -> Teclas {
 
 #[macroquad::main(window_conf)]
 async fn main() {
+    // Construct 2 usa Math.random, que cambia en cada partida.
+    rand::srand(miniquad::date::now() as u64);
     // El Touch del juego usa también el ratón: los toques no deben generar clics además.
     simulate_mouse_with_touch(false);
     let proyecto = Proyecto::leer(include_str!("../assets/data.js"), &COMPORTAMIENTOS);

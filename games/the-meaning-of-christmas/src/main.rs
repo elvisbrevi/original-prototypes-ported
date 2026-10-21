@@ -41,6 +41,8 @@ macro_rules! imagen {
 
 #[macroquad::main(window_conf)]
 async fn main() {
+    // libGDX usa java.util.Random, sembrado con la hora.
+    rand::srand(miniquad::date::now() as u64);
     let mut recursos = Recursos {
         titulo: imagen!("titulo"),
         imagen_titulo: imagen!("imagen titulo"),

@@ -588,10 +588,15 @@ Orden sugerido: primero lo que reutiliza herramientas ya hechas y luego lo más 
   los detalles técnicos de cada port: IMAN, Proyecto Nutria, The Electric Eel Attack, Que No Caiga,
   Retro Penal, Da Car, Super Happy Jump, One Button Prototype, The Meaning of Christmas, Go Ball
   y Neuro Battle (paso 6 de la plantilla para los siguientes).
-- [ ] Sembrar el azar con la hora en los ports que lo usan sin sembrarlo (Que No Caiga, Da Car,
-  Super Happy Jump, The Meaning of Christmas y las partículas de `crates/unity` y
-  `crates/construct2`): con la semilla fija de macroquad, cada partida sale igual. Lo hacen IMAN
-  y Neuro Battle.
+- [x] Sembrar el azar con la hora en los ports que lo usan sin sembrarlo (Que No Caiga, Da Car,
+  Super Happy Jump, The Meaning of Christmas y Go Ball, por las partículas de `crates/unity`;
+  Da Car también por las de `crates/construct2`): con la semilla fija de macroquad, cada partida
+  salía igual. Los originales cambiaban en cada partida (`Math.random` en Construct 2, `Random`
+  sembrado con la hora en Unity y en Java). IMAN y Neuro Battle ya lo hacían, y los ports de XNA
+  usan `xna::Random::con_reloj`. Humos nativos y web de los cinco pasan; dos partidas de Super
+  Happy Jump ya tienen los cactus a distinta altura. (Go Ball falló una vez en la web de
+  escritorio: con otra prueba corriendo a la vez, el nivel tardó más de los 5 s del paso y la
+  captura salió negra; repetido solo, pasa.)
 
 ## Fase 4 — Publicación en itch.io
 

@@ -1,0 +1,17 @@
+{
+  "pantalla": [960, 600],
+  "tactil": { "botones": 4 },
+  "pasos": [
+    { "esperar": 2500 },
+    { "captura": "titulo" },
+    { "tecla": "e", "zona": [480, 300], "ms": 30, "despues": 1000 },
+    { "captura": "instrucciones" },
+    { "tecla": "e", "zona": [480, 300], "ms": 30, "despues": 1500 },
+    { "captura": "nivel" },
+    { "tecla": ["w", "d"], "control": ["arriba", "derecha"], "ms": 1200 },
+    { "tecla": "ArrowRight", "control": "boton1", "ms": 500, "despues": 200 },
+    { "captura": "giro" },
+    { "tecla": "e", "control": "start", "ms": 100, "despues": 300 },
+    { "captura": "zoom" }
+  ]
+}

@@ -7,8 +7,8 @@ del plan en el mismo commit.
 
 **Siguiente paso:** 2.10 Neuro Battle (Unity 5.1.1 WebGL con IL2CPP): la lógica ya está
 reconstruida del asm.js (`reference/`), las escenas extraídas, el original observado en
-Chromium y el port nativo jugable; faltan la versión web con controles táctiles, el README con
-sus capturas y los pendientes. Seguir
+Chromium, el port nativo y la versión web con controles táctiles; faltan el README con sus
+capturas y los pendientes. Seguir
 la plantilla con el paso 6 ampliado. La fase 4 (publicar las versiones web en itch.io) espera la
 confirmación del dueño de la cuenta: 4.1 y 4.2 se pueden preparar en cuanto la dé. El 0.7 (GitHub
 Pages) queda pendiente de decidir si se publica.
@@ -554,7 +554,12 @@ Orden sugerido: primero lo que reutiliza herramientas ya hechas y luego lo más 
     disparar con la de ataque unida (la bala la destruye el borde) y soltar la última con Alt.
   - `Application.Quit` (Esc en el título) no hace nada, como en el WebGL, el único build del
     original.
-- [ ] Web + táctil.
+- [x] Web + táctil: una cruceta completa (WASD), cuatro botones (disparar, girar a cada lado y
+  soltar la última neurona) y START para el zoom; en el título, las instrucciones y el game over,
+  tocar la pantalla es la E durante un frame (así en el móvil se ven las instrucciones). El botón
+  derecho del ratón también suelta la neurona («mouse 1» de Fire2). `humo.json`: título,
+  instrucciones, nivel, mover y girar, zoom, en nativo y en la web (escritorio, móvil horizontal y
+  vertical). El wasm pesa 2,5 MB.
 - [ ] README del juego + ficha del museo.
 - [ ] Pendientes anotados.
 

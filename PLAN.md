@@ -5,13 +5,14 @@ Plan de trabajo para recrear en Rust + macroquad todos los juegos publicados en
 Está pensado para avanzar en varias sesiones: marca cada casilla al completarla e incluye el cambio
 del plan en el mismo commit.
 
-**Siguiente paso:** 2.10 Neuro Battle (Unity 5.1 WebGL con IL2CPP, sin DLL de C#): el `.data`
-ya se desempaqueta con `tools/unity_assets.py emscripten`; falta recuperar tipos, métodos y
-textos de los metadatos IL2CPP (`global-metadata.dat`, con Il2CppDumper o similar), extraer
-escenas y sprites con un `games/neuro-battle/tools/extraer.py` (el de One Button Prototype es
-el modelo para Unity 5.1) y probar si el WebGL original corre en un navegador actual para
-observarlo con REA. Reutilizar lo que sirva de `crates/unity`. Seguir la plantilla con el paso
-6 ampliado. La fase 4 (publicar las versiones web en itch.io) espera la confirmación del dueño
+**Siguiente paso:** 2.10 Neuro Battle (Unity 5.1.1 WebGL con IL2CPP, sin DLL de C#): el `.data`
+ya está desempaquetado y los metadatos IL2CPP están ubicados en la memoria inicial del asm.js
+(no hay `global-metadata.dat`); falta leerlos con una herramienta propia (tipos, campos con sus
+offsets, métodos con su función del asm.js, textos) para reconstruir la lógica del asm.js,
+extraer escenas y sprites con un `games/neuro-battle/tools/extraer.py` (el de One Button
+Prototype es el modelo para Unity 5.1) y probar si el WebGL original corre en un navegador
+actual para observarlo con REA. Reutilizar lo que sirva de `crates/unity`. Seguir la plantilla
+con el paso 6 ampliado. La fase 4 (publicar las versiones web en itch.io) espera la confirmación del dueño
 de la cuenta: 4.1 y 4.2 se pueden preparar en cuanto la dé. El 0.7 (GitHub Pages) queda pendiente de decidir si se publica.
 
 ## Reglas
@@ -144,7 +145,7 @@ cada juego en la fase 2).
 | Que No Caiga | HTML5 (39 archivos) | Construct 2 | ✅ hecho | ver pendientes en 2.3 |
 | Retro Penal | HTML5 + NW.js (win/osx/linux) | Construct 2 | ✅ hecho | ver pendientes en 2.4 |
 | One Button Prototype | Mac, Linux, APK y WebGL | Unity 5.1.2f1, Mono | ✅ hecho | ver pendientes en 2.7 |
-| Neuro Battle | `Neuro Battle.zip` (WebGL) | Unity 5.1.1f1, IL2CPP → asm.js | **sin DLL de C#**: metadatos IL2CPP + escenas + observar el juego (REA browser) | el más difícil; el WebGL de 2015 puede no correr en navegadores actuales. El `.data` ya se desempaqueta (`unity_assets.py emscripten`): escenas, sprites y nombres de scripts legibles |
+| Neuro Battle | `Neuro Battle.zip` (WebGL) | Unity 5.1.1f1, IL2CPP → asm.js | **sin DLL de C#**: metadatos IL2CPP + escenas + observar el juego (REA browser) | el más difícil; el WebGL de 2015 puede no correr en navegadores actuales. Sin `global-metadata.dat`: los metadatos están compilados en la memoria inicial del asm.js (ver 2.10) |
 | Da Car | HTML5 (32 archivos) | Construct 2 + Box2D (asm.js) | ✅ hecho | ver pendientes en 2.5 |
 
 ## Fase 2 — Ports
@@ -429,8 +430,46 @@ Orden sugerido: primero lo que reutiliza herramientas ya hechas y luego lo más 
   «Horizontal» no se portó.
 
 ### 2.10 Neuro Battle (Unity 5.1 WebGL / IL2CPP)
-- [ ] Desempaquetar `Neuro Battle.data` (paquete de archivos de Emscripten) y buscar los metadatos
-  IL2CPP (`global-metadata.dat`).
+- [x] Desempaquetar `Neuro Battle.data` (paquete de archivos de Emscripten) y buscar los metadatos
+  IL2CPP (`global-metadata.dat`):
+  - `Neuro Battle.zip` (13,99 MB) es el WebGL del **31-ago-2015** (fechas del zip: el `.data` y
+    el `.js` se escribieron entre las 10:37 y las 10:47). Unity **5.1.1f1**, producto «Neuro»
+    (DefaultCompany), lienzo de 960×600, C# compilado con IL2CPP a un asm.js de Emscripten
+    minificado: `Neuro Battle.js` (24,7 MB), su memoria inicial `Neuro Battle.html.mem` (3,2 MB)
+    y el paquete `Neuro Battle.data` (28,9 MB). REA `inspect-artifact` del zip
+    (`ev_ea8cecdb980921ee8e4cf64d048b4dcea8aee9aae7e8ec8c0943e8595ed99946`) y
+    `analyze-javascript-application` del cargador (`index.html`, `UnityConfig.js`,
+    `fileloader.js` y `UnityProgress.js`, sin red ni almacenamiento propios)
+    (`ev_6d65876e17591498545582fb9368462509ed6a7f5798fd55b1b3c3bca28647d2`).
+  - El `.data` se desempaqueta con `tools/unity_assets.py emscripten` en
+    `originales/neuro-battle/data` (los 12 archivos del `fileloader.js`): las cuatro escenas de
+    `BuildSettings` (`titulo`, `instrucciones`, `level` y `game_over`, en `mainData` y `level0` a
+    `level2`), `sharedassets0` a `3` (el audio en `sharedassets2.resource`) y los recursos
+    integrados. `methods_pointedto_by_uievents.xml` está vacío.
+  - **No hay `global-metadata.dat`** (el WebGL 5.1.2 de One Button Prototype sí lo trae): en
+    5.1.1, IL2CPP todavía compila los metadatos como datos estáticos de C++, que quedan en la
+    memoria inicial del asm.js (`.html.mem`, cargada en la dirección 8, `STATIC_BASE`). Hay una
+    tabla de imágenes (Assembly-CSharp con 16 tipos, Assembly-UnityScript con 4, UnityEngine con
+    226, mscorlib con 791, System, System.Core y Mono.Security; ni uGUI ni Networking, aunque
+    sus MonoScript están en `mainData`); cada tipo es un `TypeInfo` de 0xa8 bytes (nombre,
+    espacio de nombres, lista de métodos, tamaño de instancia, flags); cada método, un
+    `MethodInfo` con su nombre, el índice en la tabla de funciones de su firma, el tipo que lo
+    declara y el de retorno; y cada imagen trae los nombres de sus campos y sus definiciones
+    (nombre, tipo, offset). Il2CppDumper no lee este formato (necesita un
+    `global-metadata.dat`). Las funciones del asm.js y sus tablas están minificadas; las tablas
+    se identifican por los `dynCall_<firma>` que exporta el módulo.
+  - Los scripts: en C#, `BaseMovimiento` y `BaseRotacion` (la neurona del jugador), `Union` y
+    `animacionUnion` (las piezas que se le unen), `disparar` y `bala`, `bordescript`,
+    `muerte_enemigo`, `Aparicion`, `Camera2DFollow` (de los Standard Assets), `titulo`,
+    `intrucciones` y `gameover` (con `OnGUI`), y `PlayerControl` y `matar_neurona`, que ninguna
+    escena ni prefab usa; en UnityScript, `GeneradorVitaminas`, `IA_Enemy` y el enum
+    `EstadoEnemigo`.
+  - Las escenas: `titulo`, `instrucciones` y `game_over` tienen solo la cámara con su script;
+    `level` tiene 96 objetos: la neurona del jugador (`neurona_base` y su `centro`), piezas con
+    `Union`, el borde (`Bordes`, `Lateral` y cuatro `pata` con `bordescript`), 17
+    `GeneradorVitaminas`, el `enemigo` (`IA_Enemy` y `muerte_enemigo`) y la cámara
+    (`Camera2DFollow` y `Aparicion`). Prefabs: `neurona_basica`, `neurona_larga`,
+    `neurona_ataque` (con `disparar`), `neurona_defensa` y `bala`.
 - [ ] Recuperar tipos, métodos y textos (Il2CppDumper o similar) y extraer escenas y assets.
 - [ ] Probar si el WebGL original corre en un navegador actual; si corre, observarlo con REA
   (`capture-browser-scenario`) para cubrir la lógica que no se pueda leer.

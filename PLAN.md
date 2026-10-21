@@ -5,12 +5,11 @@ Plan de trabajo para recrear en Rust + macroquad todos los juegos publicados en
 Está pensado para avanzar en varias sesiones: marca cada casilla al completarla e incluye el cambio
 del plan en el mismo commit.
 
-**Siguiente paso:** los once ports están subidos a itch.io (canal `html5`), pero ninguna página
-los muestra todavía: falta el 4.3, que solo se hace desde el panel de itch.io (Edit game → tipo
-HTML, marcar el archivo `html5` como «played in the browser», el tamaño del marco, «Mobile
-friendly» y pantalla completa), y después probar cada página en escritorio y en móvil. Que No
-Caiga, Retro Penal y Da Car siguen mostrando su HTML5 viejo hasta que se cambie. El 0.7 se
-descartó.
+**Siguiente paso:** el museo está completo: once ports jugables en PC y en el navegador, y
+publicados en su página de itch.io (Fast Car Racer se omitió por falta de binario; GitHub Pages se
+descartó). Lo que queda son los pendientes de cada juego (sobre todo probar sonido y controles
+táctiles en dispositivos reales) y, si se hace un port nuevo, publicarlo con
+`tools/publicar_itch.sh` al cerrarlo (4.5).
 
 ## Reglas
 
@@ -617,7 +616,8 @@ los demás la estrenan. Nada se sube sin la confirmación del dueño de la cuent
 - [x] **4.2** Lo que ya había en cada página: el dueño pidió publicar sin más decisiones, así que
   las descargas originales y las versiones web viejas quedan como estaban; el port se agrega como
   un archivo más (canal `html5`).
-- [ ] **4.3** Configurar cada página para jugar en el navegador, desde el panel de itch.io (butler
+- [x] **4.3** (Hecho por el dueño el 21-oct-2026; las once páginas cargan el port publicado y
+  arrancan sin errores en Chromium.) Configurar cada página para jugar en el navegador, desde el panel de itch.io (butler
   no lo hace): tipo HTML, marco del tamaño del juego (640×480 IMAN y The Electric Eel Attack,
   1280×720 Proyecto Nutria, 400×500 Que No Caiga y Retro Penal, 800×450 Da Car, 960×600 Super
   Happy Jump, One Button Prototype y Neuro Battle, 1024×600 Go Ball, 320×480 en vertical The

@@ -1,0 +1,12 @@
+[package]
+name = "neuro-battle"
+version = "0.1.0"
+edition = "2024"
+
+[package.metadata.museo]
+titulo = "Neuro Battle"
+
+[dependencies]
+macroquad = { version = "0.4", features = ["audio"] }
+museo = { path = "../../crates/museo" }
+unity = { path = "../../crates/unity" }

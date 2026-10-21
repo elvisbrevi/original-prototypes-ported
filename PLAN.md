@@ -5,15 +5,14 @@ Plan de trabajo para recrear en Rust + macroquad todos los juegos publicados en
 Está pensado para avanzar en varias sesiones: marca cada casilla al completarla e incluye el cambio
 del plan en el mismo commit.
 
-**Siguiente paso:** 2.10 Neuro Battle (Unity 5.1.1 WebGL con IL2CPP, sin DLL de C#): el `.data`
-ya está desempaquetado y los metadatos IL2CPP están ubicados en la memoria inicial del asm.js
-(no hay `global-metadata.dat`); falta leerlos con una herramienta propia (tipos, campos con sus
-offsets, métodos con su función del asm.js, textos) para reconstruir la lógica del asm.js,
-extraer escenas y sprites con un `games/neuro-battle/tools/extraer.py` (el de One Button
-Prototype es el modelo para Unity 5.1) y probar si el WebGL original corre en un navegador
-actual para observarlo con REA. Reutilizar lo que sirva de `crates/unity`. Seguir la plantilla
-con el paso 6 ampliado. La fase 4 (publicar las versiones web en itch.io) espera la confirmación del dueño
-de la cuenta: 4.1 y 4.2 se pueden preparar en cuanto la dé. El 0.7 (GitHub Pages) queda pendiente de decidir si se publica.
+**Siguiente paso:** 2.10 Neuro Battle (Unity 5.1.1 WebGL con IL2CPP): la lógica ya está
+reconstruida del asm.js (`reference/`) y las escenas extraídas (`assets/escena.json`); falta
+probar si el WebGL original corre en un navegador actual y, si corre, observarlo con REA
+(`capture-browser-scenario`), sobre todo para ver si dos patas *kinematic* se unen, y después el
+port nativo con `crates/unity` (física 2D, Animator, la GUI con `DrawTexture` y `Label`). Seguir
+la plantilla con el paso 6 ampliado. La fase 4 (publicar las versiones web en itch.io) espera la
+confirmación del dueño de la cuenta: 4.1 y 4.2 se pueden preparar en cuanto la dé. El 0.7 (GitHub
+Pages) queda pendiente de decidir si se publica.
 
 ## Reglas
 
@@ -82,6 +81,11 @@ Herramientas de extracción por stack (checkpoint 0.8; las salidas van a `origin
   escribe el `escena.json` que lee `crates/unity`: el de Super Happy Jump es el modelo para un
   bundle de Unity 4, el de One Button Prototype para un build de Unity 5 con varias escenas y el
   de Go Ball para un juego 3D de Unity 3.4 (mallas, materiales, GUISkin y terreno).
+- Unity 5.1.1 WebGL con IL2CPP (sin `global-metadata.dat`): `python3 -I
+  games/neuro-battle/tools/il2cpp.py <carpeta Release> <salida>` lee los metadatos compilados en
+  la memoria inicial del asm.js y vuelca tipos, campos, métodos y el asm.js anotado de cada
+  método; el `tools/extraer.py` de Neuro Battle compila con ellos unos ensamblados *stub* para
+  leer los MonoBehaviour.
 - Construct 2: `python3 -I tools/c2_eventos.py resumen|eventos|fuente <carpeta html5>` (proyecto,
   tipos, layouts, tabla de referencias del runtime minificado y hojas de eventos en pseudocódigo).
 - Android: `~/.local/opt/jadx/bin/jadx -d <salida> <apk>` y
@@ -470,7 +474,40 @@ Orden sugerido: primero lo que reutiliza herramientas ya hechas y luego lo más 
     `GeneradorVitaminas`, el `enemigo` (`IA_Enemy` y `muerte_enemigo`) y la cámara
     (`Camera2DFollow` y `Aparicion`). Prefabs: `neurona_basica`, `neurona_larga`,
     `neurona_ataque` (con `disparar`), `neurona_defensa` y `bala`.
-- [ ] Recuperar tipos, métodos y textos (Il2CppDumper o similar) y extraer escenas y assets.
+- [x] Recuperar tipos, métodos y textos (Il2CppDumper o similar) y extraer escenas y assets:
+  - `games/neuro-battle/tools/il2cpp.py`, un lector propio de los metadatos compilados: parte del
+    `Il2CppMetadataRegistration` (en 0x294eb0: las ocho asambleas, la tabla de 5166
+    `Il2CppType`, los métodos genéricos y las referencias a métodos que resuelve el código), lee
+    cada imagen (tipos, campos con su tipo, visibilidad y offset, métodos con sus parámetros) y
+    llega del `MethodInfo` a la función del asm.js por la tabla de su firma (`dynCall_<firma>`;
+    los métodos estáticos también reciben un `this` nulo y todos el `MethodInfo*` oculto, casi
+    siempre nulo; un struct se devuelve por un puntero que va primero). Vuelca en
+    `reference/il2cpp` los tipos del juego (`metadatos.txt`), los 85 métodos del motor que
+    llaman (`motor.txt`) y el cuerpo de cada método (`asmjs/<Tipo>.js`) con las llamadas, las
+    referencias a tipos y métodos que se resuelven al primer uso (`DO`/`FO`), las llamadas dentro
+    de un `try` (`invoke_*`) y los literales (objetos `String` estáticos en UTF-16) anotados.
+  - La lógica, reconstruida a mano de ese asm.js en `reference/csharp` (14 scripts y
+    `PlayerControl`, sin uso) y `reference/unityscript` (`GeneradorVitaminas` e `IA_Enemy`). Lo
+    que no se ve en el C#: IL2CPP 5.1.1 no comprueba nulos (en `bala`, restar vida a un borde
+    escribe en la memoria baja y la bala igual se destruye), `Mathf.Round` quedó *inlined* como
+    `roundf` en `IA_Enemy.Seguir`, en UnityScript las llamadas a los métodos propios son
+    virtuales, y el `try`/`catch (UnityException)` de `Aparicion` pasa por `invoke_*`.
+  - `games/neuro-battle/tools/extraer.py` (con UnityPy, como el de One Button Prototype): como no
+    hay ensamblados, escribe con `il2cpp.py` unos *stubs* de C# con los campos de cada script,
+    los compila con el `csc` del SDK de .NET contra el `UnityEngine.dll` 5.1.2 de One Button
+    Prototype y genera con ellos los type trees (TypeTreeGeneratorAPI); los 72 MonoBehaviour se
+    leen enteros. `escena.json`: las cuatro escenas (1, 1, 96 y 1 objetos), los cinco prefabs que
+    instancian los scripts (`neurona_basica`, `_larga`, `_ataque`, `_defensa` y `bala`), 189
+    sprites en 12 texturas recortadas, las tres pantallas de la GUI, 9 clips y 7 controladores,
+    el `GUIStyle` del puntaje, los ejes del InputManager (`Horizontal`, `Vertical`, `Rotacion` y
+    `Fire2`) y la física 2D. Los dos sonidos (AAC en MP4, el formato de Unity 5.1 para WebGL)
+    pasan a Ogg con ffmpeg. La fuente del puntaje, «Light Pixel-7» de Style-7, es «freeware for
+    personal use only» y no se copia.
+  - Para el port: la matriz de capas hace que los muros (capa `Background`) solo choquen con las
+    neuronas (capa `Neurona`) y que las neuronas no choquen entre sí; los generadores clonan el
+    `enemigo` de la escena (no un prefab); las patas de las neuronas son cuerpos *kinematic* con
+    triggers, y unir una neurona depende de que dos de ellas se toquen (en el Box2D estándar dos
+    cuerpos kinematic no generan contactos: hay que ver en el original qué hacía Unity 5.1).
 - [ ] Probar si el WebGL original corre en un navegador actual; si corre, observarlo con REA
   (`capture-browser-scenario`) para cubrir la lógica que no se pueda leer.
 - [ ] Port nativo jugable.

@@ -1,0 +1,171 @@
+// Assembly-CSharp.dll
+class Aparicion  // TypeInfo 0x1384f0, 32 bytes, flags 0x100001
+    +16     public float timerMax
+    +20     private float timer
+    +24     public GameObject[] neuronas
+    +28     private bool zoom
+            public static float contadorTiempo
+    void Aparicion::.ctor()  -> zqg
+    static void Aparicion::.cctor()  -> Aqg
+    void Aparicion::Start()  -> Bqg
+    void Aparicion::Update()  -> Cqg
+
+class BaseMovimiento  // TypeInfo 0x1386c8, 20 bytes, flags 0x100001
+    +16     public float velocidadMovimiento
+    void BaseMovimiento::.ctor()  -> Dqg
+    void BaseMovimiento::Start()  -> Eqg
+    void BaseMovimiento::Update()  -> Fqg
+    void BaseMovimiento::Movimiento()  -> Gqg
+
+class BaseRotacion  // TypeInfo 0x1388b0, 24 bytes, flags 0x100001
+    +16     public float velocidadRotacion
+            public static bool choque
+    +20     private bool upButton
+    void BaseRotacion::.ctor()  -> Hqg
+    static void BaseRotacion::.cctor()  -> Iqg
+    void BaseRotacion::Start()  -> Jqg
+    void BaseRotacion::Update()  -> Kqg
+    void BaseRotacion::Rotacion()  -> Lqg
+
+class UnityStandardAssets._2D.Camera2DFollow  // TypeInfo 0x138ad0, 80 bytes, flags 0x100001
+    +16     public Transform target
+    +20     public float damping
+    +24     public float lookAheadFactor
+    +28     public float lookAheadReturnSpeed
+    +32     public float lookAheadMoveThreshold
+    +36     private float m_OffsetZ
+    +40     private Vector3 m_LastTargetPosition
+    +52     private Vector3 m_CurrentVelocity
+    +64     private Vector3 m_LookAheadPos
+    +76     private float tiempoSalto
+    void Camera2DFollow::.ctor()  -> Nqg
+    void Camera2DFollow::Start()  -> Oqg
+    void Camera2DFollow::Update()  -> Pqg
+
+class PlayerControl  // TypeInfo 0x138c80, 72 bytes, flags 0x100001
+    +16     private bool grounded
+    +17     private bool interact
+    +20     public Transform jumpCheck
+    +24     public Transform interactCheck
+    +28     public float speed
+    +32     private RaycastHit2D interacted
+    +68     private Animator anim
+    void PlayerControl::.ctor()  -> Qqg
+    void PlayerControl::Start()  -> Rqg
+    void PlayerControl::Update()  -> Sqg
+    void PlayerControl::RaycastStuff()  -> Uqg
+    void PlayerControl::Movement()  -> Tqg
+
+class Union  // TypeInfo 0x138eb0, 28 bytes, flags 0x100001
+    +16     public string estado
+    +20     public AudioClip shootSound
+    +24     private AudioSource source
+    void Union::.ctor()  -> Vqg
+    void Union::Awake()  -> Wqg
+    void Union::Start()  -> Xqg
+    void Union::Update()  -> Yqg
+    void Union::desconectar()  -> Mqg
+    void Union::OnTriggerEnter2D(Collider2D other)  -> Zqg
+
+class animacionUnion  // TypeInfo 0x139140, 20 bytes, flags 0x100001
+    +16     private Animator anim
+    void animacionUnion::.ctor()  -> _qg
+    void animacionUnion::Start()  -> $qg
+    void animacionUnion::Update()  -> arg
+
+class bala  // TypeInfo 0x1392d8, 16 bytes, flags 0x100001
+    void bala::.ctor()  -> brg
+    void bala::Start()  -> crg
+    void bala::Update()  -> drg
+    void bala::OnTriggerEnter2D(Collider2D other)  -> erg
+    void bala::OnCollisionEnter2D(Collision2D coll)  -> frg
+
+class bordescript  // TypeInfo 0x139528, 16 bytes, flags 0x100001
+    void bordescript::.ctor()  -> grg
+    void bordescript::Start()  -> hrg
+    void bordescript::Update()  -> irg
+    void bordescript::OnTriggerEnter2D(Collider2D other)  -> jrg
+    void bordescript::OnCollisionEnter2D(Collision2D coll)  -> krg
+
+class disparar  // TypeInfo 0x139768, 44 bytes, flags 0x100001
+    +16     public GameObject bala
+    +20     public Vector3 bulletOffset
+    +32     private bool disparo
+    +33     public bool valido
+    +36     public AudioClip shootSound
+    +40     private AudioSource source
+    void disparar::.ctor()  -> lrg
+    void disparar::Awake()  -> mrg
+    void disparar::Start()  -> nrg
+    void disparar::Update()  -> org
+
+class gameover  // TypeInfo 0x139940, 24 bytes, flags 0x100001
+    +16     public GUIStyle estilo
+    +20     public Texture aTexture
+    void gameover::.ctor()  -> prg
+    void gameover::Start()  -> qrg
+    void gameover::Update()  -> rrg
+    void gameover::OnGUI()  -> srg
+
+class intrucciones  // TypeInfo 0x139b18, 20 bytes, flags 0x100001
+    +16     public Texture aTexture
+    void intrucciones::.ctor()  -> trg
+    void intrucciones::Start()  -> urg
+    void intrucciones::Update()  -> vrg
+    void intrucciones::OnGUI()  -> wrg
+
+class matar_neurona  // TypeInfo 0x139cf0, 16 bytes, flags 0x100001
+    void matar_neurona::.ctor()  -> xrg
+    void matar_neurona::Start()  -> yrg
+    void matar_neurona::Update()  -> zrg
+
+class muerte_enemigo  // TypeInfo 0x139e88, 24 bytes, flags 0x100001
+    +16     public float vida
+    +20     private Animator anim
+    void muerte_enemigo::.ctor()  -> Arg
+    void muerte_enemigo::Start()  -> Brg
+    void muerte_enemigo::Update()  -> Crg
+    void muerte_enemigo::OnTriggerEnter2D(Collider2D other)  -> Drg
+
+class titulo  // TypeInfo 0x13a078, 20 bytes, flags 0x100001
+    +16     public Texture aTexture
+    void titulo::.ctor()  -> Erg
+    void titulo::Start()  -> Frg
+    void titulo::Update()  -> Grg
+    void titulo::OnGUI()  -> Hrg
+
+// Assembly-UnityScript.dll
+class GeneradorVitaminas  // TypeInfo 0x13a550, 28 bytes, flags 0x102001
+    +16     public GameObject[] objetos
+    +20     public int tiempoLanzar
+    +24     private int tiempoLanzarCheck
+    void GeneradorVitaminas::.ctor()  -> Irg
+    void GeneradorVitaminas::Update()  -> Jrg
+    void GeneradorVitaminas::Main()  -> Krg
+
+class EstadoEnemigo  // TypeInfo 0x13a738, 12 bytes, flags 0x2101
+    +8      public int value__
+            public static EstadoEnemigo quieto
+            public static EstadoEnemigo huir
+            public static EstadoEnemigo atacar
+            public static EstadoEnemigo patrullar
+
+class IA_Enemy  // TypeInfo 0x13a7e0, 64 bytes, flags 0x102001
+    +16     public Transform target
+    +20     public Transform waypoint
+    +24     public float velocidadMovimiento_x
+    +28     public float velocidadMovimiento_y
+    +32     public float velocidadHuida
+    +36     public EstadoEnemigo estadoEnemigo
+    +40     public float distanciaTarget
+    +44     public float distanciaWaypoint
+    +48     public float distanciaMuerte
+    +52     public float rangoMovimiento
+    +56     public int tiempoQuieto
+    +60     private int tiempoQuietoCheck
+    void IA_Enemy::.ctor()  -> Lrg
+    void IA_Enemy::Start()  -> Mrg
+    void IA_Enemy::CrearWaypoint()  -> Nrg
+    void IA_Enemy::Seguir(Transform objetivo)  -> Org
+    void IA_Enemy::Update()  -> Prg
+    void IA_Enemy::Main()  -> Qrg

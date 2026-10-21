@@ -19,7 +19,7 @@ compila todo en nativo y en wasm ([GitHub Actions](.github/workflows/build.yml))
 | 2011 | [The Electric Eel Attack](#the-electric-eel-attack) | C# + XNA 3.1 + motor propio (Windows) | ✅ [games/the-electric-eel-attack](games/the-electric-eel-attack) |
 | 2011 | [Go Ball](#go-ball) | Unity 3.4 (C#, Windows y macOS) | ✅ [games/go-ball](games/go-ball) |
 | 2011 | [The Meaning of Christmas](#the-meaning-of-christmas) | Java + libGDX (Android) | ✅ [games/the-meaning-of-christmas](games/the-meaning-of-christmas) |
-| 2013 | [Fast Car Racer](#fast-car-racer) | Android (Google Play) | bloqueado: falta el binario |
+| 2013 | [Fast Car Racer](#fast-car-racer) | Android (Google Play) | no se porta: no hay binario |
 | 2014 | [Super Happy Jump](#super-happy-jump) | Unity 4.6 (Web Player, iOS, Android) | ✅ [games/super-happy-jump](games/super-happy-jump) |
 | 2014–15 | [Que No Caiga](#que-no-caiga) | Construct 2 (HTML5) | ✅ [games/que-no-caiga](games/que-no-caiga) |
 | 2015 | [Retro Penal](#retro-penal) | Construct 2 (HTML5 + NW.js) | ✅ [games/retro-penal](games/retro-penal) |
@@ -126,8 +126,8 @@ confirmar» y se cierran en el triaje de cada juego.
 - **De qué trata:** carreras de autos.
 - **Hecho en 2013** para Android y publicado en Google Play (`cl.gioco.fcr`); motor por confirmar
   (video: 21-ene-2013).
-- **Ahora:** bloqueado: itch.io solo enlaza a Google Play y no hay binario descargable (ver
-  PLAN.md).
+- **Ahora:** no se porta: itch.io solo enlaza a Google Play y no hay binario descargable, y sin
+  él no hay un port fiel (ver PLAN.md).
 - **itch.io:** [elvisbrevi.itch.io/fast-car-racer](https://elvisbrevi.itch.io/fast-car-racer) ·
   [video](https://vimeo.com/57856159)
 

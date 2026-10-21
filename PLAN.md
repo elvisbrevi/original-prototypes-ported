@@ -5,13 +5,11 @@ Plan de trabajo para recrear en Rust + macroquad todos los juegos publicados en
 Está pensado para avanzar en varias sesiones: marca cada casilla al completarla e incluye el cambio
 del plan en el mismo commit.
 
-**Siguiente paso:** con Neuro Battle (2.10) terminado, la fase 2 queda completa salvo Fast Car
-Racer (2.11), bloqueado hasta que el dueño consiga el APK/AAB de Google Play o los archivos del
-proyecto. Lo que se puede hacer sin él: la fase 3 (sembrar el azar con la hora en los ports que
-no lo hacen, probándolos de nuevo con `tools/humo`; revisar fecha, stack, estado y enlace de cada
-ficha del museo). La fase 4 (publicar las versiones web en itch.io) espera la confirmación del
-dueño de la cuenta: 4.1 y 4.2 se pueden preparar en cuanto la dé. El 0.7 (GitHub Pages) queda
-pendiente de decidir si se publica.
+**Siguiente paso:** la fase 2 está terminada (Fast Car Racer, 2.11, se omite: no hay binario).
+Queda la fase 3: sembrar el azar con la hora en los ports que no lo hacen, probándolos de nuevo con
+`tools/humo`, y revisar fecha, stack, estado y enlace de cada ficha del museo. La fase 4 (publicar
+las versiones web en itch.io) espera la confirmación del dueño de la cuenta: 4.1 y 4.2 se pueden
+preparar en cuanto la dé. El 0.7 (GitHub Pages) queda pendiente de decidir si se publica.
 
 ## Reglas
 
@@ -143,7 +141,7 @@ cada juego en la fase 2).
 | The Electric Eel Attack | `The_Electric_Eel_Attack.zip` (7 MB) | XNA 3.1 + `Engine.dll` propio | ✅ hecho | ver pendientes en 2.2 |
 | Go Ball | 3 zips (Win32, Win64, macOS) | Unity 3.4.0f5, Mono, con `.mdb` | ✅ hecho | ver pendientes en 2.9 |
 | The Meaning of Christmas | APK (7,8 MB) | Java + libGDX 0.9.2 | ✅ hecho | ver pendientes en 2.8 |
-| Fast Car Racer | — | Android (`cl.gioco.fcr`) | — | **sin binario**: itch.io solo enlaza a Google Play |
+| Fast Car Racer | — | Android (`cl.gioco.fcr`) | omitido (ver 2.11) | **sin binario**: itch.io solo enlaza a Google Play |
 | Super Happy Jump | `web.unity3d` (385 KB) | Unity 4.6.0f3, Web Player | ✅ hecho | ver pendientes en 2.6 |
 | Que No Caiga | HTML5 (39 archivos) | Construct 2 | ✅ hecho | ver pendientes en 2.3 |
 | Retro Penal | HTML5 + NW.js (win/osx/linux) | Construct 2 | ✅ hecho | ver pendientes en 2.4 |
@@ -573,12 +571,11 @@ Orden sugerido: primero lo que reutiliza herramientas ya hechas y luego lo más 
   los metadatos de IL2CPP compilados de Unity 5.1.1 (los lee `tools/il2cpp.py`) y
   `import-managed-reconstruction` no aplica (no hay ensamblado administrado).
 
-### 2.11 Fast Car Racer (bloqueado)
-- [ ] Conseguir el binario: el APK/AAB subido a Google Play (se puede bajar desde Play Console →
-  *App bundle explorer*) o una copia de los archivos del proyecto. Sin binario no hay RE fiel.
-- [ ] Si no aparece: decidir si se recrea a partir del video de gameplay (y marcarlo como
-  reconstrucción, no port).
-- [ ] Resto de pasos de la plantilla.
+### 2.11 Fast Car Racer (omitido)
+- Omitido por decisión del dueño de la cuenta (21-oct-2026). itch.io solo enlaza a Google Play
+  (`cl.gioco.fcr`) y no hay binario descargable: sin él no hay un port fiel, y no se recrea a
+  partir del video de gameplay. Si aparece el APK/AAB (Play Console → *App bundle explorer*) o
+  los archivos del proyecto, se puede retomar con la plantilla de siempre.
 
 ## Fase 3 — Museo
 

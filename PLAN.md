@@ -579,7 +579,8 @@ Orden sugerido: primero lo que reutiliza herramientas ya hechas y luego lo más 
 
 ## Fase 3 — Museo
 
-- [ ] Capturas de cada port en `games/<slug>/docs/` y en el README del museo.
+- [x] Capturas de cada port en `games/<slug>/docs/` y en el README del museo: los once ports
+  tienen su carpeta `docs/` (de 3 a 8 capturas) y una captura en su ficha.
 - [ ] Versiones web jugables enlazadas desde el README (si se hace el checkpoint 0.7).
 - [ ] Revisar que cada ficha tenga fecha confirmada, stack, descripción, estado del port y enlace a
   itch.io.

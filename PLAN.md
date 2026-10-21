@@ -5,13 +5,13 @@ Plan de trabajo para recrear en Rust + macroquad todos los juegos publicados en
 Está pensado para avanzar en varias sesiones: marca cada casilla al completarla e incluye el cambio
 del plan en el mismo commit.
 
-**Siguiente paso:** 2.10 Neuro Battle (Unity 5.1.1 WebGL con IL2CPP): la lógica ya está
-reconstruida del asm.js (`reference/`), las escenas extraídas, el original observado en
-Chromium, el port nativo y la versión web con controles táctiles; faltan el README con sus
-capturas y los pendientes. Seguir
-la plantilla con el paso 6 ampliado. La fase 4 (publicar las versiones web en itch.io) espera la
-confirmación del dueño de la cuenta: 4.1 y 4.2 se pueden preparar en cuanto la dé. El 0.7 (GitHub
-Pages) queda pendiente de decidir si se publica.
+**Siguiente paso:** con Neuro Battle (2.10) terminado, la fase 2 queda completa salvo Fast Car
+Racer (2.11), bloqueado hasta que el dueño consiga el APK/AAB de Google Play o los archivos del
+proyecto. Lo que se puede hacer sin él: la fase 3 (sembrar el azar con la hora en los ports que
+no lo hacen, probándolos de nuevo con `tools/humo`; revisar fecha, stack, estado y enlace de cada
+ficha del museo). La fase 4 (publicar las versiones web en itch.io) espera la confirmación del
+dueño de la cuenta: 4.1 y 4.2 se pueden preparar en cuanto la dé. El 0.7 (GitHub Pages) queda
+pendiente de decidir si se publica.
 
 ## Reglas
 
@@ -432,7 +432,7 @@ Orden sugerido: primero lo que reutiliza herramientas ya hechas y luego lo más 
   build de macOS (compilado aparte el mismo día) no se revisó en detalle; el eje de mando de
   «Horizontal» no se portó.
 
-### 2.10 Neuro Battle (Unity 5.1 WebGL / IL2CPP)
+### 2.10 Neuro Battle (Unity 5.1 WebGL / IL2CPP) ✅
 - [x] Desempaquetar `Neuro Battle.data` (paquete de archivos de Emscripten) y buscar los metadatos
   IL2CPP (`global-metadata.dat`):
   - `Neuro Battle.zip` (13,99 MB) es el WebGL del **31-ago-2015** (fechas del zip: el `.data` y
@@ -564,7 +564,14 @@ Orden sugerido: primero lo que reutiliza herramientas ya hechas y luego lo más 
   hizo» cuenta el triaje con sus Evidence, la lectura de los metadatos de IL2CPP, la
   reconstrucción, la extracción con los *stubs*, la observación del original y las piezas del
   motor.
-- [ ] Pendientes anotados.
+- [x] Pendientes anotados: el sonido no se probó en hardware real; los controles táctiles se
+  probaron solo en emulación de Chromium; no se jugó una partida larga de principio a fin
+  (disparar y soltar neuronas se probaron con un cambio temporal sin enemigos); lo que hace Unity
+  por dentro y no se pudo observar (el orden de los `Update`, el momento exacto del borrado de lo
+  destruido, si un trigger kinematic toca a un colisionador estático) quedó deducido; la fuente
+  del puntaje es Micro 5 en lugar de «Light Pixel-7» (gratis solo para uso personal); REA no lee
+  los metadatos de IL2CPP compilados de Unity 5.1.1 (los lee `tools/il2cpp.py`) y
+  `import-managed-reconstruction` no aplica (no hay ensamblado administrado).
 
 ### 2.11 Fast Car Racer (bloqueado)
 - [ ] Conseguir el binario: el APK/AAB subido a Google Play (se puede bajar desde Play Console →

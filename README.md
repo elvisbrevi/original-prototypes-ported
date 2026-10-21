@@ -17,7 +17,7 @@ compila todo en nativo y en wasm ([GitHub Actions](.github/workflows/build.yml))
 | 2009 | [Proyecto Nutria](#proyecto-nutria) | C# + XNA 3.1 (Windows) | ✅ [games/proyecto-nutria](games/proyecto-nutria) |
 | 2009 | [IMAN](#iman) | C# + XNA 3.1 (Windows) | ✅ [games/iman](games/iman) |
 | 2011 | [The Electric Eel Attack](#the-electric-eel-attack) | C# + XNA 3.1 + motor propio (Windows) | ✅ [games/the-electric-eel-attack](games/the-electric-eel-attack) |
-| 2011 | [Go Ball](#go-ball) | Unity 3.4 (C# + UnityScript) | pendiente |
+| 2011 | [Go Ball](#go-ball) | Unity 3.4 (C#, Windows y macOS) | ✅ [games/go-ball](games/go-ball) |
 | 2011 | [The Meaning of Christmas](#the-meaning-of-christmas) | Java + libGDX (Android) | ✅ [games/the-meaning-of-christmas](games/the-meaning-of-christmas) |
 | 2013 | [Fast Car Racer](#fast-car-racer) | Android (Google Play) | bloqueado: falta el binario |
 | 2014 | [Super Happy Jump](#super-happy-jump) | Unity 4.6 (Web Player, iOS, Android) | ✅ [games/super-happy-jump](games/super-happy-jump) |
@@ -84,10 +84,21 @@ confirmar» y se cierran en el triaje de cada juego.
 
 ### Go Ball
 
-- **De qué trata:** puzle con una bola, en 5 niveles. Por confirmar en el triaje.
-- **Hecho en 2011** con Unity 3.4.0f5 (scripts en C# y UnityScript): build del 22-sep-2011
-  (teaser: 23-sep-2011), demo para Windows (32 y 64 bits) y macOS.
-- **Ahora:** pendiente de portar.
+![Go Ball](games/go-ball/docs/nivel3.png)
+
+- **De qué trata:** puzle en 3D con una pelota de fútbol que rueda y salta sobre una fila de
+  cajas. Para llegar al diamante del final de cada nivel hay que arrastrar con el ratón algunas
+  cajas hacia arriba o hacia abajo, mientras otras plataformas, nubes y sierras se mueven solas;
+  el fuego y las sierras hacen estallar la pelota. Cinco niveles y un menú en un prado.
+- **Hecho en 2011** con Unity 3.4.0f5 (C#, con iTween), como demo para Windows (32 y 64 bits) y
+  macOS: compilado el 22-sep-2011, según la cabecera de su `Assembly-CSharp.dll` (teaser:
+  23-sep-2011).
+- **Ahora:** ✅ portado a Rust + macroquad en [games/go-ball](games/go-ball): los scripts
+  traducidos del C# decompilado, y el dibujo 3D con los shaders de Unity 3.4 reescritos en GLSL,
+  una física propia para la pelota (en lugar de PhysX), las partículas, la GUI con su piel y sus
+  fuentes, el terreno del menú y el destello de la luz recreados en `crates/unity`, con las
+  mallas, las texturas, los sonidos y las seis escenas de siempre. Se juega con el teclado y el
+  ratón, o en el móvil con una cruceta y arrastrando las cajas con el dedo.
 - **itch.io:** [elvisbrevi.itch.io/go-ball](https://elvisbrevi.itch.io/go-ball) ·
   [teaser](https://vimeo.com/29466492)
 
@@ -223,9 +234,12 @@ crates/xna/          equivalentes de XNA 3.1 (Rectangle, Clamp, SpriteBatch.Draw
 crates/construct2/   runtime de Construct 2: data.js, Sprite, Text, Audio, comportamientos, colisiones
 crates/box2d/        Box2D 2.3.1 en Rust (el del comportamiento Physics de Construct 2 y la física
                      2D de Unity), comparado bit a bit con el C++ original (crates/box2d/comparar)
-crates/unity/        piezas de Unity 4.x y 5.x: escena.json, Time, GameObjects, física 2D (con
-                     colisionadores poligonales e interpolación), Animator (con blend trees),
-                     partículas (Shuriken), cámara y orden de dibujo, IMGUI, GUIText y AudioSource
+crates/unity/        piezas de Unity: de 4.x y 5.x, escena.json, Time, GameObjects, física 2D
+                     (con colisionadores poligonales e interpolación), Animator (con blend trees),
+                     partículas (Shuriken), cámara y orden de dibujo, IMGUI, GUIText y AudioSource;
+                     de 3.x en 3D, el dibujo Forward con sus shaders en GLSL, la física de una
+                     esfera contra triángulos, las partículas heredadas, el InputManager, el audio
+                     3D, las fuentes de mapa de bits y el terreno
 originales/          binarios originales (fuera de git) y catalogo.json con sus sha256
 tools/originales.py  inventario y descarga de los originales desde itch.io
 tools/build_web.sh   versión web de un juego en dist/<slug> a partir de la plantilla
@@ -240,7 +254,7 @@ PLAN.md              plan por fases con checkpoints
 ## Jugar
 
 ```sh
-cargo run --release -p iman            # PC (o proyecto-nutria, the-electric-eel-attack, the-meaning-of-christmas, que-no-caiga, retro-penal, da-car, super-happy-jump, one-button-prototype)
+cargo run --release -p iman            # PC (o proyecto-nutria, the-electric-eel-attack, go-ball, the-meaning-of-christmas, que-no-caiga, retro-penal, da-car, super-happy-jump, one-button-prototype)
 tools/build_web.sh iman                # web: sirve dist/iman con cualquier servidor estático
 ```
 

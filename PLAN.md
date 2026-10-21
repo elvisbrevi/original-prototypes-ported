@@ -6,8 +6,7 @@ Está pensado para avanzar en varias sesiones: marca cada casilla al completarla
 del plan en el mismo commit.
 
 **Siguiente paso:** 2.9 Go Ball (Unity 3.4): triaje, extracción y enfoque hechos (ver 2.9).
-Port nativo y web hechos; falta el README del juego con su ficha del museo y los
-pendientes.
+Port nativo y web, README y ficha hechos; falta anotar los pendientes.
 Reutilizar lo que sirva de `crates/unity`. Seguir la plantilla con el paso 6 ampliado. La fase 4 (publicar las
 versiones web en itch.io) espera la confirmación del dueño de la cuenta: 4.1 y 4.2 se pueden
 preparar en cuanto la dé. El 0.7 (GitHub Pages) queda pendiente de decidir si se publica.
@@ -409,7 +408,9 @@ Orden sugerido: primero lo que reutiliza herramientas ya hechas y luego lo más 
   y saltar, la ventana de salir y la vuelta al menú, en nativo y en la web (escritorio, móvil
   horizontal y vertical). Arrastrar una caja con el dedo se probó aparte con Playwright (toques
   de CDP en móvil horizontal). El wasm pesa 14 MB.
-- [ ] README del juego + ficha del museo.
+- [x] README del juego + ficha del museo, con capturas en `games/go-ball/docs`. «Cómo se hizo»
+  cuenta el triaje con sus Evidence, la extracción, cada pieza del motor y su comparación con
+  las capturas de itch.io.
 - [ ] Pendientes anotados.
 
 ### 2.10 Neuro Battle (Unity 5.1 WebGL / IL2CPP)
@@ -439,8 +440,8 @@ Orden sugerido: primero lo que reutiliza herramientas ya hechas y luego lo más 
 - [x] README de los juegos y fichas del museo con un mismo enfoque: qué juego es, con qué y cuándo
   se hizo y que ahora está portado, sin separar «original» y «port». «Cómo se hizo» ampliado con
   los detalles técnicos de cada port: IMAN, Proyecto Nutria, The Electric Eel Attack, Que No Caiga,
-  Retro Penal, Da Car, Super Happy Jump, One Button Prototype y The Meaning of Christmas (paso 6
-  de la plantilla para los siguientes).
+  Retro Penal, Da Car, Super Happy Jump, One Button Prototype, The Meaning of Christmas y Go Ball
+  (paso 6 de la plantilla para los siguientes).
 
 ## Fase 4 — Publicación en itch.io
 

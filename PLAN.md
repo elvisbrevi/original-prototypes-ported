@@ -5,10 +5,9 @@ Plan de trabajo para recrear en Rust + macroquad todos los juegos publicados en
 Está pensado para avanzar en varias sesiones: marca cada casilla al completarla e incluye el cambio
 del plan en el mismo commit.
 
-**Siguiente paso:** 2.9 Go Ball (Unity 3.4): el triaje está hecho (ver 2.9). Falta escribir
-`games/go-ball/tools/extraer.py` (el de One Button Prototype es el modelo; Unity 3.4 trae las
-seis escenas en `mainData` y `level0..4`), extraer mallas, texturas, materiales, luces,
-animaciones heredadas y partículas, y decidir el enfoque 3D propuesto en 2.9 antes de portar.
+**Siguiente paso:** 2.9 Go Ball (Unity 3.4): triaje y extracción hechos (ver 2.9). Falta
+cerrar el enfoque 3D propuesto en 2.9 (render con shaders GLSL y física propia de una esfera
+contra triángulos) y portar.
 Reutilizar lo que sirva de `crates/unity`. Seguir la plantilla con el paso 6 ampliado. La fase 4 (publicar las
 versiones web en itch.io) espera la confirmación del dueño de la cuenta: 4.1 y 4.2 se pueden
 preparar en cuanto la dé. El 0.7 (GitHub Pages) queda pendiente de decidir si se publica.
@@ -135,7 +134,7 @@ cada juego en la fase 2).
 | Proyecto Nutria | `Proyecto_Nutria.rar` (1,5 MB) | XNA 3.1, XNB v4 | ✅ hecho | sin audio en el original; ver pendientes en 2.1 |
 | IMAN | `IMAN_(Prototipo).rar` | XNA 3.1 | ✅ hecho | ver pendientes de IMAN |
 | The Electric Eel Attack | `The_Electric_Eel_Attack.zip` (7 MB) | XNA 3.1 + `Engine.dll` propio | ✅ hecho | ver pendientes en 2.2 |
-| Go Ball | 3 zips (Win32, Win64, macOS) | Unity 3.4.0f5, Mono, con `.mdb` | triaje hecho (2.9); escenas en `mainData` y `level0..4` con `unity_assets.py` | 3D + física PhysX (una esfera contra `MeshCollider`); UnityPy lee texturas, mallas, audio y campos de MonoBehaviour (los PPtr salen con los bytes invertidos) |
+| Go Ball | 3 zips (Win32, Win64, macOS) | Unity 3.4.0f5, Mono, con `.mdb` | triaje y extracción hechos (2.9, `games/go-ball/tools/extraer.py`) | 3D + física PhysX (una esfera contra `MeshCollider`); UnityPy lee texturas, mallas, audio y campos de MonoBehaviour (los PPtr salen con los bytes invertidos) |
 | The Meaning of Christmas | APK (7,8 MB) | Java + libGDX 0.9.2 | ✅ hecho | ver pendientes en 2.8 |
 | Fast Car Racer | — | Android (`cl.gioco.fcr`) | — | **sin binario**: itch.io solo enlaza a Google Play |
 | Super Happy Jump | `web.unity3d` (385 KB) | Unity 4.6.0f3, Web Player | ✅ hecho | ver pendientes en 2.6 |
@@ -341,7 +340,26 @@ Orden sugerido: primero lo que reutiliza herramientas ya hechas y luego lo más 
     integrados que usen los materiales, y para la física, un solver propio de una esfera contra
     triángulos (con el roce, el rebote y el límite de velocidad angular de PhysX documentados)
     en vez de un motor 3D completo, porque PhysX no se puede traducir.
-- [ ] Escenas `level0..4`: comprobar qué herramienta lee Unity 3.4; extraer mallas y texturas.
+- [x] Escenas y assets con UnityPy en `games/go-ball/tools/extraer.py` → `assets/`:
+  - UnityPy lee Unity 3.4: las clases del motor traen type trees; los MonoBehaviour comparten
+    uno sin los campos del script, que se generan con TypeTreeGeneratorAPI desde `Managed/`. La
+    `GUISkin` y el `Terrain` son MonoBehaviour de `UnityEngine.dll` con el formato nativo de
+    3.4 y se leen a mano (20 estilos fijos y 7 propios; los campos del terreno).
+  - `escena.json`: las seis escenas (8, 36, 36, 62, 64 y 66 objetos) con su jerarquía, los
+    componentes 3D (MeshRenderer, MeshCollider, BoxCollider, SphereCollider, Rigidbody, Light,
+    Camera, AudioSource, GUITexture, las partículas heredadas y los campos de los scripts), los
+    `RenderSettings` de cada escena, los 44 materiales con su shader, la piel (los estilos que
+    usan los scripts), tres fuentes de mapa de bits (solo ASCII y Latin-1), el destello «85mm
+    Lens», el terreno del menú (alturas en 8 bits, mezcla y los 45 parches de pasto; sin
+    árboles) y los ajustes (tiempo, física, calidad «Fantastic», ejes del InputManager).
+  - 25 mallas en `mallas/*.bin` (Unity 3.4 guarda las submallas como tiras: se separan en
+    triángulos, con los de colisión aparte), 58 texturas (DXT1/DXT5 decodificadas, Alpha8 de
+    las fuentes a blanco con alfa) y las seis caras de los dos cubemaps del diamante, y los seis
+    clips (OGG y un WAV) con su duración. `src/recursos.rs` los embebe.
+  - Las 29 `Animation` están vacías (sin clips: las dejan los modelos importados), así que no
+    hay animaciones que portar; lo que se mueve lo mueven los scripts e iTween.
+  - Las capturas de la página de itch.io (1440×900, «Development Build») sirven de referencia
+    visual; no van al repo.
 - [ ] Decidir el enfoque si es 3D (cámara y mallas de macroquad) y la física.
 - [ ] Port nativo jugable.
 - [ ] Web + táctil.

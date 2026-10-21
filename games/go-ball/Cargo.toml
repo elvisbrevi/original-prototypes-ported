@@ -1,0 +1,12 @@
+[package]
+name = "go-ball"
+version = "0.1.0"
+edition = "2024"
+
+[package.metadata.museo]
+titulo = "Go Ball"
+
+[dependencies]
+macroquad = { version = "0.4", features = ["audio"] }
+museo = { path = "../../crates/museo" }
+unity = { path = "../../crates/unity" }

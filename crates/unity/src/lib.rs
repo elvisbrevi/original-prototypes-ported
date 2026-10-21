@@ -13,14 +13,21 @@
 //! - [`gui`], IMGUI (`OnGUI`, `GUIStyle`, `GUI.Label`, `GUI.Button`, `GUI.Window`) y GUIText.
 //! - [`matematica`], `Mathf` y `Vector3` (SmoothDamp, MoveTowards).
 //! - [`audio`], AudioSource.
+//!
+//! Y las de los juegos 3D de Unity 3.x:
+//!
+//! - [`datos3d`], el proyecto extraído (escenas, materiales, mallas, piel, fuentes, terreno).
+//! - [`malla`], las mallas con sus submallas y sus triángulos de colisión.
 
 pub mod animator;
 pub mod audio;
 pub mod curvas;
 pub mod datos;
+pub mod datos3d;
 pub mod escena;
 pub mod fisica2d;
 pub mod gui;
+pub mod malla;
 pub mod matematica;
 pub mod particulas;
 pub mod poligonos;

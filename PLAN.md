@@ -6,10 +6,9 @@ Está pensado para avanzar en varias sesiones: marca cada casilla al completarla
 del plan en el mismo commit.
 
 **Siguiente paso:** 2.10 Neuro Battle (Unity 5.1.1 WebGL con IL2CPP): la lógica ya está
-reconstruida del asm.js (`reference/`) y las escenas extraídas (`assets/escena.json`); falta
-probar si el WebGL original corre en un navegador actual y, si corre, observarlo con REA
-(`capture-browser-scenario`), sobre todo para ver si dos patas *kinematic* se unen, y después el
-port nativo con `crates/unity` (física 2D, Animator, la GUI con `DrawTexture` y `Label`). Seguir
+reconstruida del asm.js (`reference/`), las escenas extraídas (`assets/escena.json`) y el
+original observado en Chromium; falta el port nativo con `crates/unity` (física 2D con contactos
+entre triggers kinematic, Animator, la GUI con `DrawTexture` y `Label`). Seguir
 la plantilla con el paso 6 ampliado. La fase 4 (publicar las versiones web en itch.io) espera la
 confirmación del dueño de la cuenta: 4.1 y 4.2 se pueden preparar en cuanto la dé. El 0.7 (GitHub
 Pages) queda pendiente de decidir si se publica.
@@ -508,8 +507,24 @@ Orden sugerido: primero lo que reutiliza herramientas ya hechas y luego lo más 
     `enemigo` de la escena (no un prefab); las patas de las neuronas son cuerpos *kinematic* con
     triggers, y unir una neurona depende de que dos de ellas se toquen (en el Box2D estándar dos
     cuerpos kinematic no generan contactos: hay que ver en el original qué hacía Unity 5.1).
-- [ ] Probar si el WebGL original corre en un navegador actual; si corre, observarlo con REA
-  (`capture-browser-scenario`) para cubrir la lógica que no se pueda leer.
+- [x] Probar si el WebGL original corre en un navegador actual; si corre, observarlo con REA
+  (`capture-browser-scenario`) para cubrir la lógica que no se pueda leer:
+  - **Corre** en el Chromium 1248 de Playwright (sin interfaz, WebGL 1.0 con SwiftShader), servido
+    en local con `python3 -I -m http.server`: tarda unos 15 s en cargar, muestra «made with
+    unity, Personal Edition» y luego el título. No hace falta el `.htaccess` (se sirve `Release/`
+    sin comprimir).
+  - REA `capture-browser-scenario` (consola, errores y una captura por paso)
+    (`ev_7e177af039fd0bb53b0ee21cea32633a6af97b34c31d1baa5250f791d35024f0`): título, «E» →
+    instrucciones, «E» → nivel y, sin tocar nada, «game over» a los 5,7 s con «TU PUNTAJE FUE DE
+    5 SEGUNDOS». Justo al morir salen 34 `NullReferenceException`: las 34 copias del enemigo
+    (17 generadores, dos tandas: al entrar y 5 s después) leen el `target` ya destruido en el
+    frame anterior a que cargue `game_over`.
+  - Con Playwright (teclas mantenidas, que REA no permite): la neurona se mueve con WASD; al
+    cruzar una pieza libre, la pieza se une y desde entonces se mueve y gira con ella (flechas).
+    O sea que en el Box2D de Unity 5.1 **dos triggers de cuerpos kinematic sí generan
+    contactos** (el Box2D estándar no los crea; Unity 5.5 agregó `useFullKinematicContacts`
+    para los sólidos): el port tiene que permitirlo. Si la «E» de «PLAY» sigue apretada al
+    entrar al nivel, también activa el zoom.
 - [ ] Port nativo jugable.
 - [ ] Web + táctil.
 - [ ] README del juego + ficha del museo.

@@ -11,9 +11,8 @@ textos de los metadatos IL2CPP (`global-metadata.dat`, con Il2CppDumper o simila
 escenas y sprites con un `games/neuro-battle/tools/extraer.py` (el de One Button Prototype es
 el modelo para Unity 5.1) y probar si el WebGL original corre en un navegador actual para
 observarlo con REA. Reutilizar lo que sirva de `crates/unity`. Seguir la plantilla con el paso
-6 ampliado. La fase 4 (publicar las
-versiones web en itch.io) espera la confirmación del dueño de la cuenta: 4.1 y 4.2 se pueden
-preparar en cuanto la dé. El 0.7 (GitHub Pages) queda pendiente de decidir si se publica.
+6 ampliado. La fase 4 (publicar las versiones web en itch.io) espera la confirmación del dueño
+de la cuenta: 4.1 y 4.2 se pueden preparar en cuanto la dé. El 0.7 (GitHub Pages) queda pendiente de decidir si se publica.
 
 ## Reglas
 
@@ -317,8 +316,8 @@ Orden sugerido: primero lo que reutiliza herramientas ya hechas y luego lo más 
     (`ev_f3b10410c604e1409754d98b8d98c4beb49b09d7eb0ab19ef296839fedf7eb78`) e
     `inspect-managed-members` de los seis tipos del juego: 35 métodos y 30 literales
     (`ev_8022ac3d81b5715672524d9edfad7041f0da03cf1ef2468f9c8b827d41080d8f`).
-  - Seis escenas en `BuildSettings`: `menuPrincipal` (en `mainData`, con un terreno con árboles
-    y la bola de adorno) y `nivel1` a `nivel5` (`level0` a `level4`). `PlayerSettings`: «Go
+  - Seis escenas en `BuildSettings`: `menuPrincipal` (en `mainData`, con un terreno con pasto
+    —sus cuatro prototipos de árbol no tienen instancias— y la bola de adorno) y `nivel1` a `nivel5` (`level0` a `level4`). `PlayerSettings`: «Go
     Ball», 1024×600 (640×480 en web). Sin lightmaps.
   - Scripts (unas 600 líneas propias): `Bola` (la bola, un `Rigidbody` con `SphereCollider`:
     `AddForce` horizontal en modo `Acceleration` con el eje «Horizontal» y salto con «Saltar»
@@ -326,7 +325,7 @@ Orden sugerido: primero lo que reutiliza herramientas ya hechas y luego lo más 
     de `limiteMin`/`limiteMax`; «Explosivo1» la empuja), `MoverObjeto` (objetos que se arrastran
     con el ratón en horizontal o vertical, de 0,05 en 0,05, o que van y vienen solos; la rama
     de rotación compara la y con los límites horizontales), `Objetivo` (la meta, que gira con
-    iTween `RotateBy` en *ping-pong*), `Camara` (sigue a la bola; botones de salir, maximizar,
+    iTween `RotateBy` en *ping-pong*), `Camara` (puede seguir a la bola, pero ninguna escena lo activa; botones de salir, maximizar,
     opciones, que no hace nada, y reiniciar, con ventanas que pausan con `timeScale`),
     `Transicion` (fundidos con un `GUITexture` y la carga de niveles), `EmpezarJuego` (el menú) y
     `TimedObjectDestructor` (UnityScript). Además, `iTween` (4640 líneas, de terceros) y

@@ -5,11 +5,12 @@ Plan de trabajo para recrear en Rust + macroquad todos los juegos publicados en
 Está pensado para avanzar en varias sesiones: marca cada casilla al completarla e incluye el cambio
 del plan en el mismo commit.
 
-**Siguiente paso:** las fases 2 y 3 están terminadas (Fast Car Racer, 2.11, se omite: no hay
-binario). Quedan decisiones del dueño de la cuenta: la fase 4 (publicar las versiones web en
-itch.io) espera su confirmación, y 4.1 y 4.2 se pueden preparar en cuanto la dé; el 0.7 (GitHub
-Pages) y, con él, el último punto de la fase 3 (enlazar las versiones web desde el README) quedan
-pendientes de decidir si se publica.
+**Siguiente paso:** los once ports están subidos a itch.io (canal `html5`), pero ninguna página
+los muestra todavía: falta el 4.3, que solo se hace desde el panel de itch.io (Edit game → tipo
+HTML, marcar el archivo `html5` como «played in the browser», el tamaño del marco, «Mobile
+friendly» y pantalla completa), y después probar cada página en escritorio y en móvil. Que No
+Caiga, Retro Penal y Da Car siguen mostrando su HTML5 viejo hasta que se cambie. El 0.7 se
+descartó.
 
 ## Reglas
 
@@ -104,7 +105,7 @@ Herramientas de extracción por stack (checkpoint 0.8; las salidas van a `origin
 - [x] **0.5** Plantilla web común: que `tools/build_web.sh` genere `index.html` (título, nombre del
   wasm, plugin táctil) en vez de copiar `games/<slug>/web/`.
 - [x] **0.6** GitHub Actions: build nativo + wasm de todo el workspace en cada push.
-- [ ] **0.7** (Opcional) GitHub Pages con todas las versiones web, enlazadas desde el README del museo.
+- [ ] **0.7** (Descartado por el dueño, 21-oct-2026) GitHub Pages con todas las versiones web, enlazadas desde el README del museo.
 - [x] **0.8** Herramientas de extracción por stack: UnityPy/AssetRipper (Unity 4/5 y Unity Web
   Player), lector de `data.js` de Construct 2, apktool/JADX (Android).
 - [x] **0.9** Test de humo web reutilizable (Playwright: móvil horizontal/vertical y escritorio) en
@@ -581,7 +582,7 @@ Orden sugerido: primero lo que reutiliza herramientas ya hechas y luego lo más 
 
 - [x] Capturas de cada port en `games/<slug>/docs/` y en el README del museo: los once ports
   tienen su carpeta `docs/` (de 3 a 8 capturas) y una captura en su ficha.
-- [ ] Versiones web jugables enlazadas desde el README (si se hace el checkpoint 0.7).
+- [ ] Versiones web jugables enlazadas desde el README (descartado con el 0.7).
 - [x] Revisar que cada ficha tenga fecha confirmada, stack, descripción, estado del port y enlace a
   itch.io: las doce la tienen. Dos datos no se pueden confirmar con los archivos y la ficha lo
   dice: cuándo se empezó Que No Caiga (exportado el 23-jul-2015 y con página de itch.io de esas
@@ -609,22 +610,20 @@ versión web (Que No Caiga, Retro Penal y Da Car en HTML5; One Button Prototype 
 WebGL; Super Happy Jump en el Unity Web Player, que ya no corre) la reemplazan por la del port, y
 los demás la estrenan. Nada se sube sin la confirmación del dueño de la cuenta (regla 4).
 
-- [ ] **4.1** Preparar la publicación: butler (la herramienta de itch.io) con una API key que no
-  entra al repo, y `tools/publicar_itch.sh <slug>`, que compila la web con `tools/build_web.sh` y
-  la sube con `butler push dist/<slug> elvisbrevi/<proyecto>:html5`. Hace falta la tabla de slugs
-  del repo y proyectos de itch.io: casi todos coinciden, pero One Button Prototype es
-  `prototipo-2000`. La prueba de IMÁN 2026 (`elvisbrevi/imn-2026:html5`) ya probó el flujo con
-  IMAN.
-- [ ] **4.2** Decidir con el dueño qué pasa con lo que ya hay en cada página. Las descargas
-  originales (rar, zip, apk), el HTML5 de Construct 2 y los WebGL de Unity: ¿se reemplazan, quedan
-  como descarga o se ocultan? Y el texto de la página: decir que lo que se juega es el port y
-  enlazar a este repo.
+- [x] **4.1** Preparar la publicación: butler 15.32 con la sesión del dueño (sus credenciales no
+  entran al repo) y `tools/publicar_itch.sh <juego>`, que compila la web con `tools/build_web.sh` y
+  la sube con `butler push dist/<juego> elvisbrevi/<proyecto>:html5` (One Button Prototype va a
+  `prototipo-2000`), con la versión del commit.
+- [x] **4.2** Lo que ya había en cada página: el dueño pidió publicar sin más decisiones, así que
+  las descargas originales y las versiones web viejas quedan como estaban; el port se agrega como
+  un archivo más (canal `html5`).
 - [ ] **4.3** Configurar cada página para jugar en el navegador, desde el panel de itch.io (butler
   no lo hace): tipo HTML, marco del tamaño del juego (640×480 IMAN y The Electric Eel Attack,
   1280×720 Proyecto Nutria, 400×500 Que No Caiga y Retro Penal, 800×450 Da Car, 960×600 Super
   Happy Jump, One Button Prototype y Neuro Battle, 1024×600 Go Ball, 320×480 en vertical The
   Meaning of Christmas), «Mobile friendly» con su orientación y botón de pantalla completa.
-- [ ] **4.4** Publicar uno a uno, con confirmación, los ports ya hechos: Proyecto Nutria, IMAN, The
+- [x] **4.4** Subidos el 21-oct-2026, con la confirmación del dueño, los once ports (commit
+  `fc81ec8`; butler los procesó todos). Antes, en el plan: publicar uno a uno los ports ya hechos: Proyecto Nutria, IMAN, The
   Electric Eel Attack, Go Ball, The Meaning of Christmas, Que No Caiga, Retro Penal, Da Car,
   Super Happy Jump, One Button Prototype y Neuro Battle. Probar cada página
   publicada en escritorio y en móvil (`tools/humo/web.mjs` adaptado a una URL, o a mano).

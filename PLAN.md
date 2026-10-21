@@ -5,11 +5,11 @@ Plan de trabajo para recrear en Rust + macroquad todos los juegos publicados en
 Está pensado para avanzar en varias sesiones: marca cada casilla al completarla e incluye el cambio
 del plan en el mismo commit.
 
-**Siguiente paso:** la fase 2 está terminada (Fast Car Racer, 2.11, se omite: no hay binario).
-Queda la fase 3: sembrar el azar con la hora en los ports que no lo hacen, probándolos de nuevo con
-`tools/humo`, y revisar fecha, stack, estado y enlace de cada ficha del museo. La fase 4 (publicar
-las versiones web en itch.io) espera la confirmación del dueño de la cuenta: 4.1 y 4.2 se pueden
-preparar en cuanto la dé. El 0.7 (GitHub Pages) queda pendiente de decidir si se publica.
+**Siguiente paso:** las fases 2 y 3 están terminadas (Fast Car Racer, 2.11, se omite: no hay
+binario). Quedan decisiones del dueño de la cuenta: la fase 4 (publicar las versiones web en
+itch.io) espera su confirmación, y 4.1 y 4.2 se pueden preparar en cuanto la dé; el 0.7 (GitHub
+Pages) y, con él, el último punto de la fase 3 (enlazar las versiones web desde el README) quedan
+pendientes de decidir si se publica.
 
 ## Reglas
 
@@ -582,8 +582,11 @@ Orden sugerido: primero lo que reutiliza herramientas ya hechas y luego lo más 
 - [x] Capturas de cada port en `games/<slug>/docs/` y en el README del museo: los once ports
   tienen su carpeta `docs/` (de 3 a 8 capturas) y una captura en su ficha.
 - [ ] Versiones web jugables enlazadas desde el README (si se hace el checkpoint 0.7).
-- [ ] Revisar que cada ficha tenga fecha confirmada, stack, descripción, estado del port y enlace a
-  itch.io.
+- [x] Revisar que cada ficha tenga fecha confirmada, stack, descripción, estado del port y enlace a
+  itch.io: las doce la tienen. Dos datos no se pueden confirmar con los archivos y la ficha lo
+  dice: cuándo se empezó Que No Caiga (exportado el 23-jul-2015 y con página de itch.io de esas
+  semanas, por su número, pero con la temática del Mundial de 2014) y el motor de Fast Car Racer
+  (sin binario).
 - [x] README de los juegos y fichas del museo con un mismo enfoque: qué juego es, con qué y cuándo
   se hizo y que ahora está portado, sin separar «original» y «port». «Cómo se hizo» ampliado con
   los detalles técnicos de cada port: IMAN, Proyecto Nutria, The Electric Eel Attack, Que No Caiga,

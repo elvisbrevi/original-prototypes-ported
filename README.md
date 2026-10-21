@@ -28,8 +28,8 @@ compila todo en nativo y en wasm ([GitHub Actions](.github/workflows/build.yml))
 | 2015 | [Da Car](#da-car) | Construct 2 (HTML5) | ✅ [games/da-car](games/da-car) |
 
 Las fechas salen de los propios binarios (fecha de compilación, de los archivos o de la exportación)
-y de los videos de gameplay; los datos que todavía son deducciones están marcados como «por
-confirmar» y se cierran en el triaje de cada juego.
+y de los videos de gameplay. Lo que los archivos no permiten confirmar se dice en la ficha: cuándo
+se empezó Que No Caiga y con qué motor se hizo Fast Car Racer.
 
 ---
 
@@ -124,8 +124,8 @@ confirmar» y se cierran en el triaje de cada juego.
 ### Fast Car Racer
 
 - **De qué trata:** carreras de autos.
-- **Hecho en 2013** para Android y publicado en Google Play (`cl.gioco.fcr`); motor por confirmar
-  (video: 21-ene-2013).
+- **Hecho en 2013** para Android y publicado en Google Play (`cl.gioco.fcr`), según el video del
+  21-ene-2013; sin el binario no se sabe con qué motor.
 - **Ahora:** no se porta: itch.io solo enlaza a Google Play y no hay binario descargable, y sin
   él no hay un port fiel (ver PLAN.md).
 - **itch.io:** [elvisbrevi.itch.io/fast-car-racer](https://elvisbrevi.itch.io/fast-car-racer) ·
@@ -153,8 +153,9 @@ confirmar» y se cierran en el triaje de cada juego.
 - **De qué trata:** dominar el balón para que no caiga al suelo: cada toque hace patear al jugador.
   Cuenta los segundos, y con el tiempo llegan más pelotas y bombas que explotan en los pies.
 - **Hecho entre 2014 y 2015** con Construct 2 (una versión de 2015, r20x) para el navegador:
-  exportado el 23-jul-2015, según su `offline.appcache`. Tiene la temática del Mundial de Brasil 2014; la fecha
-  de creación sigue por confirmar.
+  exportado el 23-jul-2015, según su `offline.appcache`; su página de itch.io es de las mismas
+  semanas que las de Retro Penal y One Button Prototype (por el número de la página). Tiene la
+  temática del Mundial de Brasil 2014, pero los archivos no dicen cuándo se empezó.
 - **Ahora:** ✅ portado a Rust + macroquad en [games/que-no-caiga](games/que-no-caiga): las hojas
   de eventos traducidas de su `data.js`, y lo que usa del runtime minificado (Platform,
   animaciones, colisiones) traducido también, con las imágenes, los sonidos y el proyecto de

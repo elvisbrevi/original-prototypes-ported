@@ -24,7 +24,7 @@ compila todo en nativo y en wasm ([GitHub Actions](.github/workflows/build.yml))
 | 2014–15 | [Que No Caiga](#que-no-caiga) | Construct 2 (HTML5) | ✅ [games/que-no-caiga](games/que-no-caiga) |
 | 2015 | [Retro Penal](#retro-penal) | Construct 2 (HTML5 + NW.js) | ✅ [games/retro-penal](games/retro-penal) |
 | 2015 | [One Button Prototype](#one-button-prototype) | Unity 5.1 (Mac, Linux, Android, WebGL) | ✅ [games/one-button-prototype](games/one-button-prototype) |
-| 2015 | [Neuro Battle](#neuro-battle) | Unity 5.1 (WebGL) | pendiente |
+| 2015 | [Neuro Battle](#neuro-battle) | Unity 5.1 (WebGL, IL2CPP) | ✅ [games/neuro-battle](games/neuro-battle) |
 | 2015 | [Da Car](#da-car) | Construct 2 (HTML5) | ✅ [games/da-car](games/da-car) |
 
 Las fechas salen de los propios binarios (fecha de compilación, de los archivos o de la exportación)
@@ -199,10 +199,20 @@ confirmar» y se cierran en el triaje de cada juego.
 
 ### Neuro Battle
 
-- **De qué trata:** shooter hecho en una game jam.
-- **Hecho en 2015** con Unity 5.1.1f1, solo WebGL (C# compilado con IL2CPP), en la GameJam Santo
-  Tomás Concepción 2015 (build WebGL del 31-ago-2015).
-- **Ahora:** pendiente de portar.
+![Neuro Battle](games/neuro-battle/docs/nivel.png)
+
+- **De qué trata:** acción con una neurona que se mueve por un tejido rojo y se une a las neuronas
+  que va tocando (básicas, de cola larga, de defensa y de ataque, que disparan), mientras desde los
+  bordes llegan enemigos: si tocan tu neurona, se acaba; si tocan una unida, mueren los dos. El
+  puntaje son los segundos que aguantaste.
+- **Hecho en 2015** con Unity 5.1.1f1, solo para WebGL (C# compilado con IL2CPP a asm.js), en la
+  GameJam Santo Tomás Concepción 2015 con el equipo «GROUP_5»: el build es del 31-ago-2015.
+- **Ahora:** ✅ portado a Rust + macroquad en [games/neuro-battle](games/neuro-battle): la lógica
+  reconstruida del asm.js con los metadatos de IL2CPP compilados en su memoria (sin ensamblados de
+  C#), comparada con el original corriendo en un Chromium actual, y la física 2D (con la matriz de
+  capas sobre `crates/box2d`), el Animator y la GUI en `crates/unity`, con los gráficos, los
+  sonidos y las escenas de siempre. Se juega con el teclado, o en el móvil con una cruceta y
+  botones.
 - **itch.io:** [elvisbrevi.itch.io/neuro-battle](https://elvisbrevi.itch.io/neuro-battle)
 
 ### Da Car
@@ -233,9 +243,11 @@ crates/museo/        piezas comunes: pantalla virtual con bandas, paso fijo, con
 crates/xna/          equivalentes de XNA 3.1 (Rectangle, Clamp, SpriteBatch.Draw, SpriteFont, Random)
 crates/construct2/   runtime de Construct 2: data.js, Sprite, Text, Audio, comportamientos, colisiones
 crates/box2d/        Box2D 2.3.1 en Rust (el del comportamiento Physics de Construct 2 y la física
-                     2D de Unity), comparado bit a bit con el C++ original (crates/box2d/comparar)
+                     2D de Unity, con su filtro por capas), comparado bit a bit con el C++
+                     original (crates/box2d/comparar)
 crates/unity/        piezas de Unity: de 4.x y 5.x, escena.json, Time, GameObjects, física 2D
-                     (con colisionadores poligonales e interpolación), Animator (con blend trees),
+                     (con colisionadores poligonales, interpolación y la matriz de capas),
+                     InputManager, Animator (con blend trees),
                      partículas (Shuriken), cámara y orden de dibujo, IMGUI, GUIText y AudioSource;
                      de 3.x en 3D, el dibujo Forward con sus shaders en GLSL, la física de una
                      esfera contra triángulos, las partículas heredadas, el InputManager, el audio
@@ -254,7 +266,7 @@ PLAN.md              plan por fases con checkpoints
 ## Jugar
 
 ```sh
-cargo run --release -p iman            # PC (o proyecto-nutria, the-electric-eel-attack, go-ball, the-meaning-of-christmas, que-no-caiga, retro-penal, da-car, super-happy-jump, one-button-prototype)
+cargo run --release -p iman            # PC (o proyecto-nutria, the-electric-eel-attack, go-ball, the-meaning-of-christmas, que-no-caiga, retro-penal, da-car, super-happy-jump, one-button-prototype, neuro-battle)
 tools/build_web.sh iman                # web: sirve dist/iman con cualquier servidor estático
 ```
 

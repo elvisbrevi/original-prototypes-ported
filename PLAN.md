@@ -148,7 +148,7 @@ cada juego en la fase 2).
 | Que No Caiga | HTML5 (39 archivos) | Construct 2 | ✅ hecho | ver pendientes en 2.3 |
 | Retro Penal | HTML5 + NW.js (win/osx/linux) | Construct 2 | ✅ hecho | ver pendientes en 2.4 |
 | One Button Prototype | Mac, Linux, APK y WebGL | Unity 5.1.2f1, Mono | ✅ hecho | ver pendientes en 2.7 |
-| Neuro Battle | `Neuro Battle.zip` (WebGL) | Unity 5.1.1f1, IL2CPP → asm.js | **sin DLL de C#**: metadatos IL2CPP + escenas + observar el juego (REA browser) | el más difícil; el WebGL de 2015 puede no correr en navegadores actuales. Sin `global-metadata.dat`: los metadatos están compilados en la memoria inicial del asm.js (ver 2.10) |
+| Neuro Battle | `Neuro Battle.zip` (WebGL) | Unity 5.1.1f1, IL2CPP → asm.js | ✅ hecho | ver pendientes en 2.10 |
 | Da Car | HTML5 (32 archivos) | Construct 2 + Box2D (asm.js) | ✅ hecho | ver pendientes en 2.5 |
 
 ## Fase 2 — Ports
@@ -560,7 +560,10 @@ Orden sugerido: primero lo que reutiliza herramientas ya hechas y luego lo más 
   derecho del ratón también suelta la neurona («mouse 1» de Fire2). `humo.json`: título,
   instrucciones, nivel, mover y girar, zoom, en nativo y en la web (escritorio, móvil horizontal y
   vertical). El wasm pesa 2,5 MB.
-- [ ] README del juego + ficha del museo.
+- [x] README del juego + ficha del museo, con capturas en `games/neuro-battle/docs`. «Cómo se
+  hizo» cuenta el triaje con sus Evidence, la lectura de los metadatos de IL2CPP, la
+  reconstrucción, la extracción con los *stubs*, la observación del original y las piezas del
+  motor.
 - [ ] Pendientes anotados.
 
 ### 2.11 Fast Car Racer (bloqueado)
@@ -579,8 +582,12 @@ Orden sugerido: primero lo que reutiliza herramientas ya hechas y luego lo más 
 - [x] README de los juegos y fichas del museo con un mismo enfoque: qué juego es, con qué y cuándo
   se hizo y que ahora está portado, sin separar «original» y «port». «Cómo se hizo» ampliado con
   los detalles técnicos de cada port: IMAN, Proyecto Nutria, The Electric Eel Attack, Que No Caiga,
-  Retro Penal, Da Car, Super Happy Jump, One Button Prototype, The Meaning of Christmas y Go Ball
-  (paso 6 de la plantilla para los siguientes).
+  Retro Penal, Da Car, Super Happy Jump, One Button Prototype, The Meaning of Christmas, Go Ball
+  y Neuro Battle (paso 6 de la plantilla para los siguientes).
+- [ ] Sembrar el azar con la hora en los ports que lo usan sin sembrarlo (Que No Caiga, Da Car,
+  Super Happy Jump, The Meaning of Christmas y las partículas de `crates/unity` y
+  `crates/construct2`): con la semilla fija de macroquad, cada partida sale igual. Lo hacen IMAN
+  y Neuro Battle.
 
 ## Fase 4 — Publicación en itch.io
 
@@ -602,11 +609,11 @@ los demás la estrenan. Nada se sube sin la confirmación del dueño de la cuent
 - [ ] **4.3** Configurar cada página para jugar en el navegador, desde el panel de itch.io (butler
   no lo hace): tipo HTML, marco del tamaño del juego (640×480 IMAN y The Electric Eel Attack,
   1280×720 Proyecto Nutria, 400×500 Que No Caiga y Retro Penal, 800×450 Da Car, 960×600 Super
-  Happy Jump y One Button Prototype, 1024×600 Go Ball, 320×480 en vertical The Meaning of
-  Christmas), «Mobile friendly» con su orientación y botón de pantalla completa.
+  Happy Jump, One Button Prototype y Neuro Battle, 1024×600 Go Ball, 320×480 en vertical The
+  Meaning of Christmas), «Mobile friendly» con su orientación y botón de pantalla completa.
 - [ ] **4.4** Publicar uno a uno, con confirmación, los ports ya hechos: Proyecto Nutria, IMAN, The
   Electric Eel Attack, Go Ball, The Meaning of Christmas, Que No Caiga, Retro Penal, Da Car,
-  Super Happy Jump y One Button Prototype. Probar cada página
+  Super Happy Jump, One Button Prototype y Neuro Battle. Probar cada página
   publicada en escritorio y en móvil (`tools/humo/web.mjs` adaptado a una URL, o a mano).
 - [ ] **4.5** Desde entonces, cada port nuevo se publica al cerrar su checkpoint (paso 8 de la
   plantilla), también con confirmación.

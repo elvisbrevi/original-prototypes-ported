@@ -145,6 +145,9 @@ Que No Caiga was started and which engine Fast Car Racer was made with.
   the particles and the `OnGUI` GUI recreated in `crates/unity`, with the usual images, sounds,
   scene and prefabs. It is played with the mouse or by touching the screen.
 - **itch.io:** [elvisbrevi.itch.io/super-happy-jump](https://elvisbrevi.itch.io/super-happy-jump)
+- **Downloads:** Windows (`.exe`) and macOS (universal, Intel + Apple Silicon) builds on the
+  [itch.io page](https://elvisbrevi.itch.io/super-happy-jump). The binaries are not kept in this repo.
+  On macOS, right-click → Open the first time (the binary is not signed).
 
 ### Que No Caiga
 

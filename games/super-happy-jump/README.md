@@ -28,6 +28,12 @@ On Linux you need the ALSA and OpenGL/X11 headers (`sudo apt install libasound2-
 The assets are embedded in the binary. The best score is saved in
 `~/.local/share/museo/super-happy-jump.txt` (or in the system's data folder).
 
+### Downloads
+
+Windows (`.exe`) and macOS (universal, Intel + Apple Silicon) builds are on the
+[itch.io page](https://elvisbrevi.itch.io/super-happy-jump); they are not kept in this repo. On macOS,
+right-click → Open the first time (the binary is not signed).
+
 ### Web version
 
 ```sh

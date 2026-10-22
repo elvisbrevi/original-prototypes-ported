@@ -1,25 +1,25 @@
-# Original Prototypes Ported — museo de prototipos
+# Original Prototypes Ported — a museum of prototypes
 
-Los juegos y prototipos que publiqué en [itch.io](https://elvisbrevi.itch.io) entre 2009 y 2015,
-recreados en **Rust + [macroquad](https://macroquad.rs)** para jugarse hoy en PC y en el navegador
-(con controles táctiles en móvil). Cada port se reconstruye por ingeniería inversa del binario
-original con [REA](https://rea.tools/) y usa los gráficos y sonidos originales extraídos de él.
+The games and prototypes I published on [itch.io](https://elvisbrevi.itch.io) between 2009 and 2015,
+recreated in **Rust + [macroquad](https://macroquad.rs)** so they can be played today on PC and in the
+browser (with touch controls on mobile). Each port is rebuilt by reverse-engineering the original
+binary with [REA](https://rea.tools/) and uses the original graphics and sounds extracted from it.
 
-Las versiones web de los ports reemplazarán a las de cada página de itch.io, y los juegos que no
-tenían versión web la tendrán (fase 4 del plan). El avance está en [PLAN.md](PLAN.md). Cada push
-compila todo en nativo y en wasm ([GitHub Actions](.github/workflows/build.yml)):
+The web versions of the ports will replace the ones on each itch.io page, and the games that had no
+web version will get one (phase 4 of the plan). Progress is tracked in [PLAN.md](PLAN.md). Every push
+builds everything natively and for wasm ([GitHub Actions](.github/workflows/build.yml)):
 ![build](https://github.com/elvisbrevi/original-prototypes-ported/actions/workflows/build.yml/badge.svg)
 
-## Sala de exposición
+## Showroom
 
-| Año | Juego | Hecho con | Port a Rust + macroquad |
+| Year | Game | Made with | Rust + macroquad port |
 |---|---|---|---|
 | 2009 | [Proyecto Nutria](#proyecto-nutria) | C# + XNA 3.1 (Windows) | ✅ [games/proyecto-nutria](games/proyecto-nutria) |
 | 2009 | [IMAN](#iman) | C# + XNA 3.1 (Windows) | ✅ [games/iman](games/iman) |
-| 2011 | [The Electric Eel Attack](#the-electric-eel-attack) | C# + XNA 3.1 + motor propio (Windows) | ✅ [games/the-electric-eel-attack](games/the-electric-eel-attack) |
-| 2011 | [Go Ball](#go-ball) | Unity 3.4 (C#, Windows y macOS) | ✅ [games/go-ball](games/go-ball) |
+| 2011 | [The Electric Eel Attack](#the-electric-eel-attack) | C# + XNA 3.1 + custom engine (Windows) | ✅ [games/the-electric-eel-attack](games/the-electric-eel-attack) |
+| 2011 | [Go Ball](#go-ball) | Unity 3.4 (C#, Windows and macOS) | ✅ [games/go-ball](games/go-ball) |
 | 2011 | [The Meaning of Christmas](#the-meaning-of-christmas) | Java + libGDX (Android) | ✅ [games/the-meaning-of-christmas](games/the-meaning-of-christmas) |
-| 2013 | [Fast Car Racer](#fast-car-racer) | Android (Google Play) | no se porta: no hay binario |
+| 2013 | [Fast Car Racer](#fast-car-racer) | Android (Google Play) | not ported: there is no binary |
 | 2014 | [Super Happy Jump](#super-happy-jump) | Unity 4.6 (Web Player, iOS, Android) | ✅ [games/super-happy-jump](games/super-happy-jump) |
 | 2014–15 | [Que No Caiga](#que-no-caiga) | Construct 2 (HTML5) | ✅ [games/que-no-caiga](games/que-no-caiga) |
 | 2015 | [Retro Penal](#retro-penal) | Construct 2 (HTML5 + NW.js) | ✅ [games/retro-penal](games/retro-penal) |
@@ -27,9 +27,9 @@ compila todo en nativo y en wasm ([GitHub Actions](.github/workflows/build.yml))
 | 2015 | [Neuro Battle](#neuro-battle) | Unity 5.1 (WebGL, IL2CPP) | ✅ [games/neuro-battle](games/neuro-battle) |
 | 2015 | [Da Car](#da-car) | Construct 2 (HTML5) | ✅ [games/da-car](games/da-car) |
 
-Las fechas salen de los propios binarios (fecha de compilación, de los archivos o de la exportación)
-y de los videos de gameplay. Lo que los archivos no permiten confirmar se dice en la ficha: cuándo
-se empezó Que No Caiga y con qué motor se hizo Fast Car Racer.
+The dates come from the binaries themselves (build date, file dates or export date)
+and from the gameplay videos. Whatever the files cannot confirm is stated in the entry: when
+Que No Caiga was started and which engine Fast Car Racer was made with.
 
 ---
 
@@ -37,15 +37,15 @@ se empezó Que No Caiga y con qué motor se hizo Fast Car Racer.
 
 ![Proyecto Nutria](games/proyecto-nutria/docs/nivel1.png)
 
-- **De qué trata:** plataformas de acción para dos. Un coipo (la «nutria» chilena) y un pollo
-  recorren un nivel de plataformas de roca y recogen cajas con pistolas láser para dispararse. El
-  pollo solo era jugable con un mando conectado. Tiene un nivel y un menú de pausa con el fondo
-  desenfocado en gris.
-- **Hecho en 2009** con C# + XNA 3.1 para Windows (instalador ClickOnce): compilado el
-  11-nov-2009, según la cabecera del ejecutable (video del prototipo: 3-oct-2009).
-- **Ahora:** ✅ portado a Rust + macroquad en [games/proyecto-nutria](games/proyecto-nutria), con
-  la lógica traducida del C# decompilado y los gráficos, la fuente y el efecto de pausa de
-  siempre. Se juega en PC y en el navegador, con controles táctiles en móvil. No tiene sonido.
+- **What it is:** two-player action platforming. A coipo (the Chilean "otter") and a chicken
+  cross a rock platforming level and pick up boxes with laser guns to shoot each other. The
+  chicken was only playable with a controller connected. It has one level and a pause menu with a
+  blurred grey background.
+- **Made in 2009** with C# + XNA 3.1 for Windows (ClickOnce installer): compiled on
+  11-Nov-2009, according to the executable header (prototype video: 3-Oct-2009).
+- **Now:** ✅ ported to Rust + macroquad in [games/proyecto-nutria](games/proyecto-nutria), with
+  the logic translated from the decompiled C# and the usual graphics, font and pause effect. It is
+  playable on PC and in the browser, with touch controls on mobile. It has no sound.
 - **itch.io:** [elvisbrevi.itch.io/proyecto-nutria](https://elvisbrevi.itch.io/proyecto-nutria) ·
   [video](https://vimeo.com/6882393)
 
@@ -53,13 +53,13 @@ se empezó Que No Caiga y con qué motor se hizo Fast Car Racer.
 
 ![IMAN](games/iman/docs/nivel1.png)
 
-- **De qué trata:** plataformas en el que un niño usa el imán de su mochila para atraer cajas y para
-  elevarse hacia plataformas móviles. Dos niveles y un final.
-- **Hecho en 2009** con C# + XNA 3.1 para Windows (instalador ClickOnce): compilado el
-  13-nov-2009 (video: 15-dic-2009).
-- **Ahora:** ✅ portado a Rust + macroquad en [games/iman](games/iman), con la lógica traducida del
-  C# decompilado y los gráficos, la fuente, el shader de lápiz y el sonido de siempre. Se juega en
-  PC y en el navegador, con controles táctiles en móvil.
+- **What it is:** a platformer in which a boy uses the magnet from his backpack to pull boxes and
+  to lift himself onto moving platforms. Two levels and an ending.
+- **Made in 2009** with C# + XNA 3.1 for Windows (ClickOnce installer): compiled on
+  13-Nov-2009 (video: 15-Dec-2009).
+- **Now:** ✅ ported to Rust + macroquad in [games/iman](games/iman), with the logic translated from
+  the decompiled C# and the usual graphics, font, pencil shader and sound. It is playable on
+  PC and in the browser, with touch controls on mobile.
 - **itch.io:** [elvisbrevi.itch.io/iman](https://elvisbrevi.itch.io/iman) ·
   [video](https://vimeo.com/8196488)
 
@@ -67,18 +67,18 @@ se empezó Que No Caiga y con qué motor se hizo Fast Car Racer.
 
 ![The Electric Eel Attack](games/the-electric-eel-attack/docs/nivel1.png)
 
-- **De qué trata:** plataformas de acción. Yerko reúne los tres mapas de cada nivel para abrir el
-  vórtice de salida, mientras lo atacan anguilas eléctricas: unas patrullan y se electrifican, las
-  *kamikazes* saltan. Se las pisa o se las dispara con la energía de las pilas. Tiene cuatro
-  niveles: campo, caverna, ciudad y una fábrica con un cañón que apunta.
-- **Hecho en 2011** con C# + XNA 3.1 y un motor propio (`Engine.dll`: niveles en XML hechos con su
-  editor, física, partículas y efectos), para Windows con ClickOnce. Compilado el 9-mar-2011,
-  versión 1.0.0.13 (el motor, el 8-mar-2011), según las cabeceras de los ejecutables (video:
-  24-feb-2011).
-- **Ahora:** ✅ portado a Rust + macroquad en
-  [games/the-electric-eel-attack](games/the-electric-eel-attack): motor y juego traducidos del C#
-  decompilado, con los mapas, gráficos, fuentes, sonidos y música de siempre y los efectos
-  reescritos en GLSL. Se juega en PC y en el navegador, con controles táctiles en móvil.
+- **What it is:** an action platformer. Yerko collects the three maps of each level to open the
+  exit vortex, while electric eels attack him: some patrol and electrify themselves, the
+  *kamikazes* jump. You stomp on them or shoot them with battery energy. It has four
+  levels: countryside, cavern, city and a factory with an aimed cannon.
+- **Made in 2011** with C# + XNA 3.1 and a custom engine (`Engine.dll`: XML levels made with its
+  editor, physics, particles and effects), for Windows with ClickOnce. Compiled on 9-Mar-2011,
+  version 1.0.0.13 (the engine on 8-Mar-2011), according to the executable headers (video:
+  24-Feb-2011).
+- **Now:** ✅ ported to Rust + macroquad in
+  [games/the-electric-eel-attack](games/the-electric-eel-attack): engine and game translated from the
+  decompiled C#, with the usual maps, graphics, fonts, sounds and music and the effects
+  rewritten in GLSL. It is playable on PC and in the browser, with touch controls on mobile.
 - **itch.io:** [elvisbrevi.itch.io/the-electric-eel-attack](https://elvisbrevi.itch.io/the-electric-eel-attack) ·
   [video](https://vimeo.com/20317603)
 
@@ -86,19 +86,19 @@ se empezó Que No Caiga y con qué motor se hizo Fast Car Racer.
 
 ![Go Ball](games/go-ball/docs/nivel3.png)
 
-- **De qué trata:** puzle en 3D con una pelota de fútbol que rueda y salta sobre una fila de
-  cajas. Para llegar al diamante del final de cada nivel hay que arrastrar con el ratón algunas
-  cajas hacia arriba o hacia abajo, mientras otras plataformas, nubes y sierras se mueven solas;
-  el fuego y las sierras hacen estallar la pelota. Cinco niveles y un menú en un prado.
-- **Hecho en 2011** con Unity 3.4.0f5 (C#, con iTween), como demo para Windows (32 y 64 bits) y
-  macOS: compilado el 22-sep-2011, según la cabecera de su `Assembly-CSharp.dll` (teaser:
-  23-sep-2011).
-- **Ahora:** ✅ portado a Rust + macroquad en [games/go-ball](games/go-ball): los scripts
-  traducidos del C# decompilado, y el dibujo 3D con los shaders de Unity 3.4 reescritos en GLSL,
-  una física propia para la pelota (en lugar de PhysX), las partículas, la GUI con su piel y sus
-  fuentes, el terreno del menú y el destello de la luz recreados en `crates/unity`, con las
-  mallas, las texturas, los sonidos y las seis escenas de siempre. Se juega con el teclado y el
-  ratón, o en el móvil con una cruceta y arrastrando las cajas con el dedo.
+- **What it is:** a 3D puzzle with a football that rolls and jumps along a row of
+  boxes. To reach the diamond at the end of each level you have to drag some boxes up or
+  down with the mouse, while other platforms, clouds and saws move on their own;
+  fire and saws make the ball explode. Five levels and a menu in a meadow.
+- **Made in 2011** with Unity 3.4.0f5 (C#, with iTween), as a demo for Windows (32 and 64 bit) and
+  macOS: compiled on 22-Sep-2011, according to the header of its `Assembly-CSharp.dll` (teaser:
+  23-Sep-2011).
+- **Now:** ✅ ported to Rust + macroquad in [games/go-ball](games/go-ball): the scripts
+  translated from the decompiled C#, and the 3D drawing with the Unity 3.4 shaders rewritten in
+  GLSL, custom physics for the ball (instead of PhysX), the particles, the GUI with its skin and
+  fonts, the menu terrain and the light flare recreated in `crates/unity`, with the usual
+  meshes, textures, sounds and six scenes. It is played with the keyboard and the
+  mouse, or on mobile with a D-pad and dragging the boxes with a finger.
 - **itch.io:** [elvisbrevi.itch.io/go-ball](https://elvisbrevi.itch.io/go-ball) ·
   [teaser](https://vimeo.com/29466492)
 
@@ -106,28 +106,28 @@ se empezó Que No Caiga y con qué motor se hizo Fast Car Racer.
 
 ![The Meaning of Christmas](games/the-meaning-of-christmas/docs/fuego.png)
 
-- **De qué trata:** juego navideño sobre el consumismo. Caen regalos y desde abajo sube una
-  montaña de dinero, que crece con cada regalo que llega a ella. Hay que quemar los regalos de
-  tres en tres, tocándolos a la misma altura, dentro de la franja de fuego que enciende el
-  primero; cada regalo quemado suma puntos y hace bajar el dinero. Cuando el dinero llena la
-  pantalla, se pierde. En el título suena «Noche de paz».
-- **Hecho en diciembre de 2011** con Java + libGDX 0.9.2 para Android, sobre el «hello world» de
-  libGDX: el APK se armó el 1-ene-2012, según las fechas del zip (video: 1-ene-2012).
-- **Ahora:** ✅ portado a Rust + macroquad en
-  [games/the-meaning-of-christmas](games/the-meaning-of-christmas): el juego traducido del Java
-  decompilado con JADX, y lo que usa de libGDX (la fuente por defecto, la animación, el tiempo
-  del frame) traducido del libGDX del mismo APK, con las imágenes, la fuente y la música de
-  siempre (pasada de MP3 a Ogg). Se juega con el ratón o tocando la pantalla, en vertical.
+- **What it is:** a Christmas game about consumerism. Gifts fall and from below rises a
+  mountain of money, which grows with every gift that reaches it. You have to burn the gifts
+  three at a time, touching them at the same height, inside the band of fire lit by the
+  first one; every burnt gift scores points and makes the money drop. When the money fills the
+  screen, you lose. "Silent Night" plays on the title screen.
+- **Made in December 2011** with Java + libGDX 0.9.2 for Android, on top of libGDX's
+  "hello world": the APK was built on 1-Jan-2012, according to the zip dates (video: 1-Jan-2012).
+- **Now:** ✅ ported to Rust + macroquad in
+  [games/the-meaning-of-christmas](games/the-meaning-of-christmas): the game translated from the
+  Java decompiled with JADX, and whatever it uses from libGDX (the default font, the animation, the
+  frame time) translated from the libGDX in the same APK, with the usual images, font and music
+  (converted from MP3 to Ogg). It is played with the mouse or by touching the screen, in portrait.
 - **itch.io:** [elvisbrevi.itch.io/the-meaning-of-christmas](https://elvisbrevi.itch.io/the-meaning-of-christmas) ·
   [video](https://vimeo.com/34446793)
 
 ### Fast Car Racer
 
-- **De qué trata:** carreras de autos.
-- **Hecho en 2013** para Android y publicado en Google Play (`cl.gioco.fcr`), según el video del
-  21-ene-2013; sin el binario no se sabe con qué motor.
-- **Ahora:** no se porta: itch.io solo enlaza a Google Play y no hay binario descargable, y sin
-  él no hay un port fiel (ver PLAN.md).
+- **What it is:** car racing.
+- **Made in 2013** for Android and published on Google Play (`cl.gioco.fcr`), according to the video
+  from 21-Jan-2013; without the binary there is no telling which engine it used.
+- **Now:** not ported: itch.io only links to Google Play and there is no downloadable binary, and
+  without it there is no faithful port (see PLAN.md).
 - **itch.io:** [elvisbrevi.itch.io/fast-car-racer](https://elvisbrevi.itch.io/fast-car-racer) ·
   [video](https://vimeo.com/57856159)
 
@@ -135,147 +135,148 @@ se empezó Que No Caiga y con qué motor se hizo Fast Car Racer.
 
 ![Super Happy Jump](games/super-happy-jump/docs/salto.png)
 
-- **De qué trata:** juego de saltos infinito. Un vaquero corre solo; se toca para saltar y otra vez
-  en el aire para el doble salto. Cada 2,5 segundos aparece una pareja de cactus con una moneda en
-  el hueco: la moneda suma un punto y tocar un cactus termina la partida. Guarda el mejor puntaje.
-- **Hecho en 2014** con Unity 4.6.0f3 para el Unity Web Player (también salió en iOS y Android):
-  compilado el 9-dic-2014, según la cabecera de su `Assembly-CSharp.dll`.
-- **Ahora:** ✅ portado a Rust + macroquad en [games/super-happy-jump](games/super-happy-jump):
-  los scripts traducidos del C# decompilado, y la física 2D (sobre `crates/box2d`), el Animator,
-  las partículas y la GUI de `OnGUI` recreados en `crates/unity`, con las imágenes, los sonidos,
-  la escena y los prefabs de siempre. Se juega con el ratón o tocando la pantalla.
+- **What it is:** an endless jumping game. A cowboy runs on his own; tap to jump and tap again
+  in the air for the double jump. Every 2.5 seconds a pair of cacti appears with a coin in
+  the gap: the coin scores a point and touching a cactus ends the run. It saves the best score.
+- **Made in 2014** with Unity 4.6.0f3 for the Unity Web Player (it also came out on iOS and Android):
+  compiled on 9-Dec-2014, according to the header of its `Assembly-CSharp.dll`.
+- **Now:** ✅ ported to Rust + macroquad in [games/super-happy-jump](games/super-happy-jump):
+  the scripts translated from the decompiled C#, and the 2D physics (on top of `crates/box2d`), the Animator,
+  the particles and the `OnGUI` GUI recreated in `crates/unity`, with the usual images, sounds,
+  scene and prefabs. It is played with the mouse or by touching the screen.
 - **itch.io:** [elvisbrevi.itch.io/super-happy-jump](https://elvisbrevi.itch.io/super-happy-jump)
 
 ### Que No Caiga
 
 ![Que No Caiga](games/que-no-caiga/docs/patada.png)
 
-- **De qué trata:** dominar el balón para que no caiga al suelo: cada toque hace patear al jugador.
-  Cuenta los segundos, y con el tiempo llegan más pelotas y bombas que explotan en los pies.
-- **Hecho entre 2014 y 2015** con Construct 2 (una versión de 2015, r20x) para el navegador:
-  exportado el 23-jul-2015, según su `offline.appcache`; su página de itch.io es de las mismas
-  semanas que las de Retro Penal y One Button Prototype (por el número de la página). Tiene la
-  temática del Mundial de Brasil 2014, pero los archivos no dicen cuándo se empezó.
-- **Ahora:** ✅ portado a Rust + macroquad en [games/que-no-caiga](games/que-no-caiga): las hojas
-  de eventos traducidas de su `data.js`, y lo que usa del runtime minificado (Platform,
-  animaciones, colisiones) traducido también, con las imágenes, los sonidos y el proyecto de
-  siempre. Se juega con el ratón o tocando la pantalla.
+- **What it is:** keep the ball in the air so it does not fall to the ground: every touch makes the
+  player kick. It counts the seconds, and over time more balls and bombs that explode at your feet
+  arrive.
+- **Made between 2014 and 2015** with Construct 2 (a 2015 version, r20x) for the browser:
+  exported on 23-Jul-2015, according to its `offline.appcache`; its itch.io page is from the same
+  weeks as the Retro Penal and One Button Prototype pages (by page number). It has the
+  theme of the 2014 Brazil World Cup, but the files do not say when it was started.
+- **Now:** ✅ ported to Rust + macroquad in [games/que-no-caiga](games/que-no-caiga): the event
+  sheets translated from its `data.js`, and whatever it uses from the minified runtime (Platform,
+  animations, collisions) translated too, with the usual images, sounds and project.
+  It is played with the mouse or by touching the screen.
 - **itch.io:** [elvisbrevi.itch.io/que-no-caiga](https://elvisbrevi.itch.io/que-no-caiga)
 
 ### Retro Penal
 
 ![Retro Penal](games/retro-penal/docs/gol.png)
 
-- **De qué trata:** penales con la selección chilena. Hay tres intentos: una flecha va y viene
-  sobre el punto penal y el toque patea en esa dirección. El arquero se lanza o se agacha, y cada
-  gol los hace más rápidos.
-- **Hecho en julio de 2015** con Construct 2 (una versión de 2015, r20x), para el navegador y para
-  escritorio con NW.js (Windows, macOS y Linux): los paquetes de escritorio son del 22-jul-2015 y
-  la versión HTML5 se exportó el 23-jul-2015, según su `offline.appcache`.
-- **Ahora:** ✅ portado a Rust + macroquad en [games/retro-penal](games/retro-penal): las hojas de
-  eventos traducidas de su `data.js`, y lo que usa del runtime minificado (Bullet con rebote en los
-  sólidos, Turret, Custom Movement, Wrap, colisiones con giro, Wait) traducido en
-  `crates/construct2`, con las imágenes, los sonidos y el proyecto de siempre. Se juega con el
-  ratón o tocando la pantalla.
+- **What it is:** penalty kicks with the Chilean national team. There are three attempts: an arrow
+  moves back and forth over the penalty spot and tapping kicks in that direction. The goalkeeper
+  dives or crouches, and every goal makes them faster.
+- **Made in July 2015** with Construct 2 (a 2015 version, r20x), for the browser and for
+  desktop with NW.js (Windows, macOS and Linux): the desktop packages are from 22-Jul-2015 and
+  the HTML5 version was exported on 23-Jul-2015, according to its `offline.appcache`.
+- **Now:** ✅ ported to Rust + macroquad in [games/retro-penal](games/retro-penal): the event
+  sheets translated from its `data.js`, and whatever it uses from the minified runtime (Bullet with
+  bouncing off solids, Turret, Custom Movement, Wrap, collisions with rotation, Wait) translated in
+  `crates/construct2`, with the usual images, sounds and project. It is played with the
+  mouse or by touching the screen.
 - **itch.io:** [elvisbrevi.itch.io/retro-penal](https://elvisbrevi.itch.io/retro-penal)
 
 ### One Button Prototype
 
 ![One Button Prototype](games/one-button-prototype/docs/nivel3.png)
 
-- **De qué trata:** plataformas de un solo botón. Un robot corre solo y da media vuelta al chocar
-  con las paredes; el clic lo hace saltar. Los pinchos reinician el nivel, a los dragones hay que
-  caerles encima y una estrella al final abre la ventana para elegir entre los tres niveles.
-- **Hecho en julio de 2015** con Unity 5.1.2f1 (C#, con el personaje del ejemplo 2D de los
-  Standard Assets modificado) para macOS, Linux y Android: compilado el 22-jul-2015, según la
-  cabecera de su `Assembly-CSharp.dll`. La versión WebGL, con el mismo juego, se exportó el
-  17-ago-2015.
-- **Ahora:** ✅ portado a Rust + macroquad en
-  [games/one-button-prototype](games/one-button-prototype): los scripts traducidos del C#
-  decompilado, y la física 2D (con los colisionadores poligonales y la interpolación), el
-  Animator con blend trees, la GUI con la piel integrada de Unity y el `GUIText` recreados en
-  `crates/unity`, con los gráficos, la fuente y las tres escenas de siempre. Se juega con el
-  ratón o tocando la pantalla. No tiene sonido, como el original.
+- **What it is:** single-button platforming. A robot runs on his own and turns around when he hits
+  a wall; clicking makes him jump. Spikes restart the level, dragons have to be landed on and a
+  star at the end opens the window to choose between the three levels.
+- **Made in July 2015** with Unity 5.1.2f1 (C#, with the character from the 2D example in the
+  Standard Assets modified) for macOS, Linux and Android: compiled on 22-Jul-2015, according to the
+  header of its `Assembly-CSharp.dll`. The WebGL version, with the same game, was exported on
+  17-Aug-2015.
+- **Now:** ✅ ported to Rust + macroquad in
+  [games/one-button-prototype](games/one-button-prototype): the scripts translated from the
+  decompiled C#, and the 2D physics (with polygonal colliders and interpolation), the
+  Animator with blend trees, the GUI with Unity's built-in skin and `GUIText` recreated in
+  `crates/unity`, with the usual graphics, font and three scenes. It is played with the
+  mouse or by touching the screen. It has no sound, like the original.
 - **itch.io:** [elvisbrevi.itch.io/prototipo-2000](https://elvisbrevi.itch.io/prototipo-2000)
 
 ### Neuro Battle
 
 ![Neuro Battle](games/neuro-battle/docs/nivel.png)
 
-- **De qué trata:** acción con una neurona que se mueve por un tejido rojo y se une a las neuronas
-  que va tocando (básicas, de cola larga, de defensa y de ataque, que disparan), mientras desde los
-  bordes llegan enemigos: si tocan tu neurona, se acaba; si tocan una unida, mueren los dos. El
-  puntaje son los segundos que aguantaste.
-- **Hecho en 2015** con Unity 5.1.1f1, solo para WebGL (C# compilado con IL2CPP a asm.js), en la
-  GameJam Santo Tomás Concepción 2015 con el equipo «GROUP_5»: el build es del 31-ago-2015.
-- **Ahora:** ✅ portado a Rust + macroquad en [games/neuro-battle](games/neuro-battle): la lógica
-  reconstruida del asm.js con los metadatos de IL2CPP compilados en su memoria (sin ensamblados de
-  C#), comparada con el original corriendo en un Chromium actual, y la física 2D (con la matriz de
-  capas sobre `crates/box2d`), el Animator y la GUI en `crates/unity`, con los gráficos, los
-  sonidos y las escenas de siempre. Se juega con el teclado, o en el móvil con una cruceta y
-  botones.
+- **What it is:** action with a neuron that moves through red tissue and joins the neurons
+  it touches (basic, long-tailed, defence and attack, which shoot), while enemies arrive from the
+  edges: if they touch your neuron, it is over; if they touch a joined one, both die. The
+  score is the number of seconds you lasted.
+- **Made in 2015** with Unity 5.1.1f1, WebGL only (C# compiled with IL2CPP to asm.js), at the
+  GameJam Santo Tomás Concepción 2015 with the team "GROUP_5": the build is from 31-Aug-2015.
+- **Now:** ✅ ported to Rust + macroquad in [games/neuro-battle](games/neuro-battle): the logic
+  reconstructed from the asm.js with the IL2CPP metadata compiled into its memory (without C#
+  assemblies), compared with the original running in a current Chromium, and the 2D physics (with the layer
+  matrix on top of `crates/box2d`), the Animator and the GUI in `crates/unity`, with the usual
+  graphics, sounds and scenes. It is played with the keyboard, or on mobile with a D-pad and
+  buttons.
 - **itch.io:** [elvisbrevi.itch.io/neuro-battle](https://elvisbrevi.itch.io/neuro-battle)
 
 ### Da Car
 
 ![Da Car](games/da-car/docs/salto.png)
 
-- **De qué trata:** carreras de moto estilo Dakar (el proyecto se llama «Dakar 2015»). Se acelera,
-  se inclina la moto para pasar los cerros que aparecen al azar y hay que llegar a la meta sin que
-  el piloto se golpee la cabeza; al chocar se vuelve a empezar, pero el reloj sigue corriendo.
-- **Hecho en 2015** con Construct 2 (una versión de 2015) para el navegador, con el comportamiento
-  Physics (Box2D): exportado el 23-nov-2015, según su `offline.appcache`.
-- **Ahora:** ✅ portado a Rust + macroquad en [games/da-car](games/da-car): la hoja de eventos
-  traducida de su `data.js`; Box2D 2.3.1 traducido a Rust en `crates/box2d` (idéntico bit a bit al
-  C++ de Box2D en las escenas de prueba) y el comportamiento Physics, ScrollTo y Particles en
-  `crates/construct2`, con las imágenes, los sonidos y el proyecto de siempre. Se juega con el
-  teclado, con el ratón o tocando la pantalla e inclinando el móvil.
+- **What it is:** Dakar-style motorbike racing (the project is called "Dakar 2015"). You accelerate and
+  lean the bike to get over the randomly appearing hills and you have to reach the finish line without the
+  rider hitting his head; when you crash you start over, but the clock keeps running.
+- **Made in 2015** with Construct 2 (a 2015 version) for the browser, with the
+  Physics behaviour (Box2D): exported on 23-Nov-2015, according to its `offline.appcache`.
+- **Now:** ✅ ported to Rust + macroquad in [games/da-car](games/da-car): the event sheet
+  translated from its `data.js`; Box2D 2.3.1 translated to Rust in `crates/box2d` (bit-for-bit identical to
+  the Box2D C++ in the test scenes) and the Physics, ScrollTo and Particles behaviours in
+  `crates/construct2`, with the usual images, sounds and project. It is played with the
+  keyboard, with the mouse or by touching the screen and tilting the phone.
 - **itch.io:** [elvisbrevi.itch.io/da-car](https://elvisbrevi.itch.io/da-car)
 
 ---
 
-## Cómo está organizado
+## How it is organised
 
 ```
-games/<slug>/        un crate de Cargo por juego (port + assets extraídos + referencia del original)
-crates/museo/        piezas comunes: pantalla virtual con bandas, paso fijo, controles táctiles y
-                     preferencias guardadas (récords); plantilla web (index.html + mq_js_bundle.js
-                     de macroquad) en crates/museo/web
-crates/xna/          equivalentes de XNA 3.1 (Rectangle, Clamp, SpriteBatch.Draw, SpriteFont, Random)
-crates/construct2/   runtime de Construct 2: data.js, Sprite, Text, Audio, comportamientos, colisiones
-crates/box2d/        Box2D 2.3.1 en Rust (el del comportamiento Physics de Construct 2 y la física
-                     2D de Unity, con su filtro por capas), comparado bit a bit con el C++
-                     original (crates/box2d/comparar)
-crates/unity/        piezas de Unity: de 4.x y 5.x, escena.json, Time, GameObjects, física 2D
-                     (con colisionadores poligonales, interpolación y la matriz de capas),
-                     InputManager, Animator (con blend trees),
-                     partículas (Shuriken), cámara y orden de dibujo, IMGUI, GUIText y AudioSource;
-                     de 3.x en 3D, el dibujo Forward con sus shaders en GLSL, la física de una
-                     esfera contra triángulos, las partículas heredadas, el InputManager, el audio
-                     3D, las fuentes de mapa de bits y el terreno
-originales/          binarios originales (fuera de git) y catalogo.json con sus sha256
-tools/originales.py  inventario y descarga de los originales desde itch.io
-tools/build_web.sh   versión web de un juego en dist/<slug> a partir de la plantilla
+games/<slug>/        one Cargo crate per game (port + extracted assets + reference from the original)
+crates/museo/        shared pieces: virtual screen with letterboxing, fixed step, touch controls and
+                     saved preferences (high scores); web template (index.html + mq_js_bundle.js
+                     from macroquad) in crates/museo/web
+crates/xna/          XNA 3.1 equivalents (Rectangle, Clamp, SpriteBatch.Draw, SpriteFont, Random)
+crates/construct2/   Construct 2 runtime: data.js, Sprite, Text, Audio, behaviours, collisions
+crates/box2d/        Box2D 2.3.1 in Rust (the one in the Construct 2 Physics behaviour and Unity's
+                     2D physics, with its layer filter), compared bit for bit with the original
+                     C++ (crates/box2d/comparar)
+crates/unity/        Unity pieces: for 4.x and 5.x, escena.json, Time, GameObjects, 2D physics
+                     (with polygonal colliders, interpolation and the layer matrix),
+                     InputManager, Animator (with blend trees),
+                     particles (Shuriken), camera and draw order, IMGUI, GUIText and AudioSource;
+                     for 3.x in 3D, Forward rendering with its shaders in GLSL, the physics of a
+                     sphere against triangles, the legacy particles, the InputManager, 3D
+                     audio, bitmap fonts and the terrain
+originales/          original binaries (outside git) and catalogo.json with their sha256
+tools/originales.py  inventory and download of the originals from itch.io
+tools/build_web.sh   web version of a game in dist/<slug> from the template
 tools/xnb_extract.py, tools/unity_assets.py, tools/c2_eventos.py
-                     extracción de contenido XNA, Unity y Construct 2 (ver PLAN.md)
-tools/rea_reconstruction.py   C# de ILSpy -> import-managed-reconstruction de REA
-tools/ps20_desensamblar.py    píxel shaders ps_2_0 de los efectos XNA, para reescribirlos en GLSL
-tools/humo/          tests de humo: nativo (Xvfb + xdotool) y web (Playwright: escritorio y móvil)
-PLAN.md              plan por fases con checkpoints
+                     XNA, Unity and Construct 2 content extraction (see PLAN.md)
+tools/rea_reconstruction.py   ILSpy C# -> REA's import-managed-reconstruction
+tools/ps20_desensamblar.py    pixel shaders ps_2_0 from the XNA effects, to rewrite them in GLSL
+tools/humo/          smoke tests: native (Xvfb + xdotool) and web (Playwright: desktop and mobile)
+PLAN.md              phased plan with checkpoints
 ```
 
-## Jugar
+## Playing
 
 ```sh
-cargo run --release -p iman            # PC (o proyecto-nutria, the-electric-eel-attack, go-ball, the-meaning-of-christmas, que-no-caiga, retro-penal, da-car, super-happy-jump, one-button-prototype, neuro-battle)
-tools/build_web.sh iman                # web: sirve dist/iman con cualquier servidor estático
+cargo run --release -p iman            # PC (or proyecto-nutria, the-electric-eel-attack, go-ball, the-meaning-of-christmas, que-no-caiga, retro-penal, da-car, super-happy-jump, one-button-prototype, neuro-battle)
+tools/build_web.sh iman                # web: serve dist/iman with any static server
 ```
 
-En Linux hace falta `libasound2-dev`. Para la versión web: `rustup target add wasm32-unknown-unknown`.
+On Linux you need `libasound2-dev`. For the web version: `rustup target add wasm32-unknown-unknown`.
 
-## Recuperar los originales
+## Recovering the originals
 
-Los binarios no se versionan. Para bajarlos de nuevo desde itch.io (comprueba los sha256 de
+The binaries are not versioned. To download them again from itch.io (it checks the sha256 values in
 `originales/catalogo.json`):
 
 ```sh

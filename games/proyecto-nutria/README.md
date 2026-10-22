@@ -1,114 +1,114 @@
-# Proyecto Nutria (Version Prototipo)
+# Proyecto Nutria (Prototype Version)
 
-**Proyecto Nutria** (Elvis Brevi, [itch.io](https://elvisbrevi.itch.io/proyecto-nutria)) es un
-juego de plataformas de acción para dos. Un coipo (la «nutria» chilena) y un pollo recorren un
-nivel de plataformas de roca, recogen cajas con pistolas láser y se disparan. Si una bala alcanza a
-un personaje, este sale despedido hacia arriba, girando y en rojo. Se hizo en 2009 con C# y
-XNA 3.1 para Windows (compilado el 11-nov-2009) y ahora está portado a Rust + macroquad: se juega
-en PC y en el navegador, también en móviles. La lógica se reconstruyó por ingeniería inversa del
-ejecutable publicado y se tradujo casi línea por línea. Los gráficos, la fuente y el efecto de la
-pausa son los originales, extraídos de los `.xnb`.
+**Proyecto Nutria** (Elvis Brevi, [itch.io](https://elvisbrevi.itch.io/proyecto-nutria)) is a
+two-player action platformer. A coipo (the Chilean "otter") and a chicken cross a
+level of rock platforms, pick up boxes with laser guns and shoot each other. If a bullet hits a
+character, he is thrown upwards, spinning and in red. It was made in 2009 with C# and
+XNA 3.1 for Windows (compiled on 11-Nov-2009) and is now ported to Rust + macroquad: it plays
+on PC and in the browser, also on mobile. The logic was reconstructed by reverse-engineering the
+published executable and translated almost line by line. The graphics, font and pause effect
+are the originals, extracted from the `.xnb` files.
 
-![nivel 1](docs/nivel1.png)
+![level 1](docs/nivel1.png)
 
-![disparo](docs/disparo.png) ![pausa](docs/pausa.png)
+![shot](docs/disparo.png) ![pause](docs/pausa.png)
 
-## Ejecutar
+## Running
 
 ```sh
 cargo run --release -p proyecto-nutria
 ```
 
-En Linux hacen falta las cabeceras de ALSA y OpenGL/X11 (`sudo apt install libasound2-dev`).
-Los assets van embebidos en el binario. El juego original no tiene sonido.
+On Linux you need the ALSA and OpenGL/X11 headers (`sudo apt install libasound2-dev`).
+The assets are embedded in the binary. The original game has no sound.
 
-### Versión web
+### Web version
 
 ```sh
 rustup target add wasm32-unknown-unknown
-../../tools/build_web.sh proyecto-nutria   # genera dist/proyecto-nutria
+../../tools/build_web.sh proyecto-nutria   # generates dist/proyecto-nutria
 ```
 
-El `index.html` sale de la plantilla común de [`crates/museo/web`](../../crates/museo/web). En la
-web, Esc no hace nada (no hay ventana que cerrar).
+The `index.html` comes from the common template in [`crates/museo/web`](../../crates/museo/web). On the
+web, Esc does nothing (there is no window to close).
 
-### Controles táctiles
+### Touch controls
 
-<img src="docs/movil.png" align="right" width="180" alt="móvil en vertical">
+<img src="docs/movil.png" align="right" width="180" alt="mobile in portrait">
 
-En móviles y tablets aparecen una cruceta, los botones A (disparo) y B (salto) y START (pausa).
-Los dibuja el crate compartido [`crates/museo`](../../crates/museo), configurado en `src/main.rs`.
-Se activan si el navegador indica un puntero táctil (`(pointer: coarse)`) o en cuanto llega el
-primer toque. En vertical el juego se coloca arriba y los controles debajo. En horizontal, como el
-juego ocupa toda la pantalla (16:9), los controles quedan sobre el marco.
+On phones and tablets a D-pad, the A (shoot) and B (jump) buttons and START (pause) appear.
+They are drawn by the shared crate [`crates/museo`](../../crates/museo), configured in `src/main.rs`.
+They are enabled if the browser reports a touch pointer (`(pointer: coarse)`) or as soon as the
+first touch arrives. In portrait the game sits at the top and the controls below. In landscape, since the
+game fills the screen (16:9), the controls sit on top of the frame.
 
 <br clear="right">
 
-## Controles
+## Controls
 
-| Tecla | Acción |
+| Key | Action |
 |---|---|
-| ← / → | Correr (acelera hasta 6 px por paso y patina al soltar) |
-| X | Saltar (botón "B"; mantener para saltar hasta 250 px) |
-| Z | Disparar con la pistola (botón "A"; 10 balas por caja) / elegir opción del menú |
-| Enter | Pausa: CONTINUAR, REINICIAR, SALIR |
-| ↑ / ↓ | Moverse por el menú |
-| Esc | Salir |
+| ← / → | Run (accelerates up to 6 px per step and slides when released) |
+| X | Jump (button "B"; hold to jump up to 250 px) |
+| Z | Shoot with the gun (button "A"; 10 bullets per box) / select menu option |
+| Enter | Pause: CONTINUE, RESTART, EXIT |
+| ↑ / ↓ | Move through the menu |
+| Esc | Quit |
 
-Con un solo teclado se maneja al coipo. El pollo solo se movía con un mando DirectInput, que no se
-portó (ver más abajo), así que queda quieto en su plataforma como en un PC sin mando, pero recibe
-los disparos.
+With a single keyboard you control the coipo. The chicken only moved with a DirectInput gamepad, which was not
+ported (see below), so it stays still on its platform as on a PC without a gamepad, but it does take
+the shots.
 
-## Cómo se hizo
+## How it was made
 
-1. **Descarga**: `Proyecto_Nutria.rar` de itch.io. Es un despliegue ClickOnce de XNA 3.1:
-   `Proyecto Nutria.exe` (52 KB, CIL puro, CLR 2.0, x86) y la carpeta `Content/`. Según la cabecera
-   PE se compiló el **11-nov-2009** a las 12:52 UTC (los manifiestos de ClickOnce son del mismo día).
+1. **Download**: `Proyecto_Nutria.rar` from itch.io. It is a ClickOnce deployment of XNA 3.1:
+   `Proyecto Nutria.exe` (52 KB, pure CIL, CLR 2.0, x86) and the `Content/` folder. According to the
+   PE header it was compiled on **11-Nov-2009** at 12:52 UTC (the ClickOnce manifests are from the same day).
 2. **REA** ([rea.tools](https://rea.tools/), `rea-agents` 6.7.0):
-   - `inspect-managed-artifact`: ensamblado PE32 x86, solo IL, metadatos completos, versión 1.0.0.0
+   - `inspect-managed-artifact`: PE32 x86 assembly, IL only, complete metadata, version 1.0.0.0
      (`ev_df021cd93d7021058a4e8a709710e50f3b1c383df812627c7166c2abbbbdf3d7`).
-   - `inspect-managed-members`: 42 tipos, 155 métodos, 234 campos y las cadenas que carga el código
-     (rutas de contenido, nombres de armas, opciones del menú, `..\..\..\Datos\Save.xml`)
+   - `inspect-managed-members`: 42 types, 155 methods, 234 fields and the strings the code loads
+     (content paths, weapon names, menu options, `..\..\..\Datos\Save.xml`)
      (`ev_2c96271246856c5b3e62c535b736e8b44296dc9729b428bb2b71b0c864faea9c`).
-   - `import-managed-reconstruction`: el C# decompilado de los 104 métodos con cuerpo quedó anclado
-     al hash exacto de IL y la firma de cada método
-     (`ev_6eec8dd8725bcdb315c64fae70749ec7bfb500226ea0d9b3b4b07892673e71e3`). Los 31 restantes son
-     constructores implícitos y accesores de propiedades automáticas, sin código propio.
-3. **ILSpy** (`ilspycmd` 9.1) para obtener C# legible, con las referencias del *XNA Framework
-   Redistributable 3.1* de Microsoft. El payload de REA se arma con
+   - `import-managed-reconstruction`: the decompiled C# of the 104 methods with a body was anchored
+     to the exact IL hash and the signature of each method
+     (`ev_6eec8dd8725bcdb315c64fae70749ec7bfb500226ea0d9b3b4b07892673e71e3`). The remaining 31 are
+     implicit constructors and auto-property accessors, with no code of their own.
+3. **ILSpy** (`ilspycmd` 9.1) to get readable C#, with the references of Microsoft's *XNA Framework
+   Redistributable 3.1*. The REA payload is assembled with
    [`tools/rea_reconstruction.py`](../../tools/rea_reconstruction.py).
-4. **Assets**: [`tools/xnb_extract.py`](../../tools/xnb_extract.py) (el extractor de IMAN
-   generalizado) convierte a PNG las texturas `Color` y la `SpriteFont`, solo las que el juego usa
-   (lista en `tools/contenido.txt`).
-5. **Efecto de pausa**: `Shaders/blur_grayscale.xnb` no trae el código fuente, así que su píxel
-   shader ps_2_0 se desensambló con [`tools/ps20_desensamblar.py`](../../tools/ps20_desensamblar.py) y se reescribió en GLSL
-   (`src/shader.rs`): suma 12 muestras de un disco de Poisson de radio 0,005 (en coordenadas de
-   cada textura, sin la muestra central), pasa a gris con `(r + g + b) / 3` y divide por 12. Deja
-   como alfa la suma de los 12 alfas, y no usa el tinte del sprite.
+4. **Assets**: [`tools/xnb_extract.py`](../../tools/xnb_extract.py) (IMAN's extractor
+   generalised) converts the `Color` textures and the `SpriteFont` to PNG, only the ones the game uses
+   (list in `tools/contenido.txt`).
+5. **Pause effect**: `Shaders/blur_grayscale.xnb` does not bring the source code, so its pixel
+   shader ps_2_0 was disassembled with [`tools/ps20_desensamblar.py`](../../tools/ps20_desensamblar.py) and rewritten in GLSL
+   (`src/shader.rs`): it adds 12 samples from a Poisson disk of radius 0.005 (in the coordinates of
+   each texture, without the centre sample), converts to grey with `(r + g + b) / 3` and divides by 12. It leaves
+   as alpha the sum of the 12 alphas, and it does not use the sprite's tint.
 6. **Port**:
-   - Como en IMAN, cada clase es un módulo y el paso fijo es `museo::PasoFijo::xna()`.
-     `crates/xna` aporta `Rectangle`, `Clamp`, `SpriteBatch.Draw`, `SpriteFont` y
-     `System.Random`. `tiempo.rs` copia el `GameTime` de paso fijo, en el que `TotalGameTime` suma
-     el paso antes de cada `Update`.
-   - `Game1.Draw` dibuja en dos partes. El marco y los iconos van en la pantalla virtual de
-     1280×720. El nivel va en un render target del tamaño del viewport `areaJuego`, borrado en
-     negro y con la transformación de `Camera2D` (escala y después traslación de
-     −posición × escala). Ese render target se copia a la pantalla sin mezcla
-     (`Pantalla::copiar_opaco`), para que los sprites semitransparentes no la oscurezcan.
-   - En la pausa, lo que se dibuja con la cámara (todo menos el cielo) usa el material del efecto
-     en lugar del de los sprites, como el `SpriteBatch.Begin` con efecto del original.
-   - Las partículas usan `xna::Random`, una copia del `System.Random` de .NET 2.0 (el generador
-     sustractivo de Knuth), sembrada con el reloj como `new Random()`.
-   - Sin mando, el original crea un único control, el teclado. El port hace lo mismo, y los
-     botones táctiles se leen como sus teclas.
+   - As in IMAN, each class is a module and the fixed step is `museo::PasoFijo::xna()`.
+     `crates/xna` provides `Rectangle`, `Clamp`, `SpriteBatch.Draw`, `SpriteFont` and
+     `System.Random`. `tiempo.rs` copies the fixed-step `GameTime`, in which `TotalGameTime` adds
+     the step before each `Update`.
+   - `Game1.Draw` draws in two parts. The frame and the icons go on the 1280×720 virtual screen.
+     The level goes in a render target the size of the `areaJuego` viewport, cleared in
+     black and with the `Camera2D` transformation (scale and then translation of
+     −position × scale). That render target is copied to the screen without blending
+     (`Pantalla::copiar_opaco`), so that the semi-transparent sprites do not darken it.
+   - In the pause, whatever is drawn with the camera (everything except the sky) uses the effect's
+     material instead of the sprite one, like the original's `SpriteBatch.Begin` with an effect.
+   - The particles use `xna::Random`, a copy of .NET 2.0's `System.Random` (Knuth's
+     subtractive generator), seeded with the clock like `new Random()`.
+   - Without a gamepad, the original creates a single control device, the keyboard. The port does the same, and the
+     touch buttons are read as their keys.
 
-`reference/csharp/` contiene el C# decompilado como referencia para comparar con el port.
+`reference/csharp/` contains the decompiled C# as a reference to compare against the port.
 
-## Correspondencia con el original
+## Correspondence with the original
 
 | C# (XNA) | Rust |
 |---|---|
-| `Game1`, `Program` | `main.rs` (con `museo::PasoFijo` y `museo::Pantalla`) |
+| `Game1`, `Program` | `main.rs` (with `museo::PasoFijo` and `museo::Pantalla`) |
 | `Camara`, `Camera2D` | `camara.rs` |
 | `Control`, `Teclado` | `control.rs` |
 | `Nivel`, `Nivel_1` | `nivel.rs` |
@@ -122,59 +122,59 @@ los disparos.
 | `Shaders.Blur_Grayscale` | `shader.rs` |
 | `MathHelper.Clamp`, `Rectangle`, `SpriteBatch.Draw`, `SpriteFont`, `System.Random` | [`crates/xna`](../../crates/xna) |
 
-## Rarezas del original que se conservan
+## Original quirks that are kept
 
-- `MenuPersonajes` no es un menú para elegir personaje, sino la pausa. Sus caras se cargan pero
-  nunca se dibujan, y la opción **SALIR no sale**: reinicia igual que REINICIAR, solo que sin
-  mover la cámara.
-- Al reiniciar, el coipo es el mismo objeto y **conserva la pistola** y las balas que le queden. El
-  pollo, en cambio, se crea de nuevo. Las cajas ya recogidas siguen como estaban.
-- Solo se actualiza el icono de los personajes con control, así que **la barra de vida del pollo
-  no se ve nunca** (su rectángulo se queda con ancho 0).
-- Las balas no desaparecen nunca: siguen volando fuera del nivel.
-- La gravedad solo vuelve a 0 al saltar. Mientras el personaje está en el suelo sigue cayendo 9 px
-  por paso y la colisión lo devuelve a la superficie. Al soltar el salto el personaje pasa a «cayendo»
-  en cada paso.
-- Hacia la derecha el personaje avanza aunque esté chocando con una pared; hacia la izquierda, no.
-- `MathHelper.Clamp` aplica primero el máximo, lo que fija la posición tras un choque por debajo.
-- La cámara encuadra a los dos personajes (alejándose hasta escala 0,38) y sigue al que va más a la
-  izquierda con un retraso de 6 px por paso. La posición (500, 500) que le da `Game1` se pierde
-  porque `Camera2D.Initialize` la reinicia. REINICIAR le pone escala 0,36 durante un fotograma.
-- El recorte del fondo `scroll1` es 150 px más alto que la textura. El modo Clamp de `SpriteBatch`
-  estira su última fila, y cuando la cámara se aleja se ven unas franjas verticales bajo el campo.
-- Las hojas que levanta el personaje al correr suman a su temporizador el tiempo total de juego
-  (no el del paso). La primera partícula mira a la última a través de una
-  `IndexOutOfRangeException` capturada. El alfa resta como un byte de C#.
-- `Nivel_1` crea un coipo y un pollo (y por error coloca dos veces al coipo), pero el menú los
-  reemplaza enseguida por el coipo en (0, 280) y el pollo en (2600, 800).
+- `MenuPersonajes` is not a menu to choose a character, but the pause menu. Its faces are loaded but
+  never drawn, and the **EXIT option does not exit**: it restarts like RESTART, only without
+  moving the camera.
+- On restart, the coipo is the same object and **keeps the gun** and whatever bullets it has left. The
+  chicken, however, is created again. The boxes already collected stay as they were.
+- Only the icon of the characters with a control device is updated, so **the chicken's health bar
+  is never seen** (its rectangle stays 0 wide).
+- The bullets never disappear: they keep flying outside the level.
+- Gravity only goes back to 0 when jumping. While the character is on the ground it keeps falling 9 px
+  per step and the collision returns it to the surface. When the jump is released the character switches to "falling"
+  on every step.
+- To the right the character moves forward even when hitting a wall; to the left, it does not.
+- `MathHelper.Clamp` applies the maximum first, which fixes the position after a collision below.
+- The camera frames both characters (pulling back up to scale 0.38) and follows the one furthest to the
+  left with a delay of 6 px per step. The position (500, 500) that `Game1` gives it is lost
+  because `Camera2D.Initialize` resets it. RESTART sets its scale to 0.36 for one frame.
+- The crop of the `scroll1` background is 150 px taller than the texture. `SpriteBatch`'s Clamp mode
+  stretches its last row, and when the camera pulls back some vertical stripes are visible under the field.
+- The dust the character kicks up while running adds the total game time (not the step's) to its timer.
+  The first particle looks at the last one through an
+  `IndexOutOfRangeException` that is caught. Alpha subtracts like a C# byte.
+- `Nivel_1` creates a coipo and a chicken (and by mistake places the coipo twice), but the menu
+  immediately replaces them with the coipo at (0, 280) and the chicken at (2600, 800).
 
-## Diferencias con el original
+## Differences from the original
 
-- **Mando**: el original usaba DirectInput (`JoystickGenerico`) y con un mando conectado el
-  segundo personaje pasaba a ser jugable. Este port solo admite teclado (y controles táctiles),
-  como el original en un PC sin mando.
-- **Aleatoriedad**: las partículas usan una copia de `System.Random` de .NET 2.0 sembrada con el
-  reloj, como `new Random()`; las secuencias no coinciden con una partida concreta del original.
-- **Ventana**: el juego se dibuja en 1280×720 y se escala a la ventana con bandas negras. El
-  original pedía 1280×720 en ventana.
-- No se portó código que el original nunca usa en pantalla: el cronómetro (se actualiza pero no se
-  dibuja, y por eso tampoco se extrajo su fuente de 8 MB), las monedas (la lista del nivel siempre
-  está vacía; el contador sí está), el lanzallamas (ninguna caja lo crea), los efectos `Filter` y
-  `Negative`, el guardado en `Datos\Save.xml`, la cámara manual de depuración y la clase `Enemigo`
-  (vacía).
+- **Gamepad**: the original used DirectInput (`JoystickGenerico`) and with a gamepad connected the
+  second character became playable. This port only supports a keyboard (and touch controls),
+  like the original on a PC without a gamepad.
+- **Randomness**: the particles use a copy of .NET 2.0's `System.Random` seeded with the
+  clock, like `new Random()`; the sequences do not match any particular run of the original.
+- **Window**: the game is drawn at 1280×720 and scaled to the window with black letterboxing. The
+  original asked for 1280×720 in a window.
+- Code the original never uses on screen was not ported: the stopwatch (it is updated but not
+  drawn, which is why its 8 MB font was not extracted either), the coins (the level's list is always
+  empty; the counter itself is there), the flamethrower (no box creates it), the `Filter` and
+  `Negative` effects, saving to `Datos\Save.xml`, the manual debug camera and the `Enemigo` class
+  (empty).
 
-## Regenerar los assets
-
-```sh
-python3 -I ../../tools/xnb_extract.py "<ruta>/Application Files/Proyecto Nutria_1_0_0_0/Content" assets tools/contenido.txt
-```
-
-## Pruebas
+## Regenerating the assets
 
 ```sh
-node ../../tools/humo/nativo.mjs proyecto-nutria   # tras cargo build --release
-node ../../tools/humo/web.mjs proyecto-nutria      # tras tools/build_web.sh
+python3 -I ../../tools/xnb_extract.py "<path>/Application Files/Proyecto Nutria_1_0_0_0/Content" assets tools/contenido.txt
 ```
 
-Siguen los pasos de `humo.json`: correr hasta la primera caja, disparar, saltar, pausar y
-continuar. El impacto de una bala en el pollo se comprobó aparte, bajando hasta su plataforma.
+## Tests
+
+```sh
+node ../../tools/humo/nativo.mjs proyecto-nutria   # after cargo build --release
+node ../../tools/humo/web.mjs proyecto-nutria      # after tools/build_web.sh
+```
+
+They follow the steps in `humo.json`: run to the first box, shoot, jump, pause and
+continue. A bullet hitting the chicken was checked separately, going down to its platform.

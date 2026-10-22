@@ -1,199 +1,199 @@
 # Retro Penal
 
-**Retro Penal** (Elvis Brevi, [itch.io](https://elvisbrevi.itch.io/retro-penal)) es un juego de
-penales. Sus etiquetas en itch.io (*chile*, *seleccion-chilena*, *mundial*, *cazely*) apuntan a la
-selección chilena. Hay tres intentos: una flecha va y viene sobre el punto penal, y al tocar el
-jugador patea en esa dirección. El arquero se lanza hacia un lado o se agacha, y los palos y el
-arquero desvían la pelota. Cada gol hace más rápidos la flecha y el arquero.
+**Retro Penal** (Elvis Brevi, [itch.io](https://elvisbrevi.itch.io/retro-penal)) is a penalty
+shootout game. Its itch.io tags (*chile*, *seleccion-chilena*, *mundial*, *cazely*) point to the
+Chilean national team. There are three attempts: an arrow moves back and forth over the penalty spot, and when you tap
+the player kicks in that direction. The goalkeeper dives to one side or crouches, and the posts and the
+goalkeeper deflect the ball. Every goal makes the arrow and the goalkeeper faster.
 
-Se hizo en julio de 2015 con Construct 2, para el navegador y para escritorio (NW.js en Windows,
-macOS y Linux), y ahora está portado a Rust + macroquad: se juega en PC y en el navegador, también
-en móviles. La lógica se tradujo de las hojas de eventos del proyecto (`data.js`) y del runtime
-minificado de Construct 2 (`c2runtime.js`). Las imágenes, los sonidos y el proyecto (tipos,
-animaciones, polígonos de colisión, comportamientos y layouts) son los originales: el port lee
-`data.js` al arrancar. Las piezas del runtime están en
-[`crates/construct2`](../../crates/construct2), que también usa [Que No Caiga](../que-no-caiga).
+It was made in July 2015 with Construct 2, for the browser and for desktop (NW.js on Windows,
+macOS and Linux), and is now ported to Rust + macroquad: it plays on PC and in the browser, also
+on mobile. The logic was translated from the project's event sheets (`data.js`) and from the
+minified Construct 2 runtime (`c2runtime.js`). The images, sounds and project (types,
+animations, collision polygons, behaviours and layouts) are the originals: the port reads
+`data.js` at startup. The runtime pieces are in
+[`crates/construct2`](../../crates/construct2), which is also used by [Que No Caiga](../que-no-caiga).
 
-![menú](docs/menu.png) ![flecha](docs/flecha.png) ![gol](docs/gol.png)
+![menu](docs/menu.png) ![arrow](docs/flecha.png) ![goal](docs/gol.png)
 
-![fallo](docs/fallo.png) ![final](docs/final.png)
+![miss](docs/fallo.png) ![ending](docs/final.png)
 
-## Ejecutar
+## Running
 
 ```sh
 cargo run --release -p retro-penal
 ```
 
-En Linux hacen falta las cabeceras de ALSA y OpenGL/X11 (`sudo apt install libasound2-dev`).
-Los assets van embebidos en el binario.
+On Linux you need the ALSA and OpenGL/X11 headers (`sudo apt install libasound2-dev`).
+The assets are embedded in the binary.
 
-### Versión web
+### Web version
 
 ```sh
 rustup target add wasm32-unknown-unknown
-../../tools/build_web.sh retro-penal   # genera dist/retro-penal
+../../tools/build_web.sh retro-penal   # generates dist/retro-penal
 ```
 
-El `index.html` sale de la plantilla común de [`crates/museo/web`](../../crates/museo/web).
+The `index.html` comes from the common template in [`crates/museo/web`](../../crates/museo/web).
 
-### Controles táctiles
+### Touch controls
 
-<img src="docs/movil.png" align="right" width="180" alt="móvil en vertical">
+<img src="docs/movil.png" align="right" width="180" alt="mobile in portrait">
 
-El original ya se jugaba tocando la pantalla (su objeto Touch, que también acepta el ratón), así
-que no hacen falta botones: en móviles y tablets se toca el juego, y en vertical queda centrado.
-[`crates/museo`](../../crates/museo) igual detecta el puntero táctil y lo comunica a la página.
+The original was already played by touching the screen (its Touch object, which also accepts the mouse), so
+no buttons are needed: on phones and tablets you touch the game, and in portrait it stays centred.
+[`crates/museo`](../../crates/museo) likewise detects the touch pointer and reports it to the page.
 
 <br clear="right">
 
-## Controles
+## Controls
 
-| Entrada | Acción |
+| Input | Action |
 |---|---|
-| Clic o toque | Empezar, OK, patear (en cualquier parte) y Reintentar |
+| Click or tap | Start, OK, kick (anywhere) and Retry |
 
-Sobre los botones el cursor pasa a ser una mano, como en el original (Mouse.SetCursor).
+Over the buttons the cursor becomes a hand, as in the original (Mouse.SetCursor).
 
-## Cómo se hizo
+## How it was made
 
-1. **Descarga**: la versión HTML5 que itch.io sirve en un iframe (`tools/originales.py` la rastrea
-   archivo por archivo) y los paquetes de escritorio `win32.zip`, `osx32.zip` y `linux32.zip`.
-   Según su `offline.appcache`, la HTML5 se exportó el **23-jul-2015** a las 14:40 UTC.
-2. **Triaje**:
+1. **Download**: the HTML5 version that itch.io serves in an iframe (`tools/originales.py` crawls it
+   file by file) and the desktop packages `win32.zip`, `osx32.zip` and `linux32.zip`.
+   According to its `offline.appcache`, the HTML5 one was exported on **23-Jul-2015** at 14:40 UTC.
+2. **Triage**:
    - REA ([rea.tools](https://rea.tools/), `rea-agents` 6.7.0): `analyze-javascript-application`
-     sobre la carpeta HTML5
-     (`ev_d2026d791a06ca6424b5fd5eb563fdb82b69a3d9ba1d818e0c724848d4d34f4b`, resumen
-     `ev_cedb30a278038548b36d7e9cac9325d026c5ffe2291dd9c983fbc9d85b897e40`) y sobre el `package.nw`
-     de Windows (`ev_12cfcc4a45b1af48c0f002ecb023e0e60165b9ea85f6aa9737cd305eb4718131`, resumen
+     on the HTML5 folder
+     (`ev_d2026d791a06ca6424b5fd5eb563fdb82b69a3d9ba1d818e0c724848d4d34f4b`, summary
+     `ev_cedb30a278038548b36d7e9cac9325d026c5ffe2291dd9c983fbc9d85b897e40`) and on the Windows
+     `package.nw` (`ev_12cfcc4a45b1af48c0f002ecb023e0e60165b9ea85f6aa9737cd305eb4718131`, summary
      `ev_ccb1164a0f4828c2da782a24f50a4d42d15bfe8a4d2dc3ed224bb698640f0d0d`).
-   - Los paquetes NW.js (NW.js de marzo de 2015) se abrieron sin ejecutarlos. Los tres traen los
-     mismos archivos del juego, fechados el **22-jul-2015** a las 10:07 (hora local del zip); solo
-     cambia `package.json` entre Windows y los demás. Las imágenes y los OGG son idénticos a los de
-     la HTML5, pero `data.js`, `c2runtime.js` e `index.html` no: es una exportación del día anterior.
-     Todavía tiene el plugin Browser, con llamadas a `javascript:goles()`, `intentos()`,
-     `inicio()`, `reiniciar()`, `compartir()` y `fin()` (funciones que la página no define), y el
-     tipo del botón «Compartir» del final, con su evento. El port sigue a la HTML5, la que se juega
-     en itch.io.
-3. **Eventos**: [`tools/c2_eventos.py`](../../tools/c2_eventos.py) lee `data.js` y vuelca las hojas
-   de eventos a pseudocódigo (`reference/eventos.txt`) y el proyecto a `reference/resumen.txt`. Los
-   nombres de los objetos (`t0`, `t1`...) y de las condiciones y acciones minificadas
-   (`Y.prototype.D.ir`) se identificaron leyendo su código (`reference/aces.txt`) y están en
+   - The NW.js packages (NW.js from March 2015) were opened without running them. All three bring the
+     same game files, dated **22-Jul-2015** at 10:07 (zip local time); only
+     `package.json` differs between Windows and the others. The images and OGG files are identical to the
+     HTML5 ones, but `data.js`, `c2runtime.js` and `index.html` are not: it is an export from the previous day.
+     It still has the Browser plugin, with calls to `javascript:goles()`, `intentos()`,
+     `inicio()`, `reiniciar()`, `compartir()` and `fin()` (functions the page does not define), and the
+     "Share" button type from the ending, with its event. The port follows the HTML5 one, the one played
+     on itch.io.
+3. **Events**: [`tools/c2_eventos.py`](../../tools/c2_eventos.py) reads `data.js` and dumps the event
+   sheets to pseudocode (`reference/eventos.txt`) and the project to `reference/resumen.txt`. The
+   names of the objects (`t0`, `t1`...) and of the minified conditions and actions
+   (`Y.prototype.D.ir`) were identified by reading their code (`reference/aces.txt`) and are in
    `reference/nombres.json`.
-4. **Runtime**: del runtime minificado se tradujeron (en `crates/construct2`):
-   - los comportamientos Bullet (con el rebote en los sólidos: el ángulo de rebote, el empuje
-     hacia fuera y el empuje fraccional), Turret, Custom Movement, Solid y Wrap, y su orden de
-     tick;
-   - la colisión con giro y espejo (cajas, cuadriláteros y polígonos);
-   - la condición «On collision with another object», con su memoria por parejas y las colisiones
-     que registran los comportamientos;
-   - System.Wait, que guarda las instancias elegidas y sigue en el tick en que se cumple;
-   - los bloques de eventos: O (con un disparador entre sus condiciones), Sino y los disparadores
-     de Touch y Audio;
-   - Audio con etiquetas, bucle, volumen en dB, Stop, Stop all y «On ended»;
-   - Mouse.SetCursor e «Is over object».
+4. **Runtime**: the following were translated from the minified runtime (in `crates/construct2`):
+   - the Bullet behaviours (with bouncing off solids: the bounce angle, the push
+     outwards and the fractional push), Turret, Custom Movement, Solid and Wrap, and their tick
+     order;
+   - collision with rotation and mirroring (boxes, quadrilaterals and polygons);
+   - the "On collision with another object" condition, with its per-pair memory and the collisions
+     the behaviours register;
+   - System.Wait, which stores the chosen instances and continues on the tick it is fulfilled;
+   - the event blocks: Or (with a trigger among its conditions), Else and the Touch and Audio
+     triggers;
+   - Audio with tags, loop, volume in dB, Stop, Stop all and "On ended";
+   - Mouse.SetCursor and "Is over object".
 
-   Los fragmentos están en `reference/runtime.txt`.
-5. **Assets**: [`tools/extraer.sh`](tools/extraer.sh) copia las imágenes, los OGG que suenan y
+   The snippets are in `reference/runtime.txt`.
+5. **Assets**: [`tools/extraer.sh`](tools/extraer.sh) copies the images, the OGG files that play and
    `data.js`.
-6. **Port de las hojas** (`src/juego.rs`), con las mismas reglas que en
-   [Que No Caiga](../que-no-caiga) (instancias elegidas, disparadores entre ticks, orden del tick):
-   - Cada hoja es una función (`hoja_menu`, `hoja_juego` y `hoja_game_over`) y el tick llama a la
-     del layout actual.
-   - System.Wait guarda en `construct2::Esperas` el resto de las acciones como un valor de
-     `Seguir` (`Choque(fallo)` o `FinDePartida`), junto con los uid de las instancias elegidas. Las
-     esperas se cumplen al principio del tick, antes de los comportamientos, y sobreviven al
-     cambio de layout.
-   - Cada condición «On collision» tiene su `MemoriaColision` (cuatro en este juego). Recuerda en
-     qué tick vio solapada a cada pareja y cuenta también las colisiones que registra Bullet al
-     rebotar.
-   - «Every X seconds» (`Cada`) guarda su último disparo y se recoloca si se atrasa más de 40 ms,
-     como el runtime.
-   - El rebote de Bullet en los sólidos sigue a `calculateSolidBounceAngle`. Gira de 5 en 5
-     grados alrededor de la posición anterior buscando la primera dirección libre a cada lado. La
-     normal queda entre las dos y el nuevo ángulo es el reflejo del de llegada. Luego la pelota
-     avanza en la nueva dirección de píxel en píxel hasta salir del sólido y se vuelve a acercar a
-     él en fracciones (`pushOutSolid`). Si así no sale, va al hueco libre más cercano
+6. **Port of the sheets** (`src/juego.rs`), with the same rules as in
+   [Que No Caiga](../que-no-caiga) (chosen instances, triggers between ticks, tick order):
+   - Each sheet is a function (`hoja_menu`, `hoja_juego` and `hoja_game_over`) and the tick calls the
+     one for the current layout.
+   - System.Wait stores the rest of the actions in `construct2::Esperas` as a `Seguir` value
+     (`Choque(fallo)` or `FinDePartida`), together with the uids of the chosen instances. The
+     waits are fulfilled at the start of the tick, before the behaviours, and they survive the
+     layout change.
+   - Every "On collision" condition has its own `MemoriaColision` (four in this game). It remembers on
+     which tick it saw each pair overlapping and also counts the collisions Bullet registers when it
+     bounces.
+   - "Every X seconds" (`Cada`) stores its last firing and resets it if it falls more than 40 ms behind,
+     like the runtime.
+   - Bullet's bounce off solids follows `calculateSolidBounceAngle`. It rotates in 5-degree
+     steps around the previous position looking for the first free direction on each side. The
+     normal ends up between the two and the new angle is the reflection of the incoming one. Then the ball
+     moves in the new direction pixel by pixel until it leaves the solid and is brought close to
+     it again in fractions (`pushOutSolid`). If it does not get out that way, it goes to the nearest free gap
      (`pushOutSolidNearest`).
-   - Audio: `Stop` lanza «On ended», como Web Audio, y el fin de un sonido se avisa entre ticks.
+   - Audio: `Stop` fires "On ended", like Web Audio, and the end of a sound is reported between ticks.
 
-## Correspondencia con el original
+## Correspondence with the original
 
 | Construct 2 | Rust |
 |---|---|
-| `data.js` (tipos, animaciones, comportamientos, layouts) | `crates/construct2` (`datos.rs`) |
-| Sprite, Text, Audio, comportamientos, colisiones, Wait, Every, On collision | `crates/construct2` |
-| Tick del runtime, hojas "Menu Principal", "Juego" y "Game Over" | `src/juego.rs` |
-| `index.html` (canvas de 400×500) | `src/main.rs` con `museo::Pantalla` |
+| `data.js` (types, animations, behaviours, layouts) | `crates/construct2` (`datos.rs`) |
+| Sprite, Text, Audio, behaviours, collisions, Wait, Every, On collision | `crates/construct2` |
+| Runtime tick, "Menu Principal", "Juego" and "Game Over" sheets | `src/juego.rs` |
+| `index.html` (400×500 canvas) | `src/main.rs` with `museo::Pantalla` |
 
-## Rarezas del original que se conservan
+## Original quirks that are kept
 
-- **En la pantalla final suena `click` en cada tick** mientras no se pulse «Reintentar». El
-  paquete NW.js explica por qué: allí era el evento del botón «Compartir» (al tocarlo sonaba el
-  clic y se llamaba a `javascript:compartir(...)`). Para la versión HTML5 se borró ese botón (y el
-  plugin Browser), Construct 2 quitó las condiciones y acciones que lo usaban, y quedó un evento
-  sin condiciones. El texto «Compartir» sigue en pantalla, sin botón. Lo que queda del evento
-  («si no suena "comenzar"») siempre se cumple, y cada clic se suma a los anteriores: se oye un
-  zumbido continuo.
-- La flecha (Turret) apunta a un punto invisible que está 3 px por encima de su base y va y viene
-  entre x = 197 y 203. Por eso barre de −135° a −45° (45° a cada lado de la vertical) y gira más
-  rápido cerca de la vertical. El punto se mueve a `velocidadFlecha` px/s: 5 al empezar y 0,5 más
-  por gol, hasta 15.
-- El arquero decide al salir el tiro. Su marca invisible va y viene entre x = 190 y 210 a
-  `velocidadArquero` px/s (3 al empezar y 5 más por gol, hasta 28). Si la marca está entre 197 y
-  203 se agacha; si no, se lanza hacia donde iba la marca. Vuela 3 px por tick (depende de los
-  fotogramas por segundo) hasta x = 75 o 320, y ahí queda tirado.
-- Tras lanzarse a la izquierda el arquero queda espejado: nada lo devuelve a la normal hasta que
-  se lanza a la derecha.
-- La pelota se achica una sola vez: la escala baja de 0,6 a 0,42 en el primer tick del tiro (la
-  condición es «escala > 0,5»).
-- El gol cuenta solo si la pelota queda entera dentro de un cuadro invisible que va de x = 51 a
-  350, más estrecho que el arco (los palos están en 32 y 368). Los tiros pegados a un palo entran
-  en la red sin contar, siguen de largo y salen por arriba: fallo.
-- Tocar otra vez antes de que salga el tiro (la patada sale en el tercer cuadro, a los 0,4 s)
-  reinicia la animación y vuelve a apuntar con la flecha, que sigue girando aunque esté oculta.
-- El siguiente tiro llega cuando termina el sonido del gol (1,9 s) o 3 s después de un fallo.
-- Las esperas (System.Wait) sobreviven al cambio de layout. La espera de 3 s del último fallo
-  termina ya en la pantalla final y marca el fallo. Si se pulsa «Reintentar» en ese primer
-  segundo, ResetGlobals llega antes y la marca se queda: en la partida siguiente la flecha aparece
-  antes de pulsar OK.
-- Tres sonidos (`chute`, `comenzar3` y `pitazo3`) se precargan pero ningún evento los reproduce.
-- El fondo de pelotas del menú y del final usa Wrap. Cada mitad reaparece a 1 px del borde
-  derecho sin mirar a la otra, así que entre las dos queda un hueco de hasta lo que avanzan en un
-  tick (8 px a 60 fps).
-- Quedan objetos fuera de la pantalla: los textos «TITULO DEL JUEGO» del menú y «GAME OVER» del
-  final, reemplazados por imágenes.
-- «Is on mobile» oculta la barra de los intentos al empezar en un móvil, pero la barra ya empieza
-  oculta y OK la muestra igual: no tiene efecto.
+- **On the final screen `click` plays on every tick** as long as "Retry" is not pressed. The
+  NW.js package explains why: there it was the "Share" button's event (touching it played the
+  click and called `javascript:compartir(...)`). For the HTML5 version that button was deleted (and the
+  Browser plugin), Construct 2 removed the conditions and actions that used it, and an event
+  with no conditions was left. The text "Compartir" is still on screen, without a button. What is left of the event
+  ("if 'comenzar' is not playing") is always true, and every click adds to the previous ones: you hear a
+  continuous hum.
+- The arrow (Turret) points at an invisible point 3 px above its base and moves back and forth
+  between x = 197 and 203. That is why it sweeps from −135° to −45° (45° on each side of the vertical) and turns faster
+  near the vertical. The point moves at `velocidadFlecha` px/s: 5 at the start and 0.5 more
+  per goal, up to 15.
+- The goalkeeper decides when the shot leaves. His invisible marker moves back and forth between x = 190 and 210 at
+  `velocidadArquero` px/s (3 at the start and 5 more per goal, up to 28). If the marker is between 197 and
+  203 he crouches; if not, he dives to where the marker was going. He flies 3 px per tick (it depends on
+  frames per second) until x = 75 or 320, and stays down there.
+- After diving to the left the goalkeeper stays mirrored: nothing returns him to normal until
+  he dives to the right.
+- The ball shrinks only once: the scale goes from 0.6 to 0.42 on the first tick of the shot (the
+  condition is "scale > 0.5").
+- The goal only counts if the ball is entirely inside an invisible box that goes from x = 51 to
+  350, narrower than the goal (the posts are at 32 and 368). Shots tight against a post go
+  into the net without counting, carry on and come out at the top: a miss.
+- Tapping again before the shot leaves (the kick comes out on the third frame, at 0.4 s)
+  restarts the animation and aims again with the arrow, which keeps turning even while hidden.
+- The next shot comes when the goal sound ends (1.9 s) or 3 s after a miss.
+- The waits (System.Wait) survive the layout change. The 3 s wait of the last miss
+  ends already on the final screen and records the miss. If "Retry" is pressed in that first
+  second, ResetGlobals arrives first and the mark stays: in the next run the arrow appears
+  before OK is pressed.
+- Three sounds (`chute`, `comenzar3` and `pitazo3`) are preloaded but no event plays them.
+- The ball background of the menu and the ending uses Wrap. Each half reappears 1 px from the right
+  edge without looking at the other, so between the two there is a gap of up to whatever they advance in one
+  tick (8 px at 60 fps).
+- Some objects are left off screen: the "TITULO DEL JUEGO" text from the menu and the "GAME OVER" one from the
+  ending, replaced by images.
+- "Is on mobile" hides the attempts bar when starting on a phone, but the bar already starts
+  hidden and OK shows it anyway: it has no effect.
 
-## Diferencias con el original
+## Differences from the original
 
-- **Fuentes**: el original dibujaba los textos con la fuente del sistema "Arial". El port usa
-  Liberation Sans 2.1.5 (normal y negrita, SIL OFL 1.1), con las métricas de Arial, en
+- **Fonts**: the original drew the texts with the system font "Arial". The port uses
+  Liberation Sans 2.1.5 (regular and bold, SIL OFL 1.1), with Arial's metrics, in
   [`crates/construct2/fuentes`](../../crates/construct2/fuentes).
-- **Sonido**: se usan los OGG. El navegador elegía entre OGG y M4A; los dos son el mismo sonido.
-  macroquad no distingue las reproducciones de un mismo archivo: Stop y SetVolume actúan sobre
-  todo el archivo. Aquí cada etiqueta tiene su archivo (salvo `click3`, que nunca se detiene), así
-  que no cambia nada. Como Web Audio, detener un sonido que suena lanza su «On ended».
-- **Ventana**: el original escalaba el canvas de 400×500 solo por múltiplos enteros (*letterbox
-  integer scale*). El port lo escala a la ventana con bandas negras, como el resto del museo.
-- **Is on mobile**: el original miraba el navegador; el port mira si hay pantalla táctil.
+- **Sound**: the OGG files are used. The browser chose between OGG and M4A; both are the same sound.
+  macroquad cannot tell apart different playbacks of the same file: Stop and SetVolume act on
+  the whole file. Here each tag has its own file (except `click3`, which never stops), so
+  nothing changes. Like Web Audio, stopping a playing sound fires its "On ended".
+- **Window**: the original scaled the 400×500 canvas only by integer multiples (*letterbox
+  integer scale*). The port scales it to the window with black letterboxing, like the rest of the museum.
+- **Is on mobile**: the original looked at the browser; the port looks for a touch screen.
 
-## Regenerar los assets
-
-```sh
-tools/extraer.sh <carpeta html5>        # por ejemplo ../../originales/retro-penal/html5
-```
-
-## Pruebas
+## Regenerating the assets
 
 ```sh
-node ../../tools/humo/nativo.mjs retro-penal   # tras cargo build --release
-node ../../tools/humo/web.mjs retro-penal      # tras tools/build_web.sh
+tools/extraer.sh <html5 folder>        # for example ../../originales/retro-penal/html5
 ```
 
-Siguen los pasos de `humo.json`: el menú, las instrucciones, la flecha, el tiro y su resultado. Se
-comprobaron aparte:
-- diez tiros seguidos: goles, fallos al palo y afuera, las cruces de los intentos y el final;
-- el rebote en el palo, tick a tick;
-- con un cambio temporal sin subir (un solo intento): el final, «Reintentar» y la espera que
-  sobrevive al cambio de layout.
+## Tests
+
+```sh
+node ../../tools/humo/nativo.mjs retro-penal   # after cargo build --release
+node ../../tools/humo/web.mjs retro-penal      # after tools/build_web.sh
+```
+
+They follow the steps in `humo.json`: the menu, the instructions, the arrow, the shot and its result. These were
+checked separately:
+- ten shots in a row: goals, misses off the post and wide, the attempt crosses and the ending;
+- the bounce off the post, tick by tick;
+- with a temporary change that is not committed (a single attempt): the ending, "Retry" and the wait that
+  survives the layout change.

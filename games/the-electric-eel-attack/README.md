@@ -1,120 +1,120 @@
 # The Electric Eel Attack
 
 **The Electric Eel Attack** (Elvis Brevi,
-[itch.io](https://elvisbrevi.itch.io/the-electric-eel-attack)) es un juego de plataformas de
-acción. Yerko tiene que reunir los tres mapas de cada nivel para que se abra el vórtice de salida,
-mientras lo atacan anguilas eléctricas: los *hunters* patrullan y se electrifican cada cierto
-tiempo, y los *kamikazes* saltan desde abajo. Se las puede pisar o disparar con la energía de las
-pilas (10 disparos por pila). Tiene cuatro niveles: el campo, una caverna en la que se sale por un
-lado y se entra por el otro, la ciudad y una fábrica con un cañón que apunta con su mira.
+[itch.io](https://elvisbrevi.itch.io/the-electric-eel-attack)) is an action platformer.
+Yerko has to collect the three maps of each level so the exit vortex opens,
+while electric eels attack him: the *hunters* patrol and electrify themselves every so often,
+and the *kamikazes* jump from below. You can stomp on them or shoot them with the energy from the
+batteries (10 shots per battery). It has four levels: the countryside, a cavern you leave through one
+side and enter through the other, the city and a factory with a cannon that aims with its sight.
 
-Se hizo en 2011 con C# y XNA 3.1 sobre un motor propio, `Engine.dll` (compilado el 9-mar-2011), y
-ahora está portado a Rust + macroquad: se juega en PC y en el navegador, también en móviles. La
-lógica se reconstruyó por ingeniería inversa de los dos ensamblados y se tradujo casi línea por
-línea. Los gráficos, las fuentes, los mapas, los efectos y los sonidos son los originales.
+It was made in 2011 with C# and XNA 3.1 on top of a custom engine, `Engine.dll` (compiled on 9-Mar-2011), and
+is now ported to Rust + macroquad: it plays on PC and in the browser, also on mobile. The
+logic was reconstructed by reverse-engineering the two assemblies and translated almost line by
+line. The graphics, fonts, maps, effects and sounds are the originals.
 
-![título](docs/titulo.png) ![nivel 1](docs/nivel1.png)
+![title](docs/titulo.png) ![level 1](docs/nivel1.png)
 
-![nivel 3](docs/nivel3.png) ![nivel 4](docs/nivel4.png) ![muerte](docs/muerte.png)
+![level 3](docs/nivel3.png) ![level 4](docs/nivel4.png) ![death](docs/muerte.png)
 
-## Ejecutar
+## Running
 
 ```sh
 cargo run --release -p the-electric-eel-attack
 ```
 
-En Linux hacen falta las cabeceras de ALSA y OpenGL/X11 (`sudo apt install libasound2-dev`).
-Los assets van embebidos en el binario.
+On Linux you need the ALSA and OpenGL/X11 headers (`sudo apt install libasound2-dev`).
+The assets are embedded in the binary.
 
-### Versión web
+### Web version
 
 ```sh
 rustup target add wasm32-unknown-unknown
-../../tools/build_web.sh the-electric-eel-attack   # genera dist/the-electric-eel-attack
+../../tools/build_web.sh the-electric-eel-attack   # generates dist/the-electric-eel-attack
 ```
 
-El `index.html` sale de la plantilla común de [`crates/museo/web`](../../crates/museo/web). Al
-empezar el juego el navegador decodifica los sonidos, y al llegar al nivel 3 la segunda canción,
-lo que puede tardar un momento.
+The `index.html` comes from the common template in [`crates/museo/web`](../../crates/museo/web). When
+the game starts the browser decodes the sounds, and on reaching level 3 the second song,
+which may take a moment.
 
-### Controles táctiles
+### Touch controls
 
-<img src="docs/movil.png" align="right" width="180" alt="móvil en vertical">
+<img src="docs/movil.png" align="right" width="180" alt="mobile in portrait">
 
-En móviles y tablets aparecen una cruceta con izquierda y derecha, los botones A (disparo),
-B (salto) y R (reiniciar el nivel), y START para empezar. Los dibuja el crate compartido
-[`crates/museo`](../../crates/museo), configurado en `src/main.rs`. Se activan si el navegador
-indica un puntero táctil (`(pointer: coarse)`) o en cuanto llega el primer toque. En vertical el
-juego se coloca arriba y los controles debajo.
+On phones and tablets a D-pad with left and right, the A (shoot),
+B (jump) and R (restart the level) buttons, and START to begin appear. They are drawn by the shared crate
+[`crates/museo`](../../crates/museo), configured in `src/main.rs`. They are enabled if the browser
+reports a touch pointer (`(pointer: coarse)`) or as soon as the first touch arrives. In portrait the
+game sits at the top and the controls below.
 
 <br clear="right">
 
-## Controles
+## Controls
 
-| Tecla | Acción |
+| Key | Action |
 |---|---|
-| ← / → | Andar |
-| X | Saltar (se rebota al pisar una anguila) |
-| Z | Disparar (gasta 10 de energía; las pilas la recargan) |
-| Enter | Empezar desde el título |
-| R | Reiniciar el nivel |
-| Esc | Pantalla completa (como en el original: no sale del juego) |
+| ← / → | Walk |
+| X | Jump (you bounce off when you stomp on an eel) |
+| Z | Shoot (spends 10 energy; batteries recharge it) |
+| Enter | Start from the title |
+| R | Restart the level |
+| Esc | Fullscreen (as in the original: it does not quit the game) |
 
-## Cómo se hizo
+## How it was made
 
-1. **Descarga**: `The_Electric_Eel_Attack.zip` de itch.io, un despliegue ClickOnce de XNA 3.1
-   (versión 1.0.0.13). Los nombres del zip están en CP437 (`cañon`, `montaña`). El ejecutable
-   (36 KB) se compiló el **9-mar-2011** a las 02:02 UTC y `Engine.dll` (54 KB) el 8-mar-2011,
-   según sus cabeceras PE. Los dos son CIL puro para CLR 2.0, x86.
+1. **Download**: `The_Electric_Eel_Attack.zip` from itch.io, a ClickOnce deployment of XNA 3.1
+   (version 1.0.0.13). The zip names are in CP437 (`cañon`, `montaña`). The executable
+   (36 KB) was compiled on **9-Mar-2011** at 02:02 UTC and `Engine.dll` (54 KB) on 8-Mar-2011,
+   according to their PE headers. Both are pure CIL for CLR 2.0, x86.
 2. **REA** ([rea.tools](https://rea.tools/), `rea-agents` 6.7.0):
    - `inspect-managed-artifact`: `The Electric Eel Attack.exe`
-     (`ev_d5478a582e5bf5d018c37eb2f48f62f7ee3cf54e0ae5f25788c7598b88945959`) y `Engine.dll`
+     (`ev_d5478a582e5bf5d018c37eb2f48f62f7ee3cf54e0ae5f25788c7598b88945959`) and `Engine.dll`
      (`ev_89912de47b9d1175390d36c8dddf19c6e7ae78396bccb45c8df5326e2ceca931`).
-   - `inspect-managed-members`: 11 tipos y 72 métodos en el juego
-     (`ev_4cee641740877f572c0a5b1281191e0819faecf2fc40621d346cef37880b5fac`), 32 tipos y 196
-     métodos en el motor (`ev_02b38c886ecc3f066ff8cbebf4cff4defdc0411180d4c8590aa99ed3834f5f16`).
-   - `import-managed-reconstruction`: el C# decompilado de los métodos con cuerpo quedó anclado a
-     su hash de IL y su firma, 33 del juego
-     (`ev_7d2704337defc75934720079e28fe7d85435d026fde7c5df2f6a699deb327820`) y 129 del motor
-     (`ev_6f70f86337fcb9f649d8d64e46ca3dd9a6178afd5c8c81d221427540cfe7bfe2`). El resto son
-     constructores implícitos y accesores de propiedades.
-3. **ILSpy** (`ilspycmd` 9.1) con las referencias del *XNA Framework Redistributable 3.1* y
-   `Engine.dll`. Para comprobar la semántica de XNA que el port copia, también se decompiló
-   `SpriteFont` del redistribuible: `InternalDraw` e `InternalMeasure`, con rotación, escala y
-   texto volteado. Están en [`crates/xna`](../../crates/xna).
-4. **Assets**: [`tools/extraer.sh`](tools/extraer.sh) usa
-   [`tools/xnb_extract.py`](../../tools/xnb_extract.py) para las texturas, las tres `SpriteFont`
-   y los 17 `SoundEffect` (PCM; se guardan como WAV sin convertir), y copia los cinco mapas XML
-   del editor del motor (`Content/Mapas`).
-5. **Efectos**: de los trece efectos del motor, solo se ven tres. Sus píxel shaders ps_2_0 se
-   desensamblaron con [`tools/ps20_desensamblar.py`](../../tools/ps20_desensamblar.py) y se reescribieron en
-   GLSL (`src/motor/shader.rs`). `varios.xnb` tiene siete pasadas, y el orden de los shaders en el
-   archivo es el inverso del de las pasadas.
+   - `inspect-managed-members`: 11 types and 72 methods in the game
+     (`ev_4cee641740877f572c0a5b1281191e0819faecf2fc40621d346cef37880b5fac`), 32 types and 196
+     methods in the engine (`ev_02b38c886ecc3f066ff8cbebf4cff4defdc0411180d4c8590aa99ed3834f5f16`).
+   - `import-managed-reconstruction`: the decompiled C# of the methods with a body was anchored to
+     its IL hash and signature, 33 from the game
+     (`ev_7d2704337defc75934720079e28fe7d85435d026fde7c5df2f6a699deb327820`) and 129 from the engine
+     (`ev_6f70f86337fcb9f649d8d64e46ca3dd9a6178afd5c8c81d221427540cfe7bfe2`). The rest are
+     implicit constructors and property accessors.
+3. **ILSpy** (`ilspycmd` 9.1) with the references of the *XNA Framework Redistributable 3.1* and
+   `Engine.dll`. To check the XNA semantics the port copies, the redistributable's
+   `SpriteFont` was also decompiled: `InternalDraw` and `InternalMeasure`, with rotation, scale and
+   flipped text. They are in [`crates/xna`](../../crates/xna).
+4. **Assets**: [`tools/extraer.sh`](tools/extraer.sh) uses
+   [`tools/xnb_extract.py`](../../tools/xnb_extract.py) for the textures, the three `SpriteFont`s
+   and the 17 `SoundEffect`s (PCM; saved as WAV without converting), and copies the five XML maps
+   from the engine's editor (`Content/Mapas`).
+5. **Effects**: of the engine's thirteen effects, only three are visible. Their ps_2_0 pixel shaders were
+   disassembled with [`tools/ps20_desensamblar.py`](../../tools/ps20_desensamblar.py) and rewritten in
+   GLSL (`src/motor/shader.rs`). `varios.xnb` has seven passes, and the order of the shaders in the
+   file is the reverse of the passes'.
    - `Negative`: `1 − rgb`.
-   - `Brightness`: `color × Intensity`, alfa incluido.
+   - `Brightness`: `color × Intensity`, alpha included.
    - `TopFade`: `color × v`.
 
-   Ninguno usa el tinte del sprite.
+   None of them uses the sprite's tint.
 6. **Port**:
-   - `src/motor/` traduce `Engine.dll` y `src/niveles.rs` el juego. Las subclases de `Objeto`
-     (`Grafico`, `Plataforma`, `Personaje`, `SistemaParticulas` y `Texto`) solo cambian cargar,
-     actualizar y dibujar, así que son un único tipo con un campo `tipo`.
-   - Los mapas XML se leen con `roxmltree` al cargar cada nivel, como `Escenario.cargar`. Los
-     objetos piden sus texturas, fuentes y sonidos por nombre, como `Content.Load`, a los assets
-     embebidos.
-   - La cámara del motor (`Pantalla`) guarda su matriz, `Translation(−posición) · Scale ·
-     RotationZ`. Cada objeto dibuja con ella mediante `museo::Pantalla::vista_transformada`, en una
-     pantalla virtual de 640×480. Como cada objeto abría su propio `SpriteBatch`, el port elige
-     por objeto la mezcla (aditiva o normal), si va con cámara y si usa el efecto de la escena o
-     el suyo.
-   - `SoundEffectInstance` se emula por objeto con un `Sound` de macroquad por instancia, que
-     recuerda hasta cuándo suena (ver «Diferencias con el original»).
-   - El paso fijo, `Rectangle`, `Clamp`, `SpriteFont` (con rotación, escala y volteo) y
-     `System.Random` vienen de `crates/museo` y `crates/xna`, como en los otros ports de XNA.
+   - `src/motor/` translates `Engine.dll` and `src/niveles.rs` the game. The subclasses of `Objeto`
+     (`Grafico`, `Plataforma`, `Personaje`, `SistemaParticulas` and `Texto`) only change loading,
+     updating and drawing, so they are a single type with a `tipo` field.
+   - The XML maps are read with `roxmltree` when each level loads, like `Escenario.cargar`. The
+     objects request their textures, fonts and sounds by name, like `Content.Load`, from the embedded
+     assets.
+   - The engine's camera (`Pantalla`) stores its matrix, `Translation(−position) · Scale ·
+     RotationZ`. Every object draws with it through `museo::Pantalla::vista_transformada`, on a
+     640×480 virtual screen. Since each object opened its own `SpriteBatch`, the port chooses
+     per object the blend mode (additive or normal), whether it uses the camera and whether it uses the scene's effect or
+     its own.
+   - `SoundEffectInstance` is emulated per object with one macroquad `Sound` per instance, which
+     remembers until when it plays (see "Differences from the original").
+   - The fixed step, `Rectangle`, `Clamp`, `SpriteFont` (with rotation, scale and flipping) and
+     `System.Random` come from `crates/museo` and `crates/xna`, as in the other XNA ports.
 
-`reference/csharp/` contiene el C# decompilado del juego (`juego/`) y del motor (`Engine/`).
+`reference/csharp/` contains the decompiled C# of the game (`juego/`) and of the engine (`Engine/`).
 
-## Correspondencia con el original
+## Correspondence with the original
 
 | C# | Rust |
 |---|---|
@@ -122,73 +122,73 @@ juego se coloca arriba y los controles debajo.
 | `EAAE.Control` | `control.rs` |
 | `EAAE.Niveles.*` (`Nivel`, `Titulo`, `Nivel1`–`Nivel4`) | `niveles.rs` |
 | `Engine.Datos.Escenario` | `motor/escenario.rs` |
-| `Engine.Datos.Pantalla` y los campos estáticos de `Escenario` | `motor/mod.rs` (`PantallaXna`, `Globales`) |
+| `Engine.Datos.Pantalla` and the static fields of `Escenario` | `motor/mod.rs` (`PantallaXna`, `Globales`) |
 | `Engine.Objetos.*` (`Objeto`, `Grafico`, `Plataforma`, `Personaje`, `SistemaParticulas`, `Particula`, `Texto`, `Estado`) | `motor/objeto.rs` |
 | `Engine.Fisicas.Fisica` | `motor/fisica.rs` |
 | `Engine.Shaders.*` | `motor/shader.rs` |
 | `Engine.Audios.Sonido` | `audio.rs` |
 | `MathHelper.Clamp`, `Rectangle`, `SpriteBatch.Draw`, `SpriteFont`, `System.Random` | [`crates/xna`](../../crates/xna) |
 
-## Rarezas del original que se conservan
+## Original quirks that are kept
 
-- `Escenario.getObjetoPorNombre` devuelve el primer objeto cuyo nombre **contiene** el texto
-  buscado. El juego busca así todo, cada vez («bala1» encuentra «bala1» porque está antes que
-  «bala10» en el mapa).
-- El mapa del nivel 1 pide el efecto `Negative` para toda la escena, pero `cortina()` llama a
-  `desactivarShaders()` en cada paso y nunca se ve. Los efectos de escena que sí se ven son
-  `Negative` al morir y `Brightness` ×2 al reunir los tres mapas (eso duplica también el alfa).
-- Al morir el juego se pausa y se pone en negativo mientras baja el telón. En los niveles 3 y 4
-  el daño de las plataformas electrificadas y de la bola del cañón solo cuenta cuando el sonido
-  «dead» del héroe ya suena, un paso después del choque.
-- El nivel que pide cambiar de nivel termina su propia actualización después de cargar el
-  siguiente. Durante ese paso todavía mueve la cámara a su héroe, y el nuevo nivel se dibuja una
-  vez sin haberse actualizado.
-- La cámara (`Pantalla`) guarda su matriz y solo la recalcula tras un `reset()`, así que al cargar
-  un mapa la posición nueva no se aplica hasta que algo llama a `reset()`.
-- Los *hunters* restan 1 a la componente azul de su color en cada paso (como byte, dando la
-  vuelta) y están electrificados mientras vale entre 100 y 150.
-- Al empujar un bloque se miran siempre las colisiones de «bloque1», sea cual sea el bloque.
-- El título «The Electric Eel» alterna entre mezcla aditiva y normal casi en cada fotograma.
-- La física usa el cuerpo calculado en el paso anterior, y los `Grafico` calculan el suyo con la
-  posición de scroll del paso anterior.
-- Los sistemas de partículas se actualizan y se dibujan aunque estén inactivos (las partículas que
-  quedan terminan su vida).
+- `Escenario.getObjetoPorNombre` returns the first object whose name **contains** the searched
+  text. The game looks everything up this way, every time ("bala1" finds "bala1" because it comes before
+  "bala10" in the map).
+- The level 1 map requests the `Negative` effect for the whole scene, but `cortina()` calls
+  `desactivarShaders()` on every step and it is never seen. The scene effects that are seen are
+  `Negative` on death and `Brightness` ×2 when collecting the three maps (that also doubles the alpha).
+- On death the game pauses and goes negative while the curtain falls. In levels 3 and 4
+  the damage from the electrified platforms and from the cannonball only counts when the hero's
+  "dead" sound is already playing, one step after the hit.
+- The level that requests a level change finishes its own update after loading the
+  next one. During that step it still moves the camera to its hero, and the new level is drawn once
+  without having been updated.
+- The camera (`Pantalla`) stores its matrix and only recalculates it after a `reset()`, so when loading
+  a map the new position is not applied until something calls `reset()`.
+- The *hunters* subtract 1 from the blue component of their colour on every step (as a byte, wrapping
+  around) and are electrified while it is between 100 and 150.
+- When pushing a block, the collisions of "bloque1" are always checked, whichever block it is.
+- The "The Electric Eel" title alternates between additive and normal blending on almost every frame.
+- The physics uses the body computed in the previous step, and the `Grafico`s compute theirs with the
+  scroll position of the previous step.
+- The particle systems are updated and drawn even when inactive (the remaining particles
+  finish their life).
 
-## Diferencias con el original
+## Differences from the original
 
-- **Sonido**: cada objeto tiene sus instancias de sonido, como en XNA. macroquad no dice si un
-  sonido sigue sonando, así que cada instancia recuerda su duración. Para no tener que decodificar
-  audio al cargar un nivel, las instancias se cargan al empezar (dos juegos por sonido, que se
-  alternan entre cargas para que lo que suena del nivel anterior termine).
-- **Música**: las dos canciones (400 y 213 s a 8 kHz) se decodifican enteras, así que solo se
-  tiene cargada la que toca. El cambio al llegar al nivel 3 puede hacer una pausa breve.
-- **Aleatoriedad**: las partículas usan una copia de `System.Random` de .NET 2.0 sembrada con el
-  reloj. Los barriles del nivel 4 usan `new Random(i)`, igual que en el original, así que caen
-  exactamente igual.
-- **Ventana**: el juego se dibuja en 640×480 y se escala con bandas negras.
-- No se portaron las funciones del editor del motor (guardar escenarios, grilla, datos y cuerpos
-  de depuración, cámara manual), los diez efectos que no usa ningún mapa, ni la colisión por
-  píxel. Tampoco el ratón, que el control leía pero ningún nivel usaba.
-- **Para probar el port**: en nativo, `EEL_NIVEL=n` (de 1 a 4) empieza directamente en el nivel
-  n. No existe en el original.
+- **Sound**: every object has its own sound instances, as in XNA. macroquad does not say whether a
+  sound is still playing, so each instance remembers its duration. To avoid having to decode
+  audio when loading a level, the instances are loaded at the start (two slots per sound, alternating
+  between loads so that whatever is still playing from the previous level finishes).
+- **Music**: both songs (400 and 213 s at 8 kHz) are decoded whole, so only the one currently needed is
+  loaded. The switch when reaching level 3 may cause a brief pause.
+- **Randomness**: the particles use a copy of .NET 2.0's `System.Random` seeded with the
+  clock. The barrels in level 4 use `new Random(i)`, as in the original, so they fall
+  exactly the same way.
+- **Window**: the game is drawn at 640×480 and scaled with black letterboxing.
+- The engine editor's functions were not ported (saving scenarios, grid, debug data and bodies,
+  manual camera), nor the ten effects no map uses, nor pixel-perfect
+  collision. Nor the mouse, which the control read but no level used.
+- **For testing the port**: natively, `EEL_NIVEL=n` (from 1 to 4) starts directly at level
+  n. It does not exist in the original.
 
-## Regenerar los assets
-
-```sh
-tools/extraer.sh "<ruta>/Application Files/The Electric Eel Attack_1_0_0_13/Content"
-```
-
-## Pruebas
+## Regenerating the assets
 
 ```sh
-node ../../tools/humo/nativo.mjs the-electric-eel-attack   # tras cargo build --release
-node ../../tools/humo/web.mjs the-electric-eel-attack      # tras tools/build_web.sh
+tools/extraer.sh "<path>/Application Files/The Electric Eel Attack_1_0_0_13/Content"
 ```
 
-Siguen los pasos de `humo.json`: el título, Enter, y andar, saltar y avanzar en el nivel 1. Se
-comprobaron aparte, con `EEL_NIVEL`, recorridos más largos y cambios temporales sin subir:
-- los niveles 2 a 4;
-- recoger un mapa;
-- la muerte (efecto negativo y reinicio);
-- reunir los mapas (`Brightness` ×2 y vórtice);
-- la cadena de niveles 1 → 2 → 3 → 4 → título al tocar el vórtice.
+## Tests
+
+```sh
+node ../../tools/humo/nativo.mjs the-electric-eel-attack   # after cargo build --release
+node ../../tools/humo/web.mjs the-electric-eel-attack      # after tools/build_web.sh
+```
+
+They follow the steps in `humo.json`: the title, Enter, and walking, jumping and advancing in level 1. These were
+checked separately, with `EEL_NIVEL`, longer runs and temporary changes that are not committed:
+- levels 2 to 4;
+- collecting a map;
+- death (negative effect and restart);
+- collecting the maps (`Brightness` ×2 and vortex);
+- the level chain 1 → 2 → 3 → 4 → title when touching the vortex.

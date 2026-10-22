@@ -1,273 +1,273 @@
 # Super Happy Jump
 
-**Super Happy Jump** (Elvis Brevi, [itch.io](https://elvisbrevi.itch.io/super-happy-jump)) es un
-juego de saltos infinito: «double jump, cactus and coins». Un vaquero con pañuelo rojo corre solo
-hacia la derecha; se toca para saltar y se vuelve a tocar en el aire para el doble salto. Cada 2,5
-segundos aparece una pareja de cactus con una moneda en el hueco: la moneda suma un punto y tocar
-un cactus termina la partida. Al final se ve el puntaje y el mejor, que queda guardado.
+**Super Happy Jump** (Elvis Brevi, [itch.io](https://elvisbrevi.itch.io/super-happy-jump)) is an
+endless jumping game: "double jump, cactus and coins". A cowboy with a red neckerchief runs on his own
+to the right; you tap to jump and tap again in the air for the double jump. Every 2.5
+seconds a pair of cacti appears with a coin in the gap: the coin scores a point and touching
+a cactus ends the run. At the end you see the score and the best one, which is saved.
 
-Se hizo con Unity 4.6 para el Unity Web Player (también salió en iOS y Android): la versión web se
-compiló el 9-dic-2014. Ahora está portado a Rust + macroquad y se juega en PC y en el navegador,
-también en móviles, tocando la pantalla. La lógica se tradujo del C# decompilado de
-`Assembly-CSharp.dll`, y las piezas del motor que usa (la física 2D con Box2D, el Animator, las
-partículas, la GUI de `OnGUI`) se recrearon en [`crates/unity`](../../crates/unity) a partir de
-los datos del propio juego. Las imágenes, los sonidos, la escena y los prefabs son los originales:
-el port lee al arrancar el `escena.json` que se extrae del `web.unity3d`.
+It was made with Unity 4.6 for the Unity Web Player (it also came out on iOS and Android): the web version
+was compiled on 9-Dec-2014. It is now ported to Rust + macroquad and plays on PC and in the browser,
+also on mobile, by touching the screen. The logic was translated from the C# decompiled from
+`Assembly-CSharp.dll`, and the engine pieces it uses (2D physics with Box2D, the Animator,
+the particles, the `OnGUI` GUI) were recreated in [`crates/unity`](../../crates/unity) from
+the game's own data. The images, sounds, scene and prefabs are the originals:
+at startup the port reads the `escena.json` extracted from `web.unity3d`.
 
-![título](docs/titulo.png) ![carrera](docs/carrera.png)
+![title](docs/titulo.png) ![run](docs/carrera.png)
 
-![salto](docs/salto.png) ![récord](docs/record.png)
+![jump](docs/salto.png) ![record](docs/record.png)
 
-## Ejecutar
+## Running
 
 ```sh
 cargo run --release -p super-happy-jump
 ```
 
-En Linux hacen falta las cabeceras de ALSA y OpenGL/X11 (`sudo apt install libasound2-dev`).
-Los assets van embebidos en el binario. El mejor puntaje se guarda en
-`~/.local/share/museo/super-happy-jump.txt` (o en la carpeta de datos del sistema).
+On Linux you need the ALSA and OpenGL/X11 headers (`sudo apt install libasound2-dev`).
+The assets are embedded in the binary. The best score is saved in
+`~/.local/share/museo/super-happy-jump.txt` (or in the system's data folder).
 
-### Versión web
+### Web version
 
 ```sh
 rustup target add wasm32-unknown-unknown
-../../tools/build_web.sh super-happy-jump   # genera dist/super-happy-jump
+../../tools/build_web.sh super-happy-jump   # generates dist/super-happy-jump
 ```
 
-El `index.html` sale de la plantilla común de [`crates/museo/web`](../../crates/museo/web). En la
-web el mejor puntaje va al `localStorage` del navegador, como los `PlayerPrefs` del Web Player.
+The `index.html` comes from the common template in [`crates/museo/web`](../../crates/museo/web). On the
+web the best score goes to the browser's `localStorage`, like the Web Player's `PlayerPrefs`.
 
-### Controles táctiles
+### Touch controls
 
-<img src="docs/movil.png" align="right" width="320" alt="móvil en horizontal">
+<img src="docs/movil.png" align="right" width="320" alt="mobile in landscape">
 
-Como en el original, no hay botones en pantalla: en móviles y tablets el toque hace de clic, para
-saltar y para el botón ▶. Se juega en horizontal; en vertical queda centrado.
+As in the original, there are no on-screen buttons: on phones and tablets the tap acts as a click, for
+jumping and for the ▶ button. It is played in landscape; in portrait it stays centred.
 
 <br clear="right">
 
-## Controles
+## Controls
 
-| Entrada | Acción |
+| Input | Action |
 |---|---|
-| Clic o toque en ▶ | Empezar (y, en la pantalla final, volver al título) |
-| Clic o toque | Saltar; en el aire, doble salto |
+| Click or tap on ▶ | Start (and, on the final screen, return to the title) |
+| Click or tap | Jump; in the air, double jump |
 
-## Cómo se hizo
+## How it was made
 
-1. **Descarga**: el `web.unity3d` que itch.io servía al Unity Web Player (385 194 bytes), con la
-   URL firmada de la página, comprobado contra el sha256 de `originales/catalogo.json`.
-2. **Triaje**:
-   - Es un bundle `UnityWeb` 3.x.x de Unity **4.6.0f3** comprimido con LZMA. Trae
-     `Assembly-CSharp.dll` (39 936 bytes), `UnityEngine.UI.dll` (de Unity, del 18-nov-2014) y dos
-     archivos serializados: `mainData` (271 objetos, con la única escena,
-     `assets/_Scenes/test.unity`) y `sharedassets0.assets` (199 objetos: texturas, sprites, clips,
-     controladores, prefabs, la piel de la GUI). Según su cabecera PE, `Assembly-CSharp.dll` se
-     compiló el **9-dic-2014** a las 22:52 UTC.
-   - REA ([rea.tools](https://rea.tools/), `rea-agents` 6.7.0) no abre el formato `UnityWeb`
-     (`inspect-artifact`: «unsupported binary format»); el bundle se abrió con UnityPy.
-   - `inspect-managed-artifact`: PE32 solo IL, metadatos completos, runtime `unity-mono`
-     (`ev_f64054c153ce0f926872fcbcae608201878c960f9a54726ab4f1eaca838eb297`, sobre
+1. **Download**: the `web.unity3d` that itch.io served to the Unity Web Player (385,194 bytes), with the
+   page's signed URL, checked against the sha256 in `originales/catalogo.json`.
+2. **Triage**:
+   - It is a `UnityWeb` 3.x.x bundle from Unity **4.6.0f3** compressed with LZMA. It brings
+     `Assembly-CSharp.dll` (39,936 bytes), `UnityEngine.UI.dll` (from Unity, dated 18-Nov-2014) and two
+     serialized files: `mainData` (271 objects, with the only scene,
+     `assets/_Scenes/test.unity`) and `sharedassets0.assets` (199 objects: textures, sprites, clips,
+     controllers, prefabs, the GUI skin). According to its PE header, `Assembly-CSharp.dll` was
+     compiled on **9-Dec-2014** at 22:52 UTC.
+   - REA ([rea.tools](https://rea.tools/), `rea-agents` 6.7.0) does not open the `UnityWeb` format
+     (`inspect-artifact`: "unsupported binary format"); the bundle was opened with UnityPy.
+   - `inspect-managed-artifact`: PE32, IL only, complete metadata, `unity-mono` runtime
+     (`ev_f64054c153ce0f926872fcbcae608201878c960f9a54726ab4f1eaca838eb297`, on top of
      `ev_3c17806a16032c024991e4c9eccbd52ce2e79b36ea2ebf060c3afaf6bbf671ad`).
-   - `inspect-managed-members`: 58 tipos, 218 métodos, 263 campos y las cadenas que carga el código
-     (`BestScore`, los nombres de los estilos, `Particulas`, `Suelo`, `Game Over`...)
+   - `inspect-managed-members`: 58 types, 218 methods, 263 fields and the strings the code loads
+     (`BestScore`, the style names, `Particulas`, `Suelo`, `Game Over`...)
      (`ev_655d6009500d0e8b5f73e706945778c26b5334e3d8fe150ba9c762b9ab5e0c53`).
-   - `import-managed-reconstruction`: el C# decompilado de 132 métodos quedó anclado al hash de su
-     IL y su firma (`ev_5abb5b691908474fe84da9149e93692c15bf5eca035359224a248a88675cdf52`). Los
-     demás son constructores que solo inicializan campos y las clases de las corrutinas.
-3. **ILSpy** (`ilspycmd` 9.1): el `UnityEngine.dll` de Unity 4.6 no viene en el bundle (es parte
-   del Web Player), así que las referencias se resolvieron con el de Unity 5.1.2 de la versión de
-   Linux de [One Button Prototype](https://elvisbrevi.itch.io/prototipo-2000) y sus bibliotecas de
-   Mono 2.0; las llamadas que usa el juego son las mismas en 4.6. El payload de REA se armó con
-   [`tools/rea_reconstruction.py`](../../tools/rea_reconstruction.py). De los 41 archivos que da
-   ILSpy, 12 son del juego y están en `reference/csharp`: diez del autor y
-   `PlatformerCharacter2D` y `Platformer2DUserControl`, del ejemplo 2D de Unity, modificadas
-   (polvo, chispas, sonidos, doble salto, toque para saltar). Los demás son de terceros y no se
-   guardan: el CrossPlatformInput de los Standard Assets y `Camera2DFollow` y `Restarter` del
-   ejemplo 2D, sin uso en la escena, y los scripts de Cartoon FX, de los que la escena solo usa
+   - `import-managed-reconstruction`: the decompiled C# of 132 methods was anchored to the hash of their
+     IL and their signature (`ev_5abb5b691908474fe84da9149e93692c15bf5eca035359224a248a88675cdf52`). The
+     rest are constructors that only initialise fields and the coroutine classes.
+3. **ILSpy** (`ilspycmd` 9.1): Unity 4.6's `UnityEngine.dll` does not come in the bundle (it is part
+   of the Web Player), so the references were resolved with the Unity 5.1.2 one from the Linux
+   version of [One Button Prototype](https://elvisbrevi.itch.io/prototipo-2000) and its Mono 2.0
+   libraries; the calls the game uses are the same in 4.6. The REA payload was assembled with
+   [`tools/rea_reconstruction.py`](../../tools/rea_reconstruction.py). Of the 41 files ILSpy gives,
+   12 are the game's and are in `reference/csharp`: ten from the author and
+   `PlatformerCharacter2D` and `Platformer2DUserControl`, from Unity's 2D example, modified
+   (dust, sparks, sounds, double jump, tap to jump). The others are third-party and are not
+   kept: the CrossPlatformInput from the Standard Assets and `Camera2DFollow` and `Restarter` from the
+   2D example, unused in the scene, and the Cartoon FX scripts, of which the scene only uses
    `CFX_AutoDestructShuriken`.
-4. **Assets** ([`tools/extraer.py`](tools/extraer.py), con UnityPy): los dos archivos
-   serializados traen los type trees, así que los campos de los MonoBehaviour se leen sin
-   generarlos. Extrae:
-   - las 17 texturas que se ven, decodificadas a PNG tal como las guardó Unity (DXT5 la hoja del
-     personaje, las monedas y el cartel; ARGB4444 las de partículas);
-   - los cinco `AudioClip` (WAV PCM);
-   - y `escena.json`: los 69 GameObjects de la escena con su jerarquía y componentes; los prefabs
-     que instancia el código (`muro`, `polvo` y `dobleSalto`); los 37 sprites (rectángulo, pivote
-     sacado de los vértices de su malla y píxeles por unidad); los cinco clips de Mecanim, cuyo
-     *streamed clip* se decodifica a claves (tiempo, sprite); los dos controladores; los tres
-     sistemas de partículas; los materiales; los estilos de la `GUISkin`; el `PhysicsMaterial2D`
-     «Slippery» (sin fricción); y los ajustes de tiempo, física 2D y sorting layers.
+4. **Assets** ([`tools/extraer.py`](tools/extraer.py), with UnityPy): the two serialized files
+   bring the type trees, so the MonoBehaviour fields are read without
+   generating them. It extracts:
+   - the 17 textures that are visible, decoded to PNG as Unity stored them (DXT5 for the character
+     sheet, the coins and the sign; ARGB4444 for the particle ones);
+   - the five `AudioClip`s (PCM WAV);
+   - and `escena.json`: the scene's 69 GameObjects with their hierarchy and components; the prefabs
+     the code instantiates (`muro`, `polvo` and `dobleSalto`); the 37 sprites (rectangle, pivot
+     taken from the vertices of their mesh and pixels per unit); the five Mecanim clips, whose
+     *streamed clip* is decoded to keys (time, sprite); the two controllers; the three particle
+     systems; the materials; the `GUISkin` styles; the `PhysicsMaterial2D`
+     "Slippery" (no friction); and the time, 2D physics and sorting layer settings.
 
-   La fuente «Arial Rounded Bold» que el bundle trae incrustada no se extrae (ver
-   [Diferencias](#diferencias-con-el-original)).
-5. **El motor** ([`crates/unity`](../../crates/unity)), con lo que no se ve leyendo el C#:
-   - `Time`: `deltaTime` es el tiempo real del frame (como mucho el *Maximum Allowed Timestep*,
-     1/3 s) por `timeScale`; los `FixedUpdate` van a paso fijo de 0,02 s detrás de `Time.time`.
-     Con `timeScale = 0` no corren `FixedUpdate`, ni `Invoke`, ni el Animator, ni las partículas,
-     pero sí `Update` y `OnGUI`.
-   - Física 2D sobre [`crates/box2d`](../../crates/box2d):
-     - un cuerpo de Box2D por `Rigidbody2D`, y cada `Collider2D` es una fixture del
-       `Rigidbody2D` más cercano hacia arriba en la jerarquía: el polvo que el código cuelga del
-       personaje pasa a ser parte de su cuerpo, y vuelve a ser estático al soltarlo;
-     - los colisionadores escalan con `lossyScale` (las cajas con su centro, con
-       `SetAsBox`; los círculos, con la mayor escala), tienen densidad 1 y después
-       `Rigidbody2D.mass` fija la masa con `SetMassData`. Sin material, la fricción es 0,4;
-     - los triggers son sensores de Box2D, y sus `BeginContact` son los `OnTriggerEnter2D`, que
-       reciben los scripts de los dos objetos;
-     - si el código mueve un Transform con cuerpo, el cuerpo se teletransporta (`SetTransform`) y
-       se despierta. Sin eso, el `Destroyer`, un cuerpo dinámico quieto que se mueve con la cámara,
-       se dormiría y no vería el suelo que tiene que pasar adelante. Después de cada paso, los
-       cuerpos escriben su posición en su Transform;
-     - `Physics2D.OverlapCircle` es un `QueryAABB` más `b2TestOverlap`, filtrado por capas.
+   The "Arial Rounded Bold" font the bundle brings embedded is not extracted (see
+   [Differences](#differences-from-the-original)).
+5. **The engine** ([`crates/unity`](../../crates/unity)), with what you cannot see by reading the C#:
+   - `Time`: `deltaTime` is the frame's real time (at most the *Maximum Allowed Timestep*,
+     1/3 s) times `timeScale`; the `FixedUpdate`s run at a fixed step of 0.02 s behind `Time.time`.
+     With `timeScale = 0` neither `FixedUpdate`, nor `Invoke`, nor the Animator, nor the particles run,
+     but `Update` and `OnGUI` do.
+   - 2D physics on top of [`crates/box2d`](../../crates/box2d):
+     - one Box2D body per `Rigidbody2D`, and each `Collider2D` is a fixture of the
+       nearest `Rigidbody2D` upwards in the hierarchy: the dust the code hangs from the
+       character becomes part of its body, and becomes static again when detached;
+     - the colliders scale with `lossyScale` (boxes with their centre, with
+       `SetAsBox`; circles with the largest scale), they have density 1 and afterwards
+       `Rigidbody2D.mass` sets the mass with `SetMassData`. Without a material, friction is 0.4;
+     - the triggers are Box2D sensors, and their `BeginContact`s are the `OnTriggerEnter2D`s, which
+       both objects' scripts receive;
+     - if the code moves a Transform that has a body, the body is teleported (`SetTransform`) and
+       woken up. Without that, the `Destroyer`, a still dynamic body moved with the camera,
+       would fall asleep and would not see the ground it has to pass ahead. After each step, the
+       bodies write their position to their Transform;
+     - `Physics2D.OverlapCircle` is a `QueryAABB` plus `b2TestOverlap`, filtered by layers.
 
-     Para esto `crates/box2d` ganó los sensores, los eventos de contacto por fixture,
-     `QueryAABB`, `DestroyFixture`, `ApplyForceToCenter` y `SetMassData`, traducidos del mismo
-     Box2D 2.3.1. La escena nueva «corredor» de
-     [`comparar.sh`](../../crates/box2d/comparar/comparar.sh) (un corredor con círculo y caja,
-     saltos por fuerza, cactus, moneda, polvo y el `Destroyer`) da trayectorias, eventos y
-     consultas idénticos bit a bit al C++ durante 300 pasos.
-   - Animator (Mecanim): estados con un clip de sprites, parámetros y transiciones con
-     condiciones, primero las de *Any State* y sin interrumpirse (son atómicas). En Unity 4 la
-     duración de una transición está en tiempo normalizado del estado de origen, así que las de
-     este juego duran milésimas: 0,1 de un clip de 1/60 s.
-   - ParticleSystem (Shuriken): los módulos que usan los tres sistemas (inicial, forma de esfera y
-     semiesfera, emisión con ráfagas, tamaño y color en la vida, hoja de 4 cuadros y velocidad en
-     la vida), con las curvas de Hermite y los gradientes de Unity. Como en Unity 4, la
-     simulación local (*moveWithTransform*) sigue al emisor e ignora la escala de su Transform:
-     el `dobleSalto` tiene escala 0,5 y sus chispas se ven a tamaño completo.
-   - La cámara es de perspectiva (48° de campo vertical, en z = −10); todo está en z = 0, así que
-     1 unidad son 67,4 píxeles. La cola de dibujo se ordena por sorting layer, *order in layer* y
-     de lejos a cerca. Las partículas usan los shaders `Particles/Additive`,
-     `Particles/Alpha Blended` y `Particles/Multiply`, reescritos en GLSL.
-   - IMGUI: `OnGUI` corre una vez por evento del frame (MouseDown, MouseUp y Repaint); un botón
-     se aprieta con MouseDown y responde al soltarlo dentro; los estados *hover* y *active* del
-     estilo usan su propio fondo, y si no tienen, no se dibuja ninguno. `GUI.Window` dibuja encima
-     del resto, con coordenadas relativas y recortando su contenido. El texto se coloca con las
-     métricas verticales de FreeType (el ascenso y el alto de línea con el *line gap*), las mismas
-     que Unity guardó para la fuente incrustada.
-   - `PlayerPrefs` es `museo::Preferencias`: un archivo en PC y `localStorage` en la web.
-6. **Los scripts** (`src/juego.rs`): cada uno es una estructura con sus campos; los `static`
-   (`CameraRunner.x`, `Spawn.activo`, `HUD.estadoStatic`) viven fuera de la escena y sobreviven a
-   `Application.LoadLevel`, que vuelve a cargar la escena al empezar el frame siguiente. El frame
-   sigue el orden de Unity:
-   1. los `FixedUpdate` (`PlatformerCharacter2D` y después `Platformer2DUserControl`), cada uno
-      seguido del paso de la física y sus triggers (`Muro`, `PowerUp`, `Destroyer`);
-   2. los `Update` en el orden de los objetos (`CameraRunner`, `HUD` y el control del jugador);
-   3. el `Invoke` de `Spawn` y la corrutina de `CFX_AutoDestructShuriken`;
-   4. el Animator y las partículas, y el borrado de lo destruido;
-   5. el dibujo y al final `HUD.OnGUI`.
+     For this `crates/box2d` gained sensors, per-fixture contact events,
+     `QueryAABB`, `DestroyFixture`, `ApplyForceToCenter` and `SetMassData`, translated from the same
+     Box2D 2.3.1. The new "corredor" scene in
+     [`comparar.sh`](../../crates/box2d/comparar/comparar.sh) (a runner with a circle and a box,
+     jumps by force, cacti, coin, dust and the `Destroyer`) gives trajectories, events and
+     queries bit-for-bit identical to the C++ for 300 steps.
+   - Animator (Mecanim): states with a sprite clip, parameters and transitions with
+     conditions, *Any State* ones first and without interruption (they are atomic). In Unity 4 the
+     duration of a transition is in normalized time of the source state, so this game's last
+     thousandths: 0.1 of a 1/60 s clip.
+   - ParticleSystem (Shuriken): the modules the three systems use (initial, sphere and
+     hemisphere shapes, emission with bursts, size and colour over lifetime, a 4-frame sheet and speed over
+     lifetime), with Hermite curves and Unity gradients. As in Unity 4, the local
+     simulation (*moveWithTransform*) follows the emitter and ignores its Transform's scale:
+     `dobleSalto` has scale 0.5 and its sparks are seen at full size.
+   - The camera is perspective (48° vertical field of view, at z = −10); everything is at z = 0, so
+     1 unit is 67.4 pixels. The draw queue is sorted by sorting layer, *order in layer* and
+     far to near. The particles use the `Particles/Additive`,
+     `Particles/Alpha Blended` and `Particles/Multiply` shaders, rewritten in GLSL.
+   - IMGUI: `OnGUI` runs once per frame event (MouseDown, MouseUp and Repaint); a button
+     is pressed with MouseDown and responds when released inside; the style's *hover* and *active*
+     states use their own background, and if they do not have one, none is drawn. `GUI.Window` draws on top
+     of everything else, with relative coordinates and clipping its content. The text is placed with
+     FreeType's vertical metrics (the ascent and the line height with the *line gap*), the same
+     ones Unity stored for the embedded font.
+   - `PlayerPrefs` is `museo::Preferencias`: a file on PC and `localStorage` on the web.
+6. **The scripts** (`src/juego.rs`): each one is a struct with its fields; the `static`s
+   (`CameraRunner.x`, `Spawn.activo`, `HUD.estadoStatic`) live outside the scene and survive
+   `Application.LoadLevel`, which reloads the scene at the start of the next frame. The frame
+   follows Unity's order:
+   1. the `FixedUpdate`s (`PlatformerCharacter2D` and then `Platformer2DUserControl`), each
+      followed by the physics step and its triggers (`Muro`, `PowerUp`, `Destroyer`);
+   2. the `Update`s in the order of the objects (`CameraRunner`, `HUD` and the player control);
+   3. `Spawn`'s `Invoke` and the `CFX_AutoDestructShuriken` coroutine;
+   4. the Animator and the particles, and the erasing of destroyed objects;
+   5. the drawing and at the end `HUD.OnGUI`.
 
-   `TimControllerScript`, otro control del personaje (saltaba con la barra espaciadora), está
-   desactivado en la escena y no se traduce.
-7. **Fuentes**: [`tools/fuentes.sh`](tools/fuentes.sh) baja Nunito de google/fonts y la instancia
-   con fontTools en los pesos 800 y 900.
+   `TimControllerScript`, another character control (it jumped with the space bar), is
+   disabled in the scene and is not translated.
+7. **Fonts**: [`tools/fuentes.sh`](tools/fuentes.sh) downloads Nunito from google/fonts and instances
+   it with fontTools at weights 800 and 900.
 
-## Correspondencia con el original
+## Correspondence with the original
 
 | Unity 4.6 | Rust |
 |---|---|
 | `web.unity3d` (`mainData`, `sharedassets0.assets`) | `assets/` ([`tools/extraer.py`](tools/extraer.py)) |
 | `Assembly-CSharp.dll` | `src/juego.rs` |
 | `Time`, GameObject, Transform, `Instantiate`, `Destroy` | `crates/unity` (`tiempo.rs`, `escena.rs`) |
-| Física 2D (Box2D) | `crates/unity` (`fisica2d.rs`) y `crates/box2d` |
+| 2D physics (Box2D) | `crates/unity` (`fisica2d.rs`) and `crates/box2d` |
 | Animator (Mecanim) | `crates/unity` (`animator.rs`) |
 | ParticleSystem (Shuriken) | `crates/unity` (`particulas.rs`) |
 | Camera, SpriteRenderer, ParticleSystemRenderer | `crates/unity` (`render.rs`) |
-| `OnGUI` y la `GUISkin` | `crates/unity` (`gui.rs`) |
+| `OnGUI` and the `GUISkin` | `crates/unity` (`gui.rs`) |
 | AudioSource | `crates/unity` (`audio.rs`) |
 | `PlayerPrefs` | `museo::Preferencias` |
-| El Web Player de 960×600 | `src/main.rs` con `museo::Pantalla` |
+| The 960×600 Web Player | `src/main.rs` with `museo::Pantalla` |
 
-## Rarezas del original que se conservan
+## Original quirks that are kept
 
-- **Para volver a jugar hay que pasar por el título.** El botón ▶ de la pantalla final recarga la
-  escena, y la escena empieza en el título con el tiempo detenido: son dos toques.
-- **El botón ▶ desaparece con el ratón encima y mientras se aprieta.** Su estilo solo tiene fondo
-  en el estado normal. Tras volver al título, el ratón sigue sobre el botón y no se ve hasta
-  apartarlo. En el móvil desaparece mientras se toca.
-- En el título el personaje flota un poco sobre el suelo: la escena empieza congelada antes de su
-  primera caída, y al empezar cae unos centímetros.
-- **El triple salto.** El círculo que detecta el suelo (radio 0,2, a 0,65 bajo el centro) lo sigue
-  tocando durante los dos primeros pasos de física del salto, unos 40 ms: un segundo toque así de
-  rápido cuenta como salto desde el suelo y el doble salto queda disponible.
-- **Los pasos suenan en bucle, y en el aire zumban.** En cada paso de física sin suelo el código
-  llama a `Play` del sonido de los pasos, que vuelve a empezar: en el aire se oyen solo sus
-  primeros 20 ms una y otra vez, y en el suelo el bucle sigue. Empieza con la primera caída y no
-  para hasta la pantalla final, también con el personaje muerto.
-- **El polvo se queda atrás.** Al saltar, la nube de polvo que va bajo los pies se suelta y queda
-  donde estaba, emitiendo. Hasta que el `Destroyer` (que va 10,8 unidades detrás) no la borra, no
-  aparece otra: durante alrededor de un segundo se corre sin polvo. El `Destroyer` busca la etiqueta
-  «Particulas», pero la del polvo es «Particula»; la borra igual porque, suelta, no tiene padre.
-- El efecto del salto tiene dos partes: las chispas blancas y un «Black Hit» oscuro
-  (`Particles/Multiply`). El código pone la primera en la sorting layer «Player», pero la segunda
-  se queda en «Default», la de más atrás, y el cielo la tapa: nunca se ve.
-- **El temblor de la cámara depende de los frames.** Al morir, la cámara tiembla 25 frames
-  (más corto en pantallas rápidas), y el desplazamiento con que termina queda en un campo
-  `static`: en la partida siguiente el temblor se centra en ese valor.
-- Muerto, el personaje se queda quieto, pero si murió en el aire un toque todavía deja en cero su
-  velocidad vertical (el salto solo mira la velocidad máxima para aplicar la fuerza).
-- Los cactus salen cada 2,5 s justos (el mínimo y el máximo del azar son iguales) y a una altura
-  al azar. Tras morir sale uno más, fuera de la pantalla: el `Invoke` ya estaba pedido.
-- En la pantalla final la cinta de «Game Over» es más ancha que la ventana y queda recortada por
-  ella.
-- Una moneda recogida se oculta pero sigue ahí; si la toca el polvo o el `Destroyer`, el script
-  lanza una excepción (`&` sin cortocircuito y un `GetComponent` nulo) y no pasa nada más.
-- El mejor puntaje se guarda en cuanto se ve la pantalla final con un récord.
+- **To play again you have to go through the title.** The ▶ button on the final screen reloads the
+  scene, and the scene starts at the title with time stopped: it takes two taps.
+- **The ▶ button disappears when the mouse is over it and while it is pressed.** Its style only has a background
+  in the normal state. After returning to the title, the mouse is still over the button and it is not visible until
+  you move it away. On mobile it disappears while being touched.
+- On the title the character floats a little above the ground: the scene starts frozen before his
+  first fall, and when it starts he drops a few centimetres.
+- **The triple jump.** The circle that detects the ground (radius 0.2, 0.65 below the centre) is still
+  touching it during the first two physics steps of the jump, about 40 ms: a second tap that
+  fast counts as a jump from the ground and the double jump stays available.
+- **The footsteps loop, and in the air they buzz.** On every physics step without ground the code
+  calls `Play` on the footstep sound, which starts over: in the air you hear only its
+  first 20 ms over and over, and on the ground the loop continues. It starts with the first fall and does not
+  stop until the final screen, even with the character dead.
+- **The dust is left behind.** When jumping, the cloud of dust under the feet is released and stays
+  where it was, emitting. Until the `Destroyer` (which is 10.8 units behind) erases it, no
+  other appears: for about a second you run without dust. The `Destroyer` looks for the
+  "Particulas" tag, but the dust's is "Particula"; it erases it anyway because, detached, it has no parent.
+- The jump effect has two parts: the white sparks and a dark "Black Hit"
+  (`Particles/Multiply`). The code puts the first in the "Player" sorting layer, but the second
+  stays in "Default", the furthest back one, and the sky covers it: it is never seen.
+- **The camera shake depends on frames.** On death, the camera shakes for 25 frames
+  (shorter on fast screens), and the offset it ends with stays in a
+  `static` field: in the next run the shake is centred on that value.
+- Dead, the character stays still, but if he died in the air a tap still sets his
+  vertical velocity to zero (the jump only looks at the maximum velocity to apply the force).
+- The cacti come out every 2.5 s exactly (the random's minimum and maximum are equal) and at a random
+  height. After dying one more comes out, off screen: the `Invoke` had already been requested.
+- On the final screen the "Game Over" ribbon is wider than the window and is clipped by
+  it.
+- A collected coin is hidden but still there; if the dust or the `Destroyer` touches it, the script
+  throws an exception (`&` without short-circuiting and a null `GetComponent`) and nothing else happens.
+- The best score is saved as soon as the final screen is seen with a record.
 
-## Diferencias con el original
+## Differences from the original
 
-- **Fuentes**:
-  - El original usaba la Arial del sistema para el puntaje y «Game Over»: el port usa Liberation
-    Sans 2.1.5 (SIL OFL 1.1), con las métricas de Arial, de
+- **Fonts**:
+  - The original used the system Arial for the score and "Game Over": the port uses Liberation
+    Sans 2.1.5 (SIL OFL 1.1), with Arial's metrics, from
     [`crates/construct2/fuentes`](../../crates/construct2/fuentes).
-  - Para «Score», «Best» y «New Record!» el juego trae incrustada Arial Rounded MT Bold, de
-    Monotype, que no se puede redistribuir: el port usa Nunito (SIL OFL 1.1, en `fuentes/`) en
-    peso 800, y 900 donde el estilo pedía negrita. El texto se coloca con el ascenso y el
-    interlineado que Unity guardó de la original.
-- **Box2D**: Unity 4.6 traía su propio Box2D compilado en el Web Player, de versión no publicada;
-  el port usa `crates/box2d` (2.3.1). Unity agrupa los colisionadores sin `Rigidbody2D` en un
-  cuerpo estático; aquí cada objeto tiene el suyo.
-- **Lo que hace Unity por dentro** se dedujo de su documentación y de su comportamiento conocido,
-  porque el motor es nativo y el Web Player ya no corre en los navegadores: que un Transform
-  movido por código despierte al cuerpo, que un estado de estilo sin fondo no dibuje nada, que en
-  una transición de Mecanim se vea el sprite del estado que pesa más, cómo se estira una
-  partícula *stretched* (aquí, centrada en su posición).
-- **Azar**: el orden de las tiradas es el del código, pero el generador es el de macroquad, no el
-  de Unity (que tampoco es el de las partículas).
-- **Sonido**: los WAV originales. Cada clip suena una vez a la vez; en el juego ningún clip lo
-  usan dos fuentes al mismo tiempo.
-- **Ventana**: el Web Player era de 960×600 fijos; el port escala esa pantalla a la ventana con
-  bandas negras, como el resto del museo.
-- No se dibujan los dos quads con el material `Default-Diffuse` (`GroundSpawn` y `Destroyer`),
-  que en 960×600 quedan fuera de la vista, ni el plano `ScreenshotView`, que está detrás de la
-  cámara.
+  - For "Score", "Best" and "New Record!" the game brings Arial Rounded MT Bold embedded, from
+    Monotype, which cannot be redistributed: the port uses Nunito (SIL OFL 1.1, in `fuentes/`) at
+    weight 800, and 900 where the style asked for bold. The text is placed with the ascent and the
+    line spacing Unity saved from the original.
+- **Box2D**: Unity 4.6 brought its own Box2D compiled into the Web Player, of unpublished version;
+  the port uses `crates/box2d` (2.3.1). Unity groups the colliders without a `Rigidbody2D` into one
+  static body; here each object has its own.
+- **What Unity does internally** was deduced from its documentation and its known behaviour,
+  because the engine is native and the Web Player no longer runs in browsers: that a Transform
+  moved by code wakes the body, that a style state without background draws nothing, that in
+  a Mecanim transition the sprite of the heavier state is seen, how a
+  *stretched* particle is stretched (here, centred on its position).
+- **Chance**: the order of the rolls is the code's, but the generator is macroquad's, not
+  Unity's (which is not the particles' one either).
+- **Sound**: the original WAVs. Each clip plays once at a time; in the game no clip is
+  used by two sources at the same time.
+- **Window**: the Web Player was a fixed 960×600; the port scales that screen to the window with
+  black letterboxing, like the rest of the museum.
+- The two quads with the `Default-Diffuse` material (`GroundSpawn` and `Destroyer`) are not drawn,
+  since at 960×600 they are outside the view, nor is the `ScreenshotView` plane, which is behind the
+  camera.
 
-## Regenerar los assets
-
-```sh
-~/.venvs/museo/bin/python -I tools/extraer.py <web.unity3d>   # por ejemplo ../../originales/super-happy-jump/web.unity3d
-tools/fuentes.sh                                              # Nunito, desde google/fonts
-```
-
-## Pruebas
+## Regenerating the assets
 
 ```sh
-node ../../tools/humo/nativo.mjs super-happy-jump   # tras cargo build --release
-node ../../tools/humo/web.mjs super-happy-jump      # tras tools/build_web.sh
+~/.venvs/museo/bin/python -I tools/extraer.py <web.unity3d>   # for example ../../originales/super-happy-jump/web.unity3d
+tools/fuentes.sh                                              # Nunito, from google/fonts
 ```
 
-Siguen los pasos de `humo.json`: el título, el toque en ▶, la carrera, un salto y la pantalla
-final al chocar con un cactus. En la web se prueban escritorio, móvil horizontal y móvil vertical.
-Se comprobó aparte:
-- `crates/box2d/comparar/comparar.sh`: las escenas de siempre y la nueva «corredor», idénticas
-  al C++ de Box2D 2.3.1;
-- `cargo test -p unity`: las curvas, los gradientes y las transiciones del Animator;
-- con un cambio temporal sin subir (las dos primeras monedas a la altura del corredor), tomando
-  la captura `record.png`: las monedas suman y se ocultan, la pantalla de récord, el mejor
-  puntaje guardado (`BestScore=2`), el regreso al título con el botón ▶ oculto bajo el ratón, y
-  la segunda partida, que termina con «Score» y «Best».
+## Tests
 
-No se pudo comparar con el original en marcha: el Unity Web Player ya no existe en los
-navegadores actuales.
+```sh
+node ../../tools/humo/nativo.mjs super-happy-jump   # after cargo build --release
+node ../../tools/humo/web.mjs super-happy-jump      # after tools/build_web.sh
+```
+
+They follow the steps in `humo.json`: the title, the tap on ▶, the run, a jump and the final
+screen when hitting a cactus. On the web, desktop, mobile landscape and mobile portrait are tested.
+Checked separately:
+- `crates/box2d/comparar/comparar.sh`: the usual scenes and the new "corredor" one, identical
+  to the Box2D 2.3.1 C++;
+- `cargo test -p unity`: the curves, the gradients and the Animator transitions;
+- with a temporary change that is not committed (the first two coins at the runner's height), taking
+  the `record.png` capture: the coins add up and hide, the record screen, the best
+  score saved (`BestScore=2`), the return to the title with the ▶ button hidden under the mouse, and
+  the second run, which ends with "Score" and "Best".
+
+It could not be compared with the original running: the Unity Web Player no longer exists in current
+browsers.

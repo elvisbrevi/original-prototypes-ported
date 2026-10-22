@@ -1,56 +1,56 @@
-# Plan del museo: portar los prototipos originales a macroquad
+# Museum plan: porting the original prototypes to macroquad
 
-Plan de trabajo para recrear en Rust + macroquad todos los juegos publicados en
-[elvisbrevi.itch.io](https://elvisbrevi.itch.io) (menos IMÁN 2026, que solo fue una prueba de publicación).
-Está pensado para avanzar en varias sesiones: marca cada casilla al completarla e incluye el cambio
-del plan en el mismo commit.
+Work plan to recreate in Rust + macroquad every game published on
+[elvisbrevi.itch.io](https://elvisbrevi.itch.io) (except IMÁN 2026, which was only a publishing test).
+It is meant to be worked on across several sessions: tick each box when you complete it and include the
+plan change in the same commit.
 
-**Siguiente paso:** el museo está completo: once ports jugables en PC y en el navegador, y
-publicados en su página de itch.io (Fast Car Racer se omitió por falta de binario; GitHub Pages se
-descartó). Lo que queda son los pendientes de cada juego (sobre todo probar sonido y controles
-táctiles en dispositivos reales) y, si se hace un port nuevo, publicarlo con
-`tools/publicar_itch.sh` al cerrarlo (4.5).
+**Next step:** the museum is complete: eleven playable ports on PC and in the browser, and
+published on their itch.io pages (Fast Car Racer was skipped for lack of a binary; GitHub Pages was
+dropped). What is left are the pending items of each game (above all testing sound and touch
+controls on real devices) and, if a new port is made, publishing it with
+`tools/publicar_itch.sh` when it is closed (4.5).
 
-## Reglas
+## Rules
 
-1. **Fidelidad.** La lógica se traduce del original (código decompilado o datos del motor), no se
-   reinventa. Las rarezas del original se conservan y se documentan.
-2. **Assets originales**, extraídos de los binarios. Si uno no se puede extraer, se usa un sustituto
-   provisional y se anota como pendiente.
-3. **Cada port tiene versión nativa (PC) y web (wasm)**, con controles táctiles que aparecen solos en
-   móviles y tablets.
-4. **itch.io, solo con confirmación.** Los ports viven en este repo y su versión web se publica en
-   la página de itch.io de cada juego (fase 4), pero cada subida se confirma antes con el dueño de
-   la cuenta.
-5. **Los impedimentos no bloquean.** Audio que no se puede convertir, formatos propietarios o binarios
-   que faltan se anotan como pendientes (en el README del juego y en la tabla de la fase 1) y se sigue
-   con lo demás.
-6. **Evidencia con REA.** El triaje y la reconstrucción se hacen con [REA](https://rea.tools/); los IDs
-   de Evidence se anotan en el README de cada juego.
+1. **Fidelity.** The logic is translated from the original (decompiled code or engine data), not
+   reinvented. The quirks of the original are kept and documented.
+2. **Original assets**, extracted from the binaries. If one cannot be extracted, a provisional
+   substitute is used and noted as pending.
+3. **Every port has a native (PC) and a web (wasm) version**, with touch controls that appear on their
+   own on phones and tablets.
+4. **itch.io, only with confirmation.** The ports live in this repo and their web version is published on
+   each game's itch.io page (phase 4), but every upload is confirmed first with the owner of
+   the account.
+5. **Obstacles do not block.** Audio that cannot be converted, proprietary formats or missing binaries
+   are noted as pending (in the game's README and in the phase 1 table) and work continues
+   with the rest.
+6. **Evidence with REA.** Triage and reconstruction are done with [REA](https://rea.tools/); the
+   Evidence IDs are noted in each game's README.
 
-## Retomar en otra sesión
+## Resuming in another session
 
 ```sh
-# Rust y web
+# Rust and web
 rustup target add wasm32-unknown-unknown
-sudo apt install libasound2-dev unar p7zip-full      # ALSA para macroquad; RAR/7z para los originales
+sudo apt install libasound2-dev unar p7zip-full      # ALSA for macroquad; RAR/7z for the originals
 
-# REA (Claude Code: reiniciar después del setup para tener sus herramientas MCP)
+# REA (Claude Code: restart after setup to get its MCP tools)
 npm install --global rea-agents
-rea setup --client claude_code --dry-run              # revisar el plan y luego aplicarlo con --yes
+rea setup --client claude_code --dry-run              # review the plan and then apply it with --yes
 
-# .NET (XNA y Unity con Mono): decompilador con referencias resueltas
+# .NET (XNA and Unity with Mono): decompiler with resolved references
 sudo apt install dotnet-sdk-8.0
-dotnet tool install -g ilspycmd --version 9.1.0.7988  # la última versión exige .NET 10
+dotnet tool install -g ilspycmd --version 9.1.0.7988  # the latest version requires .NET 10
 
-# Originales (no están en git): bajarlos y comprobar sha256 contra originales/catalogo.json
+# Originals (not in git): download them and check sha256 against originales/catalogo.json
 python3 -I tools/originales.py descargar
 
-# Unity (3.4 a 5.1, Web Player y WebGL): UnityPy y type trees de MonoBehaviour desde los ensamblados
+# Unity (3.4 to 5.1, Web Player and WebGL): UnityPy and MonoBehaviour type trees from the assemblies
 sudo apt install python3.12-venv
 python3 -m venv ~/.venvs/museo && ~/.venvs/museo/bin/pip install -r tools/requirements-unity.txt
 
-# Android: JADX 1.5.6 y apktool 3.0.3 (Java 21) en ~/.local/opt; REA busca `apktool` en el PATH
+# Android: JADX 1.5.6 and apktool 3.0.3 (Java 21) in ~/.local/opt; REA looks for `apktool` in the PATH
 sudo apt install openjdk-21-jre-headless
 curl -LO https://github.com/skylot/jadx/releases/download/v1.5.6/jadx-1.5.6.zip   # unzip -d ~/.local/opt/jadx
 curl -L -o ~/.local/opt/apktool/apktool_3.0.3.jar \
@@ -58,574 +58,575 @@ curl -L -o ~/.local/opt/apktool/apktool_3.0.3.jar \
 printf '#!/bin/sh\nexec java -jar "$HOME/.local/opt/apktool/apktool_3.0.3.jar" "$@"\n' > ~/.local/bin/apktool
 chmod +x ~/.local/bin/apktool
 
-# Audio: ffmpeg para pasar MP3 a Ogg Vorbis (macroquad no lee MP3)
+# Audio: ffmpeg to convert MP3 to Ogg Vorbis (macroquad cannot read MP3)
 sudo apt install ffmpeg
 
-# Tests de humo (checkpoint 0.9): Playwright con el Chromium de la caché de Playwright o $CHROMIUM
+# Smoke tests (checkpoint 0.9): Playwright with the Chromium from the Playwright cache or $CHROMIUM
 sudo apt install xvfb xdotool imagemagick
 npm install --prefix tools/humo
-node tools/humo/nativo.mjs <juego>   # tras cargo build --release -p <juego>
-node tools/humo/web.mjs <juego>      # tras tools/build_web.sh <juego>
+node tools/humo/nativo.mjs <game>   # after cargo build --release -p <game>
+node tools/humo/web.mjs <game>      # after tools/build_web.sh <game>
 ```
 
-Herramientas de extracción por stack (checkpoint 0.8; las salidas van a `originales/<slug>/`):
+Extraction tools per stack (checkpoint 0.8; outputs go to `originales/<slug>/`):
 
-- XNA 3.1: `games/iman/tools/xnb_extract.py` (XNB v4 sin comprimir, `SpriteFont`, bancos XACT).
+- XNA 3.1: `games/iman/tools/xnb_extract.py` (XNB v4 uncompressed, `SpriteFont`, XACT banks).
 - Unity: `~/.venvs/museo/bin/python -I tools/unity_assets.py inventario|exportar|emscripten ...`.
-  Lee Unity 3.4, 4.6 (`web.unity3d`) y 5.1; con `--managed <carpeta Managed>` vuelca también los
-  campos de los MonoBehaviour (en los builds de Unity 5 sin type trees, con el MonoScript
-  resuelto a mano). AssetRipper no hizo falta. Para un port, el `tools/extraer.py` del juego
-  escribe el `escena.json` que lee `crates/unity`: el de Super Happy Jump es el modelo para un
-  bundle de Unity 4, el de One Button Prototype para un build de Unity 5 con varias escenas y el
-  de Go Ball para un juego 3D de Unity 3.4 (mallas, materiales, GUISkin y terreno).
-- Unity 5.1.1 WebGL con IL2CPP (sin `global-metadata.dat`): `python3 -I
-  games/neuro-battle/tools/il2cpp.py <carpeta Release> <salida>` lee los metadatos compilados en
-  la memoria inicial del asm.js y vuelca tipos, campos, métodos y el asm.js anotado de cada
-  método; el `tools/extraer.py` de Neuro Battle compila con ellos unos ensamblados *stub* para
-  leer los MonoBehaviour.
-- Construct 2: `python3 -I tools/c2_eventos.py resumen|eventos|fuente <carpeta html5>` (proyecto,
-  tipos, layouts, tabla de referencias del runtime minificado y hojas de eventos en pseudocódigo).
-- Android: `~/.local/opt/jadx/bin/jadx -d <salida> <apk>` y
-  `java -jar ~/.local/opt/apktool/apktool_3.0.3.jar d -o <salida> <apk>`. REA usa apktool
-  (`decode-android-resources`) con el lanzador `~/.local/bin/apktool`; sus herramientas de JADX
-  piden un JAR de JADX MCP en `REA_JADX_MCP_JAR`, que no está. Para un port, el
-  `tools/extraer.py` de The Meaning of Christmas lee el APK como zip y pasa el MP3 a Ogg.
+  Reads Unity 3.4, 4.6 (`web.unity3d`) and 5.1; with `--managed <Managed folder>` it also dumps the
+  fields of the MonoBehaviours (in Unity 5 builds without type trees, with the MonoScript
+  resolved by hand). AssetRipper was not needed. For a port, the game's `tools/extraer.py`
+  writes the `escena.json` that `crates/unity` reads: the one in Super Happy Jump is the model for a
+  Unity 4 bundle, the one in One Button Prototype for a Unity 5 build with several scenes and the
+  one in Go Ball for a 3D game from Unity 3.4 (meshes, materials, GUISkin and terrain).
+- Unity 5.1.1 WebGL with IL2CPP (without `global-metadata.dat`): `python3 -I
+  games/neuro-battle/tools/il2cpp.py <Release folder> <output>` reads the metadata compiled into
+  the asm.js initial memory and dumps types, fields, methods and the annotated asm.js of each
+  method; Neuro Battle's `tools/extraer.py` compiles *stub* assemblies with them to
+  read the MonoBehaviours.
+- Construct 2: `python3 -I tools/c2_eventos.py resumen|eventos|fuente <html5 folder>` (project,
+  types, layouts, reference table of the minified runtime and event sheets in pseudocode).
+- Android: `~/.local/opt/jadx/bin/jadx -d <output> <apk>` and
+  `java -jar ~/.local/opt/apktool/apktool_3.0.3.jar d -o <output> <apk>`. REA uses apktool
+  (`decode-android-resources`) with the launcher `~/.local/bin/apktool`; its JADX tools
+  ask for a JADX MCP JAR in `REA_JADX_MCP_JAR`, which is not there. For a port, The Meaning of
+  Christmas's `tools/extraer.py` reads the APK as a zip and converts the MP3 to Ogg.
 
-## Fase 0 — Infraestructura
+## Phase 0 — Infrastructure
 
-- [x] **0.1** Renombrar el repo (`iman-macroquad` → `original-prototypes-ported`) y convertirlo en un
-  workspace de Cargo con un crate por juego en `games/<slug>/`.
-- [x] **0.2** Inventario y descarga de originales: `tools/originales.py` →
-  `originales/catalogo.json` (metadatos, archivos, sha256). Los binarios quedan fuera de git.
-- [x] **0.3** Repo público en GitHub.
-- [x] **0.4** Crate compartido `crates/museo` sacado de IMAN: pantalla virtual escalada con bandas,
-  paso fijo, detección táctil (`(pointer: coarse)` + primer toque) y controles táctiles
-  **configurables por juego** (cruceta, 1–4 botones, zonas de toque). Migrar IMAN a usarlo.
-- [x] **0.5** Plantilla web común: que `tools/build_web.sh` genere `index.html` (título, nombre del
-  wasm, plugin táctil) en vez de copiar `games/<slug>/web/`.
-- [x] **0.6** GitHub Actions: build nativo + wasm de todo el workspace en cada push.
-- [ ] **0.7** (Descartado por el dueño, 21-oct-2026) GitHub Pages con todas las versiones web, enlazadas desde el README del museo.
-- [x] **0.8** Herramientas de extracción por stack: UnityPy/AssetRipper (Unity 4/5 y Unity Web
-  Player), lector de `data.js` de Construct 2, apktool/JADX (Android).
-- [x] **0.9** Test de humo web reutilizable (Playwright: móvil horizontal/vertical y escritorio) en
-  `tools/`, como el que se usó a mano con IMAN.
+- [x] **0.1** Rename the repo (`iman-macroquad` → `original-prototypes-ported`) and turn it into a
+  Cargo workspace with one crate per game in `games/<slug>/`.
+- [x] **0.2** Inventory and download of the originals: `tools/originales.py` →
+  `originales/catalogo.json` (metadata, files, sha256). The binaries stay out of git.
+- [x] **0.3** Public repo on GitHub.
+- [x] **0.4** Shared `crates/museo` crate extracted from IMAN: virtual screen scaled with letterboxing,
+  fixed step, touch detection (`(pointer: coarse)` + first touch) and touch controls
+  **configurable per game** (D-pad, 1–4 buttons, touch zones). Migrate IMAN to use it.
+- [x] **0.5** Common web template: have `tools/build_web.sh` generate `index.html` (title, name of the
+  wasm, touch plugin) instead of copying `games/<slug>/web/`.
+- [x] **0.6** GitHub Actions: native + wasm build of the whole workspace on every push.
+- [ ] **0.7** (Dropped by the owner, 21-Oct-2026) GitHub Pages with all the web versions, linked from the museum
+  README.
+- [x] **0.8** Extraction tools per stack: UnityPy/AssetRipper (Unity 4/5 and Unity Web
+  Player), Construct 2 `data.js` reader, apktool/JADX (Android).
+- [x] **0.9** Reusable web smoke test (Playwright: mobile landscape/portrait and desktop) in
+  `tools/`, like the one used by hand with IMAN.
 
-## Plantilla de checkpoints por juego
+## Checkpoint template per game
 
-Cada juego de la fase 2 sigue estos pasos:
+Every game in phase 2 follows these steps:
 
-1. Triaje con REA: identidad del binario, stack y versión, fecha original, controles.
-2. Extracción de assets con un script en `games/<slug>/tools/` (regenerable).
-3. Reconstrucción de la lógica: C# decompilado, eventos de Construct o pseudocódigo, guardado en
+1. Triage with REA: identity of the binary, stack and version, original date, controls.
+2. Asset extraction with a script in `games/<slug>/tools/` (regenerable).
+3. Reconstruction of the logic: decompiled C#, Construct events or pseudocode, saved in
    `games/<slug>/reference/`.
-4. Port nativo jugable de principio a fin.
-5. Versión web + controles táctiles, probada en móvil (horizontal y vertical) y escritorio con
-   `tools/humo` (pasos del juego en `games/<slug>/humo.json`, también para el test nativo).
-6. README del juego y su ficha en el README del museo. Cuentan qué juego es, con qué y cuándo se
-   hizo y que ahora está portado, sin separar «versión original» y «port». En «Cómo se hizo» el
-   README documenta el proceso técnico del port, al terminarlo: triaje y Evidence de REA,
-   extracción, qué se tradujo y cómo se resolvió cada pieza del motor (lo que no se ve leyendo el
-   código), y cómo se comprobó.
-7. Pendientes anotados.
-8. Publicar la versión web en la página de itch.io del juego (fase 4), con confirmación.
+4. Native port playable from start to finish.
+5. Web version + touch controls, tested on mobile (landscape and portrait) and desktop with
+   `tools/humo` (game steps in `games/<slug>/humo.json`, also for the native test).
+6. Game README and its entry in the museum README. They tell what the game is, with what and when it was
+   made and that it is now ported, without separating "original version" and "port". Under "How it was made" the
+   README documents the technical process of the port, when finished: REA triage and Evidence,
+   extraction, what was translated and how each engine piece was solved (what you cannot see by reading the
+   code), and how it was verified.
+7. Pending items noted.
+8. Publish the web version on the game's itch.io page (phase 4), with confirmation.
 
-## Fase 1 — Triaje
+## Phase 1 — Triage
 
-Hecho un primer triaje al descargar (2026-10-18). Falta confirmarlo con REA juego a juego (paso 1 de
-cada juego en la fase 2).
+A first triage was done on download (2026-10-18). It remains to be confirmed with REA game by game (step 1 of
+each game in phase 2).
 
-| Juego | Original descargado | Stack detectado | Ruta de RE | Riesgos conocidos |
+| Game | Original downloaded | Stack detected | RE path | Known risks |
 |---|---|---|---|---|
-| Proyecto Nutria | `Proyecto_Nutria.rar` (1,5 MB) | XNA 3.1, XNB v4 | ✅ hecho | sin audio en el original; ver pendientes en 2.1 |
-| IMAN | `IMAN_(Prototipo).rar` | XNA 3.1 | ✅ hecho | ver pendientes de IMAN |
-| The Electric Eel Attack | `The_Electric_Eel_Attack.zip` (7 MB) | XNA 3.1 + `Engine.dll` propio | ✅ hecho | ver pendientes en 2.2 |
-| Go Ball | 3 zips (Win32, Win64, macOS) | Unity 3.4.0f5, Mono, con `.mdb` | ✅ hecho | ver pendientes en 2.9 |
-| The Meaning of Christmas | APK (7,8 MB) | Java + libGDX 0.9.2 | ✅ hecho | ver pendientes en 2.8 |
-| Fast Car Racer | — | Android (`cl.gioco.fcr`) | omitido (ver 2.11) | **sin binario**: itch.io solo enlaza a Google Play |
-| Super Happy Jump | `web.unity3d` (385 KB) | Unity 4.6.0f3, Web Player | ✅ hecho | ver pendientes en 2.6 |
-| Que No Caiga | HTML5 (39 archivos) | Construct 2 | ✅ hecho | ver pendientes en 2.3 |
-| Retro Penal | HTML5 + NW.js (win/osx/linux) | Construct 2 | ✅ hecho | ver pendientes en 2.4 |
-| One Button Prototype | Mac, Linux, APK y WebGL | Unity 5.1.2f1, Mono | ✅ hecho | ver pendientes en 2.7 |
-| Neuro Battle | `Neuro Battle.zip` (WebGL) | Unity 5.1.1f1, IL2CPP → asm.js | ✅ hecho | ver pendientes en 2.10 |
-| Da Car | HTML5 (32 archivos) | Construct 2 + Box2D (asm.js) | ✅ hecho | ver pendientes en 2.5 |
+| Proyecto Nutria | `Proyecto_Nutria.rar` (1.5 MB) | XNA 3.1, XNB v4 | ✅ done | no audio in the original; see pending items in 2.1 |
+| IMAN | `IMAN_(Prototipo).rar` | XNA 3.1 | ✅ done | see IMAN pending items |
+| The Electric Eel Attack | `The_Electric_Eel_Attack.zip` (7 MB) | XNA 3.1 + custom `Engine.dll` | ✅ done | see pending items in 2.2 |
+| Go Ball | 3 zips (Win32, Win64, macOS) | Unity 3.4.0f5, Mono, with `.mdb` | ✅ done | see pending items in 2.9 |
+| The Meaning of Christmas | APK (7.8 MB) | Java + libGDX 0.9.2 | ✅ done | see pending items in 2.8 |
+| Fast Car Racer | — | Android (`cl.gioco.fcr`) | skipped (see 2.11) | **no binary**: itch.io only links to Google Play |
+| Super Happy Jump | `web.unity3d` (385 KB) | Unity 4.6.0f3, Web Player | ✅ done | see pending items in 2.6 |
+| Que No Caiga | HTML5 (39 files) | Construct 2 | ✅ done | see pending items in 2.3 |
+| Retro Penal | HTML5 + NW.js (win/osx/linux) | Construct 2 | ✅ done | see pending items in 2.4 |
+| One Button Prototype | Mac, Linux, APK and WebGL | Unity 5.1.2f1, Mono | ✅ done | see pending items in 2.7 |
+| Neuro Battle | `Neuro Battle.zip` (WebGL) | Unity 5.1.1f1, IL2CPP → asm.js | ✅ done | see pending items in 2.10 |
+| Da Car | HTML5 (32 files) | Construct 2 + Box2D (asm.js) | ✅ done | see pending items in 2.5 |
 
-## Fase 2 — Ports
+## Phase 2 — Ports
 
-Orden sugerido: primero lo que reutiliza herramientas ya hechas y luego lo más difícil.
+Suggested order: first whatever reuses tools already built and then the hardest.
 
 ### 2.0 IMAN ✅
-- [x] Triaje REA, assets, lógica, port nativo, web + táctil, README.
-- [x] Migrar a `crates/museo` (checkpoint 0.4).
-- Pendientes: mando DirectInput no portado; sonido sin probar en hardware real (el servidor no tiene
-  tarjeta de sonido); controles táctiles probados solo en emulación de Chromium.
+- [x] REA triage, assets, logic, native port, web + touch, README.
+- [x] Migrate to `crates/museo` (checkpoint 0.4).
+- Pending: DirectInput gamepad not ported; sound untested on real hardware (the server has no
+  sound card); touch controls tested only in Chromium emulation.
 
 ### 2.1 Proyecto Nutria (XNA 3.1) ✅
-- [x] Triaje REA (`inspect-managed-artifact`, `inspect-managed-members`) + fecha de compilación
-  (11-nov-2009 12:52 UTC, cabecera PE).
-- [x] Assets: `tools/xnb_extract.py` (generalización del de IMAN) con la lista de contenido usado.
-  No hay audio en el original.
-- [x] Lógica: `ilspycmd -r <XNA 3.1 ref>` + `import-managed-reconstruction` en REA (104 métodos).
-  El efecto de pausa se desensambló (ps_2_0) y se reescribió en GLSL.
-- [x] Port nativo jugable.
-- [x] Web + táctil.
-- [x] README del juego + ficha del museo.
-- [x] Pendientes anotados: mando DirectInput no portado (el pollo solo era jugable con mando);
-  controles táctiles probados solo en emulación de Chromium.
+- [x] REA triage (`inspect-managed-artifact`, `inspect-managed-members`) + build date
+  (11-Nov-2009 12:52 UTC, PE header).
+- [x] Assets: `tools/xnb_extract.py` (generalisation of IMAN's) with the list of content used.
+  There is no audio in the original.
+- [x] Logic: `ilspycmd -r <XNA 3.1 ref>` + `import-managed-reconstruction` in REA (104 methods).
+  The pause effect was disassembled (ps_2_0) and rewritten in GLSL.
+- [x] Native port playable.
+- [x] Web + touch.
+- [x] Game README + museum entry.
+- [x] Pending items noted: DirectInput gamepad not ported (the chicken was only playable with a gamepad);
+  touch controls tested only in Chromium emulation.
 
 ### 2.2 The Electric Eel Attack (XNA 3.1 + Engine.dll) ✅
-- [x] Triaje REA de `The Electric Eel Attack.exe` y `Engine.dll` (9 y 8-mar-2011, cabeceras PE).
-- [x] Assets: XNB (texturas, fuentes, 17 `SoundEffect` PCM → WAV) y los mapas XML del editor del
-  motor. Los efectos se desensamblaron y los tres que se ven se reescribieron en GLSL.
-- [x] Lógica: decompilar los dos ensamblados (33 + 129 métodos importados en REA).
-- [x] Port nativo jugable.
-- [x] Web + táctil.
-- [x] README del juego + ficha del museo.
-- [x] Pendientes anotados: la música se carga al llegar a su nivel (pausa breve en web); el
-  sonido no se probó en hardware real (el servidor no tiene tarjeta de sonido); los controles
-  táctiles se probaron solo en emulación de Chromium. Los niveles se probaron hasta la cadena
-  1 → 4 → título con ayudas temporales, pero ninguno se jugó de principio a fin en el port.
+- [x] REA triage of `The Electric Eel Attack.exe` and `Engine.dll` (9 and 8-Mar-2011, PE headers).
+- [x] Assets: XNB (textures, fonts, 17 PCM `SoundEffect` → WAV) and the XML maps from the engine's
+  editor. The effects were disassembled and the three that are visible were rewritten in GLSL.
+- [x] Logic: decompile the two assemblies (33 + 129 methods imported in REA).
+- [x] Native port playable.
+- [x] Web + touch.
+- [x] Game README + museum entry.
+- [x] Pending items noted: the music loads when you reach its level (brief pause on web); the
+  sound was not tested on real hardware (the server has no sound card); the touch
+  controls were tested only in Chromium emulation. The levels were tested up to the chain
+  1 → 4 → title with temporary changes, but none was played from start to finish in the port.
 
 ### 2.3 Que No Caiga (Construct 2) ✅
-- [x] Triaje: Construct 2 de 2015 (r20x, sin número en la exportación), plugins Sprite, Text,
-  Touch, Audio, Browser (y Button, TextBox y Mouse sin uso) y el comportamiento Platform (REA
-  `analyze-javascript-application` sobre `originales/que-no-caiga/html5`).
-- [x] Herramienta `tools/c2_eventos.py` (checkpoint 0.8) y `games/que-no-caiga/reference/nombres.json`
-  con los nombres de las condiciones y acciones minificadas.
-- [x] Assets: `images/*.png` y `media/*.ogg` tal cual, y `data.js` se lee al arrancar.
-- [x] Port nativo jugable: las dos hojas de eventos y lo que usan del runtime (Platform sin
-  sólidos, animaciones de Sprite, polígonos de colisión, Text, Audio con etiquetas, Touch con el
-  ratón).
-- [x] Web + táctil (se juega tocando la pantalla, sin botones).
-- [x] README del juego + ficha del museo.
-- [x] Pendientes anotados: las fuentes son Liberation Sans en lugar de Arial y Arial Black; el
-  sonido no se probó en hardware real; no se jugó hasta el segundo 50 sin ayuda (la bomba se probó
-  con un cambio temporal).
+- [x] Triage: Construct 2 from 2015 (r20x, no number in the export), Sprite, Text,
+  Touch, Audio, Browser plugins (and Button, TextBox and Mouse unused) and the Platform behaviour (REA
+  `analyze-javascript-application` on `originales/que-no-caiga/html5`).
+- [x] `tools/c2_eventos.py` tool (checkpoint 0.8) and `games/que-no-caiga/reference/nombres.json`
+  with the names of the minified conditions and actions.
+- [x] Assets: `images/*.png` and `media/*.ogg` as is, and `data.js` is read at startup.
+- [x] Native port playable: the two event sheets and whatever they use from the runtime (Platform without
+  solids, Sprite animations, collision polygons, Text, Audio with tags, Touch with the
+  mouse).
+- [x] Web + touch (played by touching the screen, no buttons).
+- [x] Game README + museum entry.
+- [x] Pending items noted: the fonts are Liberation Sans instead of Arial and Arial Black; the
+  sound was not tested on real hardware; it was not played up to second 50 without help (the bomb was tested
+  with a temporary change).
 
 ### 2.4 Retro Penal (Construct 2) ✅
-- [x] Triaje (comparar `package.nw` con la versión HTML5): REA `analyze-javascript-application`
-  sobre las dos. Los paquetes NW.js (22-jul-2015) son una exportación del día anterior a la HTML5
-  (23-jul-2015): mismas imágenes y OGG, pero todavía con el plugin Browser y el botón «Compartir»,
-  cuyo evento sin condiciones es el clic en cada tick del final de la HTML5.
-- [x] Eventos con `tools/c2_eventos.py` y `games/retro-penal/reference/nombres.json`.
-- [x] Runtime compartido `crates/construct2`, sacado de Que No Caiga (que pasa a usarlo, con las
-  mismas capturas de humo): Bullet con rebote en sólidos, Turret, Custom Movement, Solid y Wrap,
-  colisión con giro y espejo, On collision, Wait, bloques O y Sino, Audio con bucle, Stop, volumen
-  y On ended, Mouse.SetCursor.
-- [x] Port nativo jugable: las tres hojas de eventos.
-- [x] Web + táctil (se juega tocando la pantalla, sin botones).
-- [x] README del juego + ficha del museo.
-- [x] Pendientes anotados: las fuentes son Liberation Sans en lugar de Arial; el sonido no se
-  probó en hardware real; Stop y SetVolume actúan sobre todo el archivo (aquí no cambia nada); la
-  ventana no escala por múltiplos enteros como el original; de Turret no se portaron la puntería
-  predictiva ni los disparadores de disparo (no se usan).
+- [x] Triage (compare `package.nw` with the HTML5 version): REA `analyze-javascript-application`
+  on both. The NW.js packages (22-Jul-2015) are an export from the day before the HTML5 one
+  (23-Jul-2015): same images and OGG, but still with the Browser plugin and the "Share" button,
+  whose conditionless event is the click every tick at the end of the HTML5 one.
+- [x] Events with `tools/c2_eventos.py` and `games/retro-penal/reference/nombres.json`.
+- [x] Shared runtime `crates/construct2`, extracted from Que No Caiga (which switches to using it, with the
+  same smoke captures): Bullet with bouncing off solids, Turret, Custom Movement, Solid and Wrap,
+  collision with rotation and mirroring, On collision, Wait, Or and Else blocks, Audio with loop, Stop, volume
+  and On ended, Mouse.SetCursor.
+- [x] Native port playable: the three event sheets.
+- [x] Web + touch (played by touching the screen, no buttons).
+- [x] Game README + museum entry.
+- [x] Pending items noted: the fonts are Liberation Sans instead of Arial; the sound was not
+  tested on real hardware; Stop and SetVolume act on the whole file (here it changes nothing); the
+  window does not scale by integer multiples like the original; from Turret, predictive aiming and the firing
+  triggers were not ported (they are not used).
 
 ### 2.5 Da Car (Construct 2) ✅
-- [x] Triaje: exportado el 23-nov-2015; plugins Sprite, Text, Particles, Audio, Touch, Mouse y
-  Keyboard, y los comportamientos Physics, Wrap y ScrollTo. REA `analyze-javascript-application`
-  pasó del límite de 5 min con la carpeta entera (Box2D en asm.js dentro de `c2runtime.js`): se
-  repitió sin el runtime y el runtime se leyó a mano.
-- [x] Eventos con `tools/c2_eventos.py` y `games/da-car/reference/nombres.json`.
-- [x] Box2D 2.3.1 traducido a Rust en `crates/box2d` (el `box2d.js` de kripken que trae el
-  runtime, con `b2_maxPolygonVertices` = 16), idéntico bit a bit al C++ en cuatro escenas
+- [x] Triage: exported on 23-Nov-2015; Sprite, Text, Particles, Audio, Touch, Mouse and
+  Keyboard plugins, and the Physics, Wrap and ScrollTo behaviours. REA `analyze-javascript-application`
+  exceeded the 5 min limit with the whole folder (Box2D in asm.js inside `c2runtime.js`): it was
+  run again without the runtime and the runtime was read by hand.
+- [x] Events with `tools/c2_eventos.py` and `games/da-car/reference/nombres.json`.
+- [x] Box2D 2.3.1 translated to Rust in `crates/box2d` (the `box2d.js` from kripken that the
+  runtime ships, with `b2_maxPolygonVertices` = 16), bit-for-bit identical to the C++ in four scenes
   (`crates/box2d/comparar/comparar.sh`).
-- [x] Port nativo jugable: el comportamiento Physics (formas, separador de polígonos cóncavos,
-  articulaciones, colisiones registradas), ScrollTo, Wrap por la vista, capas con parallax,
-  Particles y la hoja «InGame».
-- [x] Web + táctil: se acelera tocando y se gira inclinando el dispositivo (`museo::sensores::beta`,
-  desde `deviceorientation`; en iOS se pide permiso al primer toque).
-- [x] README del juego + ficha del museo.
-- [x] Pendientes anotados: las fuentes son Liberation Sans en lugar de Arial; el sonido no se
-  probó en hardware real; la inclinación no se probó en un móvil de verdad (solo la orientación
-  emulada por CDP en Chromium, que llega a la página, y una inclinación fija forzada en nativo); no
-  se jugó hasta la meta sin ayuda (la meta se probó con un cambio temporal).
+- [x] Native port playable: the Physics behaviour (shapes, concave polygon splitter,
+  joints, registered collisions), ScrollTo, Wrap by the view, layers with parallax,
+  Particles and the "InGame" sheet.
+- [x] Web + touch: you accelerate by touching and steer by tilting the device (`museo::sensores::beta`,
+  from `deviceorientation`; on iOS permission is requested on the first touch).
+- [x] Game README + museum entry.
+- [x] Pending items noted: the fonts are Liberation Sans instead of Arial; the sound was not
+  tested on real hardware; the tilt was not tested on a real phone (only the orientation
+  emulated by CDP in Chromium, which reaches the page, and a forced fixed tilt in native); it was
+  not played up to the finish line without help (the finish line was tested with a temporary change).
 
 ### 2.6 Super Happy Jump (Unity 4.6 Web Player) ✅
-- [x] Abrir `web.unity3d` con UnityPy: `Assembly-CSharp.dll` (compilado el 9-dic-2014, cabecera
-  PE), la escena, los prefabs, sprites, clips de Mecanim, partículas, la `GUISkin` y el audio, con
+- [x] Open `web.unity3d` with UnityPy: `Assembly-CSharp.dll` (compiled on 9-Dec-2014, PE
+  header), the scene, the prefabs, sprites, Mecanim clips, particles, the `GUISkin` and the audio, with
   `games/super-happy-jump/tools/extraer.py` → `assets/escena.json`.
-- [x] Triaje REA del ensamblado (`inspect-managed-artifact`, `inspect-managed-members`, 132 métodos
-  importados con `import-managed-reconstruction`; REA no abre el formato `UnityWeb`) + ILSpy, con
-  el `UnityEngine.dll` de Unity 5.1.2 de One Button Prototype (el de 4.6 no viene en el bundle).
-- [x] Crate compartido `crates/unity`: Time, GameObjects, física 2D sobre `crates/box2d` (que ganó
-  sensores, eventos por fixture, `QueryAABB`, `DestroyFixture`, `ApplyForceToCenter` y
-  `SetMassData`, comparados bit a bit con el C++ en la escena «corredor»), Animator, partículas
-  (Shuriken), cámara y orden de dibujo, IMGUI y AudioSource. `museo::Preferencias` para los
-  `PlayerPrefs` (archivo en PC, `localStorage` en la web).
-- [x] Port nativo jugable: los scripts del juego y el frame de Unity en `src/juego.rs`.
-- [x] Web + táctil (se juega tocando la pantalla, sin botones).
-- [x] README del juego + ficha del museo.
-- [x] Pendientes anotados: las fuentes son Liberation Sans en lugar de Arial y Nunito en lugar de
-  Arial Rounded MT Bold (incrustada en el original, de Monotype, no redistribuible); el Box2D del
-  Web Player es de versión desconocida (se usa 2.3.1); lo que Unity hace por dentro (despertar al
-  cuerpo movido por código, estados de estilo sin fondo, sprites en las transiciones de Mecanim,
-  partículas estiradas) se dedujo y no se pudo comparar con el original en marcha, porque el
-  Unity Web Player ya no corre; el sonido no se probó en hardware real; los controles táctiles se
-  probaron solo en emulación de Chromium; las monedas y el récord se probaron con un cambio
-  temporal; las versiones de iOS y Android no están en itch.io (solo enlaces a las tiendas).
+- [x] REA triage of the assembly (`inspect-managed-artifact`, `inspect-managed-members`, 132 methods
+  imported with `import-managed-reconstruction`; REA does not open the `UnityWeb` format) + ILSpy, with
+  the `UnityEngine.dll` from Unity 5.1.2 from One Button Prototype (the 4.6 one does not come in the bundle).
+- [x] Shared `crates/unity` crate: Time, GameObjects, 2D physics on top of `crates/box2d` (which gained
+  sensors, per-fixture events, `QueryAABB`, `DestroyFixture`, `ApplyForceToCenter` and
+  `SetMassData`, compared bit for bit with the C++ in the "corredor" scene), Animator, particles
+  (Shuriken), camera and draw order, IMGUI and AudioSource. `museo::Preferencias` for the
+  `PlayerPrefs` (file on PC, `localStorage` on the web).
+- [x] Native port playable: the game scripts and the Unity frame in `src/juego.rs`.
+- [x] Web + touch (played by touching the screen, no buttons).
+- [x] Game README + museum entry.
+- [x] Pending items noted: the fonts are Liberation Sans instead of Arial and Nunito instead of
+  Arial Rounded MT Bold (embedded in the original, from Monotype, not redistributable); the Box2D in the
+  Web Player is of unknown version (2.3.1 is used); what Unity does internally (waking the
+  body moved by code, style states without background, sprites in Mecanim transitions,
+  stretched particles) was deduced and could not be compared with the original running, because the
+  Unity Web Player no longer runs; the sound was not tested on real hardware; the touch controls were
+  tested only in Chromium emulation; the coins and the high score were tested with a temporary
+  change; the iOS and Android versions are not on itch.io (only links to the stores).
 
 ### 2.7 One Button Prototype (Unity 5.1, Mono) ✅
-- [x] Triaje REA de `Assembly-CSharp.dll` y `-firstpass` (`inspect-managed-artifact` e
-  `inspect-managed-members` de los seis tipos del juego y de `FPSCounter`): compilados el
-  22-jul-2015 (cabecera PE). Los builds de escritorio y Android son de ese día; el WebGL del
-  17-ago-2015 tiene las mismas escenas (comparadas con UnityPy) y los mismos literales en IL2CPP.
-- [x] Escenas y sprites con UnityPy (sin type trees: TypeTreeGeneratorAPI para los MonoBehaviour)
-  en `games/one-button-prototype/tools/extraer.py`: las tres escenas, sprites de malla ajustada
-  con su `uvTransform`, texturas recortadas, clips (también las curvas constantes del
-  `BoxCollider2D`), controladores con blend tree, la `GameSkin` integrada y OpenSans.
-- [x] `crates/unity` ampliado para Unity 5.1: varias escenas, `PolygonCollider2D` (piezas
-  convexas), contactos por par de colisionadores con `OnCollisionEnter2D`, `OverlapCircleAll`,
-  `bounds`, interpolación, Animator con blend trees 1D, *AnimatePhysics*, curvas sobre el
-  colisionador con *Write Defaults*, `GUI.Window` con título y foco, `GUIText`, `SmoothDamp`.
-  `crates/box2d` ganó el `Set` con soldadura de Box2D 2.3.1, comparado bit a bit con un C++
-  compilado como el de Unity en la escena nueva «rebote».
-- [x] Port nativo jugable.
-- [x] Web + táctil (un solo botón: el toque).
-- [x] README del juego + ficha del museo.
-- [x] Pendientes anotados: `import-managed-reconstruction` no se hizo (REA pide la Evidence de
-  miembros entera en la llamada, unos 250 KB; el payload se regenera con
-  `tools/rea_reconstruction.py`); las fuentes de la GUI son Liberation Sans en lugar de Arial; lo
-  que Unity hace por dentro (interpolación, *AnimatePhysics*, foco de las ventanas, `bounds`, la
-  curva de `m_Center` sin aplicar, las piezas de los polígonos) se dedujo y no se pudo comparar
-  con el original en marcha; los niveles no se jugaron de principio a fin sin ayuda (la estrella
-  se probó con un cambio temporal) y no se probó pisar un dragón; los controles táctiles se
-  probaron solo en emulación de Chromium.
+- [x] REA triage of `Assembly-CSharp.dll` and `-firstpass` (`inspect-managed-artifact` and
+  `inspect-managed-members` of the game's six types and of `FPSCounter`): compiled on
+  22-Jul-2015 (PE header). The desktop and Android builds are from that day; the WebGL from
+  17-Aug-2015 has the same scenes (compared with UnityPy) and the same literals in IL2CPP.
+- [x] Scenes and sprites with UnityPy (no type trees: TypeTreeGeneratorAPI for the MonoBehaviours)
+  in `games/one-button-prototype/tools/extraer.py`: the three scenes, tight mesh sprites
+  with their `uvTransform`, trimmed textures, clips (including the constant curves of the
+  `BoxCollider2D`), controllers with a blend tree, the built-in `GameSkin` and OpenSans.
+- [x] `crates/unity` extended for Unity 5.1: several scenes, `PolygonCollider2D` (convex
+  pieces), contacts per collider pair with `OnCollisionEnter2D`, `OverlapCircleAll`,
+  `bounds`, interpolation, Animator with 1D blend trees, *AnimatePhysics*, curves on the
+  collider with *Write Defaults*, `GUI.Window` with title and focus, `GUIText`, `SmoothDamp`.
+  `crates/box2d` gained the `Set` with Box2D 2.3.1 welding, compared bit for bit with a C++
+  compiled like Unity's in the new "rebote" scene.
+- [x] Native port playable.
+- [x] Web + touch (a single button: the tap).
+- [x] Game README + museum entry.
+- [x] Pending items noted: `import-managed-reconstruction` was not done (REA asks for the whole members
+  Evidence in the call, about 250 KB; the payload is regenerated with
+  `tools/rea_reconstruction.py`); the GUI fonts are Liberation Sans instead of Arial; what
+  Unity does internally (interpolation, *AnimatePhysics*, window focus, `bounds`, the
+  `m_Center` curve not applied, the polygon pieces) was deduced and could not be compared
+  with the original running; the levels were not played from start to finish without help (the star
+  was tested with a temporary change) and landing on a dragon was not tested; the touch controls were
+  tested only in Chromium emulation.
 
 ### 2.8 The Meaning of Christmas (libGDX) ✅
-- [x] Triaje: REA `decode-android-resources` (con apktool en el PATH) para el manifiesto y los
-  textos; JADX directamente para el código (las herramientas de REA que lo recuperan piden un JAR
-  de JADX MCP). libGDX 0.9.2 sobre su «hello world», APK armado el 1-ene-2012 y firmado con el
-  certificado de depuración.
-- [x] `classes.dex` decompilado con JADX 1.5.6: las siete clases del juego en `reference/java`, y
-  lo que usa de libGDX (`BitmapFont`, `Animation`, `WindowedMean`, `AndroidGraphics`) leído del
-  mismo APK.
-- [x] Assets de `assets/data` y la fuente `arial-15` de libGDX con
-  `games/the-meaning-of-christmas/tools/extraer.py`; MP3 → Ogg Vorbis con ffmpeg.
-- [x] Port nativo jugable (320×480, en vertical).
-- [x] Web + táctil (se juega tocando).
-- [x] README del juego + ficha del museo.
-- [x] Pendientes anotados: el sonido no se probó en hardware real; en la web el título queda en
-  silencio hasta el primer toque (que ya empieza la partida); los controles táctiles se probaron
-  solo en emulación de Chromium; la quema de regalos y el final de la partida se probaron con
-  cambios temporales (un jugador automático y el dinero cerca del tope); faltan las herramientas
-  JADX de REA (`REA_JADX_MCP_JAR`).
+- [x] Triage: REA `decode-android-resources` (with apktool in the PATH) for the manifest and the
+  texts; JADX directly for the code (the REA tools that recover it ask for a JADX MCP
+  JAR). libGDX 0.9.2 on top of its "hello world", APK built on 1-Jan-2012 and signed with the
+  debug certificate.
+- [x] `classes.dex` decompiled with JADX 1.5.6: the game's seven classes in `reference/java`, and
+  whatever it uses from libGDX (`BitmapFont`, `Animation`, `WindowedMean`, `AndroidGraphics`) read from the
+  same APK.
+- [x] Assets from `assets/data` and libGDX's `arial-15` font with
+  `games/the-meaning-of-christmas/tools/extraer.py`; MP3 → Ogg Vorbis with ffmpeg.
+- [x] Native port playable (320×480, portrait).
+- [x] Web + touch (played by touching).
+- [x] Game README + museum entry.
+- [x] Pending items noted: the sound was not tested on real hardware; on the web the title stays
+  silent until the first touch (which already starts the game); the touch controls were tested
+  only in Chromium emulation; the gift burning and the end of the run were tested with
+  temporary changes (an automatic player and the money near the limit); REA's JADX tools are
+  missing (`REA_JADX_MCP_JAR`).
 
 ### 2.9 Go Ball (Unity 3.4) ✅
-- [x] Triaje REA + ILSpy de `Assembly-CSharp.dll` y `Assembly-UnityScript.dll` (con sus `.mdb`),
-  del build de Windows de 32 bits extraído en `originales/go-ball/win32` (sin el `.exe` ni el
+- [x] REA triage + ILSpy of `Assembly-CSharp.dll` and `Assembly-UnityScript.dll` (with their `.mdb`),
+  from the 32-bit Windows build extracted into `originales/go-ball/win32` (without the `.exe` or the
   `.pdb`):
-  - Compilados el 22-sep-2011 a las 04:15 UTC (cabecera PE), Unity 3.4.0f5. REA
-    `inspect-managed-artifact` de `Assembly-CSharp.dll`
-    (`ev_f3b10410c604e1409754d98b8d98c4beb49b09d7eb0ab19ef296839fedf7eb78`) e
-    `inspect-managed-members` de los seis tipos del juego: 35 métodos y 30 literales
+  - Compiled on 22-Sep-2011 at 04:15 UTC (PE header), Unity 3.4.0f5. REA
+    `inspect-managed-artifact` of `Assembly-CSharp.dll`
+    (`ev_f3b10410c604e1409754d98b8d98c4beb49b09d7eb0ab19ef296839fedf7eb78`) and
+    `inspect-managed-members` of the game's six types: 35 methods and 30 literals
     (`ev_8022ac3d81b5715672524d9edfad7041f0da03cf1ef2468f9c8b827d41080d8f`).
-  - Seis escenas en `BuildSettings`: `menuPrincipal` (en `mainData`, con un terreno con pasto
-    —sus cuatro prototipos de árbol no tienen instancias— y la bola de adorno) y `nivel1` a `nivel5` (`level0` a `level4`). `PlayerSettings`: «Go
-    Ball», 1024×600 (640×480 en web). Sin lightmaps.
-  - Scripts (unas 600 líneas propias): `Bola` (la bola, un `Rigidbody` con `SphereCollider`:
-    `AddForce` horizontal en modo `Acceleration` con el eje «Horizontal» y salto con «Saltar»
-    fijando la velocidad vertical; muere con la «Sierra», con `OnParticleCollision` o al salir
-    de `limiteMin`/`limiteMax`; «Explosivo1» la empuja), `MoverObjeto` (objetos que se arrastran
-    con el ratón en horizontal o vertical, de 0,05 en 0,05, o que van y vienen solos; la rama
-    de rotación compara la y con los límites horizontales), `Objetivo` (la meta, que gira con
-    iTween `RotateBy` en *ping-pong*), `Camara` (puede seguir a la bola, pero ninguna escena lo activa; botones de salir, maximizar,
-    opciones, que no hace nada, y reiniciar, con ventanas que pausan con `timeScale`),
-    `Transicion` (fundidos con un `GUITexture` y la carga de niveles), `EmpezarJuego` (el menú) y
-    `TimedObjectDestructor` (UnityScript). Además, `iTween` (4640 líneas, de terceros) y
-    `WaterSimple` (Standard Assets) en `-firstpass`.
-  - Lo que pide del motor: render 3D con los shaders integrados de Unity 3.4 y sus luces, un
-    terreno con árboles (solo en el menú), el agua de los Standard Assets, animaciones heredadas
-    (`Animation`, 29), partículas heredadas (`EllipsoidParticleEmitter`, `ParticleAnimator`,
-    `ParticleRenderer` y `WorldParticleCollider`), `GUITexture`, IMGUI con `GUISkin`,
-    `OnMouseDown`/`OnMouseDrag` (rayos contra los colisionadores), `AudioSource` y PhysX 2.8:
-    la única cosa dinámica es la bola (y unos sistemas de partículas «OuterCore» con
-    `Rigidbody` en `nivel2` y `nivel3`), contra 148 `MeshCollider` que el código y las
-    animaciones mueven. `PhysicsManager`: *bounce threshold* 2, *sleep velocity* 0,15, velocidad
-    angular máxima 7 (limita lo que rueda la bola) y 6 iteraciones.
-  - Propuesta de enfoque, a decidir: el render 3D con macroquad y shaders GLSL que imiten los
-    integrados que usen los materiales, y para la física, un solver propio de una esfera contra
-    triángulos (con el roce, el rebote y el límite de velocidad angular de PhysX documentados)
-    en vez de un motor 3D completo, porque PhysX no se puede traducir.
-- [x] Escenas y assets con UnityPy en `games/go-ball/tools/extraer.py` → `assets/`:
-  - UnityPy lee Unity 3.4: las clases del motor traen type trees; los MonoBehaviour comparten
-    uno sin los campos del script, que se generan con TypeTreeGeneratorAPI desde `Managed/`. La
-    `GUISkin` y el `Terrain` son MonoBehaviour de `UnityEngine.dll` con el formato nativo de
-    3.4 y se leen a mano (20 estilos fijos y 7 propios; los campos del terreno).
-  - `escena.json`: las seis escenas (8, 36, 36, 62, 64 y 66 objetos) con su jerarquía, los
-    componentes 3D (MeshRenderer, MeshCollider, BoxCollider, SphereCollider, Rigidbody, Light,
-    Camera, AudioSource, GUITexture, las partículas heredadas y los campos de los scripts), los
-    `RenderSettings` de cada escena, los 44 materiales con su shader, la piel (los estilos que
-    usan los scripts), tres fuentes de mapa de bits (solo ASCII y Latin-1), el destello «85mm
-    Lens», el terreno del menú (alturas en 8 bits, mezcla y los 45 parches de pasto; sin
-    árboles) y los ajustes (tiempo, física, calidad «Fantastic», ejes del InputManager).
-  - 25 mallas en `mallas/*.bin` (Unity 3.4 guarda las submallas como tiras: se separan en
-    triángulos, con los de colisión aparte), 58 texturas (DXT1/DXT5 decodificadas, Alpha8 de
-    las fuentes a blanco con alfa) y las seis caras de los dos cubemaps del diamante, y los seis
-    clips (OGG y un WAV) con su duración. `src/recursos.rs` los embebe.
-  - Las 29 `Animation` están vacías (sin clips: las dejan los modelos importados), así que no
-    hay animaciones que portar; lo que se mueve lo mueven los scripts e iTween.
-  - Las capturas de la página de itch.io (1440×900, «Development Build») sirven de referencia
-    visual; no van al repo.
-- [x] Enfoque decidido y probado con los cinco niveles: el de la propuesta, en `crates/unity`.
-  - Render 3D propio con miniquad directamente (`render3d.rs`): búferes estáticos por malla,
-    texturas con mipmaps (Unity guarda las filas de abajo hacia arriba), cubemaps, la vista de
-    Unity (z hacia adelante, invertida como su `worldToCameraMatrix`), las colas 2000, 2450,
-    2901 y 3000, partículas como billboards y el destello de la luz en la pantalla.
-  - Los shaders de Unity 3.4 reescritos en GLSL desde su código ARB del build
-    (`shaders3d.rs`): Diffuse y Bumped Specular (ambiente + luz puntual por píxel con la
-    atenuación de Unity), Tree Soft Occlusion (luz por vértice y oclusión en las tangentes),
-    Cutout Soft Edge Unlit (dos pasadas), la nube (función fija), FX/Diamond (dos pasadas con
-    cubemaps), el skybox y Particles/Alpha Blended.
-  - miniquad 0.4 apaga el depth test cuando un pipeline no escribe profundidad: los
-    transparentes se dibujan con `glDepthMask(false)`, que en la web agrega el `index.html` de
-    `crates/museo` (el `mq_js_bundle.js` no lo trae).
-  - Física propia en lugar de PhysX (`fisica3d.rs`): una esfera contra triángulos de
-    MeshCollider, cajas y esferas, con impulsos secuenciales (6 iteraciones), roce 0,6 del
-    material por defecto, el «skin» de 0,01, la velocidad angular máxima de 7 (la bola no rueda
-    a más de 1,68 m/s), las restricciones y las fuerzas de `AddForce` que esperan al próximo
-    paso (desde `Update`, la aceleración depende de los fps, como en el original); rayos para
-    `OnMouseDown` y para las partículas.
-  - Partículas heredadas (`particulas3d.rs`), InputManager con el suavizado de los ejes
-    (`entrada.rs`), AudioSource con atenuación por distancia (`audio3d.rs`) y la GUI de Unity 3
-    (fuentes de mapa de bits, `GUI.color`, `DrawTexture`, tooltips, estados sin fondo) en
-    `gui.rs`, decompilando de `UnityEngine.dll` 3.4 `SendMouseEvents`, `GUI` y `GUIUtility`.
-  - El juego (`games/go-ball/src`): los siete scripts, iTween `RotateBy` y el frame de Unity
-    3.4. Los niveles se ven como las capturas de itch.io y se juegan (arrastrar cajas, saltar,
-    la meta, el fuego). Falta el terreno del menú.
-- [x] Port nativo jugable: el menú y los cinco niveles, de principio a fin (la meta del nivel 5
-  vuelve al menú).
-  - El terreno del menú (`crates/unity/src/terreno.rs`): la malla del mapa de alturas en la zona
-    que ve la cámara (filas en z, alturas sobre 32766), las dos capas mezcladas con el mapa de
-    control y unas 3400 matas de pasto en cuatro capas, como billboards que se balancean con el
-    viento (el programa de vértices de BillboardWavingDoublePass traducido). El reparto al azar de
-    las matas dentro de cada muestra no es el de Unity.
-  - El destello calibrado con las capturas de itch.io: la caída del rojo en la fila de la luz da
-    un resplandor (tamaño 50) de 1,25 altos de pantalla, o sea 2,5 % del alto por unidad de
-    tamaño; con eso coincide punto a punto en el nivel 1. Las sierras lo tapan y lo apagan, como
-    el rayo de oclusión de Unity contra sus MeshCollider.
-  - `src/recursos.rs` con `static` (con `const` el wasm repetía las texturas: 24 MB en vez de
+  - Six scenes in `BuildSettings`: `menuPrincipal` (in `mainData`, with a grassy terrain
+    —its four tree prototypes have no instances— and the decorative ball) and `nivel1` to `nivel5` (`level0` to `level4`). `PlayerSettings`: "Go
+    Ball", 1024×600 (640×480 on the web). No lightmaps.
+  - Scripts (about 600 lines of their own): `Bola` (the ball, a `Rigidbody` with `SphereCollider`:
+    horizontal `AddForce` in `Acceleration` mode with the "Horizontal" axis and jump with "Saltar"
+    setting the vertical speed; it dies with the "Sierra", with `OnParticleCollision` or when leaving
+    `limiteMin`/`limiteMax`; "Explosivo1" pushes it), `MoverObjeto` (objects dragged
+    with the mouse horizontally or vertically, in steps of 0.05, or that go back and forth on their own; the rotation
+    branch compares the y with the horizontal limits), `Objetivo` (the goal, which rotates with
+    iTween `RotateBy` in *ping-pong*), `Camara` (it can follow the ball, but no scene enables it; exit, maximise,
+    options, which does nothing, and restart buttons, with windows that pause with `timeScale`),
+    `Transicion` (fades with a `GUITexture` and level loading), `EmpezarJuego` (the menu) and
+    `TimedObjectDestructor` (UnityScript). In addition, `iTween` (4640 lines, third-party) and
+    `WaterSimple` (Standard Assets) in `-firstpass`.
+  - What it asks of the engine: 3D rendering with Unity 3.4's built-in shaders and its lights, a
+    terrain with trees (only in the menu), the water from the Standard Assets, legacy animations
+    (`Animation`, 29), legacy particles (`EllipsoidParticleEmitter`, `ParticleAnimator`,
+    `ParticleRenderer` and `WorldParticleCollider`), `GUITexture`, IMGUI with `GUISkin`,
+    `OnMouseDown`/`OnMouseDrag` (rays against the colliders), `AudioSource` and PhysX 2.8:
+    the only dynamic thing is the ball (and some "OuterCore" particle systems with
+    `Rigidbody` in `nivel2` and `nivel3`), against 148 `MeshCollider`s that the code and the
+    animations move. `PhysicsManager`: bounce threshold 2, sleep velocity 0.15, maximum
+    angular velocity 7 (limits how the ball rolls) and 6 iterations.
+  - Proposed approach, to be decided: 3D rendering with macroquad and GLSL shaders that imitate the
+    built-in ones the materials use, and for the physics, a custom solver for a sphere against
+    triangles (with friction, bounce and PhysX's angular velocity limit documented)
+    instead of a full 3D engine, because PhysX cannot be translated.
+- [x] Scenes and assets with UnityPy in `games/go-ball/tools/extraer.py` → `assets/`:
+  - UnityPy reads Unity 3.4: the engine classes come with type trees; the MonoBehaviours share
+    one without the script's fields, which are generated with TypeTreeGeneratorAPI from `Managed/`. The
+    `GUISkin` and the `Terrain` are MonoBehaviours from `UnityEngine.dll` with the native 3.4 format
+    and are read by hand (20 fixed styles and 7 of their own; the terrain fields).
+  - `escena.json`: the six scenes (8, 36, 36, 62, 64 and 66 objects) with their hierarchy, the
+    3D components (MeshRenderer, MeshCollider, BoxCollider, SphereCollider, Rigidbody, Light,
+    Camera, AudioSource, GUITexture, the legacy particles and the script fields), the
+    `RenderSettings` of each scene, the 44 materials with their shader, the skin (the styles the scripts
+    use), three bitmap fonts (ASCII and Latin-1 only), the "85mm
+    Lens" flare, the menu terrain (8-bit heights, blending and the 45 grass patches; no
+    trees) and the settings (time, physics, "Fantastic" quality, InputManager axes).
+  - 25 meshes in `mallas/*.bin` (Unity 3.4 stores submeshes as strips: they are split into
+    triangles, with the collision ones separate), 58 textures (DXT1/DXT5 decoded, Alpha8 of
+    the fonts turned white with alpha) and the six faces of the diamond's two cubemaps, and the six
+    clips (OGG and one WAV) with their duration. `src/recursos.rs` embeds them.
+  - The 29 `Animation`s are empty (without clips: the imported models leave them that way), so there
+    are no animations to port; whatever moves is moved by the scripts and iTween.
+  - The captures from the itch.io page (1440×900, "Development Build") serve as visual
+    reference; they do not go in the repo.
+- [x] Approach decided and tested with the five levels: the one in the proposal, in `crates/unity`.
+  - Custom 3D rendering with miniquad directly (`render3d.rs`): static buffers per mesh,
+    textures with mipmaps (Unity stores the rows bottom-up), cubemaps, the Unity view
+    (z forward, flipped like its `worldToCameraMatrix`), the 2000, 2450,
+    2901 and 3000 queues, particles as billboards and the light flare on the screen.
+  - Unity 3.4's shaders rewritten in GLSL from their ARB code in the build
+    (`shaders3d.rs`): Diffuse and Bumped Specular (ambient + per-pixel point light with
+    Unity's attenuation), Tree Soft Occlusion (per-vertex lighting and occlusion in the tangents),
+    Cutout Soft Edge Unlit (two passes), the cloud (fixed function), FX/Diamond (two passes with
+    cubemaps), the skybox and Particles/Alpha Blended.
+  - miniquad 0.4 turns off depth test when a pipeline does not write depth: the
+    transparent objects are drawn with `glDepthMask(false)`, which on the web is added by the `index.html` from
+    `crates/museo` (`mq_js_bundle.js` does not bring it).
+  - Custom physics instead of PhysX (`fisica3d.rs`): a sphere against triangles of a
+    MeshCollider, boxes and spheres, with sequential impulses (6 iterations), friction 0.6 from the
+    default material, the "skin" of 0.01, the maximum angular velocity of 7 (the ball does not roll
+    faster than 1.68 m/s), the constraints and the `AddForce` forces that wait for the next
+    step (from `Update`, acceleration depends on fps, as in the original); rays for
+    `OnMouseDown` and for the particles.
+  - Legacy particles (`particulas3d.rs`), InputManager with axis smoothing
+    (`entrada.rs`), AudioSource with distance attenuation (`audio3d.rs`) and the Unity 3
+    GUI (bitmap fonts, `GUI.color`, `DrawTexture`, tooltips, states without background) in
+    `gui.rs`, decompiling `SendMouseEvents`, `GUI` and `GUIUtility` from `UnityEngine.dll` 3.4.
+  - The game (`games/go-ball/src`): the seven scripts, iTween `RotateBy` and the Unity
+    3.4 frame. The levels look like the itch.io captures and are playable (dragging boxes, jumping,
+    the goal, the fire). The menu terrain is missing.
+- [x] Native port playable: the menu and the five levels, from start to finish (the level 5 goal
+  returns to the menu).
+  - The menu terrain (`crates/unity/src/terreno.rs`): the mesh of the height map in the area
+    the camera sees (rows in z, heights over 32766), the two layers blended with the control map and about 3400 grass
+    tufts in four layers, as billboards that sway with the
+    wind (the translated BillboardWavingDoublePass vertex program). The random distribution of
+    the tufts within each sample is not Unity's.
+  - The flare calibrated with the itch.io captures: the fall-off of red in the light's row gives
+    a glow (size 50) 1.25 screen-heights tall, that is 2.5 % of the height per unit of
+    size; with that it matches point by point in level 1. The saws cover it and turn it off, like
+    Unity's occlusion ray against its MeshColliders.
+  - `src/recursos.rs` with `static` (with `const` the wasm repeated the textures: 24 MB instead of
     14).
-  - Probado en Xvfb: el menú, «Jugar», arrastrar las cajas, rodar y saltar, la ventana de salir
-    (pausa y oscurece) y la vuelta al menú; con un cambio temporal (la bola puesta junto a la
-    meta o al peligro): la meta y el paso al nivel siguiente, la muerte en el fuego y en las
-    sierras con el reinicio, y el nivel 5 que vuelve al menú.
-- [x] Web + táctil: una cruceta horizontal y el botón «A» para saltar (las flechas y la de
-  arriba); fuera de los controles, el dedo hace de ratón (los botones de la GUI y arrastrar las
-  cajas; el primer dedo que empieza fuera de los controles). `humo.json`: el menú, «Jugar», rodar
-  y saltar, la ventana de salir y la vuelta al menú, en nativo y en la web (escritorio, móvil
-  horizontal y vertical). Arrastrar una caja con el dedo se probó aparte con Playwright (toques
-  de CDP en móvil horizontal). El wasm pesa 14 MB.
-- [x] README del juego + ficha del museo, con capturas en `games/go-ball/docs`. «Cómo se hizo»
-  cuenta el triaje con sus Evidence, la extracción, cada pieza del motor y su comparación con
-  las capturas de itch.io.
-- [x] Pendientes anotados: `import-managed-reconstruction` no se hizo (como en 2.7, REA pide la
-  Evidence de miembros entera en la llamada, unos 250 KB por las referencias de todo el
-  ensamblado); lo que hace Unity por dentro (el ambiente sin doblar, la atenuación, el tamaño de
-  los elementos del destello, las fórmulas de las partículas heredadas, el reparto y las ondas
-  del pasto, los estados de estilo sin fondo) se dedujo y se comparó solo con las cinco capturas
-  de itch.io, que no muestran el menú ni las ventanas; la física es un solver propio, no PhysX;
-  los niveles no se jugaron de principio a fin sin ayuda (la meta, el fuego, las sierras y el
-  final del nivel 5 se probaron con la pelota puesta a mano); el sonido no se probó en hardware
-  real y en la web la música del menú espera al primer clic o toque (además, suena muy baja,
-  como en el original); los controles táctiles se probaron solo en emulación de Chromium; el
-  build de macOS (compilado aparte el mismo día) no se revisó en detalle; el eje de mando de
-  «Horizontal» no se portó.
+  - Tested in Xvfb: the menu, "Jugar", dragging the boxes, rolling and jumping, the exit window
+    (pauses and darkens) and the return to the menu; with a temporary change (the ball placed next to the
+    goal or to the danger): the goal and the move to the next level, death in the fire and in the
+    saws with the restart, and level 5 returning to the menu.
+- [x] Web + touch: a horizontal D-pad and the "A" button to jump (the arrows and the up
+  one); outside the controls, the finger acts as a mouse (the GUI buttons and dragging the
+  boxes; the first finger that starts outside the controls). `humo.json`: the menu, "Jugar", rolling
+  and jumping, the exit window and the return to the menu, natively and on the web (desktop, mobile
+  landscape and portrait). Dragging a box with a finger was tested separately with Playwright (CDP
+  taps in mobile landscape). The wasm weighs 14 MB.
+- [x] Game README + museum entry, with captures in `games/go-ball/docs`. "How it was made"
+  tells the triage with its Evidence, the extraction, each engine piece and its comparison with
+  the itch.io captures.
+- [x] Pending items noted: `import-managed-reconstruction` was not done (as in 2.7, REA asks for the whole
+  members Evidence in the call, about 250 KB for the references of the whole
+  assembly); what Unity does internally (ambient without doubling, attenuation, the size of
+  the flare elements, the formulas of the legacy particles, the distribution and the waves
+  of the grass, the style states without background) was deduced and compared only with the five captures
+  from itch.io, which do not show the menu or the windows; the physics is a custom solver, not PhysX;
+  the levels were not played from start to finish without help (the goal, the fire, the saws and the
+  end of level 5 were tested with the ball placed by hand); the sound was not tested on real
+  hardware and on the web the menu music waits for the first click or touch (furthermore, it plays very softly,
+  as in the original); the touch controls were tested only in Chromium emulation; the
+  macOS build (compiled separately the same day) was not reviewed in detail; the gamepad axis for
+  "Horizontal" was not ported.
 
 ### 2.10 Neuro Battle (Unity 5.1 WebGL / IL2CPP) ✅
-- [x] Desempaquetar `Neuro Battle.data` (paquete de archivos de Emscripten) y buscar los metadatos
-  IL2CPP (`global-metadata.dat`):
-  - `Neuro Battle.zip` (13,99 MB) es el WebGL del **31-ago-2015** (fechas del zip: el `.data` y
-    el `.js` se escribieron entre las 10:37 y las 10:47). Unity **5.1.1f1**, producto «Neuro»
-    (DefaultCompany), lienzo de 960×600, C# compilado con IL2CPP a un asm.js de Emscripten
-    minificado: `Neuro Battle.js` (24,7 MB), su memoria inicial `Neuro Battle.html.mem` (3,2 MB)
-    y el paquete `Neuro Battle.data` (28,9 MB). REA `inspect-artifact` del zip
-    (`ev_ea8cecdb980921ee8e4cf64d048b4dcea8aee9aae7e8ec8c0943e8595ed99946`) y
-    `analyze-javascript-application` del cargador (`index.html`, `UnityConfig.js`,
-    `fileloader.js` y `UnityProgress.js`, sin red ni almacenamiento propios)
+- [x] Unpack `Neuro Battle.data` (Emscripten file package) and look for the IL2CPP metadata
+  (`global-metadata.dat`):
+  - `Neuro Battle.zip` (13.99 MB) is the WebGL build from **31-Aug-2015** (zip dates: the `.data` and
+    the `.js` were written between 10:37 and 10:47). Unity **5.1.1f1**, product "Neuro"
+    (DefaultCompany), 960×600 canvas, C# compiled with IL2CPP to a minified Emscripten asm.js:
+    `Neuro Battle.js` (24.7 MB), its initial memory `Neuro Battle.html.mem` (3.2 MB)
+    and the `Neuro Battle.data` package (28.9 MB). REA `inspect-artifact` of the zip
+    (`ev_ea8cecdb980921ee8e4cf64d048b4dcea8aee9aae7e8ec8c0943e8595ed99946`) and
+    `analyze-javascript-application` of the loader (`index.html`, `UnityConfig.js`,
+    `fileloader.js` and `UnityProgress.js`, without their own network or storage)
     (`ev_6d65876e17591498545582fb9368462509ed6a7f5798fd55b1b3c3bca28647d2`).
-  - El `.data` se desempaqueta con `tools/unity_assets.py emscripten` en
-    `originales/neuro-battle/data` (los 12 archivos del `fileloader.js`): las cuatro escenas de
-    `BuildSettings` (`titulo`, `instrucciones`, `level` y `game_over`, en `mainData` y `level0` a
-    `level2`), `sharedassets0` a `3` (el audio en `sharedassets2.resource`) y los recursos
-    integrados. `methods_pointedto_by_uievents.xml` está vacío.
-  - **No hay `global-metadata.dat`** (el WebGL 5.1.2 de One Button Prototype sí lo trae): en
-    5.1.1, IL2CPP todavía compila los metadatos como datos estáticos de C++, que quedan en la
-    memoria inicial del asm.js (`.html.mem`, cargada en la dirección 8, `STATIC_BASE`). Hay una
-    tabla de imágenes (Assembly-CSharp con 16 tipos, Assembly-UnityScript con 4, UnityEngine con
-    226, mscorlib con 791, System, System.Core y Mono.Security; ni uGUI ni Networking, aunque
-    sus MonoScript están en `mainData`); cada tipo es un `TypeInfo` de 0xa8 bytes (nombre,
-    espacio de nombres, lista de métodos, tamaño de instancia, flags); cada método, un
-    `MethodInfo` con su nombre, el índice en la tabla de funciones de su firma, el tipo que lo
-    declara y el de retorno; y cada imagen trae los nombres de sus campos y sus definiciones
-    (nombre, tipo, offset). Il2CppDumper no lee este formato (necesita un
-    `global-metadata.dat`). Las funciones del asm.js y sus tablas están minificadas; las tablas
-    se identifican por los `dynCall_<firma>` que exporta el módulo.
-  - Los scripts: en C#, `BaseMovimiento` y `BaseRotacion` (la neurona del jugador), `Union` y
-    `animacionUnion` (las piezas que se le unen), `disparar` y `bala`, `bordescript`,
-    `muerte_enemigo`, `Aparicion`, `Camera2DFollow` (de los Standard Assets), `titulo`,
-    `intrucciones` y `gameover` (con `OnGUI`), y `PlayerControl` y `matar_neurona`, que ninguna
-    escena ni prefab usa; en UnityScript, `GeneradorVitaminas`, `IA_Enemy` y el enum
+  - The `.data` is unpacked with `tools/unity_assets.py emscripten` into
+    `originales/neuro-battle/data` (the 12 files from `fileloader.js`): the four scenes in
+    `BuildSettings` (`titulo`, `instrucciones`, `level` and `game_over`, in `mainData` and `level0` to
+    `level2`), `sharedassets0` to `3` (the audio in `sharedassets2.resource`) and the built-in
+    resources. `methods_pointedto_by_uievents.xml` is empty.
+  - **There is no `global-metadata.dat`** (the WebGL 5.1.2 of One Button Prototype does have it): in
+    5.1.1, IL2CPP still compiles the metadata as static C++ data, which end up in the
+    asm.js initial memory (`.html.mem`, loaded at address 8, `STATIC_BASE`). There is an
+    image table (Assembly-CSharp with 16 types, Assembly-UnityScript with 4, UnityEngine with
+    226, mscorlib with 791, System, System.Core and Mono.Security; neither uGUI nor Networking, although
+    their MonoScripts are in `mainData`); each type is a `TypeInfo` of 0xa8 bytes (name,
+    namespace, method list, instance size, flags); each method, a
+    `MethodInfo` with its name, the index in the function table of its signature, the type that
+    declares it and the return type; and each image brings the names of its fields and their definitions
+    (name, type, offset). Il2CppDumper does not read this format (it needs a
+    `global-metadata.dat`). The asm.js functions and their tables are minified; the tables
+    are identified by the `dynCall_<signature>` that the module exports.
+  - The scripts: in C#, `BaseMovimiento` and `BaseRotacion` (the player's neuron), `Union` and
+    `animacionUnion` (the pieces that join it), `disparar` and `bala`, `bordescript`,
+    `muerte_enemigo`, `Aparicion`, `Camera2DFollow` (from the Standard Assets), `titulo`,
+    `intrucciones` and `gameover` (with `OnGUI`), and `PlayerControl` and `matar_neurona`, which no
+    scene or prefab uses; in UnityScript, `GeneradorVitaminas`, `IA_Enemy` and the enum
     `EstadoEnemigo`.
-  - Las escenas: `titulo`, `instrucciones` y `game_over` tienen solo la cámara con su script;
-    `level` tiene 96 objetos: la neurona del jugador (`neurona_base` y su `centro`), piezas con
-    `Union`, el borde (`Bordes`, `Lateral` y cuatro `pata` con `bordescript`), 17
-    `GeneradorVitaminas`, el `enemigo` (`IA_Enemy` y `muerte_enemigo`) y la cámara
-    (`Camera2DFollow` y `Aparicion`). Prefabs: `neurona_basica`, `neurona_larga`,
-    `neurona_ataque` (con `disparar`), `neurona_defensa` y `bala`.
-- [x] Recuperar tipos, métodos y textos (Il2CppDumper o similar) y extraer escenas y assets:
-  - `games/neuro-battle/tools/il2cpp.py`, un lector propio de los metadatos compilados: parte del
-    `Il2CppMetadataRegistration` (en 0x294eb0: las ocho asambleas, la tabla de 5166
-    `Il2CppType`, los métodos genéricos y las referencias a métodos que resuelve el código), lee
-    cada imagen (tipos, campos con su tipo, visibilidad y offset, métodos con sus parámetros) y
-    llega del `MethodInfo` a la función del asm.js por la tabla de su firma (`dynCall_<firma>`;
-    los métodos estáticos también reciben un `this` nulo y todos el `MethodInfo*` oculto, casi
-    siempre nulo; un struct se devuelve por un puntero que va primero). Vuelca en
-    `reference/il2cpp` los tipos del juego (`metadatos.txt`), los 85 métodos del motor que
-    llaman (`motor.txt`) y el cuerpo de cada método (`asmjs/<Tipo>.js`) con las llamadas, las
-    referencias a tipos y métodos que se resuelven al primer uso (`DO`/`FO`), las llamadas dentro
-    de un `try` (`invoke_*`) y los literales (objetos `String` estáticos en UTF-16) anotados.
-  - La lógica, reconstruida a mano de ese asm.js en `reference/csharp` (14 scripts y
-    `PlayerControl`, sin uso) y `reference/unityscript` (`GeneradorVitaminas` e `IA_Enemy`). Lo
-    que no se ve en el C#: IL2CPP 5.1.1 no comprueba nulos (en `bala`, restar vida a un borde
-    escribe en la memoria baja y la bala igual se destruye), `Mathf.Round` quedó *inlined* como
-    `roundf` en `IA_Enemy.Seguir`, en UnityScript las llamadas a los métodos propios son
-    virtuales, y el `try`/`catch (UnityException)` de `Aparicion` pasa por `invoke_*`.
-  - `games/neuro-battle/tools/extraer.py` (con UnityPy, como el de One Button Prototype): como no
-    hay ensamblados, escribe con `il2cpp.py` unos *stubs* de C# con los campos de cada script,
-    los compila con el `csc` del SDK de .NET contra el `UnityEngine.dll` 5.1.2 de One Button
-    Prototype y genera con ellos los type trees (TypeTreeGeneratorAPI); los 72 MonoBehaviour se
-    leen enteros. `escena.json`: las cuatro escenas (1, 1, 96 y 1 objetos), los cinco prefabs que
-    instancian los scripts (`neurona_basica`, `_larga`, `_ataque`, `_defensa` y `bala`), 189
-    sprites en 12 texturas recortadas, las tres pantallas de la GUI, 9 clips y 7 controladores,
-    el `GUIStyle` del puntaje, los ejes del InputManager (`Horizontal`, `Vertical`, `Rotacion` y
-    `Fire2`) y la física 2D. Los dos sonidos (AAC en MP4, el formato de Unity 5.1 para WebGL)
-    pasan a Ogg con ffmpeg. La fuente del puntaje, «Light Pixel-7» de Style-7, es «freeware for
-    personal use only» y no se copia.
-  - Para el port: la matriz de capas hace que los muros (capa `Background`) solo choquen con las
-    neuronas (capa `Neurona`) y que las neuronas no choquen entre sí; los generadores clonan el
-    `enemigo` de la escena (no un prefab); las patas de las neuronas son cuerpos *kinematic* con
-    triggers, y unir una neurona depende de que dos de ellas se toquen (en el Box2D estándar dos
-    cuerpos kinematic no generan contactos: hay que ver en el original qué hacía Unity 5.1).
-- [x] Probar si el WebGL original corre en un navegador actual; si corre, observarlo con REA
-  (`capture-browser-scenario`) para cubrir la lógica que no se pueda leer:
-  - **Corre** en el Chromium 1248 de Playwright (sin interfaz, WebGL 1.0 con SwiftShader), servido
-    en local con `python3 -I -m http.server`: tarda unos 15 s en cargar, muestra «made with
-    unity, Personal Edition» y luego el título. No hace falta el `.htaccess` (se sirve `Release/`
-    sin comprimir).
-  - REA `capture-browser-scenario` (consola, errores y una captura por paso)
-    (`ev_7e177af039fd0bb53b0ee21cea32633a6af97b34c31d1baa5250f791d35024f0`): título, «E» →
-    instrucciones, «E» → nivel y, sin tocar nada, «game over» a los 5,7 s con «TU PUNTAJE FUE DE
-    5 SEGUNDOS». Justo al morir salen 34 `NullReferenceException`: las 34 copias del enemigo
-    (17 generadores, dos tandas: al entrar y 5 s después) leen el `target` ya destruido en el
-    frame anterior a que cargue `game_over`.
-  - Con Playwright (teclas mantenidas, que REA no permite): la neurona se mueve con WASD; al
-    cruzar una pieza libre, la pieza se une y desde entonces se mueve y gira con ella (flechas).
-    O sea que en el Box2D de Unity 5.1 **dos triggers de cuerpos kinematic sí generan
-    contactos** (el Box2D estándar no los crea; Unity 5.5 agregó `useFullKinematicContacts`
-    para los sólidos): el port tiene que permitirlo. Si la «E» de «PLAY» sigue apretada al
-    entrar al nivel, también activa el zoom.
-- [x] Port nativo jugable: los cuatro scripts de menú y los catorce del nivel en
-  `games/neuro-battle/src/juego.rs`, con el frame de Unity 5.1 (LoadLevel al empezar el frame
-  siguiente, Physics2D a paso fijo con sus mensajes, lo destruido borrado después de la física y
-  después de los Update, Start antes del primer Update, el Animator en modo Normal y OnGUI).
-  - `crates/box2d`: `World::sensores_cinematicos` (dos cuerpos kinematic se tocan si hay un
-    sensor, como se observó en el original) y `b2Filter` con `SetFilterData`/`Refilter` (con 32
-    bits de categoría y máscara, para las capas de Unity). La escena nueva «neuronas» de
-    `comparar.sh` (un cuerpo dinámico teletransportado contra una pared, patas kinematic que giran,
-    una pieza que se une pasando su fixture al cuerpo del jugador, un enemigo estático, una bala
-    que el filtro deja atravesar la pared y un cambio de capa a mitad) es idéntica bit a bit al C++
-    compilado con los mismos cambios; las seis de siempre siguen idénticas.
-  - `crates/unity`: la matriz de colisiones por capas (antes se ignoraba; en One Button Prototype
-    y Super Happy Jump todas las capas chocan), los contactos entre triggers kinematic,
-    `GetButton`/`GetButtonUp` en el InputManager, los ejes en el proyecto 2D,
-    `Escena::instanciar_datos` (clona un objeto de la escena, con «(Clone)»),
-    `Audio::play_one_shot`, `azar_entero` y `FuenteGui::escala` (una fuente sustituta más grande
-    para que mida como la original).
-  - Comparado con el original en Chromium: la unión de piezas (se unen al tocarse las puntas de
-    las patas, se arrastran y giran con la neurona), el inicio del nivel, el «game over» a los 5 s
-    con el puntaje en el mismo lugar (Micro 5 a 2,1 veces el tamaño de «Light Pixel-7»), el
-    puntaje que se acumula entre partidas (5 y luego 10 segundos: `contadorTiempo` es estático y
-    nunca vuelve a 0, verificado en el original) y la E: con el original a 20 fps, una E de 40 ms
-    muestra las instrucciones, de 120 ms las salta y de 250 ms además entra con zoom, como predice
-    `GetKey` con la carga al frame siguiente; el port hace lo mismo. Con WebAudio intervenido, el
-    original pone la ganancia en 100 en `PlayOneShot(clip, 100)` (sonido saturado); el port
-    también. Probado en Xvfb con cambios temporales (sin enemigos): unir piezas en cadena,
-    disparar con la de ataque unida (la bala la destruye el borde) y soltar la última con Alt.
-  - `Application.Quit` (Esc en el título) no hace nada, como en el WebGL, el único build del
+  - The scenes: `titulo`, `instrucciones` and `game_over` only have the camera with its script;
+    `level` has 96 objects: the player's neuron (`neurona_base` and its `centro`), pieces with
+    `Union`, the border (`Bordes`, `Lateral` and four `pata` with `bordescript`), 17
+    `GeneradorVitaminas`, the `enemigo` (`IA_Enemy` and `muerte_enemigo`) and the camera
+    (`Camera2DFollow` and `Aparicion`). Prefabs: `neurona_basica`, `neurona_larga`,
+    `neurona_ataque` (with `disparar`), `neurona_defensa` and `bala`.
+- [x] Recover types, methods and texts (Il2CppDumper or similar) and extract scenes and assets:
+  - `games/neuro-battle/tools/il2cpp.py`, a reader of its own for the compiled metadata: it starts from
+    the `Il2CppMetadataRegistration` (at 0x294eb0: the eight assemblies, the table of 5166
+    `Il2CppType`s, the generic methods and the method references that the code resolves), reads
+    each image (types, fields with their type, visibility and offset, methods with their parameters) and
+    goes from the `MethodInfo` to the asm.js function through the table of its signature (`dynCall_<signature>`;
+    static methods also receive a null `this` and all of them the hidden `MethodInfo*`, almost
+    always null; a struct is returned through a pointer that comes first). It dumps into
+    `reference/il2cpp` the game's types (`metadatos.txt`), the 85 engine methods they
+    call (`motor.txt`) and the body of each method (`asmjs/<Type>.js`) with the calls, the
+    type and method references resolved on first use (`DO`/`FO`), the calls inside
+    a `try` (`invoke_*`) and the literals (static `String` objects in UTF-16) annotated.
+  - The logic, reconstructed by hand from that asm.js in `reference/csharp` (14 scripts and
+    `PlayerControl`, unused) and `reference/unityscript` (`GeneradorVitaminas` and `IA_Enemy`). What
+    is not visible in the C#: IL2CPP 5.1.1 does not check for nulls (in `bala`, subtracting life from a border
+    writes to low memory and the bullet is destroyed anyway), `Mathf.Round` was left *inlined* as
+    `roundf` in `IA_Enemy.Seguir`, in UnityScript the calls to their own methods are
+    virtual, and the `try`/`catch (UnityException)` of `Aparicion` goes through `invoke_*`.
+  - `games/neuro-battle/tools/extraer.py` (with UnityPy, like the one in One Button Prototype): since there
+    are no assemblies, it writes with `il2cpp.py` some C# *stubs* with the fields of each script,
+    compiles them with the `csc` from the .NET SDK against the `UnityEngine.dll` 5.1.2 from One Button
+    Prototype and generates the type trees with them (TypeTreeGeneratorAPI); the 72 MonoBehaviours are
+    read whole. `escena.json`: the four scenes (1, 1, 96 and 1 objects), the five prefabs that
+    the scripts instantiate (`neurona_basica`, `_larga`, `_ataque`, `_defensa` and `bala`), 189
+    sprites in 12 trimmed textures, the three GUI screens, 9 clips and 7 controllers,
+    the `GUIStyle` of the score, the InputManager axes (`Horizontal`, `Vertical`, `Rotacion` and
+    `Fire2`) and the 2D physics. The two sounds (AAC in MP4, Unity 5.1's format for WebGL)
+    are converted to Ogg with ffmpeg. The score font, "Light Pixel-7" from Style-7, is "freeware for
+    personal use only" and is not copied.
+  - For the port: the layer matrix makes the walls (`Background` layer) only collide with the
+    neurons (`Neurona` layer) and the neurons not collide with each other; the generators clone the
+    `enemigo` from the scene (not a prefab); the neurons' legs are *kinematic* bodies with
+    triggers, and joining a neuron depends on two of them touching (in standard Box2D two
+    kinematic bodies do not generate contacts: you have to see what Unity 5.1 did in the original).
+- [x] Test whether the original WebGL runs in a current browser; if it runs, observe it with REA
+  (`capture-browser-scenario`) to cover the logic that cannot be read:
+  - **It runs** in Playwright's Chromium 1248 (headless, WebGL 1.0 with SwiftShader), served
+    locally with `python3 -I -m http.server`: it takes about 15 s to load, shows "made with
+    unity, Personal Edition" and then the title. The `.htaccess` is not needed (`Release/` is served
+    uncompressed).
+  - REA `capture-browser-scenario` (console, errors and one capture per step)
+    (`ev_7e177af039fd0bb53b0ee21cea32633a6af97b34c31d1baa5250f791d35024f0`): title, "E" →
+    instructions, "E" → level and, without touching anything, "game over" after 5.7 s with "TU PUNTAJE FUE DE
+    5 SEGUNDOS". Right on death, 34 `NullReferenceException`s come out: the 34 copies of the enemy
+    (17 generators, two batches: on entry and 5 s later) read the `target` already destroyed in the
+    frame before `game_over` loads.
+  - With Playwright (held keys, which REA does not allow): the neuron moves with WASD; when
+    crossing a free piece, the piece joins and from then on it moves and rotates with it (arrow keys).
+    So in Unity 5.1's Box2D **two triggers of kinematic bodies do generate
+    contacts** (standard Box2D does not create them; Unity 5.5 added `useFullKinematicContacts`
+    for solids): the port has to allow it. If the "E" of "PLAY" is still pressed when
+    entering the level, it also triggers the zoom.
+- [x] Native port playable: the four menu scripts and the fourteen level scripts in
+  `games/neuro-battle/src/juego.rs`, with the Unity 5.1 frame (LoadLevel at the start of the next
+  frame, Physics2D at a fixed step with its messages, destroyed objects erased after the physics and
+  after the Update calls, Start before the first Update, the Animator in Normal mode and OnGUI).
+  - `crates/box2d`: `World::sensores_cinematicos` (two kinematic bodies touch if there is a
+    sensor, as observed in the original) and `b2Filter` with `SetFilterData`/`Refilter` (with 32
+    bits of category and mask, for Unity's layers). The new "neuronas" scene in
+    `comparar.sh` (a dynamic body teleported against a wall, kinematic legs that rotate,
+    a piece that joins by passing its fixture to the player's body, a static enemy, a bullet
+    that the filter lets through the wall and a layer change halfway through) is bit-for-bit identical to the C++
+    compiled with the same changes; the usual six are still identical.
+  - `crates/unity`: the collision matrix by layers (previously ignored; in One Button Prototype
+    and Super Happy Jump all layers collide), the contacts between kinematic triggers,
+    `GetButton`/`GetButtonUp` in the InputManager, the axes in the 2D project,
+    `Escena::instanciar_datos` (clones an object from the scene, with "(Clone)"),
+    `Audio::play_one_shot`, `azar_entero` and `FuenteGui::escala` (a larger substitute font
+    so that it measures like the original).
+  - Compared with the original in Chromium: the joining of pieces (they join when the tips of
+    the legs touch, they are dragged and rotate with the neuron), the start of the level, the "game over" at 5 s
+    with the score in the same place (Micro 5 at 2.1 times the size of "Light Pixel-7"), the
+    score that accumulates between runs (5 and then 10 seconds: `contadorTiempo` is static and
+    never returns to 0, verified in the original) and the E: with the original at 20 fps, a 40 ms E
+    shows the instructions, 120 ms skips them and 250 ms also enters with zoom, as
+    `GetKey` predicts with loading on the next frame; the port does the same. With WebAudio hooked, the
+    original sets the gain to 100 in `PlayOneShot(clip, 100)` (saturated sound); the port
+    does too. Tested in Xvfb with temporary changes (no enemies): joining pieces in a chain,
+    shooting with the joined attack one (the border destroys the bullet) and releasing the last one with Alt.
+  - `Application.Quit` (Esc on the title) does nothing, as in the WebGL, the only build of the
     original.
-- [x] Web + táctil: una cruceta completa (WASD), cuatro botones (disparar, girar a cada lado y
-  soltar la última neurona) y START para el zoom; en el título, las instrucciones y el game over,
-  tocar la pantalla es la E durante un frame (así en el móvil se ven las instrucciones). El botón
-  derecho del ratón también suelta la neurona («mouse 1» de Fire2). `humo.json`: título,
-  instrucciones, nivel, mover y girar, zoom, en nativo y en la web (escritorio, móvil horizontal y
-  vertical). El wasm pesa 2,5 MB.
-- [x] README del juego + ficha del museo, con capturas en `games/neuro-battle/docs`. «Cómo se
-  hizo» cuenta el triaje con sus Evidence, la lectura de los metadatos de IL2CPP, la
-  reconstrucción, la extracción con los *stubs*, la observación del original y las piezas del
-  motor.
-- [x] Pendientes anotados: el sonido no se probó en hardware real; los controles táctiles se
-  probaron solo en emulación de Chromium; no se jugó una partida larga de principio a fin
-  (disparar y soltar neuronas se probaron con un cambio temporal sin enemigos); lo que hace Unity
-  por dentro y no se pudo observar (el orden de los `Update`, el momento exacto del borrado de lo
-  destruido, si un trigger kinematic toca a un colisionador estático) quedó deducido; la fuente
-  del puntaje es Micro 5 en lugar de «Light Pixel-7» (gratis solo para uso personal); REA no lee
-  los metadatos de IL2CPP compilados de Unity 5.1.1 (los lee `tools/il2cpp.py`) y
-  `import-managed-reconstruction` no aplica (no hay ensamblado administrado).
+- [x] Web + touch: a full D-pad (WASD), four buttons (shoot, rotate each way and
+  release the last neuron) and START for the zoom; on the title, the instructions and the game over,
+  touching the screen is the E for one frame (so on mobile the instructions are seen). The right
+  mouse button also releases the neuron ("mouse 1" of Fire2). `humo.json`: title,
+  instructions, level, moving and rotating, zoom, natively and on the web (desktop, mobile landscape and
+  portrait). The wasm weighs 2.5 MB.
+- [x] Game README + museum entry, with captures in `games/neuro-battle/docs`. "How it was
+  made" tells the triage with its Evidence, the reading of the IL2CPP metadata, the
+  reconstruction, the extraction with the *stubs*, the observation of the original and the engine
+  pieces.
+- [x] Pending items noted: the sound was not tested on real hardware; the touch controls were
+  tested only in Chromium emulation; a long run was not played from start to finish
+  (shooting and releasing neurons were tested with a temporary change without enemies); what Unity
+  does internally and could not be observed (the order of the `Update` calls, the exact moment of erasing
+  destroyed objects, whether a kinematic trigger touches a static collider) was left deduced; the score
+  font is Micro 5 instead of "Light Pixel-7" (free only for personal use); REA does not read
+  the compiled IL2CPP metadata of Unity 5.1.1 (`tools/il2cpp.py` reads them) and
+  `import-managed-reconstruction` does not apply (there is no managed assembly).
 
-### 2.11 Fast Car Racer (omitido)
-- Omitido por decisión del dueño de la cuenta (21-oct-2026). itch.io solo enlaza a Google Play
-  (`cl.gioco.fcr`) y no hay binario descargable: sin él no hay un port fiel, y no se recrea a
-  partir del video de gameplay. Si aparece el APK/AAB (Play Console → *App bundle explorer*) o
-  los archivos del proyecto, se puede retomar con la plantilla de siempre.
+### 2.11 Fast Car Racer (skipped)
+- Skipped by decision of the account owner (21-Oct-2026). itch.io only links to Google Play
+  (`cl.gioco.fcr`) and there is no downloadable binary: without it there is no faithful port, and it is not recreated
+  from the gameplay video. If the APK/AAB appears (Play Console → *App bundle explorer*) or
+  the project files, it can be resumed with the usual template.
 
-## Fase 3 — Museo
+## Phase 3 — Museum
 
-- [x] Capturas de cada port en `games/<slug>/docs/` y en el README del museo: los once ports
-  tienen su carpeta `docs/` (de 3 a 8 capturas) y una captura en su ficha.
-- [ ] Versiones web jugables enlazadas desde el README (descartado con el 0.7).
-- [x] Revisar que cada ficha tenga fecha confirmada, stack, descripción, estado del port y enlace a
-  itch.io: las doce la tienen. Dos datos no se pueden confirmar con los archivos y la ficha lo
-  dice: cuándo se empezó Que No Caiga (exportado el 23-jul-2015 y con página de itch.io de esas
-  semanas, por su número, pero con la temática del Mundial de 2014) y el motor de Fast Car Racer
-  (sin binario).
-- [x] README de los juegos y fichas del museo con un mismo enfoque: qué juego es, con qué y cuándo
-  se hizo y que ahora está portado, sin separar «original» y «port». «Cómo se hizo» ampliado con
-  los detalles técnicos de cada port: IMAN, Proyecto Nutria, The Electric Eel Attack, Que No Caiga,
+- [x] Captures of each port in `games/<slug>/docs/` and in the museum README: the eleven ports
+  have their `docs/` folder (3 to 8 captures) and one capture in their entry.
+- [ ] Playable web versions linked from the README (dropped with 0.7).
+- [x] Check that each entry has a confirmed date, stack, description, port status and link to
+  itch.io: all twelve have them. Two facts cannot be confirmed with the files and the entry says
+  so: when Que No Caiga was started (exported on 23-Jul-2015 and with an itch.io page from those
+  weeks, by its number, but with the 2014 World Cup theme) and the engine of Fast Car Racer
+  (no binary).
+- [x] READMEs of the games and museum entries with the same approach: what game it is, with what and when it was
+  made and that it is now ported, without separating "original" and "port". "How it was made" expanded with
+  the technical details of each port: IMAN, Proyecto Nutria, The Electric Eel Attack, Que No Caiga,
   Retro Penal, Da Car, Super Happy Jump, One Button Prototype, The Meaning of Christmas, Go Ball
-  y Neuro Battle (paso 6 de la plantilla para los siguientes).
-- [x] Sembrar el azar con la hora en los ports que lo usan sin sembrarlo (Que No Caiga, Da Car,
-  Super Happy Jump, The Meaning of Christmas y Go Ball, por las partículas de `crates/unity`;
-  Da Car también por las de `crates/construct2`): con la semilla fija de macroquad, cada partida
-  salía igual. Los originales cambiaban en cada partida (`Math.random` en Construct 2, `Random`
-  sembrado con la hora en Unity y en Java). IMAN y Neuro Battle ya lo hacían, y los ports de XNA
-  usan `xna::Random::con_reloj`. Humos nativos y web de los cinco pasan; dos partidas de Super
-  Happy Jump ya tienen los cactus a distinta altura. (Go Ball falló una vez en la web de
-  escritorio: con otra prueba corriendo a la vez, el nivel tardó más de los 5 s del paso y la
-  captura salió negra; repetido solo, pasa.)
+  and Neuro Battle (step 6 of the template for the next ones).
+- [x] Seed randomness with the time in the ports that use it without seeding it (Que No Caiga, Da Car,
+  Super Happy Jump, The Meaning of Christmas and Go Ball, because of the `crates/unity` particles;
+  Da Car also because of the `crates/construct2` ones): with macroquad's fixed seed, every run
+  came out the same. The originals changed on every run (`Math.random` in Construct 2, `Random`
+  seeded with the time in Unity and in Java). IMAN and Neuro Battle already did it, and the XNA
+  ports use `xna::Random::con_reloj`. Native and web smoke tests of the five pass; two runs of Super
+  Happy Jump already have the cacti at different heights. (Go Ball failed once on the desktop web:
+  with another test running at the same time, the level took longer than the 5 s of the step and the
+  capture came out black; repeated alone, it passes.)
 
-## Fase 4 — Publicación en itch.io
+## Phase 4 — Publishing on itch.io
 
-Cada página de itch.io pasa a ofrecer el port para jugar en el navegador. Los juegos que ya tenían
-versión web (Que No Caiga, Retro Penal y Da Car en HTML5; One Button Prototype y Neuro Battle en
-WebGL; Super Happy Jump en el Unity Web Player, que ya no corre) la reemplazan por la del port, y
-los demás la estrenan. Nada se sube sin la confirmación del dueño de la cuenta (regla 4).
+Each itch.io page now offers the port to play in the browser. The games that already had a
+web version (Que No Caiga, Retro Penal and Da Car in HTML5; One Button Prototype and Neuro Battle in
+WebGL; Super Happy Jump in the Unity Web Player, which no longer runs) replace it with the port's, and
+the others premiere one. Nothing is uploaded without confirmation from the account owner (rule 4).
 
-- [x] **4.1** Preparar la publicación: butler 15.32 con la sesión del dueño (sus credenciales no
-  entran al repo) y `tools/publicar_itch.sh <juego>`, que compila la web con `tools/build_web.sh` y
-  la sube con `butler push dist/<juego> elvisbrevi/<proyecto>:html5` (One Button Prototype va a
-  `prototipo-2000`), con la versión del commit.
-- [x] **4.2** Lo que ya había en cada página: el dueño pidió publicar sin más decisiones, así que
-  las descargas originales y las versiones web viejas quedan como estaban; el port se agrega como
-  un archivo más (canal `html5`).
-- [x] **4.3** (Hecho por el dueño el 21-oct-2026; las once páginas cargan el port publicado y
-  arrancan sin errores en Chromium.) Configurar cada página para jugar en el navegador, desde el panel de itch.io (butler
-  no lo hace): tipo HTML, marco del tamaño del juego (640×480 IMAN y The Electric Eel Attack,
-  1280×720 Proyecto Nutria, 400×500 Que No Caiga y Retro Penal, 800×450 Da Car, 960×600 Super
-  Happy Jump, One Button Prototype y Neuro Battle, 1024×600 Go Ball, 320×480 en vertical The
-  Meaning of Christmas), «Mobile friendly» con su orientación y botón de pantalla completa.
-- [x] **4.4** Subidos el 21-oct-2026, con la confirmación del dueño, los once ports (commit
-  `fc81ec8`; butler los procesó todos). Antes, en el plan: publicar uno a uno los ports ya hechos: Proyecto Nutria, IMAN, The
+- [x] **4.1** Prepare the publishing: butler 15.32 with the owner's session (their credentials do not
+  go into the repo) and `tools/publicar_itch.sh <game>`, which builds the web version with `tools/build_web.sh` and
+  uploads it with `butler push dist/<game> elvisbrevi/<project>:html5` (One Button Prototype goes to
+  `prototipo-2000`), with the commit version.
+- [x] **4.2** What was already on each page: the owner asked to publish without further decisions, so
+  the original downloads and the old web versions stay as they are; the port is added as
+  one more file (`html5` channel).
+- [x] **4.3** (Done by the owner on 21-Oct-2026; the eleven pages load the published port and
+  start without errors in Chromium.) Configure each page to play in the browser, from the itch.io panel (butler
+  does not do it): HTML type, frame the size of the game (640×480 IMAN and The Electric Eel Attack,
+  1280×720 Proyecto Nutria, 400×500 Que No Caiga and Retro Penal, 800×450 Da Car, 960×600 Super
+  Happy Jump, One Button Prototype and Neuro Battle, 1024×600 Go Ball, 320×480 portrait The
+  Meaning of Christmas), "Mobile friendly" with its orientation and a fullscreen button.
+- [x] **4.4** Uploaded on 21-Oct-2026, with the owner's confirmation, the eleven ports (commit
+  `fc81ec8`; butler processed them all). Before that, in the plan: publish the already finished ports one by one: Proyecto Nutria, IMAN, The
   Electric Eel Attack, Go Ball, The Meaning of Christmas, Que No Caiga, Retro Penal, Da Car,
-  Super Happy Jump, One Button Prototype y Neuro Battle. Probar cada página
-  publicada en escritorio y en móvil (`tools/humo/web.mjs` adaptado a una URL, o a mano).
-- [ ] **4.5** Desde entonces, cada port nuevo se publica al cerrar su checkpoint (paso 8 de la
-  plantilla), también con confirmación.
+  Super Happy Jump, One Button Prototype and Neuro Battle. Test each published page
+  on desktop and on mobile (`tools/humo/web.mjs` adapted to a URL, or by hand).
+- [ ] **4.5** From then on, every new port is published when its checkpoint closes (step 8 of the
+  template), also with confirmation.

@@ -48,6 +48,9 @@ Que No Caiga was started and which engine Fast Car Racer was made with.
   playable on PC and in the browser, with touch controls on mobile. It has no sound.
 - **itch.io:** [elvisbrevi.itch.io/proyecto-nutria](https://elvisbrevi.itch.io/proyecto-nutria) ·
   [video](https://vimeo.com/6882393)
+- **Downloads:** Windows (`.exe`), macOS (universal, Intel + Apple Silicon) and Linux (x86_64) builds on the
+  [itch.io page](https://elvisbrevi.itch.io/proyecto-nutria). The binaries are not kept in this repo.
+  On macOS, right-click → Open the first time (the binary is not signed).
 
 ### IMAN
 
@@ -62,6 +65,9 @@ Que No Caiga was started and which engine Fast Car Racer was made with.
   PC and in the browser, with touch controls on mobile.
 - **itch.io:** [elvisbrevi.itch.io/iman](https://elvisbrevi.itch.io/iman) ·
   [video](https://vimeo.com/8196488)
+- **Downloads:** Windows (`.exe`), macOS (universal, Intel + Apple Silicon) and Linux (x86_64) builds on the
+  [itch.io page](https://elvisbrevi.itch.io/iman). The binaries are not kept in this repo.
+  On macOS, right-click → Open the first time (the binary is not signed).
 
 ### The Electric Eel Attack
 
@@ -81,6 +87,9 @@ Que No Caiga was started and which engine Fast Car Racer was made with.
   rewritten in GLSL. It is playable on PC and in the browser, with touch controls on mobile.
 - **itch.io:** [elvisbrevi.itch.io/the-electric-eel-attack](https://elvisbrevi.itch.io/the-electric-eel-attack) ·
   [video](https://vimeo.com/20317603)
+- **Downloads:** Windows (`.exe`), macOS (universal, Intel + Apple Silicon) and Linux (x86_64) builds on the
+  [itch.io page](https://elvisbrevi.itch.io/the-electric-eel-attack). The binaries are not kept in this repo.
+  On macOS, right-click → Open the first time (the binary is not signed).
 
 ### Go Ball
 
@@ -101,6 +110,9 @@ Que No Caiga was started and which engine Fast Car Racer was made with.
   mouse, or on mobile with a D-pad and dragging the boxes with a finger.
 - **itch.io:** [elvisbrevi.itch.io/go-ball](https://elvisbrevi.itch.io/go-ball) ·
   [teaser](https://vimeo.com/29466492)
+- **Downloads:** Windows (`.exe`), macOS (universal, Intel + Apple Silicon) and Linux (x86_64) builds on the
+  [itch.io page](https://elvisbrevi.itch.io/go-ball). The binaries are not kept in this repo.
+  On macOS, right-click → Open the first time (the binary is not signed).
 
 ### The Meaning of Christmas
 
@@ -120,6 +132,9 @@ Que No Caiga was started and which engine Fast Car Racer was made with.
   (converted from MP3 to Ogg). It is played with the mouse or by touching the screen, in portrait.
 - **itch.io:** [elvisbrevi.itch.io/the-meaning-of-christmas](https://elvisbrevi.itch.io/the-meaning-of-christmas) ·
   [video](https://vimeo.com/34446793)
+- **Downloads:** Windows (`.exe`), macOS (universal, Intel + Apple Silicon) and Linux (x86_64) builds on the
+  [itch.io page](https://elvisbrevi.itch.io/the-meaning-of-christmas). The binaries are not kept in this repo.
+  On macOS, right-click → Open the first time (the binary is not signed).
 
 ### Fast Car Racer
 
@@ -145,7 +160,7 @@ Que No Caiga was started and which engine Fast Car Racer was made with.
   the particles and the `OnGUI` GUI recreated in `crates/unity`, with the usual images, sounds,
   scene and prefabs. It is played with the mouse or by touching the screen.
 - **itch.io:** [elvisbrevi.itch.io/super-happy-jump](https://elvisbrevi.itch.io/super-happy-jump)
-- **Downloads:** Windows (`.exe`) and macOS (universal, Intel + Apple Silicon) builds on the
+- **Downloads:** Windows (`.exe`), macOS (universal, Intel + Apple Silicon) and Linux (x86_64) builds on the
   [itch.io page](https://elvisbrevi.itch.io/super-happy-jump). The binaries are not kept in this repo.
   On macOS, right-click → Open the first time (the binary is not signed).
 
@@ -165,6 +180,9 @@ Que No Caiga was started and which engine Fast Car Racer was made with.
   animations, collisions) translated too, with the usual images, sounds and project.
   It is played with the mouse or by touching the screen.
 - **itch.io:** [elvisbrevi.itch.io/que-no-caiga](https://elvisbrevi.itch.io/que-no-caiga)
+- **Downloads:** Windows (`.exe`), macOS (universal, Intel + Apple Silicon) and Linux (x86_64) builds on the
+  [itch.io page](https://elvisbrevi.itch.io/que-no-caiga). The binaries are not kept in this repo.
+  On macOS, right-click → Open the first time (the binary is not signed).
 
 ### Retro Penal
 
@@ -182,6 +200,9 @@ Que No Caiga was started and which engine Fast Car Racer was made with.
   `crates/construct2`, with the usual images, sounds and project. It is played with the
   mouse or by touching the screen.
 - **itch.io:** [elvisbrevi.itch.io/retro-penal](https://elvisbrevi.itch.io/retro-penal)
+- **Downloads:** Windows (`.exe`), macOS (universal, Intel + Apple Silicon) and Linux (x86_64) builds on the
+  [itch.io page](https://elvisbrevi.itch.io/retro-penal). The binaries are not kept in this repo.
+  On macOS, right-click → Open the first time (the binary is not signed).
 
 ### One Button Prototype
 
@@ -201,6 +222,9 @@ Que No Caiga was started and which engine Fast Car Racer was made with.
   `crates/unity`, with the usual graphics, font and three scenes. It is played with the
   mouse or by touching the screen. It has no sound, like the original.
 - **itch.io:** [elvisbrevi.itch.io/prototipo-2000](https://elvisbrevi.itch.io/prototipo-2000)
+- **Downloads:** Windows (`.exe`), macOS (universal, Intel + Apple Silicon) and Linux (x86_64) builds on the
+  [itch.io page](https://elvisbrevi.itch.io/prototipo-2000). The binaries are not kept in this repo.
+  On macOS, right-click → Open the first time (the binary is not signed).
 
 ### Neuro Battle
 
@@ -219,6 +243,9 @@ Que No Caiga was started and which engine Fast Car Racer was made with.
   graphics, sounds and scenes. It is played with the keyboard, or on mobile with a D-pad and
   buttons.
 - **itch.io:** [elvisbrevi.itch.io/neuro-battle](https://elvisbrevi.itch.io/neuro-battle)
+- **Downloads:** Windows (`.exe`), macOS (universal, Intel + Apple Silicon) and Linux (x86_64) builds on the
+  [itch.io page](https://elvisbrevi.itch.io/neuro-battle). The binaries are not kept in this repo.
+  On macOS, right-click → Open the first time (the binary is not signed).
 
 ### Da Car
 
@@ -235,6 +262,9 @@ Que No Caiga was started and which engine Fast Car Racer was made with.
   `crates/construct2`, with the usual images, sounds and project. It is played with the
   keyboard, with the mouse or by touching the screen and tilting the phone.
 - **itch.io:** [elvisbrevi.itch.io/da-car](https://elvisbrevi.itch.io/da-car)
+- **Downloads:** Windows (`.exe`), macOS (universal, Intel + Apple Silicon) and Linux (x86_64) builds on the
+  [itch.io page](https://elvisbrevi.itch.io/da-car). The binaries are not kept in this repo.
+  On macOS, right-click → Open the first time (the binary is not signed).
 
 ---
 

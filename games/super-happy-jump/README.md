@@ -30,7 +30,7 @@ The assets are embedded in the binary. The best score is saved in
 
 ### Downloads
 
-Windows (`.exe`) and macOS (universal, Intel + Apple Silicon) builds are on the
+Windows (`.exe`), macOS (universal, Intel + Apple Silicon) and Linux (x86_64) builds are on the
 [itch.io page](https://elvisbrevi.itch.io/super-happy-jump); they are not kept in this repo. On macOS,
 right-click → Open the first time (the binary is not signed).
 
